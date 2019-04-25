@@ -1,0 +1,46 @@
+<div class="col-md-12 col-sm-12 col-lg-12">
+  <div class="card">
+      <div class="card-body">
+          <h3 class="card-title">Back Office Users To Approve</h3>
+          <form class="form-inline" action="#">
+            <div class="row">
+              <div class="col-sm-3" style="margin-left: 80%;">
+                    <button type="button" class="btn btn-success" (click)="verifyUsers()" style="width: 150px;">Approve Users</button>
+              </div>
+            </div>
+          </form>
+          <hr/>
+          <div id="table-wrapper">
+            <div id="table-scroll">
+                <table class="table table-sm m-b-0 ">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Approve</th>
+                            <th scope="col">User</th>
+                            <th scope="col">User Group</th>
+                            <th scope="col">Date Added</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                           <tr *ngFor="let user of users; let i = index"> 
+                            <td>{{i+1}}</td>
+                            <td>
+                                <input type="checkbox" [(ngModel)]="user.isActive" [ngModelOptions]="{standalone: true}">
+                            </td>
+                            <td>{{user.fullName}}</td>
+                            <td>{{user.groupName}}</td>
+                            <td>{{user.createdAt}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+             </div>
+          </div>
+          <div class="col">
+
+          </div>
+         <div>
+         </div>
+      </div>
+  </div>
+</div> 

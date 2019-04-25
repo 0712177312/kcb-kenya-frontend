@@ -1,0 +1,28 @@
+server/target/
+!server/.mvn/wrapper/maven-wrapperserver/.jar
+server/src/main/resources/static/**
+### STS ###
+server/.apt_generated
+server/.classpath
+server/.factorypath
+server/.project
+server/.settings
+server/.springBeans
+server/.sts4-cache
+
+### IntelliJ IDEA ###
+server/*.idea
+server/*.iws
+server/*.iml
+server/*.ipr
+
+### NetBeans ###
+server/nbproject/private/
+server/build/
+server/nbbuild/
+server/dist/
+server/nbdist/
+server/.nb-gradle/
+
+### FrontEnd ###
+client/node_modules/*

@@ -1,0 +1,126 @@
+<block-ui> 
+  <div class="row" *ngIf="!editMode">
+  
+    <div class="col-12">
+  
+      <div class="card">
+  
+        <div class="card-body">
+  
+          <h4 class="card-title">User group</h4>
+  
+          <div class="table table-responsive smart-table">
+            <ng2-smart-table [settings]="settings" [source]="source" class="" (create)="initAddGroup($event)" (edit)="initEditGroup($event)"></ng2-smart-table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="editMode">
+  
+    <div class="col-lg-12">
+      <div class="card ">
+        <div class="card-header bg-info">
+          <h4 class="card-title text-white">{{title}}</h4>
+        </div>
+        <form action="#" class="form-horizontal">
+          <div class="form-body">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group row">
+                    <label class="control-label text-left col-md-2">Group code</label>
+                    <div class="col-md-10">
+                       <fieldset [disabled]="is_edit">
+                          <input type="text" class="form-control" [(ngModel)]="userGroup.groupCode" [ngModelOptions]="{standalone: true}">
+                       </fieldset>                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+  
+              <!--/span-->
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group has-danger row">
+                    <label class="control-label text-left col-md-2">Group name</label>
+                    <div class="col-md-10">
+                      <input type="text" class="form-control form-control-danger" [(ngModel)]="userGroup.groupName" [ngModelOptions]="{standalone: true}">
+                    </div>
+                  </div>
+                </div>
+  
+                <!--/span-->
+              </div>
+  
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group row">
+                    <label class="control-label text-right col-md-2"></label>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="customCheck1" [(ngModel)]="userGroup.active" [ngModelOptions]="{standalone: true}">
+                      <label class="custom-control-label" for="customCheck1">Active</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+  
+              <!--/span-->
+  
+              <div class="col-12" *ngIf="rights.length > 0">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-subtitle">Rights</h5>
+                  </div>
+                  <div class="table-responsive">
+                    <table class="table table-bordered table-sm">
+                      <thead class="thead-light">
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Right name</th>
+                          <th scope="col">View</th>
+                          <th scope="col">Add</th>
+                          <th scope="col">Edit</th>
+                          <!-- <th scope="col">Delete</th> -->
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let right of rights">
+                          <td>{{right.rightId}}</td>
+                          <td>{{right.rightName}}</td>
+                          <td style="padding: 1px;">
+                            <input type="checkbox" [(ngModel)]="right.allowView" [ngModelOptions]="{standalone: true}">
+                          </td>
+                          <td style="padding: 1px;">
+                            <label>
+                              <input type="checkbox" [(ngModel)]="right.allowAdd" [ngModelOptions]="{standalone: true}">
+                            </label>
+                          </td>
+                          <td style="padding: 1px;">
+                            <label>
+                              <input type="checkbox" [(ngModel)]="right.allowEdit" [ngModelOptions]="{standalone: true}">
+                            </label>
+                          </td>
+                          <!-- <td style="padding: 1px;">
+                            <label>
+                              <input type="checkbox" [(ngModel)]="right.allowDelete" [ngModelOptions]="{standalone: true}">
+                            </label>
+                          </td> -->
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="col-lg-12" style="text-align: left">
+            <button type="button" class="btn btn-success" (click)="addGroup()">{{button}}</button>
+            <button type="button" class="btn btn-warning" (click)="cancel()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  </block-ui> 

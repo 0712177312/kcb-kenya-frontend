@@ -1,0 +1,81 @@
+<block-ui>
+    <div class="row" *ngIf="!editMode">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title mb-3">List of Country's</h4>
+            <div class="table table-responsive smart-table">
+              <ng2-smart-table [settings]="settings" [source]="source" class=""   (create)="initAddCountry($event)" (edit)="initEditCountry($event)"></ng2-smart-table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="editMode">
+      <div class="col-lg-12">
+        <div class="card">
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-horizontal">
+            <div class="form-body">
+             <div class="card-body">
+                <ngb-alert *ngIf="!staticAlertClosed" (close)="staticAlertClosed = true">Mandatory field are marked with *</ngb-alert>
+              </div>
+              <div class="card-body">
+                <h4 class="card-title">Country</h4>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                          <label for="countryCode" class="control-label text-left col-md-2">Country Code  <span class="error">*</span></label>
+                          <div class="col-md-10">
+                            
+                          <fieldset [disabled]="is_edit">
+                             <input type="text" class="form-control" id="countryCode" formControlName="countryCode"/>
+                          </fieldset>
+                          <div *ngIf="submited && (form.controls['countryCode'].invalid || form.controls['countryCode'].dirty || form.controls['countryCode'].touched)" class="error">
+                            <div *ngIf="f.countryCode.errors?.required">Country code is required</div>
+                           <div *ngIf="f.countryCode.errors?.minlength">Country Code must be at least 2 characters</div>
+                         </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+               <div class="row">
+                <div class="col-md-12">
+                   <div class="form-group row">
+                      <label for="name" class="control-label text-left col-md-2">Country  <span class="error">*</span></label>
+                      <div class="col-md-10">
+                      <input type="text" class="form-control" id="name" formControlName="name" />
+                      <div *ngIf="submited && (form.controls['name'].invalid || form.controls['name'].dirty || form.controls['name'].touched)" class="error">
+                        <div *ngIf="f.name.errors?.required">Country Name is required</div>
+                        <div *ngIf="f.name.errors?.minlength">Country Name must be at least 3 characters</div>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+                <!--/row-->
+
+                <!--/span-->
+                <div class="form-group row">
+                    <label for="status" class="col-2 col-form-label">Active</label>
+                   <div class="custom-control chk-active custom-checkbox mr-sm-2 m-b-15">
+                     <input type="checkbox" formControlName="status" class="custom-control-input" id="status" value="check">
+                     <label class="custom-control-label" for="status"></label>
+                    </div>
+                </div>
+              </div>
+
+              <div class="col-lg-12" style="text-align: left; padding-left: 16.7%">
+                <button type="button" class="btn btn-success" (click)="addCountry()">Save</button>
+                <button type="button" class="btn btn-warning" (click)="cancel()">Cancel</button>
+                <div [hidden]="!isDelayedRunning" class="spinner">
+                  <div class="double-bounce1"></div>
+                  <div class="double-bounce2"></div>
+               </div>
+              </div>
+            </div>
+          </form>
+       </div>
+       </div>
+    </div>
+    </block-ui> 
