@@ -1,5 +1,6 @@
 export class Urls {
     private uri = 'rest/v1';
+   // private uriTest = 'http://localhost:8090/compas/rest/v1';
 
     get url(): string {
         return this.uri; // = 'rest/v1' ;

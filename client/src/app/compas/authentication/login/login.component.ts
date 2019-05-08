@@ -41,6 +41,7 @@ export class LoginComponent implements OnInit {
   loginform = true;
   recoverform = false;
   ngOnInit() {
+    console.log("Initialization:  "+localStorage.getItem('bio.glob#$$#'));
     localStorage.getItem('bio.glob#$$#') ? this.doNothing() : this.getGlobals();
   }
   showRecoverForm() {
@@ -120,8 +121,9 @@ export class LoginComponent implements OnInit {
     if (this.user.username === '') {
       this.toastr.warning('Please specify the user name to proceed', 'Warning!', { timeOut: 1500 });
     }
-    this.apiService.capturePrint().subscribe((data: Array<object>) => {
+    this.apiService.capturePrint().subscribe(data => {
       this.bio = data;
+      console.log("fingerprint received: " + this.bio);
       if (this.bio.ErrorCode === 0) {
 
         if (this.bio !== null && this.bio.BMPBase64.length > 0) {
@@ -215,6 +217,7 @@ export class LoginComponent implements OnInit {
 
   getGlobals() {
     this.authService.getGlobals().subscribe(data => {
+      console.log("Data Configs:: " + data);
       localStorage.setItem('bio.glob#$$#', JSON.stringify(data));
     }, error => {
       return this.toastr.error('Error in loading configs.', 'Error!', { timeOut: 1500 });

@@ -59,6 +59,7 @@ public class DashboardController {
 	}
 	@GetMapping(value ="/dashboard/configs")
 	public ResponseEntity<?> getConfigs() {
+		System.out.println("in dashboard configs");
 		try {
 			String authName=env.getProperty("cobankingAuthName");
 			String authPass=env.getProperty("cobankingAuthPass");
