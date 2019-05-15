@@ -626,24 +626,21 @@ resetDevice() {
   return this.toastr.success('Device was reset successfully .. .', 'Success!', { timeOut: 3000 });
 }
 
-rejectUpdate() {
-  const customer = {
-    'customerId': this.teller.customerId,
-    'afisStatus': 'R'
+rejectTeller() {
+  const tellerDetails = {
+    'customerId': this.teller.customerId
   };
-  console.log('customer to authorize..', customer);
-  this.blockUI.start('Updating details...');
-  this.custSvc.afisApprove(customer).subscribe(data => {
+  this.blockUI.start('Rejecting the Teller...');
+  this.custSvc.rejectTellerApproval(tellerDetails).subscribe(data => {
     this.respo = data;
-    console.log('repo', this.respo);
     if (this.respo.status === true) {
       this.editMode = false;
       this.gtTellers();
-      this.blockUI.stop();
-      return this.toastr.success('Customer was rejected upddated successfuly.', ' Success!');
+
+      return this.toastr.success('Teller was rejected successfuly.', ' Success!');
     } else {
-      this.blockUI.stop();
-      return this.toastr.warning('There was problem rejecting customer details .', 'Warning!');
+
+      return this.toastr.warning('There was problem rejecting the teller.', 'Warning!');
     }
   });
 }
