@@ -64,6 +64,11 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	@Query(nativeQuery=true, value="UPDATE customer set waived='R', waive_approved_by=?1, approvedcustomerwaive_on=systimestamp WHERE customerId=?2 ")
 	int rejeCustomerWaive(int waivedApprovedBy, String customerId);
 
+	@Modifying
+	@Transactional
+	@Query(nativeQuery=true, value="UPDATE customer set verified='R' WHERE customerId=?1 ")
+	int rejectCustomerEnrollment(String customerId);
+
 //	@Query("select u from Customer u")
 //	List<Customer> getEnrolledCustomers(Date fromDate, Date toDate);
 	

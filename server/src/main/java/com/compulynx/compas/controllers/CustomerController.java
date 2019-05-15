@@ -322,6 +322,28 @@ public class CustomerController {
 		}
 	}
 
+	@PostMapping(value = "/rejectCustomerEnrollment")
+	public ResponseEntity<?> rejectCustomerEnrollment(@RequestBody Customer customer){
+		try {
+			int updates = customerService.rejectCustomerEnrollment(customer.getCustomerId());
+			if(updates > 0){
+				return new ResponseEntity<>(
+						new GlobalResponse("000", "Customer rejected successfully", true, GlobalResponse.APIV),
+						HttpStatus.OK);
+			}else{
+				return new ResponseEntity<>(
+						new GlobalResponse(GlobalResponse.APIV, "201", false, "Customer not successfully rejected"),
+						HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			GlobalResponse resp = new GlobalResponse("404", "An Exception occurred while attempting to reject the customer", false,
+					GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
+
+
 	@GetMapping("/previewCustomers")
 	public ResponseEntity<?> previewCustomers(
 			@RequestParam("FromDt") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,

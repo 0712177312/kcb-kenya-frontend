@@ -82,6 +82,10 @@ public class CustomerService {
 		return customerRepository.rejeCustomerWaive(waivedApprovedBy,customerId);
 	}
 
+	public int rejectCustomerEnrollment(String customerId) {
+		return customerRepository.rejectCustomerEnrollment(customerId);
+	}
+
 	public List<Customer> gtEnrolledCustomers(Date fromDate, Date toDate, String enrolledType) {
 		// TODO Auto-generated method stub
 		return customerRepository.getEnrolledCustomers(fromDate, toDate, enrolledType);
