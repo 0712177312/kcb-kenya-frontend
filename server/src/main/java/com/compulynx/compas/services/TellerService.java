@@ -69,6 +69,10 @@ public class TellerService {
 //		// TODO Auto-generated method stub
 //		return this.tellerRepository.removeTellerDetails(customerId);
 //	}
-	
-	
+
+	public int rejectTellerApproval(String customerId){
+		return tellerRepository.rejectTellerApproval(customerId);
+	}
+
+
 }
