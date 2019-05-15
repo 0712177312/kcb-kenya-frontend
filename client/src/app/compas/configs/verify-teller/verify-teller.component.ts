@@ -631,7 +631,7 @@ rejectTeller() {
     'customerId': this.teller.customerId
   };
   this.blockUI.start('Rejecting the Teller...');
-  this.custSvc.rejectTellerApproval(tellerDetails).subscribe(data => {
+  this.tellerSvc.rejectTellerApproval(tellerDetails).subscribe(data => {
     this.respo = data;
     if (this.respo.status === true) {
       this.editMode = false;
