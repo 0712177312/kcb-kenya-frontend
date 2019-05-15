@@ -46,4 +46,8 @@ export class TellerService {
   upgradeTellerProfile(cust) {
     return this.http.post(`${this.API_URL.url}/tellers/upgradeCustomerProfile`, cust);
   }
+
+  rejectTellerApproval(tellerDetails){
+    return this.http.post(`${this.API_URL.url}/tellers/rejectTellerApproval`, tellerDetails);
+  }
 }
