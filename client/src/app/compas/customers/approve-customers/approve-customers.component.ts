@@ -543,21 +543,20 @@ upCustDet() {
     return this.toastr.success('Device was reset successfully .. .', 'Success!', {timeOut: 3000});
   }
 
-  rejectUpdate() {
-    const customer = {
-      'accountNumber': this.customer.accountNumber,
-      'afisStatus': 'R'
+  rejectCustomer() {
+    const customerDetails = {
+      'customerId': this.customer.customerId
     };
     // console.log('customer to authorize..', customer);
-    this.blockUI.start('Updating details...');
-    this.custSvc.afisApprove(customer).subscribe(data => {
+    this.blockUI.start('Rejecting the Customer...');
+    this.custSvc.rejectCustomerEnrollment(customerDetails).subscribe(data => {
       this.respo = data;
       // console.log('repo', this.respo);
       if (this.respo.status === true) {
         this.editMode = false;
         this.gtCustomers();
 
-        return this.toastr.success('Customer was rejected upddated successfuly.', ' Success!');
+        return this.toastr.success('Customer was rejected successfuly.', ' Success!');
       } else {
 
         return this.toastr.warning('There was problem rejecting customer details .', 'Warning!');

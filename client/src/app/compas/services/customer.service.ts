@@ -52,6 +52,10 @@ export class CustomerService {
     return this.http.post(`${this.API_URL.url}/rejectCustomerWaive`, customer);
   }
 
+  rejectCustomerEnrollment(customerDetails){
+    return this.http.post(`${this.API_URL.url}/rejectCustomerEnrollment`, customerDetails);
+  }
+
   updateProfileDetails(profile) {
     return this.http.post(`${this.API_URL.url}/verifyProfileDetails`, profile);
   }
