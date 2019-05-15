@@ -235,4 +235,25 @@ public class TellerController {
 	    	return new ResponseEntity<>(resp, HttpStatus.OK);
 	   }
     }
+
+    @PostMapping(value = "/rejectTellerApproval")
+	public ResponseEntity<?> rejectTellerApproval (@RequestBody Teller teller){
+    	try{
+    		int updates = tellerService.rejectTellerApproval(teller.getCustomerId());
+    		if(updates > 0){
+				return new ResponseEntity<>(
+						new GlobalResponse("000", "Teller rejected successfully", true, GlobalResponse.APIV),
+						HttpStatus.OK);
+			}else{
+				return new ResponseEntity<>(
+						new GlobalResponse(GlobalResponse.APIV, "201", false, "Teller not successfully rejected"),
+						HttpStatus.OK);
+			}
+		}catch(Exception e){
+			GlobalResponse resp = new GlobalResponse("404", "An Exception occurred while attempting to reject the teller", false,
+					GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
 }
