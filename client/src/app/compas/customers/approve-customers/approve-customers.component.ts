@@ -547,19 +547,23 @@ upCustDet() {
     const customerDetails = {
       'customerId': this.customer.customerId
     };
-    // console.log('customer to authorize..', customer);
     this.blockUI.start('Rejecting the Customer...');
+    //remove user from database
     this.custSvc.rejectCustomerEnrollment(customerDetails).subscribe(data => {
       this.respo = data;
-      // console.log('repo', this.respo);
       if (this.respo.status === true) {
-        this.editMode = false;
-        this.gtCustomers();
-
-        return this.toastr.success('Customer was rejected successfuly.', ' Success!');
+        //remove from abis
+        this.custSvc.removeFromAbis(customerDetails).subscribe(data => {
+            if(this.respo.status === true){
+              this.editMode = false;
+              this.gtCustomers();
+              return this.toastr.success('Customer was rejected successfully.', ' Success!');
+            }else{
+              return this.toastr.success('Customer was not removed successfully.', ' Warning!');
+            }
+        });
       } else {
-
-        return this.toastr.warning('There was problem rejecting customer details .', 'Warning!');
+        return this.toastr.warning('There was a problem rejecting customer details .', 'Warning!');
       }
     });
   }
