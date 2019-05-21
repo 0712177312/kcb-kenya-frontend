@@ -78,8 +78,8 @@ export class BioService {
     return this.http.post(`${this.getConfigs().abis}/identify`, applicant);
   }
 
-  afisRemove(customerDetails){
-    return this.http.post(`${this.getConfigs().abis}/delete`, customerDetails);
+  afisRemove(applicant){
+    return this.http.post(`${this.getConfigs().abis}/delete`, applicant);
   }
 
   appoveCustomer(cust) {

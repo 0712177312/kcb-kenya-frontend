@@ -631,16 +631,22 @@ rejectTeller() {
     'customerId': this.teller.customerId
   };
   this.blockUI.start('Rejecting the Teller...');
+  //remove teller from database
   this.tellerSvc.rejectTellerApproval(tellerDetails).subscribe(data => {
     this.respo = data;
     if (this.respo.status === true) {
-      this.editMode = false;
-      this.gtTellers();
-
-      return this.toastr.success('Teller was rejected successfuly.', ' Success!');
-    } else {
-
-      return this.toastr.warning('There was problem rejecting the teller.', 'Warning!');
+      //remove from abis
+      this.biosvc.afisRemove(tellerDetails).subscribe(data => {
+        if(this.respo.status === true){
+          this.editMode = false;
+          this.gtTellers();
+          return this.toastr.success('Teller was rejected successfully.', 'Success!');
+        }else{
+          return this.toastr.success('Teller was not removed successfully.', 'Warning!');
+        }
+      });
+    }else{
+      return this.toastr.warning('There was a problem rejecting teller details. ', 'Warning!');
     }
   });
 }
