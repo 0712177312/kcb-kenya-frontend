@@ -1,7 +1,7 @@
 export class Urls {
-    private uri = 'rest/v1'; // to be used on server
+    //private uri = 'rest/v1'; // to be used on server
     //private uri = 'http://localhost:8090/compas/rest/v1';
-    //private uri = 'http://localhost:9000/compas/rest/v1';
+    private uri = 'http://localhost:9000/compas/rest/v1';
    // private uri = 'http://172.16.21.72:8090/compas/rest/v1'
 
     get url(): string {
