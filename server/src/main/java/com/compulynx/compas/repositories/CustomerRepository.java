@@ -19,7 +19,7 @@ import com.compulynx.compas.models.extras.TopFiveBranches;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	
-	@Query("select u from Customer u where u.customerId = ?1 or u.mnemonic =?2")
+	@Query("select u from Customer u where (u.customerId = ?1 or u.mnemonic =?2) and u.verified='A'")
 	Customer findCustomerByCustomerId(String customerId, String mnemonic);
 	
 	@Query(nativeQuery = true, value ="SELECT ROWNUM AS COUNTER,CUSTOMERID, " + 
