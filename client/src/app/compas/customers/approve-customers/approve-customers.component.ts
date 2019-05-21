@@ -553,7 +553,7 @@ upCustDet() {
       this.respo = data;
       if (this.respo.status === true) {
         //remove from abis
-        this.custSvc.removeFromAbis(customerDetails).subscribe(data => {
+        this.biosvc.afisRemove(customerDetails).subscribe(data => {
             if(this.respo.status === true){
               this.editMode = false;
               this.gtCustomers();

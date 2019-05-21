@@ -52,10 +52,6 @@ export class CustomerService {
     return this.http.post(`${this.API_URL.url}/rejectCustomerWaive`, customer);
   }
 
-  removeFromAbis(customer){
-    return this.http.post(`${this.API_URL.url}/delete`, customer);
-  }
-
   rejectCustomerEnrollment(customerDetails){
     return this.http.post(`${this.API_URL.url}/rejectCustomerEnrollment`, customerDetails);
   }
