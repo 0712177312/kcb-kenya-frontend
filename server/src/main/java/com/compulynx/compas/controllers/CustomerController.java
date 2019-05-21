@@ -142,21 +142,20 @@ public class CustomerController {
 	      if (cust != null)
 	      {
 
-			//Commented call using customerId
-//	        try
-//	        {
-//
-//	          String t24Url = env.getProperty("tserver") + customer.getCustomerId() + "/true";
-//	          String customerId = customer.getCustomerId();
-//	          log.info("update url for " + t24Url);
-//
-//	          String response = HttpRestProccesor.postJson(t24Url, customerId);
-//
-//	          log.info("T24 response response " + response);
-//	        }
-//	        catch (Exception e) {
-//	          log.error("Error in proccesing ", e);
-//	        }
+	        try
+	        {
+
+	          String t24Url = env.getProperty("tserver") + customer.getCustomerId() + "/true";
+	          String customerId = customer.getCustomerId();
+	          log.info("update url for " + t24Url);
+
+	          String response = HttpRestProccesor.postJson(t24Url, customerId);
+
+	          log.info("T24 response response " + response);
+	        }
+	        catch (Exception e) {
+	          log.error("Error in proccesing ", e);
+	        }
 	        return new ResponseEntity(new GlobalResponse("000", "customer found", true, "1.0.0"), HttpStatus.OK);
 	      }
 	      

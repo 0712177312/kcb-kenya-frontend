@@ -104,20 +104,19 @@ public class TellerController {
         if (cust != null)
         {
 
-        	//Commented call using customerId
-//          try
-//          {
-//            String t24Url = env.getProperty("tserver") + teller.getCustomerId() + "/true";
-//            String customerId = teller.getCustomerId();
-//            log.info("update url for " + t24Url);
-//
-//            String response = HttpRestProccesor.postJson(t24Url, customerId);
-//
-//            log.info("T24 response response " + response);
-//          }
-//          catch (Exception e) {
-//            log.error("upTellerDetails", e);
-//          }
+          try
+          {
+            String t24Url = env.getProperty("tserver") + teller.getCustomerId() + "/true";
+            String customerId = teller.getCustomerId();
+            log.info("update url for " + t24Url);
+
+            String response = HttpRestProccesor.postJson(t24Url, customerId);
+
+            log.info("T24 response response " + response);
+          }
+          catch (Exception e) {
+            log.error("upTellerDetails", e);
+          }
 
           return new ResponseEntity(new GlobalResponse(
             "000", "customer found", true, "1.0.0"), HttpStatus.OK);
