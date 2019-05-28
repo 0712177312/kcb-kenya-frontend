@@ -1,0 +1,254 @@
+<block-ui>
+  <div class="row" *ngIf="!isVerified">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header bg-info">
+          <h4 class="card-title text-white">Customer Enquiry</h4>
+        </div>
+        <div class="card-body">
+          <form class="form-horizontal">
+            <div class="card-body">
+              <div class="form-group row">
+                <div class="col-sm-3">
+                  <div class="b-label">
+                    <label for="inputEmail3" class="control-label col-form-label">Profile Type</label>
+                  </div>
+                </div>
+                <div class="col-sm-9">
+                  <div class="custom-control custom-radio custom-control-inline m-t-5">
+                    <input type="radio" value="1" class="custom-control-input" id="customControlValidation2"
+                      [(ngModel)]="profType" name="profType" required [ngModelOptions]="{standalone: true}">
+                    <label class="custom-control-label" for="customControlValidation2">Customer</label>
+                  </div>
+                  <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" value="2" class="custom-control-input" id="customControlValidation3"
+                      [(ngModel)]="profType" name="profType" required [ngModelOptions]="{standalone: true}">
+                    <label class="custom-control-label" for="customControlValidation3">Staff</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row" *ngIf="profType == '2'">
+                <div class="col-sm-3">
+                  <div class="b-label">
+                    <label for="staff" class="control-label col-form-label">Staff Id</label>
+                  </div>
+                </div>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="inputEmail3" [(ngModel)]="account_number"
+                    placeholder="Staff Id" [ngModelOptions]="{standalone: true}">
+                </div>
+              </div>
+              <div class="form-group row" *ngIf="profType == '1'">
+                <div class="col-sm-3">
+                  <div class="b-label">
+                    <label for="customer" class="control-label col-form-label">Customer Id</label>
+                  </div>
+                </div>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" autocomplete="off" id="inputEmail3"
+                    [(ngModel)]="account_number" placeholder="Customer Id" [ngModelOptions]="{standalone: true}">
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="card-body">
+              <div class="form-group m-b-0 text-right">
+                <button type="submit" class="btn btn-success cust-bt waves-effect waves-light"
+                  (click)="getCustomer(account_number)">NEXT</button>
+                <button type="button" class="btn btn-danger waves-effect waves-light"
+                  (click)="cancelEnr()">CANCEL</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="isVerified">
+    <div class="col-lg-12 col-xlg-12 col-md-12" *ngIf="!profForm">
+      <div class="card">
+        <ngb-tabset type="pills" class="custom-pills" #t="ngbTabset" (tabChange)="validateCustomer($event)"
+          [destroyOnHide]="false">
+          <ngb-tab title="Customer Details" id="tab1">
+            <ng-template ngbTabContent>
+              <div class="card-body" [hidden]="profDetails">
+                <h4 class="card-title">Enroll Teller</h4>
+                <hr>
+                <form class="form form-material" [formGroup]="tellerForm">
+                  <div class="form-group row">
+
+                      <input type="text" class="form-control" formControlName="testInput" placeholder="test input"
+                      [attr.disabled]="isDisabled? true : null" />
+
+                    <label for="tellerName" class="col-2 col-form-label">Teller Name <span
+                        class="error">*</span></label>
+                    <div class="col-md-10">
+                      <input type="text" class="form-control" formControlName="tellerName" placeholder="Full Name"
+                        [attr.disabled]="isDisabled? true : null" />
+                      <div
+                        *ngIf="submited && (tellerForm.controls['tellerName'].invalid || tellerForm.controls['tellerName'].dirty || tellerForm.controls['tellerName'].touched)"
+                        class="error">
+                        <div *ngIf="c.tellerName.errors?.required">FullName is required</div>
+                        <div *ngIf="c.tellerName.errors?.minlength">Full Name must be a more than 6 characters</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="tellerEmail" class="col-2 col-form-label">Teller Email <span
+                        class="error">*</span></label>
+                    <div class="col-md-10">
+                      <input type="text" class="form-control" id="tellerEmail" formControlName="tellerEmail"
+                        placeholder="Customer ID Number" [attr.disabled]="isDisabled? true : null" />
+                      <div
+                        *ngIf="submited && (tellerForm.controls['tellerEmail'].invalid || tellerForm.controls['tellerEmail'].dirty || tellerForm.controls['tellerEmail'].touched)"
+                        class="error">
+                        <div *ngIf="c.tellerEmail.errors?.required">Teller Email is required</div>
+                        <div *ngIf="c.tellerEmail.errors?.maxlength">Teller Email is should not exceed 20 characters
+                        </div>
+                        <div *ngIf="c.tellerEmail.errors?.minlength">Teller Email must be a more than 5 characters</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group row">
+                        <label for="branchCode" class="control-label text-left col-md-2">Department <span
+                            class="error">*</span></label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" formControlName="departmentCode" placeholder="Department"
+                            [attr.disabled]="isDisabled? true : null" />
+                          <div
+                            *ngIf="submited && (tellerForm.controls['departmentCode'].invalid || tellerForm.controls['departmentCode'].dirty || tellerForm.controls['departmentCode'].touched)"
+                            class="error">
+                            <div *ngIf="c.departmentCode.errors?.required">Branch is required</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="col-lg-12" style="text-align: left; padding-left: 16.7%">
+                      <button type="submit" class="btn btn-success cust-btn" (click)="deleteTellerDetails()">
+                        DELETE</button>
+                      <button type="button" class="btn btn-warning" (click)="cancel()">Cancel</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
+      </div>
+    </div>
+    <div class="col-lg-12 col-xlg-12 col-md-12" *ngIf="profForm">
+      <div class="card">
+        <ngb-tabset type="pills" class="custom-pills" #t="ngbTabset" (tabChange)="validateCustomer($event)"
+          [destroyOnHide]="false">
+          <ngb-tab title="Customer Details" id="tab1">
+            <ng-template ngbTabContent>
+              <div class="card-body" [hidden]="profDetails">
+                <h4 class="card-title">Enroll Profile</h4>
+                <hr>
+                <form class="form form-material" [formGroup]="form">
+                  <div class="form-group row">
+                    <label for="customerName" class="col-2 col-form-label">Full Name <span
+                        class="error">*</span></label>
+                    <div class="col-md-10">
+                      <input type="text" class="form-control" formControlName="customerName" placeholder="Full Name"
+                        [attr.disabled]="isDisabled? true : null" />
+                      <div
+                        *ngIf="submited && (form.controls['customerName'].invalid || form.controls['customerName'].dirty || form.controls['customerName'].touched)"
+                        class="error">
+                        <div *ngIf="f.customerName.errors?.required">FullName is required</div>
+                        <div *ngIf="f.customerName.errors?.minlength">Full Name must be a more than 6 characters</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">  
+                    <label for="example-password-input" class="col-2 col-form-label">Gender <span
+                        class="error">*</span></label>
+                    <div class="col-10">
+                      <div class="form-check">
+                        <div class="custom-control custom-radio">
+                          <input type="radio" value="MALE" formControlName="gender" class="custom-control-input"
+                            id="customControlValidation2" [attr.disabled]="isDisabled? true : null">
+                          <label class="custom-control-label" for="customControlValidation2">Male</label>
+                        </div>
+                      </div>
+                      <div class="form-check">
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input" value="FEMALE" formControlName="gender"
+                            id="customControlValidation3" [attr.disabled]="isDisabled? true : null">
+                          <label class="custom-control-label" for="customControlValidation3">Female</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="customerIdNumber" class="col-2 col-form-label">ID Number <span
+                        class="error">*</span></label>
+                    <div class="col-md-10">
+                      <input type="text" class="form-control" id="customerIdNumber" formControlName="customerIdNumber"
+                        placeholder="Customer ID Number" [attr.disabled]="isDisabled? true : null" />
+                      <div
+                        *ngIf="submited && (form.controls['customerIdNumber'].invalid || form.controls['customerIdNumber'].dirty || form.controls['customerIdNumber'].touched)"
+                        class="error">
+                        <div *ngIf="f.customerIdNumber.errors?.required">ID Number is required</div>
+                        <div *ngIf="f.customerIdNumber.errors?.maxlength">ID Number is should not exceed 20 characters
+                        </div>
+                        <div *ngIf="f.customerIdNumber.errors?.minlength">ID Number must be a more than 5 characters
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="phoneNumber" class="col-2 col-form-label">Phone Number <span
+                        class="error">*</span></label>
+                    <div class="col-md-10">
+                      <input type="text" class="form-control" formControlName="phoneNumber"
+                        placeholder="Telephone Number.." [attr.disabled]="isDisabled? true : null" />
+                      <div
+                        *ngIf="submited && (form.controls['phoneNumber'].invalid || form.controls['phoneNumber'].dirty || form.controls['phoneNumber'].touched)"
+                        class="error">
+                        <div *ngIf="f.phoneNumber.errors?.required">Phone Number is required</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group row">
+                        <label for="branchCode" class="control-label text-left col-md-2">Branch <span
+                            class="error">*</span></label>
+                        <div class="col-md-10">
+                          <select [attr.disabled]="isDisabled? true : null" class="form-control custom-select"
+                            data-placeholder="branch group" tabindex="1" formControlName="branchCode">
+                            <option *ngFor="let branch of activeBranches" [value]="branch.branchCode">
+                              {{branch.branchName}}
+                            </option>
+                          </select>
+                          <div
+                            *ngIf="submited && (form.controls['branchCode'].invalid || form.controls['branchCode'].dirty || form.controls['branchCode'].touched)"
+                            class="error">
+                            <div *ngIf="f.branchCode.errors?.required">Branch is required</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="col-lg-12" style="text-align: left; padding-left: 16.7%">
+                      <button type="submit" class="btn btn-success cust-btn" (click)="deleteCustomerDetails()">
+                        DELETE</button>
+                      <button type="button" class="btn btn-warning" (click)="cancel()">Cancel</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
+      </div>
+    </div>
+    <!-- Column -->
+  </div>
+</block-ui>

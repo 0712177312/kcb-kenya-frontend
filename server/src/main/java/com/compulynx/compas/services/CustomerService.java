@@ -82,10 +82,6 @@ public class CustomerService {
 		return customerRepository.rejeCustomerWaive(waivedApprovedBy,customerId);
 	}
 
-	public int rejectCustomerEnrollment(String customerId) {
-		return customerRepository.rejectCustomerEnrollment(customerId);
-	}
-
 	public List<Customer> gtEnrolledCustomers(Date fromDate, Date toDate, String enrolledType) {
 		// TODO Auto-generated method stub
 		return customerRepository.getEnrolledCustomers(fromDate, toDate, enrolledType);
@@ -115,7 +111,16 @@ public class CustomerService {
 		// TODO Auto-generated method stub
 		return customerRepository.upgradeCustomerDetails(customerId);
 	}
-	
+
+	public int rejectCustomerEnrollment(int rejectedBy,String customerId) {
+		return customerRepository.rejectCustomerEnrollment(rejectedBy,customerId);
+	}
+
+	public int deleteCustomer(int deletedBy,String customerId) {
+		// TODO Auto-generated method stub
+		return customerRepository.deleteCustomers(deletedBy,customerId);
+	}
+
 //	public List<Customer> gtEnrolledCustomers(Date fromDate, Date toDate) {
 //		// TODO Auto-generated method stub
 //		return customerRepository.getAll(fromDate,toDate);

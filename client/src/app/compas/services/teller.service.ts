@@ -25,6 +25,7 @@ export class TellerService {
   checkTellerExists(teller) {
     return this.http.post(`${this.API_URL.url}/tellers/checkTeller`, teller);
   }
+
   getTellerDetails(teller) {
     return this.http.post(`${this.getConfigs().cobanking}/userSearch`, teller);
   }
@@ -49,5 +50,13 @@ export class TellerService {
 
   rejectTellerApproval(tellerDetails){
     return this.http.post(`${this.API_URL.url}/tellers/rejectTellerApproval`, tellerDetails);
+  }
+
+  removeTeller(tellerDetails){
+    return this.http.post(`${this.API_URL.url}/tellers/removeTeller`, tellerDetails);
+  }
+
+  obtainTellerDetails(teller) {
+    return this.http.post(`${this.API_URL.url}/tellers/obtainTellerDetails`, teller);
   }
 }

@@ -30,6 +30,14 @@ public class Teller extends BaseModel{
     @Column(name = "created_at", nullable = false,updatable = false)
     @CreationTimestamp
     private Date createdOn;
+
+	@Column(name="deleted_by")
+	private Integer deletedBy;
+
+	@Column(name = "deleted_on", nullable = true, updatable = true)
+	@CreationTimestamp
+	private Date deletedOn;
+
 	protected Teller() {
 		
 	}
@@ -37,7 +45,7 @@ public class Teller extends BaseModel{
 	public Teller(String tellerId, String tellerStatus, String deptCode, String recordStatus, String tellerEmail,
 			String tellerName, String tellerSignOnName, String departmentCode, String companyCode,
 			String customerId,String verified, int createdBy, int verifiedBy, 
-			Date approvedOn, Date createdOn, String enrollStatus) {
+			Date approvedOn, Date createdOn, String enrollStatus, int deletedBy, Date deletedOn) {
 		super();
 		this.tellerId = tellerId;
 		this.tellerStatus = tellerStatus;
@@ -54,6 +62,8 @@ public class Teller extends BaseModel{
 		this.verifiedBy = verifiedBy;
 		this.approvedOn = approvedOn;
 		this.createdOn = createdOn;
+		this.deletedBy = deletedBy;
+		this.deletedOn = deletedOn;
 	}
 
 	public Date getCreatedOn() {
@@ -174,5 +184,25 @@ public class Teller extends BaseModel{
 
 	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
+	}
+
+	public int getDeletedBy() {
+		if(deletedBy == null){
+			return 0;
+		}else {
+			return deletedBy;
+		}
+	}
+
+	public void setDeletedBy(int deletedBy) {
+		this.deletedBy = deletedBy;
+	}
+
+	public Date getDeletedOn() {
+		return deletedOn;
+	}
+
+	public void setDeletedOn(Date deletedOn) {
+		this.deletedOn = deletedOn;
 	}
 }

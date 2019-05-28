@@ -64,4 +64,12 @@ export class CustomerService {
     return this.http.post(`${this.API_URL.url}/rejectProfileDetails`, profile);
   }
 
+  removeCustomer(customerDetails){
+    return this.http.post(`${this.API_URL.url}/deleteCustomer`, customerDetails);
+  }
+
+  obtainCustomerDetails(customer){
+    return this.http.post(`${this.API_URL.url}/obtainCustomerDetails`, customer);
+  }
+
 }

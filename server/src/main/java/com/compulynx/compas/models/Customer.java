@@ -60,6 +60,13 @@ public class Customer extends BaseModel {
     @Column(name = "approvedcustomerwaive_on", nullable = true,updatable = true)
     @CreationTimestamp
     private Date approveWaiveOn;
+
+    @Column(name="deleted_by")
+    private Integer deletedBy;
+
+    @Column(name = "deleted_on", nullable = true, updatable = true)
+	@CreationTimestamp
+    private Date deletedOn;
     
         
 	public Customer() {
@@ -70,7 +77,7 @@ public class Customer extends BaseModel {
 			String phoneNumber, String gender, String country, String nationality, String customerType, int branchId,
 			boolean active, int createdBy, String verified, int verifiedBy, Date verifiedOn,
 			Date createdOn,String branchCode, String waived, int waivedBy, Date waivedOn,
-			int waivedApprovedBy,Date approveWaiveOn) {
+			int waivedApprovedBy,Date approveWaiveOn, int deletedBy, Date deletedOn ) {
 		super();
 		this.customerName = customerName;
 		this.customerIdNumber = customerIdNumber;
@@ -94,6 +101,8 @@ public class Customer extends BaseModel {
 		this.waivedOn=waivedOn;
 		this.waivedApprovedBy =waivedApprovedBy;
 		this.approveWaiveOn = approveWaiveOn;
+		this.deletedBy = deletedBy;
+		this.deletedOn = deletedOn;
 	}
 
 	public int getWaivedApprovedBy() {
@@ -270,5 +279,25 @@ public class Customer extends BaseModel {
 
 	public void setWaivedOn(Date waivedOn) {
 		this.waivedOn = waivedOn;
+	}
+
+	public int getDeletedBy() {
+		if(deletedBy == null){
+			return 0;
+		}else {
+			return deletedBy;
+		}
+	}
+
+	public void setDeletedBy(int deletedBy) {
+		this.deletedBy = deletedBy;
+	}
+
+	public Date getDeletedOn() {
+		return deletedOn;
+	}
+
+	public void setDeletedOn(Date deletedOn) {
+		this.deletedOn = deletedOn;
 	}
 }

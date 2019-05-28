@@ -74,5 +74,7 @@ public class TellerService {
 		return tellerRepository.rejectTellerApproval(customerId);
 	}
 
-
+	public int removeTeller(int deletedBy, String customerId){
+		return tellerRepository.removeTeller(deletedBy, customerId);
+	}
 }

@@ -150,6 +150,25 @@ public class TellerController {
 	    	return new ResponseEntity<>(resp, HttpStatus.OK);
 	  }
     }
+
+	@PostMapping(value="/obtainTellerDetails")
+	public ResponseEntity<?> obtainTellerDetails(@RequestBody Teller teller) {
+		try {
+			Teller cust = tellerService.checkTeller(teller.getTellerId());
+			if(cust != null) {
+				return new ResponseEntity<>(new TellerResponse("000","teller found",
+						true,GlobalResponse.APIV,cust),HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(new TellerResponse("201","teller not found",
+						false,GlobalResponse.APIV,teller),HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
+
     
 //    @PostMapping(value="/getTellerDetailsToVerify")
 //    public ResponseEntity<?> getTellerDetailsToVerify(@RequestBody Teller teller) {
@@ -251,6 +270,27 @@ public class TellerController {
 			}
 		}catch(Exception e){
 			GlobalResponse resp = new GlobalResponse("404", "An Exception occurred while attempting to reject the teller", false,
+					GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
+
+	@PostMapping(value = "/removeTeller")
+	public ResponseEntity<?> removeTeller (@RequestBody Teller teller){
+		try{
+			int updates = tellerService.removeTeller(teller.getDeletedBy(), teller.getCustomerId());
+			if(updates > 0){
+				return new ResponseEntity<>(
+						new GlobalResponse("000", "Teller removed successfully", true, GlobalResponse.APIV),
+						HttpStatus.OK);
+			}else{
+				return new ResponseEntity<>(
+						new GlobalResponse(GlobalResponse.APIV, "201", false, "Teller not removed successfully"),
+						HttpStatus.OK);
+			}
+		}catch(Exception e){
+			GlobalResponse resp = new GlobalResponse("404", "An Exception occurred while attempting to remove the teller", false,
 					GlobalResponse.APIV);
 			e.printStackTrace();
 			return new ResponseEntity<>(resp, HttpStatus.OK);

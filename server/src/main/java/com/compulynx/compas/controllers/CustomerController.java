@@ -134,6 +134,27 @@ public class CustomerController {
 		}
 	}
 
+	@PostMapping(value = "/obtainCustomerDetails")
+	public ResponseEntity<?> obtainCustomerDetails(@RequestBody Customer customer) {
+		try {
+			Customer cust = customerService.checkCustomer(customer.getMnemonic(), customer.getMnemonic());
+			if (cust != null) {
+				return new ResponseEntity<>(new CustomerResponse("000", "customer found", true, GlobalResponse.APIV, cust),
+						HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(
+						new CustomerResponse("201", "customer not found", false, GlobalResponse.APIV, cust), HttpStatus.OK);
+
+			}
+		} catch (Exception e) {
+			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
+
+
+
 	  @PostMapping({"/upCustomerDetails"})
 	  public ResponseEntity<?> upCustomerDetails(@RequestBody Customer customer) {
 	    try {
@@ -324,7 +345,7 @@ public class CustomerController {
 	@PostMapping(value = "/rejectCustomerEnrollment")
 	public ResponseEntity<?> rejectCustomerEnrollment(@RequestBody Customer customer){
 		try {
-			int updates = customerService.rejectCustomerEnrollment(customer.getCustomerId());
+			int updates = customerService.rejectCustomerEnrollment(customer.getVerifiedBy(),customer.getCustomerId());
 			if(updates > 0){
 				return new ResponseEntity<>(
 						new GlobalResponse("000", "Customer rejected successfully", true, GlobalResponse.APIV),
@@ -360,6 +381,25 @@ public class CustomerController {
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404", "error processing customer details request", false,
 					GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
+	@PostMapping(value = "/deleteCustomer")
+	public ResponseEntity<?> deleteCustomer(@RequestBody Customer customer) {
+		try {
+			int cust = customerService.deleteCustomer(customer.getDeletedBy(), customer.getCustomerId());
+
+			if (cust > 0) {
+				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true,
+						"customer  " + customer.getCustomerId() + " deleted successfully"), HttpStatus.OK);
+
+			}
+			return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "201", false, "no customers found"),
+					HttpStatus.OK);
+
+		} catch (Exception e) {
+			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
 			return new ResponseEntity<>(resp, HttpStatus.OK);
 		}

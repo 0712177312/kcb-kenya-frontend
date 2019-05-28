@@ -26,6 +26,7 @@ import { RptsyslogsComponent } from './compas/reports/rptsyslogs/rptsyslogs.comp
 import { RptbranchesComponent } from './compas/reports/rptbranches/rptbranches.component';
 import { VerifyTellerComponent } from './compas/configs/verify-teller/verify-teller.component';
 import { VerifyCustomerDetailsComponent } from './compas/customers/verify-customer-details/verify-customer-details.component';
+import { DeleteCustomerComponent } from './compas/customers/delete-customer/delete-customer.component';
 export const Approutes: Routes = [
   {
     path: '',
@@ -144,8 +145,11 @@ export const Approutes: Routes = [
         canActivate: [ServiceGuard]
       },
       {
+        // path: 'reports/rptsyslogs',
+        // component: RptsyslogsComponent,
+        // canActivate: [ServiceGuard]
         path: 'reports/rptsyslogs',
-        component: RptsyslogsComponent,
+        component: DeleteCustomerComponent,
         canActivate: [ServiceGuard]
       }
     ]
