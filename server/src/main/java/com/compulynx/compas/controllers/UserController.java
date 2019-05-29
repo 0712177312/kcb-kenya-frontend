@@ -29,9 +29,10 @@ public class UserController {
 		
 		System.out.println("System users ####");
 		
-		for(User usr: users) {
-			usr.setPassword(AES.decrypt(usr.getPassword()));
-		}
+//		for(User usr: users) {
+//
+//			usr.setPassword(AES.decrypt(usr.getPassword()));
+//		}
 		
 		if(users.isEmpty()) {
 			return new ResponseEntity<>(new UserResponse(users,"no users found",false,"000",Api.API_VERSION), HttpStatus.OK);
@@ -57,7 +58,12 @@ public class UserController {
 					false,"201",Api.API_VERSION), HttpStatus.OK);
 		}
 		System.out.println("username" + user.getPassword());
-		user.setPassword(AES.encrypt(user.getPassword()));
+		if(user.getPassword()!=null){
+			user.setPassword(AES.encrypt(user.getPassword()));
+		}else{
+			user.setPassword("");
+		}
+
 		User usr=userService.addUser(user);
 		
 		if(usr ==null) {
