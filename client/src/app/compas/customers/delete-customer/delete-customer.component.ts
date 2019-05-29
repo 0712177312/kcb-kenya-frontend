@@ -34,7 +34,7 @@ export class DeleteCustomerComponent implements OnInit {
 
   constructor(private tellerSvc: TellerService, private apiService: BioService,
     private fb: FormBuilder, private custSvc: CustomerService,
-    private toastr: ToastrService, private logs: LogsService,  private globalService: MySharedService) { }
+    private toastr: ToastrService, private logs: LogsService, private globalService: MySharedService) { }
 
   ngOnInit() {
     this.profType = '1';
@@ -102,8 +102,8 @@ export class DeleteCustomerComponent implements OnInit {
 
   deleteCustomerDetails() {
     const customerDetails = {
-      'customerId': this.form.get('customerId').value, 
-      'deletedBy' : this.rightId
+      'customerId': this.form.get('customerId').value,
+      'deletedBy': this.rightId
     };
     this.custSvc.removeCustomer(customerDetails).subscribe((response) => {
       this.response = response;
@@ -132,23 +132,27 @@ export class DeleteCustomerComponent implements OnInit {
     // const teller = this.tellerForm.value;
     const tellerDetails = {
       'customerId': this.tellerForm.get('customerId').value,
-      'deletedBy' : this.rightId
+      'deletedBy': this.rightId
     };
     this.tellerSvc.removeTeller(tellerDetails).subscribe((response) => {
       this.response = response;
       if (this.response.status === true) {
+        this.log(this.rightId, "Removed the teller details from the database");
         this.apiService.afisRemove(tellerDetails).subscribe((response) => {
           this.response = response;
           if (this.response.status === true) {
+            this.log(this.rightId, "Removed the teller details from abis");
             this.isVerified = false;
             return this.toastr.success('Teller removed successfully', ' Success!');
           } else {
+            this.log(this.rightId, "Attempted to remove teller details from abis");
             return this.toastr.error('Teller not removed successfully', ' Error!', { timeOut: 4000 });
           }
         }, error => {
           return this.toastr.error('Error while attempting to remove the teller details', 'Error!', { timeOut: 4000 });
         });
       } else {
+        this.log(this.rightId, "Attempted to remove teller details from the database");
         return this.toastr.warning("Failed to remove the teller", 'Warning!');
       }
     }, error => {
@@ -190,20 +194,20 @@ export class DeleteCustomerComponent implements OnInit {
     });
   }
 
-  cancel(){
+  cancel() {
     this.isVerified = false;
   }
 
   log(userId, activity) {
     const log = {
-        'userId': userId,
-        'activity': activity
+      'userId': userId,
+      'activity': activity
     };
 
     this.logs.log(log).subscribe((data) => {
 
     }, error => {
-        return this.toastr.error('Error logging.', 'Error!', { timeOut: 4000 });
+      return this.toastr.error('Error logging.', 'Error!', { timeOut: 4000 });
     });
-}
+  }
 }
