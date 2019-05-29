@@ -145,10 +145,12 @@ export const Approutes: Routes = [
         canActivate: [ServiceGuard]
       },
       {
-        // path: 'reports/rptsyslogs',
-        // component: RptsyslogsComponent,
-        // canActivate: [ServiceGuard]
         path: 'reports/rptsyslogs',
+        component: RptsyslogsComponent,
+        canActivate: [ServiceGuard]
+      },
+      {
+        path: 'masters/removeCustomer',
         component: DeleteCustomerComponent,
         canActivate: [ServiceGuard]
       }
