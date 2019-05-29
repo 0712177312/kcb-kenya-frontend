@@ -77,9 +77,11 @@
                 <form class="form form-material" [formGroup]="tellerForm">
                   <div class="form-group row">
 
-                      <input type="text" class="form-control" formControlName="testInput" placeholder="test input"
-                      [attr.disabled]="isDisabled? true : null" />
-
+                    <label for="customerId" class="col-2 col-form-label">CustomerId<span class="error">*</span></label>
+                    <div class="col-md-10">
+                      <input type="text" class="form-control" formControlName="customerId" placeholder="customerId"
+                        [attr.disabled]="isDisabled? true : null" />
+                    </div>
                     <label for="tellerName" class="col-2 col-form-label">Teller Name <span
                         class="error">*</span></label>
                     <div class="col-md-10">
@@ -115,8 +117,8 @@
                         <label for="branchCode" class="control-label text-left col-md-2">Department <span
                             class="error">*</span></label>
                         <div class="col-md-10">
-                            <input type="text" class="form-control" formControlName="departmentCode" placeholder="Department"
-                            [attr.disabled]="isDisabled? true : null" />
+                          <input type="text" class="form-control" formControlName="departmentCode"
+                            placeholder="Department" [attr.disabled]="isDisabled? true : null" />
                           <div
                             *ngIf="submited && (tellerForm.controls['departmentCode'].invalid || tellerForm.controls['departmentCode'].dirty || tellerForm.controls['departmentCode'].touched)"
                             class="error">
@@ -151,6 +153,12 @@
                 <hr>
                 <form class="form form-material" [formGroup]="form">
                   <div class="form-group row">
+                    <label for="customerId" class="col-2 col-form-label">Customer Id<span
+                        class="error">*</span></label>
+                    <div class="col-md-10">
+                      <input type="text" class="form-control" formControlName="customerId" placeholder="customerId"
+                        [attr.disabled]="isDisabled? true : null" />
+                    </div>
                     <label for="customerName" class="col-2 col-form-label">Full Name <span
                         class="error">*</span></label>
                     <div class="col-md-10">
@@ -164,7 +172,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-group row">  
+                  <div class="form-group row">
                     <label for="example-password-input" class="col-2 col-form-label">Gender <span
                         class="error">*</span></label>
                     <div class="col-10">
