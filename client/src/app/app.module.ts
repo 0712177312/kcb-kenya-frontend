@@ -78,6 +78,9 @@ import { DeleteCustomerComponent } from './compas/customers/delete-customer/dele
 
 // import { stompConfig } from './compas/services/web-socket-config';
 
+import {ProgressBarModalComponent} from './progressbar-modal.component';
+import {NgIdleKeepaliveModule} from '@ng-idle/keepalive';
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
   wheelSpeed: 1,
@@ -127,7 +130,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     VerifyTellerComponent,
     VerifyCustomerDetailsComponent,
     BlockUiTemplateComponent,
-    DeleteCustomerComponent
+    DeleteCustomerComponent,
+    ProgressBarModalComponent
   ],
   imports: [
     CommonModule,
@@ -152,8 +156,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NgMultiSelectDropDownModule.forRoot(),
     Ng2SmartTableModule,
     ToastrModule.forRoot(),
+    NgIdleKeepaliveModule.forRoot()
   ],
-  entryComponents: [ConfirmDialogComponent, BlockUiTemplateComponent],
+  entryComponents: [ConfirmDialogComponent, BlockUiTemplateComponent, ProgressBarModalComponent],
   providers: [
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
