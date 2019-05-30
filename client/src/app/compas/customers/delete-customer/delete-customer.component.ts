@@ -56,14 +56,27 @@ export class DeleteCustomerComponent implements OnInit {
   }
 
   initCustomerProfile() {
-    this.form = this.fb.group({
-      customerId: new FormControl(this.locl.customer.customerId, []),
-      customerName: new FormControl(this.locl.customer.customerName, []),
-      gender: new FormControl(this.locl.customer.gender, []),
-      customerIdNumber: new FormControl(this.locl.customer.customerIdNumber, []),
-      phoneNumber: new FormControl(this.locl.customer.phoneNumber, []),
-      branchCode: new FormControl(this.locl.customer.branchCode, [])
-    });
+    if (this.locl.customer != null) {
+      // customer obtained thus the details will be displayed
+      this.form = this.fb.group({
+        customerId: new FormControl(this.locl.customer.customerId, []),
+        customerName: new FormControl(this.locl.customer.customerName, []),
+        gender: new FormControl(this.locl.customer.gender, []),
+        customerIdNumber: new FormControl(this.locl.customer.customerIdNumber, []),
+        phoneNumber: new FormControl(this.locl.customer.phoneNumber, []),
+        branchCode: new FormControl(this.locl.customer.branchCode, [])
+      });
+    } else {
+      // customer not obtained thus only the customer id will be displayed
+      this.form = this.fb.group({
+        customerId: new FormControl(""),
+        customerName: new FormControl(""),
+        gender: new FormControl(""),
+        customerIdNumber: new FormControl(""),
+        phoneNumber: new FormControl(""),
+        branchCode: new FormControl("")
+      });
+    }
 
     this.isVerified = true;
     this.profForm = true;
@@ -72,32 +85,26 @@ export class DeleteCustomerComponent implements OnInit {
   }
 
   initTellerProfile() {
-    this.tellerForm = this.fb.group({
-      testInput: new FormControl("test1", []),
-      // id: new FormControl(0),
-      tellerId: new FormControl(this.locl.teller.id, []),
-      // tellerStatus: new FormControl(this.locl.payload.loginStatus, []),
-      // deptCode: new FormControl(this.locl.payload.deptCode),
-      // recordStatus: new FormControl(this.locl.payload.recordStatus, []),
-      tellerEmail: new FormControl(this.locl.teller.tellerEmail, []),
-      tellerName: new FormControl(this.locl.teller.tellerName, []),
-      // tellerSignOnName: new FormControl(this.locl.payload.signOnName, [Validators.required]),
-      departmentCode: new FormControl(this.locl.teller.departmentCode, []),
-      // companyCode: new FormControl(this.locl.payload.companyCode),
-      customerId: new FormControl(this.locl.teller.customerId, []),
-      // verified: 'N',
-      // customerType: 'TEllER',
-      // waived: 'N',
-      // waivedBy: 0,
-      // waivedApprovedBy: 0,
-      // enrollStatus: 'N',
-      // verifiedBy: 0
-    });
+    if (this.locl.teller.id != null) {
+      //teller details obtained thus the details will be displayed
+      this.tellerForm = this.fb.group({
+        customerId: new FormControl(this.locl.teller.customerId, []),
+        tellerEmail: new FormControl(this.locl.teller.tellerEmail, []),
+        tellerName: new FormControl(this.locl.teller.tellerName, []),
+        departmentCode: new FormControl(this.locl.teller.departmentCode, [])
+      });
+    } else {
+      // teller details not obtained thus only the customer id will be displayed
+      this.tellerForm = this.fb.group({
+        customerId: new FormControl("124"),
+        tellerEmail: new FormControl(""),
+        tellerName: new FormControl(""),
+        departmentCode: new FormControl("")
+      });
+    }
 
     this.isVerified = true;
     this.profForm = false;
-    console.log(this.tellerForm.get('tellerName').value);
-    console.log(this.tellerForm.get('tellerId').value);
   }
 
   deleteCustomerDetails() {
@@ -107,22 +114,20 @@ export class DeleteCustomerComponent implements OnInit {
     };
     this.custSvc.removeCustomer(customerDetails).subscribe((response) => {
       this.response = response;
-      if (this.response.status === true) {
-        this.apiService.afisRemove(customerDetails).subscribe((response) => {
-          this.response = response;
-          if (this.response.status === true) {
-            this.isVerified = false;
-            return this.toastr.success('Customer removed successfully', ' Success!');
-          } else {
-            return this.toastr.error('Customer not removed successfully', ' Error!', { timeOut: 4000 });
-          }
-
-        }, error => {
-          return this.toastr.error('Error while attempting to remove the customer details', 'Error!', { timeOut: 4000 });
-        });
-      } else {
-        return this.toastr.warning("Failed to remove the customer", 'Warning!');
-      }
+      this.log(this.rightId, "Removed the customer details from the database");
+      this.apiService.afisRemove(customerDetails).subscribe((response) => {
+        this.response = response;
+        if (this.response.status === true) {
+          this.log(this.rightId, "Removed the customer details from abis");
+          this.isVerified = false;
+          return this.toastr.success('Customer removed successfully', ' Success!');
+        } else {
+          this.log(this.rightId, "Attempted to remove customer details from abis");
+          return this.toastr.error('Customer not removed successfully', ' Error!', { timeOut: 4000 });
+        }
+      }, error => {
+        return this.toastr.error('Error while attempting to remove the customer details', 'Error!', { timeOut: 4000 });
+      });
     }, error => {
       return this.toastr.error('Error while attempting to remove the customer.', 'Error!', { timeOut: 4000 });
     });
@@ -136,25 +141,20 @@ export class DeleteCustomerComponent implements OnInit {
     };
     this.tellerSvc.removeTeller(tellerDetails).subscribe((response) => {
       this.response = response;
-      if (this.response.status === true) {
-        this.log(this.rightId, "Removed the teller details from the database");
-        this.apiService.afisRemove(tellerDetails).subscribe((response) => {
-          this.response = response;
-          if (this.response.status === true) {
-            this.log(this.rightId, "Removed the teller details from abis");
-            this.isVerified = false;
-            return this.toastr.success('Teller removed successfully', ' Success!');
-          } else {
-            this.log(this.rightId, "Attempted to remove teller details from abis");
-            return this.toastr.error('Teller not removed successfully', ' Error!', { timeOut: 4000 });
-          }
-        }, error => {
-          return this.toastr.error('Error while attempting to remove the teller details', 'Error!', { timeOut: 4000 });
-        });
-      } else {
-        this.log(this.rightId, "Attempted to remove teller details from the database");
-        return this.toastr.warning("Failed to remove the teller", 'Warning!');
-      }
+      this.log(this.rightId, "Removed the teller details from the database");
+      this.apiService.afisRemove(tellerDetails).subscribe((response) => {
+        this.response = response;
+        if (this.response.status === true) {
+          this.log(this.rightId, "Removed the teller details from abis");
+          this.isVerified = false;
+          return this.toastr.success('Teller removed successfully', ' Success!');
+        } else {
+          this.log(this.rightId, "Attempted to remove teller details from abis");
+          return this.toastr.error('Teller not removed successfully', ' Error!', { timeOut: 4000 });
+        }
+      }, error => {
+        return this.toastr.error('Error while attempting to remove the teller details', 'Error!', { timeOut: 4000 });
+      });
     }, error => {
       return this.toastr.error('Error while attempting to remove the teller.', 'Error!', { timeOut: 4000 });
     });
@@ -170,6 +170,12 @@ export class DeleteCustomerComponent implements OnInit {
         this.initCustomerProfile();
         return this.toastr.success('Customer id is valid', ' Success!');
       } else {
+        if (!customer.startsWith('ID')) {
+          //continue to the delete page only if id does not start with 'ID'
+          this.locl.customer = {};
+          this.locl.customer.customerId = customer;
+          this.initCustomerProfile();
+        }
         return this.toastr.warning('Customer id is was not found', ' Warning!');
       }
     }, error => {
@@ -187,6 +193,15 @@ export class DeleteCustomerComponent implements OnInit {
         this.initTellerProfile();
         return this.toastr.success('Teller id is valid', ' Success!');
       } else {
+        //continue to the delete page only if id does not start with 'KE'
+        if (!teller.startsWith('KE')) {
+          this.locl = null; 
+          this.locl = {};
+          this.locl.teller = {};
+          console.log(this.locl);
+          this.locl.teller.customerId = teller;
+          this.initTellerProfile();
+        }
         return this.toastr.warning('Teller id is was not found', ' Warning!');
       }
     }, error => {
