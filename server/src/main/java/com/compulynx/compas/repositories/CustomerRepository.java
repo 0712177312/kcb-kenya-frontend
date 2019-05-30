@@ -30,7 +30,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	
 	@Modifying
 	@Transactional
-	@Query(nativeQuery = true, value ="UPDATE customer set verified='A',verified_by=?1, verified_on=systimestamp  WHERE customerId=?2")
+	@Query(nativeQuery = true, value ="UPDATE customer set verified='A',verified_by=?1, verified_on=systimestamp  WHERE customerId=?2 and verified<>'D'")
 	int approveCustomers(int verifiedBy, String customerId);
 	
 	@Query(nativeQuery=true, value="SELECT * from customer  where customerId =?1")
