@@ -645,10 +645,14 @@ rejectTeller() {
         }else{
           return this.toastr.success('Teller was not removed successfully.', 'Warning!');
         }
+      }, error => {
+        return this.toastr.error('Error while attempting to remove the teller print details', 'Error!', { timeOut: 4000 });
       });
     }else{
       return this.toastr.warning('There was a problem rejecting teller details. ', 'Warning!');
     }
+  }, error => {
+    return this.toastr.error('Error while attempting to reject the teller.', 'Error!', { timeOut: 4000 });
   });
 }
 
