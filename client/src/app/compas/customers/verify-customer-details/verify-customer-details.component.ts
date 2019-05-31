@@ -125,16 +125,19 @@ getCustomer (cust) {
      this.tellerSvc.getTellerDetails(teller).subscribe( data => {
 
      this.tellerInq = data;
-     if (this.tellerInq.requestStatus === true) {
+     if (this.tellerInq.requestStatus === true && this.tellerInq.cif !== '') {
        this.isVerified = true;
          this.account_number = ' ';
         this.initTellerProfile(this.tellerInq);
 
         return this.toastr.success('Teller id is valid, can proceed to enroll', ' Success!');
-    } else {
+     }else if(this.tellerInq.requestStatus === true && this.tellerInq.cif === ''){
+        // valid teller returned but they do not have a cif number attached
+        return this.toastr.warning('Teller id is valid but account does not have a valid cif number', 'Warning!');
+     } else {
 
         return this.toastr.warning('Specified teller id was not found or invalid , kindly verify to proceed .', 'Warning!');
-      }
+     }
     }, error => {
 
         return this.toastr.error('Error in inquiring teller data.', 'Error!', { timeOut: 4000 });
