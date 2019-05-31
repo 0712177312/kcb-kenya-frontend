@@ -54,8 +54,8 @@ public interface TellerRepository extends JpaRepository<Teller, Long>{
 
 	@Modifying
 	@Transactional
-	@Query(nativeQuery = true, value ="UPDATE tellermaster set verified='R' WHERE customerId=?1")
-	int rejectTellerApproval(String customerId);
+	@Query(nativeQuery = true, value ="UPDATE tellermaster set verified='R', rejected_by=?1, rejected_on=systimestamp WHERE customerId=?2")
+	int rejectTellerApproval(int rejectedBy,String customerId);
 
 	@Modifying
 	@Transactional

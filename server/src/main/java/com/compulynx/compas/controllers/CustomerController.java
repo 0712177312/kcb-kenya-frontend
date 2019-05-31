@@ -345,7 +345,7 @@ public class CustomerController {
 	@PostMapping(value = "/rejectCustomerEnrollment")
 	public ResponseEntity<?> rejectCustomerEnrollment(@RequestBody Customer customer){
 		try {
-			int updates = customerService.rejectCustomerEnrollment(customer.getVerifiedBy(),customer.getCustomerId());
+			int updates = customerService.rejectCustomerEnrollment(customer.getRejectedBy(),customer.getCustomerId());
 			if(updates > 0){
 				return new ResponseEntity<>(
 						new GlobalResponse("000", "Customer rejected successfully", true, GlobalResponse.APIV),

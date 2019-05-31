@@ -545,7 +545,8 @@ upCustDet() {
 
   rejectCustomer() {
     const customerDetails = {
-      'customerId': this.customer.customerId
+      'customerId': this.customer.customerId,
+      'rejectedBy': this.rightId
     };
     this.blockUI.start('Rejecting the Customer...');
     //remove user from database

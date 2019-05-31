@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedBy;
 
 /**
  * @author Mutwol
@@ -67,6 +68,13 @@ public class Customer extends BaseModel {
     @Column(name = "deleted_on", nullable = true, updatable = true)
 	@CreationTimestamp
     private Date deletedOn;
+
+    @Column(name="rejected_by")
+	private Integer rejectedBy;
+
+    @Column(name = "rejected_on", nullable = true, updatable = true)
+	@CreationTimestamp
+	private Date rejectedOn;
     
         
 	public Customer() {
@@ -77,7 +85,8 @@ public class Customer extends BaseModel {
 			String phoneNumber, String gender, String country, String nationality, String customerType, int branchId,
 			boolean active, int createdBy, String verified, int verifiedBy, Date verifiedOn,
 			Date createdOn,String branchCode, String waived, int waivedBy, Date waivedOn,
-			int waivedApprovedBy,Date approveWaiveOn, int deletedBy, Date deletedOn ) {
+			int waivedApprovedBy,Date approveWaiveOn, int deletedBy, Date deletedOn, int rejectedBy,
+					Date rejectedOn) {
 		super();
 		this.customerName = customerName;
 		this.customerIdNumber = customerIdNumber;
@@ -102,6 +111,8 @@ public class Customer extends BaseModel {
 		this.waivedApprovedBy =waivedApprovedBy;
 		this.approveWaiveOn = approveWaiveOn;
 		this.deletedBy = deletedBy;
+		this.deletedOn = deletedOn;
+		this.rejectedBy = rejectedBy;
 		this.deletedOn = deletedOn;
 	}
 
@@ -299,5 +310,25 @@ public class Customer extends BaseModel {
 
 	public void setDeletedOn(Date deletedOn) {
 		this.deletedOn = deletedOn;
+	}
+
+	public int getRejectedBy() {
+		if(rejectedBy == null){
+			return 0;
+		}else{
+			return rejectedBy;
+		}
+	}
+
+	public void setRejectedBy(Integer rejectedBy) {
+		this.rejectedBy = rejectedBy;
+	}
+
+	public Date getRejectedOn() {
+		return rejectedOn;
+	}
+
+	public void setRejectedOn(Date rejectedOn) {
+		this.rejectedOn = rejectedOn;
 	}
 }
