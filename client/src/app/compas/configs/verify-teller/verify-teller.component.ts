@@ -636,19 +636,23 @@ rejectTeller() {
   this.tellerSvc.rejectTellerApproval(tellerDetails).subscribe(data => {
     this.respo = data;
     if (this.respo.status === true) {
+      this.log(this.rightId, 'rejected the teller '+ tellerDetails.customerId);
       //remove from abis
       this.biosvc.afisRemove(tellerDetails).subscribe(data => {
         if(this.respo.status === true){
           this.editMode = false;
+          this.log(this.rightId, 'removed teller details of '+ tellerDetails.customerId);
           this.gtTellers();
           return this.toastr.success('Teller was rejected successfully.', 'Success!');
         }else{
+          this.log(this.rightId, 'attempted to remove teller details of '+ tellerDetails.customerId);
           return this.toastr.success('Teller was not removed successfully.', 'Warning!');
         }
       }, error => {
         return this.toastr.error('Error while attempting to remove the teller print details', 'Error!', { timeOut: 4000 });
       });
     }else{
+      this.log(this.rightId, 'attempted to reject the teller '+ tellerDetails.customerId);
       return this.toastr.warning('There was a problem rejecting teller details. ', 'Warning!');
     }
   }, error => {

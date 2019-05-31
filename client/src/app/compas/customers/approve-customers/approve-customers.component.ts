@@ -553,19 +553,23 @@ upCustDet() {
     this.custSvc.rejectCustomerEnrollment(customerDetails).subscribe(data => {
       this.respo = data;
       if (this.respo.status === true) {
+        this.log(this.rightId, 'rejected the customer ' + customerDetails.customerId);
         //remove from abis
         this.biosvc.afisRemove(customerDetails).subscribe(data => {
             if(this.respo.status === true){
               this.editMode = false;
+              this.log(this.rightId, 'removed customer details of '+ customerDetails.customerId);
               this.gtCustomers();
               return this.toastr.success('Customer was rejected successfully.', ' Success!');
             }else{
+              this.log(this.rightId, 'attempted to remove customer details of '+ customerDetails.customerId);
               return this.toastr.success('Customer was not removed successfully.', ' Warning!');
             }
         }, error => {
           return this.toastr.error('Error while attempting to remove the print details', 'Error!', { timeOut: 4000 });
         });
       } else {
+        this.log(this.rightId, 'attempted to reject the customer ' + customerDetails.customerId);
         return this.toastr.warning('There was a problem rejecting customer details .', 'Warning!');
       }
     }, error => {
