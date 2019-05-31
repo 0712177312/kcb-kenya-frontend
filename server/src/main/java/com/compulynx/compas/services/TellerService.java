@@ -70,8 +70,8 @@ public class TellerService {
 //		return this.tellerRepository.removeTellerDetails(customerId);
 //	}
 
-	public int rejectTellerApproval(String customerId){
-		return tellerRepository.rejectTellerApproval(customerId);
+	public int rejectTellerApproval(int rejectedBy, String customerId){
+		return tellerRepository.rejectTellerApproval(rejectedBy, customerId);
 	}
 
 	public int removeTeller(int deletedBy, String customerId){

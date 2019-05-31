@@ -8,201 +8,231 @@ import javax.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
-@Table(name="tellermaster")
-public class Teller extends BaseModel{
-	@Column(unique=true)
-	private String tellerId;
-	private String tellerStatus;
-	private String deptCode;
-	private String recordStatus;
-	private String tellerEmail;
-	private String tellerName;
-	@Column(unique=true)
-	private String tellerSignOnName;
-	private String departmentCode;
-	private String companyCode;
-	private String customerId;
-	private String verified;
-	private int createdBy;
-	private int verifiedBy;
-    @Column(name="verified_on")
+@Table(name = "tellermaster")
+public class Teller extends BaseModel {
+    @Column(unique = true)
+    private String tellerId;
+    private String tellerStatus;
+    private String deptCode;
+    private String recordStatus;
+    private String tellerEmail;
+    private String tellerName;
+    @Column(unique = true)
+    private String tellerSignOnName;
+    private String departmentCode;
+    private String companyCode;
+    private String customerId;
+    private String verified;
+    private int createdBy;
+    private int verifiedBy;
+    @Column(name = "verified_on")
     private Date approvedOn;
-    @Column(name = "created_at", nullable = false,updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
     private Date createdOn;
 
-	@Column(name="deleted_by")
-	private Integer deletedBy;
+    @Column(name = "deleted_by")
+    private Integer deletedBy;
 
-	@Column(name = "deleted_on", nullable = true, updatable = true)
-	@CreationTimestamp
-	private Date deletedOn;
+    @Column(name = "deleted_on", nullable = true, updatable = true)
+    @CreationTimestamp
+    private Date deletedOn;
 
-	protected Teller() {
-		
-	}
-	
-	public Teller(String tellerId, String tellerStatus, String deptCode, String recordStatus, String tellerEmail,
-			String tellerName, String tellerSignOnName, String departmentCode, String companyCode,
-			String customerId,String verified, int createdBy, int verifiedBy, 
-			Date approvedOn, Date createdOn, String enrollStatus, int deletedBy, Date deletedOn) {
-		super();
-		this.tellerId = tellerId;
-		this.tellerStatus = tellerStatus;
-		this.deptCode = deptCode;
-		this.recordStatus = recordStatus;
-		this.tellerEmail = tellerEmail;
-		this.tellerName = tellerName;
-		this.tellerSignOnName = tellerSignOnName;
-		this.departmentCode = departmentCode;
-		this.companyCode = companyCode;
-		this.customerId = customerId;
-		this.verified = verified;
-		this.createdBy = createdBy;
-		this.verifiedBy = verifiedBy;
-		this.approvedOn = approvedOn;
-		this.createdOn = createdOn;
-		this.deletedBy = deletedBy;
-		this.deletedOn = deletedOn;
-	}
+    @Column(name = "rejected_by")
+    private Integer rejectedBy;
 
-	public Date getCreatedOn() {
-		return createdOn;
-	}
+    @Column(name = "rejected_on", nullable = true, updatable = true)
+    @CreationTimestamp
+    private Date rejectedOn;
 
-	public void setCreatedOn(Date createdOn) {
-		this.createdOn = createdOn;
-	}
+    protected Teller() {
 
-	public Date getApprovedOn() {
-		return approvedOn;
-	}
+    }
 
-	public void setApprovedOn(Date approvedOn) {
-		this.approvedOn = approvedOn;
-	}
+    public Teller(String tellerId, String tellerStatus, String deptCode, String recordStatus, String tellerEmail,
+                  String tellerName, String tellerSignOnName, String departmentCode, String companyCode,
+                  String customerId, String verified, int createdBy, int verifiedBy,
+                  Date approvedOn, Date createdOn, String enrollStatus, int deletedBy, Date deletedOn,
+                  int rejectedBy, Date rejectedOn) {
+        super();
+        this.tellerId = tellerId;
+        this.tellerStatus = tellerStatus;
+        this.deptCode = deptCode;
+        this.recordStatus = recordStatus;
+        this.tellerEmail = tellerEmail;
+        this.tellerName = tellerName;
+        this.tellerSignOnName = tellerSignOnName;
+        this.departmentCode = departmentCode;
+        this.companyCode = companyCode;
+        this.customerId = customerId;
+        this.verified = verified;
+        this.createdBy = createdBy;
+        this.verifiedBy = verifiedBy;
+        this.approvedOn = approvedOn;
+        this.createdOn = createdOn;
+        this.deletedBy = deletedBy;
+        this.deletedOn = deletedOn;
+        this.rejectedBy = rejectedBy;
+        this.rejectedOn = rejectedOn;
+    }
 
-	public int getVerifiedBy() {
-		return verifiedBy;
-	}
+    public Date getCreatedOn() {
+        return createdOn;
+    }
 
-	public void setVerifiedBy(int verifiedBy) {
-		this.verifiedBy = verifiedBy;
-	}
+    public void setCreatedOn(Date createdOn) {
+        this.createdOn = createdOn;
+    }
 
-	public int getCreatedBy() {
-		return createdBy;
-	}
+    public Date getApprovedOn() {
+        return approvedOn;
+    }
 
-	public void setCreatedBy(int createdBy) {
-		this.createdBy = createdBy;
-	}
+    public void setApprovedOn(Date approvedOn) {
+        this.approvedOn = approvedOn;
+    }
 
-	public String getVerified() {
-		return verified;
-	}
+    public int getVerifiedBy() {
+        return verifiedBy;
+    }
 
-	public void setVerified(String verified) {
-		this.verified = verified;
-	}
+    public void setVerifiedBy(int verifiedBy) {
+        this.verifiedBy = verifiedBy;
+    }
 
-	public String getTellerId() {
-		return tellerId;
-	}
+    public int getCreatedBy() {
+        return createdBy;
+    }
 
-	public void setTellerId(String tellerId) {
-		this.tellerId = tellerId;
-	}
+    public void setCreatedBy(int createdBy) {
+        this.createdBy = createdBy;
+    }
 
-	public String getTellerStatus() {
-		return tellerStatus;
-	}
+    public String getVerified() {
+        return verified;
+    }
 
-	public void setTellerStatus(String tellerStatus) {
-		this.tellerStatus = tellerStatus;
-	}
+    public void setVerified(String verified) {
+        this.verified = verified;
+    }
 
-	public String getDeptCode() {
-		return deptCode;
-	}
+    public String getTellerId() {
+        return tellerId;
+    }
 
-	public void setDeptCode(String deptCode) {
-		this.deptCode = deptCode;
-	}
+    public void setTellerId(String tellerId) {
+        this.tellerId = tellerId;
+    }
 
-	public String getRecordStatus() {
-		return recordStatus;
-	}
+    public String getTellerStatus() {
+        return tellerStatus;
+    }
 
-	public void setRecordStatus(String recordStatus) {
-		this.recordStatus = recordStatus;
-	}
+    public void setTellerStatus(String tellerStatus) {
+        this.tellerStatus = tellerStatus;
+    }
 
-	public String getTellerEmail() {
-		return tellerEmail;
-	}
+    public String getDeptCode() {
+        return deptCode;
+    }
 
-	public void setTellerEmail(String tellerEmail) {
-		this.tellerEmail = tellerEmail;
-	}
+    public void setDeptCode(String deptCode) {
+        this.deptCode = deptCode;
+    }
 
-	public String getTellerName() {
-		return tellerName;
-	}
+    public String getRecordStatus() {
+        return recordStatus;
+    }
 
-	public void setTellerName(String tellerName) {
-		this.tellerName = tellerName;
-	}
+    public void setRecordStatus(String recordStatus) {
+        this.recordStatus = recordStatus;
+    }
 
-	public String getTellerSignOnName() {
-		return tellerSignOnName;
-	}
+    public String getTellerEmail() {
+        return tellerEmail;
+    }
 
-	public void setTellerSignOnName(String tellerSignOnName) {
-		this.tellerSignOnName = tellerSignOnName;
-	}
+    public void setTellerEmail(String tellerEmail) {
+        this.tellerEmail = tellerEmail;
+    }
 
-	public String getDepartmentCode() {
-		return departmentCode;
-	}
+    public String getTellerName() {
+        return tellerName;
+    }
 
-	public void setDepartmentCode(String departmentCode) {
-		this.departmentCode = departmentCode;
-	}
+    public void setTellerName(String tellerName) {
+        this.tellerName = tellerName;
+    }
 
-	public String getCompanyCode() {
-		return companyCode;
-	}
+    public String getTellerSignOnName() {
+        return tellerSignOnName;
+    }
 
-	public void setCompanyCode(String companyCode) {
-		this.companyCode = companyCode;
-	}
+    public void setTellerSignOnName(String tellerSignOnName) {
+        this.tellerSignOnName = tellerSignOnName;
+    }
 
-	public String getCustomerId() {
-		return customerId;
-	}
+    public String getDepartmentCode() {
+        return departmentCode;
+    }
 
-	public void setCustomerId(String customerId) {
-		this.customerId = customerId;
-	}
+    public void setDepartmentCode(String departmentCode) {
+        this.departmentCode = departmentCode;
+    }
 
-	public int getDeletedBy() {
-		if(deletedBy == null){
-			return 0;
-		}else {
-			return deletedBy;
-		}
-	}
+    public String getCompanyCode() {
+        return companyCode;
+    }
 
-	public void setDeletedBy(int deletedBy) {
-		this.deletedBy = deletedBy;
-	}
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
 
-	public Date getDeletedOn() {
-		return deletedOn;
-	}
+    public String getCustomerId() {
+        return customerId;
+    }
 
-	public void setDeletedOn(Date deletedOn) {
-		this.deletedOn = deletedOn;
-	}
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public int getDeletedBy() {
+        if (deletedBy == null) {
+            return 0;
+        } else {
+            return deletedBy;
+        }
+    }
+
+    public void setDeletedBy(int deletedBy) {
+        this.deletedBy = deletedBy;
+    }
+
+    public Date getDeletedOn() {
+        return deletedOn;
+    }
+
+    public void setDeletedOn(Date deletedOn) {
+        this.deletedOn = deletedOn;
+    }
+
+    public int getRejectedBy() {
+        if (rejectedBy == null) {
+            return 0;
+        } else {
+            return rejectedBy;
+        }
+    }
+
+    public void setRejectedBy(int rejectedBy) {
+        this.rejectedBy = rejectedBy;
+    }
+
+    public Date getRejectedOn() {
+        return rejectedOn;
+    }
+
+    public void setRejectedOn(Date rejectedOn) {
+        this.rejectedOn = rejectedOn;
+    }
 }

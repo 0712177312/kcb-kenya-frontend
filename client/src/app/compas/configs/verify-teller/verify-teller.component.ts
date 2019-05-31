@@ -628,7 +628,8 @@ resetDevice() {
 
 rejectTeller() {
   const tellerDetails = {
-    'customerId': this.teller.customerId
+    'customerId': this.teller.customerId,
+    'rejectedBy': this.rightId
   };
   this.blockUI.start('Rejecting the Teller...');
   //remove teller from database

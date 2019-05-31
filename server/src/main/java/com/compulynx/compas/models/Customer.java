@@ -320,7 +320,7 @@ public class Customer extends BaseModel {
 		}
 	}
 
-	public void setRejectedBy(Integer rejectedBy) {
+	public void setRejectedBy(int rejectedBy) {
 		this.rejectedBy = rejectedBy;
 	}
 
