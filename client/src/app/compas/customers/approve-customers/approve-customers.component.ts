@@ -562,10 +562,14 @@ upCustDet() {
             }else{
               return this.toastr.success('Customer was not removed successfully.', ' Warning!');
             }
+        }, error => {
+          return this.toastr.error('Error while attempting to remove the print details', 'Error!', { timeOut: 4000 });
         });
       } else {
         return this.toastr.warning('There was a problem rejecting customer details .', 'Warning!');
       }
+    }, error => {
+      return this.toastr.error('Error while attempting to reject the customer.', 'Error!', { timeOut: 4000 });
     });
   }
 
