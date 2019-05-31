@@ -75,6 +75,7 @@ import { VerifyCustomerDetailsComponent } from './compas/customers/verify-custom
 import { BlockUiTemplateComponent } from './block-ui-temp.component';
 import {BlockUIHttpModule} from "ng-block-ui/http";
 import { DeleteCustomerComponent } from './compas/customers/delete-customer/delete-customer.component';
+import { ConvertStaffToCustomerComponent } from './compas/customers/convert-staff-to-customer/convert-staff-to-customer.component';
 
 // import { stompConfig } from './compas/services/web-socket-config';
 
@@ -131,7 +132,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     VerifyCustomerDetailsComponent,
     BlockUiTemplateComponent,
     DeleteCustomerComponent,
-    ProgressBarModalComponent
+    ProgressBarModalComponent,
+    DeleteCustomerComponent,
+    ConvertStaffToCustomerComponent
   ],
   imports: [
     CommonModule,

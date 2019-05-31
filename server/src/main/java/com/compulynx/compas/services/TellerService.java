@@ -70,11 +70,15 @@ public class TellerService {
 //		return this.tellerRepository.removeTellerDetails(customerId);
 //	}
 
-	public int rejectTellerApproval(String customerId){
-		return tellerRepository.rejectTellerApproval(customerId);
+	public int rejectTellerApproval(int rejectedBy, String customerId){
+		return tellerRepository.rejectTellerApproval(rejectedBy, customerId);
 	}
 
 	public int removeTeller(int deletedBy, String customerId){
 		return tellerRepository.removeTeller(deletedBy, customerId);
+	}
+
+	public int convertStaffToCustomer(String customerId){
+		return tellerRepository.convertStaffToCustomer(customerId);
 	}
 }

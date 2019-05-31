@@ -258,7 +258,7 @@ public class TellerController {
     @PostMapping(value = "/rejectTellerApproval")
 	public ResponseEntity<?> rejectTellerApproval (@RequestBody Teller teller){
     	try{
-    		int updates = tellerService.rejectTellerApproval(teller.getCustomerId());
+    		int updates = tellerService.rejectTellerApproval(teller.getRejectedBy(), teller.getCustomerId());
     		if(updates > 0){
 				return new ResponseEntity<>(
 						new GlobalResponse("000", "Teller rejected successfully", true, GlobalResponse.APIV),
