@@ -15,8 +15,7 @@ import { MySharedService } from '../../services/sharedService';
   styleUrls: ['./delete-customer.component.css']
 })
 export class DeleteCustomerComponent implements OnInit {
-
-  searchText;
+  
   isVerified = false;
   profType = '';
   profForm = false;

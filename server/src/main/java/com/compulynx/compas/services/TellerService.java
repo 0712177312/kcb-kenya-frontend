@@ -77,4 +77,8 @@ public class TellerService {
 	public int removeTeller(int deletedBy, String customerId){
 		return tellerRepository.removeTeller(deletedBy, customerId);
 	}
+
+	public int convertStaffToCustomer(String customerId){
+		return tellerRepository.convertStaffToCustomer(customerId);
+	}
 }

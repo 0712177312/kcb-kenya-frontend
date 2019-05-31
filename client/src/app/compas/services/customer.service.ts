@@ -72,4 +72,8 @@ export class CustomerService {
     return this.http.post(`${this.API_URL.url}/obtainCustomerDetails`, customer);
   }
 
+  convertStaffToCustomer(customerDetails){
+    return this.http.post(`${this.API_URL.url}/convertStaffToCustomer`, customerDetails);
+  }
+
 }

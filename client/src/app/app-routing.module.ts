@@ -27,6 +27,7 @@ import { RptbranchesComponent } from './compas/reports/rptbranches/rptbranches.c
 import { VerifyTellerComponent } from './compas/configs/verify-teller/verify-teller.component';
 import { VerifyCustomerDetailsComponent } from './compas/customers/verify-customer-details/verify-customer-details.component';
 import { DeleteCustomerComponent } from './compas/customers/delete-customer/delete-customer.component';
+import {ConvertStaffToCustomerComponent} from './compas/customers/convert-staff-to-customer/convert-staff-to-customer.component';
 export const Approutes: Routes = [
   {
     path: '',
@@ -152,6 +153,11 @@ export const Approutes: Routes = [
       {
         path: 'masters/removeCustomer',
         component: DeleteCustomerComponent,
+        canActivate: [ServiceGuard]
+      },
+      {
+        path: 'masters/convertstafftocustomer',
+        component: ConvertStaffToCustomerComponent,
         canActivate: [ServiceGuard]
       }
     ]

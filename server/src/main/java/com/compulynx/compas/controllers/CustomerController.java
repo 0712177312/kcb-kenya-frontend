@@ -404,4 +404,30 @@ public class CustomerController {
 			return new ResponseEntity<>(resp, HttpStatus.OK);
 		}
 	}
+
+	@PostMapping(value = "convertStaffToCustomer")
+    public ResponseEntity<?> convertStaffToCustomer(@RequestBody Customer customerRequestBody){
+	    try{
+	        // create the new customer based on the details obtained from the staff details
+	        Customer customer = customerService.upCustomerDetails(customerRequestBody);
+	        if(customer != null){
+	            int conversionUpdateReturnValue = this.tellerService.convertStaffToCustomer(customerRequestBody.getCustomerId());
+	            if(conversionUpdateReturnValue > 0){
+                    return new ResponseEntity<>(new GlobalResponse(
+                            "000","Conversion of Staff to Customer done successfully",true,GlobalResponse.APIV),HttpStatus.OK);
+                }else{
+                    return new ResponseEntity<>(new GlobalResponse(
+                            "201","Conversion of Staff to Customer not done successfully",false,GlobalResponse.APIV),HttpStatus.OK);
+                }
+            }else{
+                return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"201",
+                        false, "Error occurred while attempting to create the customer when converting staff to customer"),HttpStatus.OK);
+            }
+
+        }catch(Exception e){
+            GlobalResponse resp = new GlobalResponse("404","An Exception occurred when attempting to covert staff to customer",false,GlobalResponse.APIV);
+            e.printStackTrace();
+            return new ResponseEntity<>(resp, HttpStatus.OK);
+        }
+    }
 }
