@@ -67,4 +67,8 @@ export class AdministrationService {
     return this.http.get(`${this.API_URL.url}/usergroups/gtRights`);
   }
 
+  editUserProfile(userProfile){
+    return this.http.post(`${this.API_URL.url}/editUserProfile`, userProfile);
+  }
+
 }

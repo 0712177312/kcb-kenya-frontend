@@ -45,6 +45,27 @@ public class UserController {
 			return new ResponseEntity<>(resp, HttpStatus.OK);
 		}
 	}
+
+	@PostMapping("/editUserProfile")
+	public ResponseEntity<?> editUserProfile(@RequestBody User user) throws Exception {
+		try {
+			System.out.println(user);
+			System.out.println(user.getFullName()+ user.getEmail()+ user.getPhone()+ user.getGroup()+
+					user.getBranch()+ user.getId());
+			int userUpdate = userService.updateUsers(user.getGroup(), user.getId());
+			if (userUpdate > 0) {
+				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true, "User updated successfully"),
+						HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "201",
+						false, "user not updated successfully"), HttpStatus.OK);
+			}
+		}catch (Exception e){
+			GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
 	
 	@PostMapping("/upUser")
 	public ResponseEntity<?> addUser(@RequestBody User user) throws Exception {

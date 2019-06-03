@@ -95,22 +95,22 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
     myUsername: String;
     groupRights: any;
     storageObject: any = {};
-    constructor(private blockUIService: BlockUIService ,
+    constructor(private blockUIService: BlockUIService,
         private renderer: Renderer2, private regionSvc: RegionService, private apiService: AdministrationService,
-         private toastr: ToastrService,
-        private bioService: BioService, private tellerSvc: TellerService,  private fb: FormBuilder,
+        private toastr: ToastrService,
+        private bioService: BioService, private tellerSvc: TellerService, private fb: FormBuilder,
         private modalService: NgbModal,
-    private modalService2: NgbModal, private logs: LogsService,
+        private modalService2: NgbModal, private logs: LogsService,
         @Inject(DOCUMENT) private document: any) {
         this.source = new LocalDataSource(this.userProfiles); // create the source
     }
     settings = settings;
 
     ngOnInit() {
-        // this.getTellers();
+        //this.getTellers();
         this.getUserProfiles();
         this.getUserGroups();
-        // this.getActiveBranches();
+        //this.getActiveBranches();
         this.getActiveCountries();
         this.otc = JSON.parse(localStorage.getItem('otc'));
         this.rightId = this.otc.rightId;
@@ -119,7 +119,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
     get f() { return this.form.controls; }
 
     getTellers(branch) {
-        this.tellerSvc.getBranchTellers(branch).subscribe( data => {
+        this.tellerSvc.getBranchTellers(branch).subscribe(data => {
             this.tellersResp = data;
             this.tellers = this.tellersResp.collection;
         }, error => {
@@ -140,40 +140,40 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
             this.blockUI.stop();
             return this.toastr.error('Error logging.', 'Error!', { timeOut: 4000 });
         });
-   }
-   onSubmit() {
-       this.submited = true;
-       console.log('works...', this.form.value);
-       if (this.form.invalid) {
-           return;
-       } else {
-        console.log('works...');
-       }
-   }
-   passwordConfirming(c: AbstractControl): { invalid: boolean } {
-    if (c.get('password').value !== c.get('confirmPassword').value) {
-        return { invalid: true };
     }
-   }
-  initEditUser($event) {
-    this.form = this.fb.group({
-        country: new FormControl($event.data.country, [Validators.required]),
-        branch: new FormControl($event.data.branch, [Validators.required]),
-        teller: new FormControl($event.data.teller, [Validators.required]),
-        group: new FormControl($event.data.group, Validators.required),
-        // password: new FormControl($event.data.password, Validators.required),
-        // confirmPassword: new FormControl($event.data.password, Validators.required),
-        status: new FormControl($event.data.status, Validators.required),
-        createdBy: new FormControl($event.data.createdBy, Validators.required),
-        id: new FormControl($event.data.id, Validators.required),
-        approved: new FormControl($event.data.approved, Validators.required)
-    });
-    this.editMode = true;
-    this.is_edit = true;
-    this.title = 'Edit user profile';
-    this.button = 'Update user';
-    this.isNew = false;
-}
+    onSubmit() {
+        this.submited = true;
+        console.log('works...', this.form.value);
+        if (this.form.invalid) {
+            return;
+        } else {
+            console.log('works...');
+        }
+    }
+    passwordConfirming(c: AbstractControl): { invalid: boolean } {
+        if (c.get('password').value !== c.get('confirmPassword').value) {
+            return { invalid: true };
+        }
+    }
+    initEditUser($event) {
+        this.form = this.fb.group({
+            country: new FormControl($event.data.country, [Validators.required]),
+            branch: new FormControl($event.data.branch, [Validators.required]),
+            teller: new FormControl($event.data.teller, [Validators.required]),
+            group: new FormControl($event.data.group, Validators.required),
+            // password: new FormControl($event.data.password, Validators.required),
+            // confirmPassword: new FormControl($event.data.password, Validators.required),
+            status: new FormControl($event.data.status, Validators.required),
+            createdBy: new FormControl($event.data.createdBy, Validators.required),
+            id: new FormControl($event.data.id, Validators.required),
+            approved: new FormControl($event.data.approved, Validators.required)
+        });
+        this.editMode = true;
+        this.is_edit = true;
+        this.title = 'Edit user profile';
+        this.button = 'Update user';
+        this.isNew = false;
+    }
 
     getUserProfiles() {
         this.blockUI.start('Loading data...');
@@ -191,7 +191,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
             this.dashs = data;
             this.usernames = this.dashs.usrs;
             console.log('users', this.usernames);
-            if ( this.usernames.length > 0) {
+            if (this.usernames.length > 0) {
                 for (let i = 0; i < this.usernames.length; i++) {
                     console.log(this.usernames[i]);
                     if (this.usernames[i] === username) {
@@ -216,7 +216,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
     }
     doSomething(event) {
         console.log(event); // logs model value
-      }
+    }
     initAddUser() {
         // tslint:disable-next-line:max-line-length
         const validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -245,14 +245,14 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         this.regionSvc.getActiveCountries().subscribe(data => {
             this.countryResp = data;
             if (this.countryResp.status === true) {
-                    this.countries = this.countryResp.collection;
-                    console.log('countries dts', this.countryResp.collection);
+                this.countries = this.countryResp.collection;
+                console.log('countries dts', this.countryResp.collection);
             } else {
                 console.log('not countries enrolled');
             }
-           // this.tellerDet.details = this.tellerDet.model;
+            // this.tellerDet.details = this.tellerDet.model;
         }, error => {
-             console.log('error getting countries details');
+            console.log('error getting countries details');
         });
     }
     getActiveBranches(country) {
@@ -260,44 +260,85 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         this.regionSvc.getCountryBranches(country).subscribe(data => {
             this.branchesResp = data;
             if (this.branchesResp.status === true) {
-                    this.branches = this.branchesResp.collection;
-                    console.log('branches dts', this.branchesResp.collection);
+                this.branches = this.branchesResp.collection;
+                console.log('branches dts', this.branchesResp.collection);
             } else {
                 console.log('not branches enrolled');
             }
-           // this.tellerDet.details = this.tellerDet.model;
+            // this.tellerDet.details = this.tellerDet.model;
         }, error => {
-             console.log('error getting branches details');
+            console.log('error getting branches details');
         });
     }
     getTellerDetail(teller) {
         this.tellerSvc.getTellerDetail(teller).subscribe(data => {
             this.tellerDet = data;
             if (this.tellerDet.status === true) {
-                    this.teller = this.tellerDet.teller;
-                    console.log('teller dts', this.tellerDet.teller);
+                this.teller = this.tellerDet.teller;
+                console.log('teller dts', this.tellerDet.teller);
             } else {
                 console.log('not tellers enrolled');
             }
-           // this.tellerDet.details = this.tellerDet.model;
+            // this.tellerDet.details = this.tellerDet.model;
         }, error => {
-             console.log('error getting teller details');
+            console.log('error getting teller details');
         });
     }
     addUser() {
-        console.log('user details' , this.userProfile );
-        console.log('user ', this.userProfile);
+        switch (this.button) {
+            case 'Update user':
+                this.updateUser();
+                break;
+            default:
+                console.log('user details', this.userProfile);
+                console.log('user ', this.userProfile);
+                if (this.form.invalid) {
+                    return this.toastr.warning('Kindly ensure all fields are correctly entered', 'Success!', { timeOut: 1500 });
+                } else {
+                    this.userProfile = this.form.value;
+                    this.userProfile = this.form.value;
+                    this.userProfile.fullName = this.teller.tellerName;
+                    this.userProfile.email = this.teller.tellerEmail;
+                    this.userProfile.username = this.teller.tellerSignOnName;
+                    console.log('user ', this.userProfile);
+                    console.log('user profile details ####$$', this.userProfile);
+                    this.apiService.addUserProfile(this.userProfile).subscribe(res => {
+                        this.blockUI.stop();
+                        this.response = res;
+                        if (this.response.status === false) {
+                            this.toastr.warning(this.response.respMessage, 'Alert!', { timeOut: 1500 });
+                        }
+                        if (this.response.status === true) {
+                            this.editMode = false;
+                            this.getUserProfiles();
+                            // if (this.globalService.rightId === this.userProfile.id) {
+                            //     this.apiService.getUserMenus(this.userProfile.group).subscribe(data => {
+                            //         this.groupRights = data;
+                            //         this.globalService.setRights(this.groupRights.collection);
+                            //         this.storageObject.username = this.globalService.username;
+                            //         this.storageObject.groupId = this.globalService.groupId;
+                            //         this.storageObject.rightId = this.globalService.rightId;
+                            //         this.storageObject.rights = this.groupRights.collection;
+                            //         localStorage.setItem('otc', JSON.stringify(this.storageObject));
+                            //     }, error => {
+                            //         this.toastr.error('Error has occured', 'Oops!', { timeOut: 1500 });
+                            //     });
+                            // }
+                            this.userProfile = {};
+                            return this.toastr.success(this.response.respMessage, 'Success!', { timeOut: 1500 });
+                        }
+                    });
+                }
+        }
+    }
+
+    updateUser() {
         if (this.form.invalid) {
             return this.toastr.warning('Kindly ensure all fields are correctly entered', 'Success!', { timeOut: 1500 });
         } else {
             this.userProfile = this.form.value;
-            this.userProfile = this.form.value;
-            this.userProfile.fullName = this.teller.tellerName;
-            this.userProfile.email = this.teller.tellerEmail;
-            this.userProfile.username = this.teller.tellerSignOnName;
-            console.log('user ', this.userProfile);
-            console.log('user profile details ####$$', this.userProfile);
-            this.apiService.addUserProfile(this.userProfile).subscribe(res => {
+            console.log("userProfile: "+ this.userProfile);
+            this.apiService.editUserProfile(this.userProfile).subscribe(res => {
                 this.blockUI.stop();
                 this.response = res;
                 if (this.response.status === false) {
@@ -306,19 +347,6 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
                 if (this.response.status === true) {
                     this.editMode = false;
                     this.getUserProfiles();
-                    // if (this.globalService.rightId === this.userProfile.id) {
-                    //     this.apiService.getUserMenus(this.userProfile.group).subscribe(data => {
-                    //         this.groupRights = data;
-                    //         this.globalService.setRights(this.groupRights.collection);
-                    //         this.storageObject.username = this.globalService.username;
-                    //         this.storageObject.groupId = this.globalService.groupId;
-                    //         this.storageObject.rightId = this.globalService.rightId;
-                    //         this.storageObject.rights = this.groupRights.collection;
-                    //         localStorage.setItem('otc', JSON.stringify(this.storageObject));
-                    //     }, error => {
-                    //         this.toastr.error('Error has occured', 'Oops!', { timeOut: 1500 });
-                    //     });
-                    // }
                     this.userProfile = {};
                     return this.toastr.success(this.response.respMessage, 'Success!', { timeOut: 1500 });
                 }
@@ -346,16 +374,16 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
             this.document.getElementById(imgId).src = this.defaultSrc;
             const btnid = 'BTN_' + imgId;
             this.document.getElementById(captS).src = 'assets/images/enroll/' + captS + '.png';
-            (<HTMLInputElement> document.getElementById(btnid)).disabled = false;
+            (<HTMLInputElement>document.getElementById(btnid)).disabled = false;
         }
         console.log('removed bios', this.bios);
         console.log('removed profile print', this.userProfile.bios);
         console.log('removed profile print', this.afisBio);
-        return this.toastr.success('Device was reset successfully .. .', 'Success!', {timeOut: 3000});
+        return this.toastr.success('Device was reset successfully .. .', 'Success!', { timeOut: 3000 });
     }
 
     validateUser($event: NgbTabChangeEvent) {
-         if (this.userProfile.fullName === '') {
+        if (this.userProfile.fullName === '') {
             $event.preventDefault();
             this.toastr.warning('Please specify the user full name', 'Alert!', { timeOut: 1500 });
         } else if (this.userProfile.username === '') {

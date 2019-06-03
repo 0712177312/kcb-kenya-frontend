@@ -47,4 +47,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	
 	@Query("select u from User u where u.username=?1")
 	User manualAuth(String username);
+
+	@Modifying
+	@Transactional
+//	@Query(nativeQuery = true, value = "UPDATE users set verified='N',fullname=?1,email=?2,phone=?3,group_id=?4,branchId=?5 WHERE id=?6")
+	@Query(nativeQuery = true, value = "UPDATE USERMASTER set verified='N',group_id=?1 WHERE id=?2")
+	int updateUsers(int group,Long userId);
 }

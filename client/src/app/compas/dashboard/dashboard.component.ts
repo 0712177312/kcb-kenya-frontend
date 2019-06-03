@@ -41,7 +41,7 @@ export class DashboardComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    this.resetTimeOut();
+    //this.resetTimeOut();
 
   }
 
