@@ -49,7 +49,7 @@ export class ConvertStaffToCustomerComponent implements OnInit {
     const tellerDetails = {
       'tellerId': teller
     };
-    this.tellerSvc.obtainTellerDetails(tellerDetails).subscribe(data => {
+    this.tellerSvc.checkStaffApproved(tellerDetails).subscribe(data => {
       this.tellerResponse = data;
       if (this.tellerResponse.status === true) {
         this.initTellerProfile();
