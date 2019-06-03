@@ -154,7 +154,7 @@ public class TellerController {
 	@PostMapping(value="/obtainTellerDetails")
 	public ResponseEntity<?> obtainTellerDetails(@RequestBody Teller teller) {
 		try {
-			Teller cust = tellerService.checkTeller(teller.getTellerId());
+			Teller cust = tellerService.checkStaff(teller.getTellerId());
 			if(cust != null) {
 				return new ResponseEntity<>(new TellerResponse("000","teller found",
 						true,GlobalResponse.APIV,cust),HttpStatus.OK);
