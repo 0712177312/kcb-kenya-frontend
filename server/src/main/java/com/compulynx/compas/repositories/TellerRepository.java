@@ -13,8 +13,8 @@ import com.compulynx.compas.models.extras.TellerToApprove;
 
 @Repository
 public interface TellerRepository extends JpaRepository<Teller, Long>{
-	
-	@Query("select u from Teller u where u.tellerId=?1")
+
+	@Query("select u from Teller u where u.tellerId=?1 and (u.verified='A' or u.verified='N')")
 	Teller checkTeller(String tellerId);
 	
 	@Query("select u from Teller u where u.tellerSignOnName=?1")
@@ -68,6 +68,6 @@ public interface TellerRepository extends JpaRepository<Teller, Long>{
 	@Query(nativeQuery=true, value="update tellermaster set verified='T'  WHERE customerId=?1 ")
 	int convertStaffToCustomer(String customerId);
 
-	@Query("select u from Teller u where u.tellerId=?1 and verified<>'T'")
-	Teller checkStaff(String tellerId);
+	@Query("select u from Teller u where u.tellerId=?1 and verified='A'")
+	Teller checkStaffApproved(String tellerId);
 }

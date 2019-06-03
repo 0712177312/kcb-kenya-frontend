@@ -151,10 +151,10 @@ public class TellerController {
 	  }
     }
 
-	@PostMapping(value="/obtainTellerDetails")
-	public ResponseEntity<?> obtainTellerDetails(@RequestBody Teller teller) {
+	@PostMapping(value="/checkStaffApproved")
+	public ResponseEntity<?> checkStaffApproved(@RequestBody Teller teller) {
 		try {
-			Teller cust = tellerService.checkStaff(teller.getTellerId());
+			Teller cust = tellerService.checkStaffApproved(teller.getTellerId());
 			if(cust != null) {
 				return new ResponseEntity<>(new TellerResponse("000","teller found",
 						true,GlobalResponse.APIV,cust),HttpStatus.OK);

@@ -8,7 +8,6 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { LogsService } from '../../services/logs.service';
 import { TellerService } from '../../services/teller.service';
 import { MySharedService } from '../../services/sharedService';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-delete-customer',
@@ -34,8 +33,7 @@ export class DeleteCustomerComponent implements OnInit {
 
   constructor(private tellerSvc: TellerService, private apiService: BioService,
     private fb: FormBuilder, private custSvc: CustomerService,
-    private toastr: ToastrService, private logs: LogsService, private globalService: MySharedService,
-    private router: Router) { }
+    private toastr: ToastrService, private logs: LogsService, private globalService: MySharedService) { }
 
   ngOnInit() {
     this.profType = '1';
@@ -124,7 +122,7 @@ export class DeleteCustomerComponent implements OnInit {
           return this.toastr.success('Customer removed successfully', ' Success!');
         } else {
           this.log(this.rightId, "Attempted to remove customer details from abis");
-          return this.toastr.error('Customer does not exist on abis', ' Error!', { timeOut: 4000 });
+          return this.toastr.error('Customer not removed successfully', ' Error!', { timeOut: 4000 });
         }
       }, error => {
         return this.toastr.error('Error while attempting to remove the customer details', 'Error!', { timeOut: 4000 });
@@ -188,7 +186,7 @@ export class DeleteCustomerComponent implements OnInit {
     const tellr = {
       'tellerId': teller
     };
-    this.tellerSvc.obtainTellerDetails(tellr).subscribe(data => {
+    this.tellerSvc.checkTellerExists(tellr).subscribe(data => {
       this.locl = data;
       if (this.locl.status === true) {
         this.initTellerProfile();
@@ -212,11 +210,6 @@ export class DeleteCustomerComponent implements OnInit {
 
   cancel() {
     this.isVerified = false;
-  }
-
-  cancelEnquiry(){
-    this.isVerified = false;
-    this.router.navigate(['./']); 
   }
 
   log(userId, activity) {

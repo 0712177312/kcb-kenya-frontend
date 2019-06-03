@@ -82,7 +82,7 @@ public class TellerService {
 		return tellerRepository.convertStaffToCustomer(customerId);
 	}
 
-	public Teller checkStaff(String tellerId) {
-		return tellerRepository.checkStaff(tellerId);
+	public Teller checkStaffApproved(String tellerId) {
+		return tellerRepository.checkStaffApproved(tellerId);
 	}
 }
