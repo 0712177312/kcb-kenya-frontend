@@ -8,6 +8,7 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { LogsService } from '../../services/logs.service';
 import { TellerService } from '../../services/teller.service';
 import { MySharedService } from '../../services/sharedService';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-delete-customer',
@@ -33,7 +34,8 @@ export class DeleteCustomerComponent implements OnInit {
 
   constructor(private tellerSvc: TellerService, private apiService: BioService,
     private fb: FormBuilder, private custSvc: CustomerService,
-    private toastr: ToastrService, private logs: LogsService, private globalService: MySharedService) { }
+    private toastr: ToastrService, private logs: LogsService, private globalService: MySharedService,
+    private router: Router) { }
 
   ngOnInit() {
     this.profType = '1';
@@ -210,6 +212,11 @@ export class DeleteCustomerComponent implements OnInit {
 
   cancel() {
     this.isVerified = false;
+  }
+
+  cancelEnquiry(){
+    this.isVerified = false;
+    this.router.navigate(['./']); 
   }
 
   log(userId, activity) {
