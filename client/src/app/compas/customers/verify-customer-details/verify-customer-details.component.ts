@@ -400,6 +400,7 @@ cancel() {
     this.isVerified = false;
     this.account_number = '';
     this.fingerprints = [];
+    this.router.navigate(['./']);
 
 }
 

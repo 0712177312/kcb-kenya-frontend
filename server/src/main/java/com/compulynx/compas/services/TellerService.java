@@ -81,4 +81,8 @@ public class TellerService {
 	public int convertStaffToCustomer(String customerId){
 		return tellerRepository.convertStaffToCustomer(customerId);
 	}
+
+	public Teller checkStaffApproved(String tellerId) {
+		return tellerRepository.checkStaffApproved(tellerId);
+	}
 }

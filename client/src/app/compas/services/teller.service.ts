@@ -56,7 +56,7 @@ export class TellerService {
     return this.http.post(`${this.API_URL.url}/tellers/removeTeller`, tellerDetails);
   }
 
-  obtainTellerDetails(teller) {
-    return this.http.post(`${this.API_URL.url}/tellers/obtainTellerDetails`, teller);
+  checkStaffApproved(teller) {
+    return this.http.post(`${this.API_URL.url}/tellers/checkStaffApproved`, teller);
   }
 }

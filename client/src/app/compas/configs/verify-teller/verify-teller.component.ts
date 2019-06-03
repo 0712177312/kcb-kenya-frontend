@@ -631,32 +631,35 @@ rejectTeller() {
     'customerId': this.teller.customerId,
     'rejectedBy': this.rightId
   };
-  this.blockUI.start('Rejecting the Teller...');
+  if(this.rightId === this.teller.createdBy){
+    return this.toastr.error('Cannot reject staff that one has created', 'Error!', { timeOut: 4000 });
+  }
+  this.blockUI.start('Rejecting the Staff...');
   //remove teller from database
   this.tellerSvc.rejectTellerApproval(tellerDetails).subscribe(data => {
     this.respo = data;
     if (this.respo.status === true) {
-      this.log(this.rightId, 'rejected the teller '+ tellerDetails.customerId);
+      this.log(this.rightId, 'rejected the staff '+ tellerDetails.customerId);
       //remove from abis
       this.biosvc.afisRemove(tellerDetails).subscribe(data => {
         if(this.respo.status === true){
           this.editMode = false;
-          this.log(this.rightId, 'removed teller details of '+ tellerDetails.customerId);
+          this.log(this.rightId, 'removed staff details of '+ tellerDetails.customerId);
           this.gtTellers();
-          return this.toastr.success('Teller was rejected successfully.', 'Success!');
+          return this.toastr.success('Staff was rejected successfully.', 'Success!');
         }else{
-          this.log(this.rightId, 'attempted to remove teller details of '+ tellerDetails.customerId);
-          return this.toastr.success('Teller was not removed successfully.', 'Warning!');
+          this.log(this.rightId, 'attempted to remove staff details of '+ tellerDetails.customerId);
+          return this.toastr.success('Staff was not removed successfully.', 'Warning!');
         }
       }, error => {
-        return this.toastr.error('Error while attempting to remove the teller print details', 'Error!', { timeOut: 4000 });
+        return this.toastr.error('Error while attempting to remove the staff print details', 'Error!', { timeOut: 4000 });
       });
     }else{
-      this.log(this.rightId, 'attempted to reject the teller '+ tellerDetails.customerId);
-      return this.toastr.warning('There was a problem rejecting teller details. ', 'Warning!');
+      this.log(this.rightId, 'attempted to reject the staff '+ tellerDetails.customerId);
+      return this.toastr.warning('There was a problem rejecting staff details. ', 'Warning!');
     }
   }, error => {
-    return this.toastr.error('Error while attempting to reject the teller.', 'Error!', { timeOut: 4000 });
+    return this.toastr.error('Error while attempting to reject the staff.', 'Error!', { timeOut: 4000 });
   });
 }
 

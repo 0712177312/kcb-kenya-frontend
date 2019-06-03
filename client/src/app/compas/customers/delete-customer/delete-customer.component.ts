@@ -186,7 +186,7 @@ export class DeleteCustomerComponent implements OnInit {
     const tellr = {
       'tellerId': teller
     };
-    this.tellerSvc.obtainTellerDetails(tellr).subscribe(data => {
+    this.tellerSvc.checkTellerExists(tellr).subscribe(data => {
       this.locl = data;
       if (this.locl.status === true) {
         this.initTellerProfile();
