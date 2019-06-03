@@ -124,7 +124,7 @@ export class DeleteCustomerComponent implements OnInit {
           return this.toastr.success('Customer removed successfully', ' Success!');
         } else {
           this.log(this.rightId, "Attempted to remove customer details from abis");
-          return this.toastr.error('Customer not removed successfully', ' Error!', { timeOut: 4000 });
+          return this.toastr.error('Customer does not exist on abis', ' Error!', { timeOut: 4000 });
         }
       }, error => {
         return this.toastr.error('Error while attempting to remove the customer details', 'Error!', { timeOut: 4000 });
