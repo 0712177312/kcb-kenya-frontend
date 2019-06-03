@@ -65,6 +65,6 @@ public interface TellerRepository extends JpaRepository<Teller, Long>{
 
 	@Modifying
 	@Transactional
-	@Query(nativeQuery=true, value="update tellermaster set WAIVED='T'  WHERE customerId=?1 ")
+	@Query(nativeQuery=true, value="update tellermaster set verified='T'  WHERE customerId=?1 ")
 	int convertStaffToCustomer(String customerId);
 }

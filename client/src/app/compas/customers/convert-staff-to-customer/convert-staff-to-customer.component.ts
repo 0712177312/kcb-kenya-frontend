@@ -43,7 +43,7 @@ export class ConvertStaffToCustomerComponent implements OnInit {
       return this.toastr.warning('Kindly provide a valid staff id to continue', ' Warning!', { timeOut: 4000 });
     }
 
-    // check if the staff id is enterd valid
+    // check if the staff id entered is valid
     const tellerDetails = {
       'tellerId': teller
     };
