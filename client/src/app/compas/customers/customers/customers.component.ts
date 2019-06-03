@@ -975,13 +975,13 @@ private getThumbs(data) {
      this.tellerSvc.getTellerDetails(teller).subscribe( data => {
 
      this.tellerInq = data;
-     if (this.tellerInq.requestStatus === true && this.tellerInq.cif !== '') {
+     if (this.tellerInq.requestStatus === true && this.tellerInq.payload.cif !== '') {
          this.account_number = ' ';
         this.initTellerProfile();
 
 
         return this.toastr.success('Teller id is valid, can proceed to enroll', ' Success!');
-    }else if(this.tellerInq.requestStatus === true && this.tellerInq.cif === ''){
+    }else if(this.tellerInq.requestStatus === true && this.tellerInq.payload.cif === ''){
       // valid customer returned but they do not have a cif number attached
       return this.toastr.warning('cif number is invalid', ' Warning!');
     } else {
