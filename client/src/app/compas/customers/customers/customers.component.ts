@@ -983,7 +983,7 @@ private getThumbs(data) {
         return this.toastr.success('Teller id is valid, can proceed to enroll', ' Success!');
     }else if(this.tellerInq.requestStatus === true && this.tellerInq.cif === ''){
       // valid customer returned but they do not have a cif number attached
-      return this.toastr.warning('Teller id is valid but account does not have a valid cif number', ' Warning!');
+      return this.toastr.warning('cif number is invalid', ' Warning!');
     } else {
 
         return this.toastr.warning('Specified teller id was not found or invalid , kindly verify to proceed .', 'Warning!');
