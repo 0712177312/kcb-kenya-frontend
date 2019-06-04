@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Urls } from './url';
+import { Observable } from 'rxjs';
+import { RequestOptions, ResponseContentType } from '@angular/http';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +34,11 @@ export class ReportsService {
 
   getSystemLogs(fromDt, toDt, userId) {
     return  this.http.get(`${this.API_URL.url}/getSystemActivity?FromDt=${ fromDt }&ToDt=${toDt}&userId=${userId}`);
+  }
+
+  getSystemLogsForExporting(fromDt, toDt, userId){
+    let options = new RequestOptions({responseType: ResponseContentType.Blob });
+    return this.http.get(`${this.API_URL.url}/getSystemActivityForExporting?FromDt=${ fromDt }&ToDt=${toDt}&userId=${userId}`, {"responseType": "blob"})
   }
 
 

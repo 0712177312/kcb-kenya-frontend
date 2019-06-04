@@ -9,7 +9,7 @@ import { AdministrationService } from '../../services/administration.service';
   selector: 'app-rptsyslogs',
   templateUrl: './rptsyslogs.component.html',
   styleUrls: ['./rptsyslogs.component.css'],
-  providers: [{provide: NgbDateAdapter, useClass: NgbDateNativeAdapter}]
+  providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }]
 })
 export class RptsyslogsComponent implements OnInit {
   @BlockUI() blockUI: NgBlockUI;
@@ -41,48 +41,48 @@ export class RptsyslogsComponent implements OnInit {
   // http://localhost:9000/compas/reports/enrolledCustomers?reportType=BD&exportType=P&FromDt=2018-12-12&ToDt=2019-12-12&userId=21
   getLogsRpt() {
     this.logs = [];
-    if (this.fromDate === undefined ) {
-      return this.toastr.warning('Kindly specify from date to continue', 'Warning!', {timeOut: 4000});
-  } else if (this.toDate === undefined ) {
-    return this.toastr.warning('Kindly specify to date to continue', 'Warning!', {timeOut: 4000});
-  } else if (this.userId === undefined) {
-    return this.toastr.warning('Kindly specify to user to continue', 'Warning!', {timeOut: 4000});
-  } else {
+    if (this.fromDate === undefined) {
+      return this.toastr.warning('Kindly specify from date to continue', 'Warning!', { timeOut: 4000 });
+    } else if (this.toDate === undefined) {
+      return this.toastr.warning('Kindly specify to date to continue', 'Warning!', { timeOut: 4000 });
+    } else if (this.userId === undefined) {
+      return this.toastr.warning('Kindly specify to user to continue', 'Warning!', { timeOut: 4000 });
+    } else {
       this.reportSvc.getSystemLogs(this.formatDate(this.fromDate), this.formatDate(this.toDate), this.userId).subscribe(data => {
         this.resp = data;
-        if (this.resp.collection.length <= 0 ) {
-          return this.toastr.warning('No items found', 'Alert', {timeOut: 4000});
+        if (this.resp.collection.length <= 0) {
+          return this.toastr.warning('No items found', 'Alert', { timeOut: 4000 });
         }
         if (this.resp.status === true && this.resp.collection.length > 0) {
           this.logs = this.resp.collection;
         } else {
-            return this.toastr.warning(this.resp.respMessage, 'Alert', {timeOut: 4000});
+          return this.toastr.warning(this.resp.respMessage, 'Alert', { timeOut: 4000 });
         }
       }, error => {
         this.blockUI.stop();
         return this.toastr.error(this.resp.respMessage, 'Error!', { timeOut: 4000 });
-    });
+      });
     }
   }
 
   getUsers() {
     this.userSvc.getUserProfiles().subscribe(data => {
-        this.users = data;
-        if (this.users.status === true) {
-            this.usersResp = this.users.collection;
-        } else {
-          return this.toastr.warning('No users found', 'Warning!', { timeOut: 4000 });
-        }
+      this.users = data;
+      if (this.users.status === true) {
+        this.usersResp = this.users.collection;
+      } else {
+        return this.toastr.warning('No users found', 'Warning!', { timeOut: 4000 });
+      }
     }, error => {
-        this.blockUI.stop();
-        return this.toastr.error('Error logging.', 'Error!', { timeOut: 4000 });
+      this.blockUI.stop();
+      return this.toastr.error('Error logging.', 'Error!', { timeOut: 4000 });
     });
   }
 
   getPdfCustomerReport() {
     console.log(this.fromDate);
     console.log('clicked....');
-      // tslint:disable-next-line:max-line-length
+    // tslint:disable-next-line:max-line-length
     this.pdf_url = `reports/enrolledCustomers?reportType=BD&exportType=P&FromDt=${this.formatDate(this.fromDate)}&ToDt=${this.formatDate(this.toDate)}&userId=${this.userId}`;
   }
   geteCsvCustomerReport() {
@@ -100,13 +100,33 @@ export class RptsyslogsComponent implements OnInit {
 
   formatDate(date) {
     let d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
 
     if (month.length < 2) { month = '0' + month; }
     if (day.length < 2) { day = '0' + day; }
 
     return [year, month, day].join('-');
+  }
+
+  getUserActivityCsv() {
+    if (this.fromDate === undefined) {
+      return this.toastr.warning('Kindly specify from date to continue', 'Warning!', { timeOut: 4000 });
+    } else if (this.toDate === undefined) {
+      return this.toastr.warning('Kindly specify to date to continue', 'Warning!', { timeOut: 4000 });
+    } else if (this.userId === undefined) {
+      return this.toastr.warning('Kindly specify to user to continue', 'Warning!', { timeOut: 4000 });
+    } else {
+      this.reportSvc.getSystemLogsForExporting(this.formatDate(this.fromDate), this.formatDate(this.toDate), this.userId).subscribe(data => {
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(data);
+        a.download = "UserAcitivity.csv";
+        // start download
+        a.click();
+      }, error => {
+        return this.toastr.error(this.resp.respMessage, 'Error!', { timeOut: 4000 });
+      });
+    }
   }
 }
