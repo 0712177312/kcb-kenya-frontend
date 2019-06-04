@@ -125,7 +125,7 @@ export class RptsyslogsComponent implements OnInit {
         // start download
         a.click();
       }, error => {
-        return this.toastr.error(this.resp.respMessage, 'Error!', { timeOut: 4000 });
+        return this.toastr.error("Error occurred while attempting to create the csv file", 'Error!', { timeOut: 4000 });
       });
     }
   }

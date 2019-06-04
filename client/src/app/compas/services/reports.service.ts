@@ -41,6 +41,11 @@ export class ReportsService {
     return this.http.get(`${this.API_URL.url}/getSystemActivityForExporting?FromDt=${ fromDt }&ToDt=${toDt}&userId=${userId}`, {"responseType": "blob"})
   }
 
+  getCustomerLogsForExporting(fromDate, toDate, enrolledType){
+    let options = new RequestOptions({responseType: ResponseContentType.Blob });
+    return this.http.get(`${this.API_URL.url}/getCustomerLogsForExporting?FromDt=${fromDate}&ToDt=${toDate}&enrolledType=${enrolledType}`, {"responseType": "blob"})
+  }
+
 
 
 }
