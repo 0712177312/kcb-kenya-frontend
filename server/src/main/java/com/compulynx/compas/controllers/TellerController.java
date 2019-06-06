@@ -296,4 +296,22 @@ public class TellerController {
 			return new ResponseEntity<>(resp, HttpStatus.OK);
 		}
 	}
+	@PostMapping(value="/obtainTellerDetails")
+	public ResponseEntity<?> obtainTellerDetails(@RequestBody Teller teller) {
+		try {
+			System.out.println("teller id" + teller.getTellerId());
+			Teller cust = tellerService.checkTeller(teller.getTellerId());
+			if(cust != null) {
+				return new ResponseEntity<>(new TellerResponse(
+						"000","teller found",true,GlobalResponse.APIV,cust),HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"201",
+						false, "teller not enrolled"),HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
 }

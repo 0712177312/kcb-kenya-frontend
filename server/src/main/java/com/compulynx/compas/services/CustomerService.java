@@ -84,6 +84,9 @@ public class CustomerService {
 
 	public List<Customer> gtEnrolledCustomers(Date fromDate, Date toDate, String enrolledType) {
 		// TODO Auto-generated method stub
+		System.out.println("from date: "+ fromDate);
+		System.out.println("to date: "+ toDate);
+		System.out.println("enrolled type: "+ enrolledType);
 		return customerRepository.getEnrolledCustomers(fromDate, toDate, enrolledType);
 	}
 
