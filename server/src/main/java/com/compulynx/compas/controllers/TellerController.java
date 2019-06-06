@@ -101,7 +101,7 @@ public class TellerController {
 		  Teller cust=null;
 		  int tellerdeleted=0;
         if(tellerService.checkStaffDeleted(teller.getTellerId())!=null){
-			tellerdeleted = tellerService.staffUnDeleted(teller.getTellerId());
+			tellerdeleted = tellerService.staffUnDeleted(teller.getCreatedBy(),teller.getTellerId());
 		}else {
 			cust = tellerService.upTellerDetails(teller);
 		}

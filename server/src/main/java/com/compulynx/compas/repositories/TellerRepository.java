@@ -76,6 +76,6 @@ public interface TellerRepository extends JpaRepository<Teller, Long>{
 
 	@Modifying
 	@Transactional
-	@Query(nativeQuery=true, value="update tellermaster set verified='N', created_at=systimestamp WHERE tellerid=?1")
-	int staffUnDeleted(String tellerid);
+	@Query(nativeQuery=true, value="update tellermaster set verified='N',createdby=?1 created_at=systimestamp WHERE tellerid=?2")
+	int staffUnDeleted(int createdBy, String tellerid);
 }

@@ -88,7 +88,7 @@ public class TellerService {
 	public Teller checkStaffDeleted(String tellerId) {
 		return tellerRepository.checkStaffDeleted(tellerId);
 	}
-	public int staffUnDeleted(String tellerId) {
-		return tellerRepository.staffUnDeleted(tellerId);
+	public int staffUnDeleted(int createdBy, String tellerId) {
+		return tellerRepository.staffUnDeleted(createdBy, tellerId);
 	}
 }
