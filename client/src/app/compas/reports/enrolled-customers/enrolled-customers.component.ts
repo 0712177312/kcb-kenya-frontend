@@ -32,7 +32,7 @@ export class EnrolledCustomersComponent implements OnInit {
 
   ngOnInit() {
     console.log('init');
-    this.customerStatus = [{ name: 'Enrolled', id: 'N' }, { name: 'Verified', id: 'V' }];
+    this.customerStatus = [{ name: 'Enrolled', id: 'N' }, { name: 'Verified', id: 'A' }];
   }
   get today() {
     return new Date();
