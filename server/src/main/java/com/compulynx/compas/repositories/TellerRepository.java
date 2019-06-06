@@ -33,7 +33,7 @@ public interface TellerRepository extends JpaRepository<Teller, Long>{
 			"from tellermaster CU " + 
 			"INNER JOIN USERMASTER UM ON UM.ID = CU.createdBy AND CU.VERIFIED = 'N'")
 	List<TellerToApprove> getTellersToApprove();
-	
+
 //	@Query("select u from Teller u where u.customerId=?1 OR tellerSignOnName=?2  AND u.enrollStatus<>'A'")
 //	Teller getTellerToVerify(String customerId, String mnemonic);
 //
@@ -70,4 +70,12 @@ public interface TellerRepository extends JpaRepository<Teller, Long>{
 
 	@Query("select u from Teller u where u.tellerId=?1 and verified='A'")
 	Teller checkStaffApproved(String tellerId);
+
+	@Query("select u from Teller u where u.tellerId=?1 and verified='D'")
+	Teller checkStaffDeleted(String tellerId);
+
+	@Modifying
+	@Transactional
+	@Query(nativeQuery=true, value="update tellermaster set verified='N', created_at=systimestamp WHERE tellerid=?1")
+	int staffUnDeleted(String tellerid);
 }

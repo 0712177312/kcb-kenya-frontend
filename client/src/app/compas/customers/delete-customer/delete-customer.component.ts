@@ -95,7 +95,7 @@ export class DeleteCustomerComponent implements OnInit {
     } else {
       // teller details not obtained thus only the customer id will be displayed
       this.tellerForm = this.fb.group({
-        customerId: new FormControl("aaaaa"),
+        customerId: new FormControl("Customer Id"),
         tellerEmail: new FormControl(""),
         tellerName: new FormControl(""),
         departmentCode: new FormControl("")

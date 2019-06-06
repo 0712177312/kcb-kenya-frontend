@@ -100,7 +100,7 @@ export class DashboardComponent implements OnDestroy, OnInit {
     // sets the interrupts like Keydown, scroll, mouse wheel, mouse down, and etc
     this.idle.setInterrupts([
       new EventTargetInterruptSource(
-        this.element.nativeElement, 'keydown DOMMouseScroll mousewheel mousedown touchstart touchmove scroll')]);
+        this.element.nativeElement, 'keydown DOMMouseScroll mousewheel mousedown mouseclick touchstart touchmove scroll')]);
 
     this.idle.onIdleEnd.subscribe(() => {
       this.idleState = 'NO_LONGER_IDLE';

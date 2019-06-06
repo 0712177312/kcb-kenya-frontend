@@ -85,4 +85,10 @@ public class TellerService {
 	public Teller checkStaffApproved(String tellerId) {
 		return tellerRepository.checkStaffApproved(tellerId);
 	}
+	public Teller checkStaffDeleted(String tellerId) {
+		return tellerRepository.checkStaffDeleted(tellerId);
+	}
+	public int staffUnDeleted(String tellerId) {
+		return tellerRepository.staffUnDeleted(tellerId);
+	}
 }

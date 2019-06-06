@@ -98,10 +98,15 @@ public class TellerController {
     public ResponseEntity<?> upCustomerDetails(@RequestBody Teller teller) {
       try {
         System.out.println("####" + teller.getTellerId());
-        
-        Teller cust = tellerService.upTellerDetails(teller);
+		  Teller cust=null;
+		  int tellerdeleted=0;
+        if(tellerService.checkStaffDeleted(teller.getTellerId())!=null){
+			tellerdeleted = tellerService.staffUnDeleted(teller.getTellerId());
+		}else {
+			cust = tellerService.upTellerDetails(teller);
+		}
         log.info("teller details updated succesfull for " + teller.getCustomerId());
-        if (cust != null)
+        if (cust != null||tellerdeleted>0)
         {
 
           try
