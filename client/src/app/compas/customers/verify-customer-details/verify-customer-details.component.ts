@@ -49,101 +49,104 @@ export class VerifyCustomerDetailsComponent implements OnInit {
   activeBranches = [];
   locl: any = {};
 
-  constructor( private apiService: BioService, private tellerSvc: TellerService,
-      private modalService: NgbModal, private fb: FormBuilder, private logs: LogsService, private sockService: WebSocketServiceService,
-      private custSvc: CustomerService,
-      private toastr: ToastrService, private regionService: RegionService, private router: Router) {
+  constructor(private apiService: BioService, private tellerSvc: TellerService,
+    private modalService: NgbModal, private fb: FormBuilder, private logs: LogsService, private sockService: WebSocketServiceService,
+    private custSvc: CustomerService,
+    private toastr: ToastrService, private regionService: RegionService, private router: Router) {
 
-}
-settings = settings;
-loading = false;
-ngOnInit() {
+  }
+  settings = settings;
+  loading = false;
+  ngOnInit() {
     this.otc = JSON.parse(localStorage.getItem('otc'));
     this.rightId = this.otc.rightId;
     console.log('right id', this.rightId);
-}
+  }
 
 
-log(userId, activity) {
+  log(userId, activity) {
     const log = {
-        'userId': userId,
-        'activity': activity
+      'userId': userId,
+      'activity': activity
     };
     this.logs.log(log).subscribe((data) => {
-        console.log('logged');
+      console.log('logged');
     }, error => {
-        return this.toastr.error('Error logging.', 'Error!', { timeOut: 4000 });
+      return this.toastr.error('Error logging.', 'Error!', { timeOut: 4000 });
     });
   }
 
 
 
-initInquiry() {
-  this.account_number = '';
-  this.editMode = true;
-  this.isVerified = false;
-  this.isNew = true;
-}
-
-getCustomer (cust) {
-  if (cust === '' ) {
-      return this.toastr.warning('Kindly provide valid customer/staff id to continue', ' Warning!', {timeOut: 4000});
+  initInquiry() {
+    this.account_number = '';
+    this.editMode = true;
+    this.isVerified = false;
+    this.isNew = true;
   }
 
-  if (this.profType === '2') {
+  getCustomer(cust) {
+    if (cust === '') {
+      return this.toastr.warning('Kindly provide valid customer/staff id to continue', ' Warning!', { timeOut: 4000 });
+    }
+
+    if (this.profType === '2') {
       this.tellerInquiry(cust);
-  } else {
+    } else {
       this.customerInfInquiry(cust);
-}
-}
+    }
+  }
 
   tellerInquiry(teller) {
     const tell = {
       'userName': this.getConfigs().authUsr,
       'passWord': this.getConfigs().authPs,
-        'object': {
-            'id': teller,
-        }
-      };
-      const tellr = {
-        'tellerId': teller
-     };
-    this.tellerSvc.checkTellerExists(tellr).subscribe(data => {
-        this.locl = data;
-        if ( this.locl.status === true) {
-
-            return this.toastr.warning('teller with specified details is already exist', ' Warning!', {timeOut: 3000});
-        } else {
-          this.tellerCoBankingInq(tell);
+      'object': {
+        'id': teller,
       }
-     }, error => {
-         return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
-     });
+    };
+    const tellr = {
+      'tellerId': teller
+    };
+    this.tellerSvc.checkTellerExists(tellr).subscribe(data => {
+      this.locl = data;
+      if (this.locl.status === true) {
+
+        return this.toastr.warning('teller with specified details is already exist', ' Warning!', { timeOut: 3000 });
+      } else {
+        this.tellerCoBankingInq(tell);
+      }
+    }, error => {
+      return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
+    });
   }
   tellerCoBankingInq(teller) {
     // this.tellerSvc.getTllrDetails().subscribe (data => {
-     this.tellerSvc.getTellerDetails(teller).subscribe( data => {
+    this.tellerSvc.getTellerDetails(teller).subscribe(data => {
 
-     this.tellerInq = data;
-     if (this.tellerInq.requestStatus === true) {
-       this.isVerified = true;
-         this.account_number = ' ';
+      this.tellerInq = data;
+      if (this.tellerInq.requestStatus === true && this.tellerInq.payload.cif !== '') {
+        this.isVerified = true;
+        this.account_number = ' ';
         this.initTellerProfile(this.tellerInq);
 
         return this.toastr.success('Teller id is valid, can proceed to enroll', ' Success!');
-    } else {
+      } else if (this.tellerInq.requestStatus === true && this.tellerInq.payload.cif === '') {
+        // valid staff returned but they do not have a cif number attached
+        return this.toastr.warning('cif number is invalid', ' Warning!');
+      } else {
 
         return this.toastr.warning('Specified teller id was not found or invalid , kindly verify to proceed .', 'Warning!');
       }
     }, error => {
 
-        return this.toastr.error('Error in inquiring teller data.', 'Error!', { timeOut: 4000 });
+      return this.toastr.error('Error in inquiring teller data.', 'Error!', { timeOut: 4000 });
     });
-}
+  }
 
-upgradeCustomerProfile() {
+  upgradeCustomerProfile() {
 
-  this.tellerSvc.upgradeTellerProfile(this.tellerForm.value).subscribe(data => {
+    this.tellerSvc.upgradeTellerProfile(this.tellerForm.value).subscribe(data => {
       this.tellerdata = data;
       if (this.tellerdata.status) {
         this.isVerified = false;
@@ -155,10 +158,10 @@ upgradeCustomerProfile() {
       } else {
         return this.toastr.warning('Failed to update teller details.', 'Warning!', { timeOut: 4000 });
       }
-  }, error => {
-    return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
-  });
-}
+    }, error => {
+      return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
+    });
+  }
   getConfigs() {
     this.bioconfigs = JSON.parse(localStorage.getItem('bio.glob#$$#'));
     return this.bioconfigs;
@@ -185,85 +188,85 @@ upgradeCustomerProfile() {
       // waivedApprovedBy: 0,
       enrollStatus: 'N',
       verifiedBy: 0
-  });
-  this.editMode = true;
-  this.isVerified = true;
-  this.isNew = true;
-}
+    });
+    this.editMode = true;
+    this.isVerified = true;
+    this.isNew = true;
+  }
 
   initProfile($event) {
     this.gtActivebranches();
     this.form = this.fb.group({
-       id: new FormControl($event.id),
-       customerName: new FormControl($event.customerName),
-       active: new FormControl(false),
-       createdBy: new FormControl(this.rightId),
-       gender: new FormControl($event.gender),
-       customerIdNumber: new FormControl($event.customerIdNumber),
-       phoneNumber: new FormControl($event.phoneNumber),
-       country: new FormControl($event.country),
-       nationality: new FormControl($event.nationality),
-       mnemonic: new FormControl($event.mnemonic, [Validators.required]),
-       customerId: new FormControl($event.id, [Validators.required]),
-       branchCode: new FormControl($event.accountOfficer, [Validators.required]),
-       verified: 'N',
-       customerType: 'CUST',
-       waived: 'N',
-       enrollStatus: 'N',
-       waivedBy: 0,
-       waivedApprovedBy: 0,
-       verifiedBy: 0,
-       fingerprints: new FormControl($event.fingerPrints.length)
-     });
+      id: new FormControl($event.id),
+      customerName: new FormControl($event.customerName),
+      active: new FormControl(false),
+      createdBy: new FormControl(this.rightId),
+      gender: new FormControl($event.gender),
+      customerIdNumber: new FormControl($event.customerIdNumber),
+      phoneNumber: new FormControl($event.phoneNumber),
+      country: new FormControl($event.country),
+      nationality: new FormControl($event.nationality),
+      mnemonic: new FormControl($event.mnemonic, [Validators.required]),
+      customerId: new FormControl($event.id, [Validators.required]),
+      branchCode: new FormControl($event.accountOfficer, [Validators.required]),
+      verified: 'N',
+      customerType: 'CUST',
+      waived: 'N',
+      enrollStatus: 'N',
+      waivedBy: 0,
+      waivedApprovedBy: 0,
+      verifiedBy: 0,
+      fingerprints: new FormControl($event.fingerPrints.length)
+    });
 
-   this.editMode = true;
-   this.isVerified = true;
-   this.isNew = true;
- }
- gtActivebranches() {
-  this.regionService.getActiveBranches().subscribe(data => {
-    this.response = data;
-    this.activeBranches = this.response.collection;
-  }, error => {
-    return this.toastr.error('Error in loading branch data.', 'Error!', { timeOut: 4000 });
-  });
-}
+    this.editMode = true;
+    this.isVerified = true;
+    this.isNew = true;
+  }
+  gtActivebranches() {
+    this.regionService.getActiveBranches().subscribe(data => {
+      this.response = data;
+      this.activeBranches = this.response.collection;
+    }, error => {
+      return this.toastr.error('Error in loading branch data.', 'Error!', { timeOut: 4000 });
+    });
+  }
 
   customerInfInquiry(customer) {
     const custom = {
-        'mnemonic': customer
-     };
+      'mnemonic': customer
+    };
     this.custSvc.getCustomerToVerify(custom).subscribe(data => {
 
-        this.customer = data;
-        if ( this.customer.status === true) {
-          this.isVerify = true;
-          this.isProfile = false;
-          this.initProfile(this.customer.customer);
-            return this.toastr.success('Verify customer', ' Success!', {timeOut: 3000});
-        } else {
-          return this.toastr.warning('No customer with specified number found to verify', ' Warning!', {timeOut: 3000});
-    }
-     }, error => {
-         return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
-     });
+      this.customer = data;
+      if (this.customer.status === true) {
+        this.isVerify = true;
+        this.isProfile = false;
+        this.initProfile(this.customer.customer);
+        return this.toastr.success('Verify customer', ' Success!', { timeOut: 3000 });
+      } else {
+        return this.toastr.warning('No customer with specified number found to verify', ' Warning!', { timeOut: 3000 });
+      }
+    }, error => {
+      return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
+    });
   }
 
   verifyCustomerDetails() {
     const prof: any = {};
-     if (this.profType === '2') {
-        const {customerId, id} = this.tellerProfile.teller;
-        prof.customerId = customerId;
-        prof.profileType = 'TELLER';
-        prof.profileId = id;
-     } else {
-       const {customerId, id } = this.customer.customer;
-       prof.customerId = customerId;
-       prof.profileType = 'CUSTOMER';
-       prof.profileId = id;
-     }
-     console.log(prof);
-     this.custSvc.updateProfileDetails(prof).subscribe (data => {
+    if (this.profType === '2') {
+      const { customerId, id } = this.tellerProfile.teller;
+      prof.customerId = customerId;
+      prof.profileType = 'TELLER';
+      prof.profileId = id;
+    } else {
+      const { customerId, id } = this.customer.customer;
+      prof.customerId = customerId;
+      prof.profileType = 'CUSTOMER';
+      prof.profileId = id;
+    }
+    console.log(prof);
+    this.custSvc.updateProfileDetails(prof).subscribe(data => {
       this.response = data;
       if (this.response.status) {
         this.profType = '';
@@ -273,102 +276,102 @@ upgradeCustomerProfile() {
         this.account_number = '';
         this.tellerProfile = {};
         this.log(this.rightId, 'verified enroll status of customer/teller id' + prof.customerId);
-        return this.toastr.success(this.response.respMessage , 'Succes!', {timeOut: 4000});
+        return this.toastr.success(this.response.respMessage, 'Succes!', { timeOut: 4000 });
       } else {
-      this.log(this.rightId, 'failed to enroll customer');
-      return this.toastr.warning(this.response.respMessage , 'Warning!', {timeOut: 4000});
+        this.log(this.rightId, 'failed to enroll customer');
+        return this.toastr.warning(this.response.respMessage, 'Warning!', { timeOut: 4000 });
       }
-     }, error => {
+    }, error => {
       return this.toastr.error('Error in updating Customer data.', 'Error!', { timeOut: 4000 });
-   });
+    });
   }
 
   getTellerToUpgrade(teller) {
     const tell = {
       'userName': this.getConfigs().authUsr,
       'passWord': this.getConfigs().authPs,
-        'object': {
-            'id': teller,
-        }
-      };
-      const tellr = {
-        'tellerId': teller
-     };
-    this.tellerSvc.checkTellerExists(tellr).subscribe(data => {
-        this.locl = data;
-        if ( this.locl.status === true) {
-            return this.toastr.warning('Customer with specified account id number is already enrolled', ' Warning!', {timeOut: 3000});
-        } else {
-          this.tellerCoBankingInq(tell);
+      'object': {
+        'id': teller,
       }
-     }, error => {
-         return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
-     });
+    };
+    const tellr = {
+      'tellerId': teller
+    };
+    this.tellerSvc.checkTellerExists(tellr).subscribe(data => {
+      this.locl = data;
+      if (this.locl.status === true) {
+        return this.toastr.warning('Customer with specified account id number is already enrolled', ' Warning!', { timeOut: 3000 });
+      } else {
+        this.tellerCoBankingInq(tell);
+      }
+    }, error => {
+      return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
+    });
   }
 
   storeTeller(teller) {
     this.tellerSvc.addTeller(teller).subscribe((response) => {
-    this.response = response;
-    if (this.response.status === true ) {
-             if (teller.id === 0 ) {
-                      this.log(this.rightId, 'added teller ' + this.customer.customerName);
-              } else {
-                  this.log(this.rightId, 'updated teller details  ' + this.customer.id);
-              }
-              return this.toastr.success('Teller details saved successfuly. Awaiting authorization', ' Success!');
-         } else {
-              this.log(this.rightId, this.response.respMessage);
-            return this.toastr.warning(this.response.respMessage, 'Warning!');
+      this.response = response;
+      if (this.response.status === true) {
+        if (teller.id === 0) {
+          this.log(this.rightId, 'added teller ' + this.customer.customerName);
+        } else {
+          this.log(this.rightId, 'updated teller details  ' + this.customer.id);
         }
-  }, error => {
+        return this.toastr.success('Teller details saved successfuly. Awaiting authorization', ' Success!');
+      } else {
+        this.log(this.rightId, this.response.respMessage);
+        return this.toastr.warning(this.response.respMessage, 'Warning!');
+      }
+    }, error => {
       this.log(this.rightId, 'error updating country details');
       return this.toastr.error('Error in updating Customer data.', 'Error!', { timeOut: 4000 });
     });
-}
+  }
 
   rejectCustomerDetails(cust) {
     const prof: any = {};
     if (this.profType === '2') {
-       const {customerId, id} = this.tellerProfile.teller;
-       prof.customerId = customerId;
-       prof.profileType = 'TELLER';
-       prof.profileId = id;
+      const { customerId, id } = this.tellerProfile.teller;
+      prof.customerId = customerId;
+      prof.profileType = 'TELLER';
+      prof.profileId = id;
     } else {
-      const {customerId, id } = this.customer.customer;
+      const { customerId, id } = this.customer.customer;
       prof.customerId = customerId;
       prof.profileType = 'CUSTOMER';
       prof.profileId = id;
     }
     console.log(prof);
-    this.custSvc.removeProfileDetails(prof).subscribe (data => {
-     this.response = data;
-     if (this.response.status) {
-      this.profType = '';
-      this.customer = {};
-      this.isVerified = false;
-      this.isProfile = null;
-      this.account_number = '';
-      this.tellerProfile = {};
-       this.log(this.rightId, 'removed enroll status of customer/teller id' + prof.customerId);
-       return this.toastr.success(this.response.respMessage , 'Succes!', {timeOut: 4000});
-     } else {
-     this.log(this.rightId, 'failed to remove customer' + prof.customerId);
-     this.toastr.warning(this.response.respMessage , 'Warning!', {timeOut: 4000});
-     }
+    this.custSvc.removeProfileDetails(prof).subscribe(data => {
+      this.response = data;
+      if (this.response.status) {
+        this.profType = '';
+        this.customer = {};
+        this.isVerified = false;
+        this.isProfile = null;
+        this.account_number = '';
+        this.tellerProfile = {};
+        this.log(this.rightId, 'removed enroll status of customer/teller id' + prof.customerId);
+        return this.toastr.success(this.response.respMessage, 'Succes!', { timeOut: 4000 });
+      } else {
+        this.log(this.rightId, 'failed to remove customer' + prof.customerId);
+        this.toastr.warning(this.response.respMessage, 'Warning!', { timeOut: 4000 });
+      }
     }, error => {
-     return this.toastr.error('Error in updating Customer data.', 'Error!', { timeOut: 4000 });
- });
+      return this.toastr.error('Error in updating Customer data.', 'Error!', { timeOut: 4000 });
+    });
   }
 
   enrollCustomer() {
     const prof: any = {};
     if (this.profType === '2') {
-       const {customerId, fingerPrints, createdBy} = this.tellerProfile.teller;
-       prof.customerId = customerId;
-       prof.fingerPrints = fingerPrints;
-       prof.createdBy = createdBy;
+      const { customerId, fingerPrints, createdBy } = this.tellerProfile.teller;
+      prof.customerId = customerId;
+      prof.fingerPrints = fingerPrints;
+      prof.createdBy = createdBy;
     } else {
-      const {customerId, fingerPrints, createdBy } = this.customer.customer;
+      const { customerId, fingerPrints, createdBy } = this.customer.customer;
       prof.customerId = customerId;
       prof.fingerPrints = fingerPrints;
       prof.createdBy = createdBy;
@@ -377,20 +380,20 @@ upgradeCustomerProfile() {
       return this.toastr.warning('User cannot verify profile they enrolled.', 'Warning!', { timeOut: 4000 });
     }
     this.apiService.afisEnroll(prof).subscribe((response) => {
-           this.response = response;
-           if (this.response.status) {
-              this.verifyCustomerDetails();
-           } else {
-            this.log(this.rightId, 'failed to enroll customer' + prof.customerId);
-        this.toastr.warning(this.response.message + ' customer id ' + this.response.customerId + '' , 'Warning!', {timeOut: 4000});
-       }
-        }, error => {
-        this.log(this.rightId, 'failed to verify profile ' + this.customer.customerId);
-        return this.toastr.error('Error updating data.', 'Error!', { timeOut: 4000 });
+      this.response = response;
+      if (this.response.status) {
+        this.verifyCustomerDetails();
+      } else {
+        this.log(this.rightId, 'failed to enroll customer' + prof.customerId);
+        this.toastr.warning(this.response.message + ' customer id ' + this.response.customerId + '', 'Warning!', { timeOut: 4000 });
+      }
+    }, error => {
+      this.log(this.rightId, 'failed to verify profile ' + this.customer.customerId);
+      return this.toastr.error('Error updating data.', 'Error!', { timeOut: 4000 });
     });
-   }
+  }
 
-cancel() {
+  cancel() {
     this.userProfile = {};
     this.account_number = '';
     this.editMode = false;
@@ -402,64 +405,64 @@ cancel() {
     this.fingerprints = [];
     this.router.navigate(['./']);
 
-}
+  }
 
 
 
 }
 export let settings = {
-mode: 'external',
-actions: {
+  mode: 'external',
+  actions: {
     delete: false,
     position: 'right',
     add: false,
     edit: false
-},
-columns: {
-  id: {
+  },
+  columns: {
+    id: {
       title: '##',
       filter: false
-  },
-  customerName: {
+    },
+    customerName: {
       title: 'Full Name',
       filter: false
-  },
-  customerIdNumber: {
-        title: 'Customer IdNumber',
-        filter: false
+    },
+    customerIdNumber: {
+      title: 'Customer IdNumber',
+      filter: false
     },
     phoneNumber: {
-        title: 'Phone Number',
-        filter: false
+      title: 'Phone Number',
+      filter: false
     },
     gender: {
-        title: 'Gender',
-        filter: false
+      title: 'Gender',
+      filter: false
     },
     country: {
       title: 'Nationality',
       filter: false
     }
-},
-edit: {
+  },
+  edit: {
     // tslint:disable-next-line:max-line-length
     editButtonContent: '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>',
     saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
     cancelButtonContent: '<i class="ti-close text-danger"></i>'
-},
-add: {
+  },
+  add: {
     // tslint:disable-next-line:max-line-length
     addButtonContent: '<a class="btn btn-block btn-outline-info m-r-10" ngbPopover="Add Customer" triggers="mouseenter:mouseleave" popoverTitle="Add Customer"> <i class="fas fa-plus-circle"></i></a>',
     createButtonContent: '<i class="nb-checkmark"></i>',
     cancelButtonContent: '<i class="nb-close"></i>',
-},
-pager: {
-  perPage: 200
   },
-rowClassFunction : function(row) {
-          if (row.editable) { return 'editable'; }
-          return '';
+  pager: {
+    perPage: 200
+  },
+  rowClassFunction: function (row) {
+    if (row.editable) { return 'editable'; }
+    return '';
 
-   }
+  }
 
 }
