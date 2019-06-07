@@ -8,8 +8,11 @@ public class ServerConfig {
 	private String secugen;
 	private String authPs;
 	private String authUsr;
+	private String sessionTimeout;
+	private String sessionIdle;
 	
-	public ServerConfig(String t24, String cobanking, String abis, String greenbit, String secugen, String authPs, String authUsr) {
+	public ServerConfig(String t24, String cobanking, String abis, String greenbit, String secugen, String authPs, String authUsr,
+	String sessionTimeout, String sessionIdle) {
 		super();
 		this.t24 = t24;
 		this.cobanking = cobanking;
@@ -18,6 +21,8 @@ public class ServerConfig {
 		this.secugen = secugen;
 		this.authPs=authPs;
 		this.authUsr=authUsr;
+		this.sessionTimeout = sessionTimeout;
+		this.sessionIdle = sessionIdle;
 	}
 	public String getGreenbit() {
 		return greenbit;
@@ -61,5 +66,20 @@ public class ServerConfig {
 	public void setAuthUsr(String authUsr) {
 		this.authUsr = authUsr;
 	}
-	
+
+	public String getSessionTimeout() {
+		return sessionTimeout;
+	}
+
+	public void setSessionTimeout(String sessionTimeout) {
+		this.sessionTimeout = sessionTimeout;
+	}
+
+	public String getSessionIdle() {
+		return sessionIdle;
+	}
+
+	public void setSessionIdle(String sessionIdle) {
+		this.sessionIdle = sessionIdle;
+	}
 }

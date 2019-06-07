@@ -68,7 +68,9 @@ public class DashboardController {
 			String abis = env.getProperty("abis");
 			String greenbit = env.getProperty("greenbit");
 			String secugen = env.getProperty("secugen");
-			ServerConfig resp = new ServerConfig(t24se,cobanking, abis,greenbit,secugen,authPass, authName);
+			String sessionTimeout = env.getProperty("sessionTimeout");
+			String sessionIdle = env.getProperty("sessionIdle");
+			ServerConfig resp = new ServerConfig(t24se,cobanking, abis,greenbit,secugen,authPass, authName, sessionTimeout, sessionIdle);
       		return new ResponseEntity<>(resp, HttpStatus.OK);
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404","Server failure authenticating user",false,GlobalResponse.APIV);

@@ -94,9 +94,14 @@ export class DashboardComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.idle.setIdle(300);
-    // sets a timeout period of 5 minutes.
-    this.idle.setTimeout(120);
+    //sets a timeout duration of user inactivity
+    // + is added to convert from string to int
+    this.idle.setIdle(+JSON.parse(localStorage.getItem('bio.glob#$$#')).sessionIdle);
+    console.log("session Idle duration: "+ JSON.parse(localStorage.getItem('bio.glob#$$#')).sessionIdle);
+    // sets a timeout duration of the popup asking if the user wants to stay on page. 
+    // + is added to convert from string to int
+    this.idle.setTimeout(+JSON.parse(localStorage.getItem('bio.glob#$$#')).sessionTimeout);
+    console.log("session timeout duration: "+ JSON.parse(localStorage.getItem('bio.glob#$$#')).sessionTimeout);
     // sets the interrupts like Keydown, scroll, mouse wheel, mouse down, and etc
     this.idle.setInterrupts([
       new EventTargetInterruptSource(
