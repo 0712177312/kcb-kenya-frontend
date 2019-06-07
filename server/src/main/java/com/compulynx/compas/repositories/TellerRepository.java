@@ -20,7 +20,7 @@ public interface TellerRepository extends JpaRepository<Teller, Long>{
 	@Query("select u from Teller u where u.tellerSignOnName=?1")
 	Teller getTellerDetails(String tellr);
 	
-	@Query("select u from Teller u where u.departmentCode=?1")
+	@Query("select u from Teller u where u.verified='A' and u.departmentCode=?1")
 	List<Teller> getBranchTellers(String branch);
 	
 	@Modifying
