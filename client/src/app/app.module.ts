@@ -81,6 +81,7 @@ import { ConvertStaffToCustomerComponent } from './compas/customers/convert-staf
 
 import {ProgressBarModalComponent} from './progressbar-modal.component';
 import {NgIdleKeepaliveModule} from '@ng-idle/keepalive';
+import { DataTablesModule } from 'angular-datatables';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -159,7 +160,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NgMultiSelectDropDownModule.forRoot(),
     Ng2SmartTableModule,
     ToastrModule.forRoot(),
-    NgIdleKeepaliveModule.forRoot()
+    NgIdleKeepaliveModule.forRoot(),
+    DataTablesModule 
   ],
   entryComponents: [ConfirmDialogComponent, BlockUiTemplateComponent, ProgressBarModalComponent],
   providers: [

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbCalendar, NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ReportsService } from '../../services/reports.service';
@@ -26,6 +26,13 @@ export class EnrolledCustomersComponent implements OnInit {
   xls_url: any;
   customerStatus = [];
   enrolledType: String;
+
+
+  @ViewChild('dataTable') table;
+  dataTable: any;
+  dtOptions: any;
+
+  showTable = false;
   constructor(calendar: NgbCalendar, private toastr: ToastrService,
     private reportSvc: ReportsService) {
   }
@@ -56,7 +63,15 @@ export class EnrolledCustomersComponent implements OnInit {
     console.log(this.fromDate);
     console.log('clicked....');
     // tslint:disable-next-line:max-line-length
-    this.pdf_url = `reports/enrolledCustomers?reportType=CER&exportType=P&FromDt=${this.formatDate(this.fromDate)}&ToDt=${this.formatDate(this.toDate)}&enrolledType=${this.enrolledType}`;
+    //this.pdf_url = `reports/enrolledCustomers?reportType=CER&exportType=P&FromDt=${this.formatDate(this.fromDate)}&ToDt=${this.formatDate(this.toDate)}&enrolledType=${this.enrolledType}`;
+    this.dtOptions = {
+      dom: 'Bfrtip',
+      buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+      ]
+    };
+    this.dataTable = $(this.table.nativeElement);
+    this.dataTable.DataTable(this.dtOptions);
   }
   geteCsvCustomerReport() {
     console.log(this.fromDate);
