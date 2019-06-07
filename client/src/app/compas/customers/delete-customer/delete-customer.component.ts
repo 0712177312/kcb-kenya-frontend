@@ -121,6 +121,7 @@ export class DeleteCustomerComponent implements OnInit {
         if (this.response.status === true) {
           this.log(this.rightId, "Removed the customer details from abis");
           this.isVerified = false;
+          this.router.navigate(['./']);
           return this.toastr.success('Customer removed successfully', ' Success!');
         } else {
           this.log(this.rightId, "Attempted to remove customer details from abis");
@@ -148,6 +149,7 @@ export class DeleteCustomerComponent implements OnInit {
         if (this.response.status === true) {
           this.log(this.rightId, "Removed the teller details from abis");
           this.isVerified = false;
+          this.router.navigate(['./']);
           return this.toastr.success('Teller removed successfully', ' Success!');
         } else {
           this.log(this.rightId, "Attempted to remove teller details from abis");
