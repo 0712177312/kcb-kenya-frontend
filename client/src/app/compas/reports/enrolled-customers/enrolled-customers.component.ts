@@ -27,12 +27,10 @@ export class EnrolledCustomersComponent implements OnInit {
   customerStatus = [];
   enrolledType: String;
 
-
   @ViewChild('dataTable') table;
   dataTable: any;
   dtOptions: any;
 
-  showTable = false;
   constructor(calendar: NgbCalendar, private toastr: ToastrService,
     private reportSvc: ReportsService) {
   }

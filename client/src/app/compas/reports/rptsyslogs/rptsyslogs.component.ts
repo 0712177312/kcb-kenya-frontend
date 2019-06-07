@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { NgbCalendar, NgbDateAdapter, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -28,6 +28,11 @@ export class RptsyslogsComponent implements OnInit {
   csv_url: any;
   resp: any = {};
   xls_url: any;
+
+  @ViewChild('dataTable') table;
+  dataTable: any;
+  dtOptions: any;
+
   constructor(calendar: NgbCalendar, private userSvc: AdministrationService, private toastr: ToastrService,
     private reportSvc: ReportsService) {
   }
@@ -79,11 +84,18 @@ export class RptsyslogsComponent implements OnInit {
     });
   }
 
-  getPdfCustomerReport() {
+  getPdfSystemReport() {
     console.log(this.fromDate);
     console.log('clicked....');
     // tslint:disable-next-line:max-line-length
-    this.pdf_url = `reports/enrolledCustomers?reportType=BD&exportType=P&FromDt=${this.formatDate(this.fromDate)}&ToDt=${this.formatDate(this.toDate)}&userId=${this.userId}`;
+    this.dtOptions = {
+      dom: 'Bfrtip',
+      buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+      ]
+    };
+    this.dataTable = $(this.table.nativeElement);
+    this.dataTable.DataTable(this.dtOptions);
   }
   geteCsvCustomerReport() {
     console.log(this.fromDate);

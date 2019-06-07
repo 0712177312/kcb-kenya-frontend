@@ -1,101 +1,98 @@
 <div class="col-md-12 col-sm-12 col-lg-12">
   <div class="card">
-      <div class="card-body">
-          <h3 class="card-title">User Activity Summary</h3>
-          <form action="#">
-            <div class="row">
-                <div class="col-sm-3">
-                    <div class="form-group row">
-                            <label class="control-label text-right col-sm-3 labels">From</label>
-                            <div class="col-md-9">
-                          <div class="input-group">
-                                  <input class="form-control" placeholder="yyyy-mm-dd"
-                                         name="d1" #c1="ngModel" [(ngModel)]="fromDate" ngbDatepicker #d1="ngbDatepicker">
-                                  <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary no-shadow" (click)="d1.toggle()" type="button">
-                                        <i class="fa fa-calendar"></i>
-                                    </button>
-                                  </div>
-                                </div>
-                          </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="form-group row">
-                            <label class="control-label text-right col-sm-3 labels">To</label>
-                            <div class="col-md-9">
-                       <div class="input-group">
-                              <input class="form-control" placeholder="yyyy-mm-dd"
-                                     name="d2" #c2="ngModel" [(ngModel)]="toDate" ngbDatepicker #d2="ngbDatepicker">
-                              <div class="input-group-append">
-                                <button class="btn btn-outline-secondary no-shadow" (click)="d2.toggle()" type="button">
-                                    <i class="fa fa-calendar"></i>
-                                </button>
-                              </div>
-                              </div>
-                      </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="form-group row">
-                      <label class="control-label text-right col-sm-3 labels">User</label>
-                      <div class="col-md-9">
-                          <ng-select [items]="usersResp"
-                                    bindLabel="fullName"
-                                    bindValue="id"
-                                    [(ngModel)]="userId"
-                                    [ngModelOptions]="{standalone: true}">
-                          </ng-select>
-                      </div>
+    <div class="card-body">
+      <h3 class="card-title">User Activity Summary</h3>
+      <form action="#">
+        <div class="row">
+          <div class="col-sm-3">
+            <div class="form-group row">
+              <label class="control-label text-right col-sm-3 labels">From</label>
+              <div class="col-md-9">
+                <div class="input-group">
+                  <input class="form-control" placeholder="yyyy-mm-dd" name="d1" #c1="ngModel" [(ngModel)]="fromDate"
+                    ngbDatepicker #d1="ngbDatepicker">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary no-shadow" (click)="d1.toggle()" type="button">
+                      <i class="fa fa-calendar"></i>
+                    </button>
                   </div>
                 </div>
-              <div class="col-sm-3" *ngIf="!filtered">
-                  <button type="button" class="btn btn-success" (click)="getLogsRpt()" style="width: 150px;">Preview</button>
-              </div>
-              <div class="col-sm-3">
-                <div ngbDropdown class="d-inline-block">
-                    <button class="btn btn-default" id="dropdownBasic1" ngbDropdownToggle>Export</button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                      <a class="dropdown-item" target="_blank" href="{{pdf_url}}" (click)="getPdfCustomerReport()">PDF</a>
-                      <a class="dropdown-item" target="_blank" href="{{xls_url}}" (click)="getExcelCustomerReport()">EXCEL</a>
-                      <!-- <a class="dropdown-item" target="_blank" href="{{csv_url}}" (click)="geteCsvCustomerReport()">CSV</a> -->
-                      <a class="dropdown-item" target="_blank" href="about:blank" (click)="getUserActivityCsv()">CSV</a>
-      
-                    </div>
-                  </div>
               </div>
             </div>
-          </form>
-          <hr/>
-          <div id="table-wrapper">
-            <div id="table-scroll">
-                <table class="table table-sm m-b-0 ">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">USER NAME</th>
-                            <th scope="col">ACTIVITY</th>
-                            <th scope="col">Date</th>
-                            <th scope="col">Time</th>
-                        </tr>
-                    </thead>
-                    <tbody >
-                        <tr *ngFor="let log of logs; let i = index">
-                            <th scope="row">{{i+1}}</th>
-                            <td>{{log.username}}</td>
-                            <td>{{log.activity}}</td>
-                            <td>{{log.actDate}}</td>
-                            <td>{{log.actTime}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-             </div>
           </div>
-          <div class="col">
+          <div class="col-sm-3">
+            <div class="form-group row">
+              <label class="control-label text-right col-sm-3 labels">To</label>
+              <div class="col-md-9">
+                <div class="input-group">
+                  <input class="form-control" placeholder="yyyy-mm-dd" name="d2" #c2="ngModel" [(ngModel)]="toDate"
+                    ngbDatepicker #d2="ngbDatepicker">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary no-shadow" (click)="d2.toggle()" type="button">
+                      <i class="fa fa-calendar"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="form-group row">
+              <label class="control-label text-right col-sm-3 labels">User</label>
+              <div class="col-md-9">
+                <ng-select [items]="usersResp" bindLabel="fullName" bindValue="id" [(ngModel)]="userId"
+                  [ngModelOptions]="{standalone: true}">
+                </ng-select>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3" *ngIf="!filtered">
+            <button type="button" class="btn btn-success" (click)="getLogsRpt()" style="width: 150px;">Preview</button>
+          </div>
+          <div class="col-sm-3">
+            <div ngbDropdown class="d-inline-block">
+              <button class="btn btn-default" id="dropdownBasic1" ngbDropdownToggle>Export</button>
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <a class="dropdown-item" target="_blank" (click)="getPdfSystemReport()">PDF</a>
+                <a class="dropdown-item" target="_blank" href="{{xls_url}}" (click)="getExcelCustomerReport()">EXCEL</a>
+                <!-- <a class="dropdown-item" target="_blank" href="{{csv_url}}" (click)="geteCsvCustomerReport()">CSV</a> -->
+                <a class="dropdown-item" target="_blank" href="about:blank" (click)="getUserActivityCsv()">CSV</a>
 
+              </div>
+            </div>
           </div>
-         <div>
-         </div>
+        </div>
+      </form>
+      <hr />
+      <div id="table-wrapper">
+        <div id="table-scroll">
+          <table #dataTable class="display" style="width:100%">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">USER NAME</th>
+                <th scope="col">ACTIVITY</th>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let log of logs; let i = index">
+                <th scope="row">{{i+1}}</th>
+                <td>{{log.username}}</td>
+                <td>{{log.activity}}</td>
+                <td>{{log.actDate}}</td>
+                <td>{{log.actTime}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
+      <div class="col">
+
+      </div>
+      <div>
+      </div>
+    </div>
   </div>
-</div> 
+</div>
