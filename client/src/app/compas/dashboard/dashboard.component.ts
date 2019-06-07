@@ -96,7 +96,7 @@ export class DashboardComponent implements OnDestroy, OnInit {
   ngOnInit() {
     this.idle.setIdle(300);
     // sets a timeout period of 5 minutes.
-    this.idle.setTimeout(300);
+    this.idle.setTimeout(120);
     // sets the interrupts like Keydown, scroll, mouse wheel, mouse down, and etc
     this.idle.setInterrupts([
       new EventTargetInterruptSource(
