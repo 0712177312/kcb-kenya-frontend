@@ -325,7 +325,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
                             //     });
                             // }
                             this.userProfile = {};
-                            return this.toastr.success(this.response.respMessage, 'Success!', { timeOut: 1500 });
+                            return this.toastr.success("Added successfully", 'Success!', { timeOut: 1500 });
                         }
                     });
                 }
@@ -348,7 +348,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
                     this.editMode = false;
                     this.getUserProfiles();
                     this.userProfile = {};
-                    return this.toastr.success(this.response.respMessage, 'Success!', { timeOut: 1500 });
+                    return this.toastr.success("Edited User Profile Successfully", 'Success!', { timeOut: 1500 });
                 }
             });
         }
