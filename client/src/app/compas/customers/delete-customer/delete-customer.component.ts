@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./delete-customer.component.css']
 })
 export class DeleteCustomerComponent implements OnInit {
-  
+
   isVerified = false;
   profType = '';
   profForm = false;
@@ -143,16 +143,16 @@ export class DeleteCustomerComponent implements OnInit {
     };
     this.tellerSvc.removeTeller(tellerDetails).subscribe((response) => {
       this.response = response;
-      this.log(this.rightId, "Removed the teller details from the database");
+      this.log(this.rightId, "removed the staff details of staff with customerId: " + tellerDetails.customerId + " from the database");
       this.apiService.afisRemove(tellerDetails).subscribe((response) => {
         this.response = response;
         if (this.response.status === true) {
-          this.log(this.rightId, "Removed the teller details from abis");
+          this.log(this.rightId, "removed the staff details of staff with customerId: " + tellerDetails.customerId + " from abis");
           this.isVerified = false;
           this.router.navigate(['./']);
           return this.toastr.success('Teller removed successfully', ' Success!');
         } else {
-          this.log(this.rightId, "Attempted to remove teller details from abis");
+          this.log(this.rightId, "attempted to remove staff details of staff with customerId: " + tellerDetails.customerId + " from abis");
           return this.toastr.error('Teller not removed successfully', ' Error!', { timeOut: 4000 });
         }
       }, error => {
@@ -198,7 +198,7 @@ export class DeleteCustomerComponent implements OnInit {
       } else {
         //continue to the delete page only if id does not start with 'KE'
         if (!teller.startsWith('KE')) {
-          this.locl = null; 
+          this.locl = null;
           this.locl = {};
           this.locl.teller = {};
           console.log(this.locl);
@@ -229,7 +229,7 @@ export class DeleteCustomerComponent implements OnInit {
     });
   }
 
-  cancelEnquiry(){
+  cancelEnquiry() {
     this.router.navigate(['./']);
   }
 }
