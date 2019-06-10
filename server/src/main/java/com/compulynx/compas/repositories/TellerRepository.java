@@ -71,11 +71,11 @@ public interface TellerRepository extends JpaRepository<Teller, Long>{
 	@Query("select u from Teller u where u.tellerId=?1 and verified='A'")
 	Teller checkStaffApproved(String tellerId);
 
-	@Query("select u from Teller u where u.tellerId=?1 and verified='D'")
+	@Query("select u from Teller u where u.tellerId=?1 and (verified='D' or verified='R')")
 	Teller checkStaffDeleted(String tellerId);
 
 	@Modifying
 	@Transactional
-	@Query(nativeQuery=true, value="update tellermaster set verified='N',createdby=?1 created_at=systimestamp WHERE tellerid=?2")
+	@Query(nativeQuery=true, value="update tellermaster set verified='N',createdby=?1, created_at=systimestamp WHERE tellerid=?2")
 	int staffUnDeleted(int createdBy, String tellerid);
 }
