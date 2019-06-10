@@ -52,7 +52,7 @@ public class UserController {
 			System.out.println(user);
 			System.out.println(user.getFullName()+ user.getEmail()+ user.getPhone()+ user.getGroup()+
 					user.getBranch()+ user.getId());
-			int userUpdate = userService.updateUsers(user.getGroup(), user.getId());
+			int userUpdate = userService.updateUsers(user.getGroup(), user.isStatus(), user.getId());
 			if (userUpdate > 0) {
 				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true, "User updated successfully"),
 						HttpStatus.OK);

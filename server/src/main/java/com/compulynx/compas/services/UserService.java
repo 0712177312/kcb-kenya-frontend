@@ -52,8 +52,8 @@ public class UserService {
 		return userRepo.approveUsers(id);
 	}
 
-	public int updateUsers(int group, Long userId) {
+	public int updateUsers(int group, boolean status, Long userId) {
 		// TODO Auto-generated method stub
-		return userRepo.updateUsers(group, userId);
+		return userRepo.updateUsers(group, status, userId);
 	}
 }
