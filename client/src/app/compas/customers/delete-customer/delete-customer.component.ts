@@ -115,16 +115,16 @@ export class DeleteCustomerComponent implements OnInit {
     };
     this.custSvc.removeCustomer(customerDetails).subscribe((response) => {
       this.response = response;
-      this.log(this.rightId, "Removed the customer details from the database");
+      this.log(this.rightId, "removed the customer details of customer with customerId: " + customerDetails.customerId + " from the database");
       this.apiService.afisRemove(customerDetails).subscribe((response) => {
         this.response = response;
         if (this.response.status === true) {
-          this.log(this.rightId, "Removed the customer details from abis");
+          this.log(this.rightId, "removed the customer details of customer with customerId: " + customerDetails.customerId + " from abis");
           this.isVerified = false;
           this.router.navigate(['./']);
           return this.toastr.success('Customer removed successfully', ' Success!');
         } else {
-          this.log(this.rightId, "Attempted to remove customer details from abis");
+          this.log(this.rightId, "attempted to remove customer details of customer with customerId: " + customerDetails.customerId + " from abis");
           return this.toastr.error('Customer not removed successfully', ' Error!', { timeOut: 4000 });
         }
       }, error => {
