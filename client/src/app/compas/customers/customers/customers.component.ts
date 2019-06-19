@@ -733,15 +733,33 @@ private getThumbs(data) {
               return this.toastr.success('Teller details saved successfuly. Awaiting authorization', ' Success!');
          } else {
               this.log(this.rightId, this.response.respMessage);
-
-            return this.toastr.warning(this.response.respMessage, 'Warning!');
+              this.removeTeller(teller);
+              return this.toastr.warning(this.response.respMessage, 'Warning!');
         }
-  }, error => {
+    }, error => {
       this.log(this.rightId, 'error updating country details');
-
+      this.removeTeller(teller);
       return this.toastr.error('Error in updating Customer data.', 'Error!', { timeOut: 4000 });
     });
-}
+  }
+
+  removeTeller(teller){
+      // remove prints from abis in case the entry has not been added to the database but 
+      // has probably been added to abis
+      const tellerDetails = {
+        'customerId': teller.customerId
+      };
+      this.apiService.afisRemove(tellerDetails).subscribe((response: any) => {
+        if(response.status === true){
+          this.log(this.rightId, + "staff details of staff with customerId: "+ tellerDetails.customerId + " removed after timeout during enrollment");
+        }else{
+          this.log(this.rightId, + "staff details of staff with customerId: "+ tellerDetails.customerId + " not removed after timeout during enrollment");
+        }
+      }, error => {
+          this.log(this.rightId, + "staff details of staff with customerId: "+ tellerDetails.customerId + " not removed after timeout during enrollment due to an error");
+      });
+  }
+
   storeCustomer() {
 
       this.apiService.addCustomer(this.customer).subscribe((response) => {
