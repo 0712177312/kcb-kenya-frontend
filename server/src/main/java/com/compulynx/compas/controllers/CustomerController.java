@@ -223,6 +223,24 @@ public class CustomerController {
         }
     }
 
+    @GetMapping(value = "/customersToApproveDetach")
+    public ResponseEntity<?> getCustomersToApproveDetach(){
+        try{
+            List<CustomersToApprove> customers = customerService.getCustomersToApproveDetach();
+            if (customers.size() > 0) {
+                return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true,
+                        "customers to approve detach found", new HashSet<>(customers)), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "201", false,
+                        "no customers to approve detach found", new HashSet<>(customers)), HttpStatus.OK);
+            }
+        }catch(Exception e){
+            GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
+            e.printStackTrace();
+            return new ResponseEntity<>(resp, HttpStatus.OK);
+        }
+    }
+
     @PostMapping(value = "/gtCustomerToWaive")
     public ResponseEntity<?> getCustomerToWaive(@RequestBody Customer customerId) {
         try {
@@ -394,6 +412,44 @@ public class CustomerController {
                     HttpStatus.OK);
 
         } catch (Exception e) {
+            GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
+            e.printStackTrace();
+            return new ResponseEntity<>(resp, HttpStatus.OK);
+        }
+    }
+
+    @PostMapping(value = "/approveRemoveCustomer")
+    public ResponseEntity<?> approveRemoveCustomer(@RequestBody Customer customer){
+        try{
+            int cust = customerService.approveRemoveCustomer(customer.getCustomerId());
+
+            if (cust > 0) {
+                return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true,
+                        "removal of customer  " + customer.getCustomerId() + " approved successfully"), HttpStatus.OK);
+
+            }
+            return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "201", false, "no customers found"),
+                    HttpStatus.OK);
+        }catch(Exception e){
+            GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
+            e.printStackTrace();
+            return new ResponseEntity<>(resp, HttpStatus.OK);
+        }
+    }
+
+    @PostMapping(value = "/rejectRemoveCustomer")
+    public ResponseEntity<?> rejectRemoveCustomer(@RequestBody Customer customer){
+        try{
+            int cust = customerService.rejectRemoveCustomer(customer.getCustomerId());
+
+            if (cust > 0) {
+                return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true,
+                        "removal of customer  " + customer.getCustomerId() + " rejected successfully"), HttpStatus.OK);
+
+            }
+            return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "201", false, "no customers found"),
+                    HttpStatus.OK);
+        }catch(Exception e){
             GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
             e.printStackTrace();
             return new ResponseEntity<>(resp, HttpStatus.OK);

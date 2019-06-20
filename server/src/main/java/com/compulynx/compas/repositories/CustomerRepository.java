@@ -22,11 +22,17 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	@Query("select u from Customer u where (u.customerId = ?1 or u.mnemonic =?2) and (u.verified='A' or u.verified='N')")
 	Customer findCustomerByCustomerId(String customerId, String mnemonic);
 	
-	@Query(nativeQuery = true, value ="SELECT ROWNUM AS COUNTER,CUSTOMERID, " + 
-			"CU.CUSTOMERNAME,CUSTOMERIDNUMBER,CU.PHONENUMBER,CU.COUNTRY,TO_CHAR(CU.CREATED_AT,'dd-mm-rrrr') AS ENROLLEDON,UM.FULLNAME AS CREATEDBY, UM.ID AS USERSID " + 
-			"from CUSTOMER CU " + 
+	@Query(nativeQuery = true, value ="SELECT ROWNUM AS COUNTER,CUSTOMERID, " +
+			"CU.CUSTOMERNAME,CUSTOMERIDNUMBER,CU.PHONENUMBER,CU.COUNTRY,TO_CHAR(CU.CREATED_AT,'dd-mm-rrrr') AS ENROLLEDON,UM.FULLNAME AS CREATEDBY, UM.ID AS USERSID " +
+			"from CUSTOMER CU " +
 			"INNER JOIN USERMASTER UM ON UM.ID = CU.CREATED_BY AND CU.VERIFIED = 'N'")
 	List<CustomersToApprove> getCustomersToApprove();
+
+	@Query(nativeQuery = true, value ="SELECT ROWNUM AS COUNTER,CUSTOMERID, " +
+			"CU.CUSTOMERNAME,CUSTOMERIDNUMBER,CU.PHONENUMBER,CU.COUNTRY,TO_CHAR(CU.CREATED_AT,'dd-mm-rrrr') AS ENROLLEDON,UM.FULLNAME AS CREATEDBY, UM.ID AS USERSID " +
+			"from CUSTOMER CU " +
+			"INNER JOIN USERMASTER UM ON UM.ID = CU.CREATED_BY AND CU.VERIFIED = 'D'")
+	List<CustomersToApprove> getCustomersToApproveDetach();
 	
 	@Modifying
 	@Transactional
@@ -123,6 +129,15 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	@Query(nativeQuery = true, value ="UPDATE customer set verified='D',deleted_by=?1, deleted_on=systimestamp  WHERE customerId=?2")
 	int deleteCustomers(int deletedBy, String customerId);
 
+	@Modifying
+	@Transactional
+	@Query(nativeQuery = true, value ="UPDATE customer set verified='AD' WHERE customerId=?1")
+	int approveRemoveCustomer(String customerId);
+
+	@Modifying
+	@Transactional
+	@Query(nativeQuery = true, value ="UPDATE customer set verified='N' WHERE customerId=?1")
+	int rejectRemoveCustomer(String customerId);
 
 
 }

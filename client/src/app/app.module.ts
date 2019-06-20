@@ -82,6 +82,8 @@ import { ConvertStaffToCustomerComponent } from './compas/customers/convert-staf
 import {ProgressBarModalComponent} from './progressbar-modal.component';
 import {NgIdleKeepaliveModule} from '@ng-idle/keepalive';
 import { DataTablesModule } from 'angular-datatables';
+import { DetachCustomerComponent } from './compas/customers/detach-customer/detach-customer.component';
+import { DetachStaffComponent } from './compas/configs/detach-staff/detach-staff.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -135,7 +137,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DeleteCustomerComponent,
     ProgressBarModalComponent,
     DeleteCustomerComponent,
-    ConvertStaffToCustomerComponent
+    ConvertStaffToCustomerComponent,
+    DetachCustomerComponent,
+    DetachStaffComponent
   ],
   imports: [
     CommonModule,

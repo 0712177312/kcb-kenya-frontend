@@ -129,4 +129,19 @@ public class CustomerService {
 //		return customerRepository.getAll(fromDate,toDate);
 //	}
 
+	public List<CustomersToApprove> getCustomersToApproveDetach() {
+		return customerRepository.getCustomersToApproveDetach();
+	}
+
+	public int approveRemoveCustomer(String customerId) {
+		// TODO Auto-generated method stub
+		return customerRepository.approveRemoveCustomer(customerId);
+	}
+
+
+	public int rejectRemoveCustomer(String customerId) {
+		// TODO Auto-generated method stub
+		return customerRepository.rejectRemoveCustomer(customerId);
+	}
+
 }

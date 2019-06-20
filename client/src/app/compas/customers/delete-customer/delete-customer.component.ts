@@ -115,51 +115,38 @@ export class DeleteCustomerComponent implements OnInit {
     };
     this.custSvc.removeCustomer(customerDetails).subscribe((response) => {
       this.response = response;
-      this.log(this.rightId, "removed the customer details of customer with customerId: " + customerDetails.customerId + " from the database");
-      this.apiService.afisRemove(customerDetails).subscribe((response) => {
-        this.response = response;
-        if (this.response.status === true) {
-          this.log(this.rightId, "removed the customer details of customer with customerId: " + customerDetails.customerId + " from abis");
-          this.isVerified = false;
-          this.router.navigate(['./']);
-          return this.toastr.success('Customer removed successfully', ' Success!');
-        } else {
-          this.log(this.rightId, "attempted to remove customer details of customer with customerId: " + customerDetails.customerId + " from abis");
-          return this.toastr.error('Customer not removed successfully', ' Error!', { timeOut: 4000 });
-        }
-      }, error => {
-        return this.toastr.error('Error while attempting to remove the customer details', 'Error!', { timeOut: 4000 });
-      });
+      if(this.response.status === true){
+        this.log(this.rightId, "selected to remove customer with customerId: " + customerDetails.customerId + " .Awaiting authorization");
+        this.isVerified = false;
+        this.router.navigate(['./']);
+        return this.toastr.success('Customer queued for removal. Awaiting authorization', ' Success!');
+      }else{
+        this.log(this.rightId, "attempted to select to remove customer of customerId: " + customerDetails.customerId + "");
+        return this.toastr.error('An error occurred. Customer not queued for removal', ' Error!', { timeOut: 4000 });
+      }
     }, error => {
-      return this.toastr.error('Error while attempting to remove the customer.', 'Error!', { timeOut: 4000 });
+      return this.toastr.error('Error while attempting to queue the customer for removal.', 'Error!', { timeOut: 4000 });
     });
   }
 
-  deleteTellerDetails() {//////////////
-    // const teller = this.tellerForm.value;
+  deleteTellerDetails() {
     const tellerDetails = {
       'customerId': this.tellerForm.get('customerId').value,
       'deletedBy': this.rightId
     };
     this.tellerSvc.removeTeller(tellerDetails).subscribe((response) => {
       this.response = response;
-      this.log(this.rightId, "removed the staff details of staff with customerId: " + tellerDetails.customerId + " from the database");
-      this.apiService.afisRemove(tellerDetails).subscribe((response) => {
-        this.response = response;
-        if (this.response.status === true) {
-          this.log(this.rightId, "removed the staff details of staff with customerId: " + tellerDetails.customerId + " from abis");
-          this.isVerified = false;
-          this.router.navigate(['./']);
-          return this.toastr.success('Teller removed successfully', ' Success!');
-        } else {
-          this.log(this.rightId, "attempted to remove staff details of staff with customerId: " + tellerDetails.customerId + " from abis");
-          return this.toastr.error('Teller not removed successfully', ' Error!', { timeOut: 4000 });
-        }
-      }, error => {
-        return this.toastr.error('Error while attempting to remove the teller details', 'Error!', { timeOut: 4000 });
-      });
+      if(this.response.status === true){
+        this.log(this.rightId, "selected to remove teller with customerId: " + tellerDetails.customerId + " .Awaiting authorization");
+        this.isVerified = false;
+        this.router.navigate(['./']);
+        return this.toastr.success('Teller queued for removal. Awaiting authorization', ' Success!');
+      }else{
+        this.log(this.rightId, "attempted to select to remove teller of customerId: " + tellerDetails.customerId + "");
+        return this.toastr.error('An error occurred. Teller not queued for removal', ' Error!', { timeOut: 4000 });
+      }
     }, error => {
-      return this.toastr.error('Error while attempting to remove the teller.', 'Error!', { timeOut: 4000 });
+      return this.toastr.error('Error while attempting to queue the teller for removal.', 'Error!', { timeOut: 4000 });
     });
   }
 

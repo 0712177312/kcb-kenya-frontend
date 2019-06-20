@@ -63,4 +63,17 @@ export class TellerService {
   obtainTellerDetails(teller){
     return this.http.post(`${this.API_URL.url}/tellers/obtainTellerDetails`, teller);
   }
+
+  getTellersToApproveDetach(){
+    return this.http.get(`${this.API_URL.url}/tellers/tellersToApproveDetach`);
+  }
+
+  approveRemoveTeller(tellerDetails){
+    return this.http.post(`${this.API_URL.url}/tellers/approveRemoveTeller`, tellerDetails);
+  }
+
+  
+  rejectRemoveTeller(tellerDetails){
+    return this.http.post(`${this.API_URL.url}/tellers/rejectRemoveTeller`, tellerDetails);
+  }
 }

@@ -28,6 +28,8 @@ import { VerifyTellerComponent } from './compas/configs/verify-teller/verify-tel
 import { VerifyCustomerDetailsComponent } from './compas/customers/verify-customer-details/verify-customer-details.component';
 import { DeleteCustomerComponent } from './compas/customers/delete-customer/delete-customer.component';
 import {ConvertStaffToCustomerComponent} from './compas/customers/convert-staff-to-customer/convert-staff-to-customer.component';
+import { DetachCustomerComponent } from './compas/customers/detach-customer/detach-customer.component';
+import { DetachStaffComponent } from './compas/configs/detach-staff/detach-staff.component';
 export const Approutes: Routes = [
   {
     path: '',
@@ -158,6 +160,16 @@ export const Approutes: Routes = [
       {
         path: 'masters/convertstafftocustomer',
         component: ConvertStaffToCustomerComponent,
+        canActivate: [ServiceGuard]
+      },
+      {
+        path: 'masters/verifyprint-customer',
+        component: DetachCustomerComponent,
+        canActivate: [ServiceGuard]
+      },
+      {
+        path: 'masters/verifyprint-staff',
+        component: DetachStaffComponent,
         canActivate: [ServiceGuard]
       }
     ]

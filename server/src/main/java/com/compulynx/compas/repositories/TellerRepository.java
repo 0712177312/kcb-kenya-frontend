@@ -34,6 +34,12 @@ public interface TellerRepository extends JpaRepository<Teller, Long>{
 			"INNER JOIN USERMASTER UM ON UM.ID = CU.createdBy AND CU.VERIFIED = 'N'")
 	List<TellerToApprove> getTellersToApprove();
 
+	@Query(nativeQuery = true, value ="SELECT ROWNUM AS COUNTER,customerId, " +
+			"CU.tellerName,TO_CHAR(CU.CREATED_AT,'dd-mm-rrrr') AS ENROLLEDON,UM.FULLNAME AS CREATEDBY, UM.ID AS USERSID " +
+			"from tellermaster CU " +
+			"INNER JOIN USERMASTER UM ON UM.ID = CU.createdBy AND CU.VERIFIED = 'D'")
+	List<TellerToApprove> getTellersToApproveDetach();
+
 //	@Query("select u from Teller u where u.customerId=?1 OR tellerSignOnName=?2  AND u.enrollStatus<>'A'")
 //	Teller getTellerToVerify(String customerId, String mnemonic);
 //
@@ -78,4 +84,14 @@ public interface TellerRepository extends JpaRepository<Teller, Long>{
 	@Transactional
 	@Query(nativeQuery=true, value="update tellermaster set verified='N',createdby=?1, created_at=systimestamp WHERE tellerid=?2")
 	int staffUnDeleted(int createdBy, String tellerid);
+
+	@Modifying
+	@Transactional
+	@Query(nativeQuery = true, value = "update tellermaster set verified='AD' where customerId=?1")
+	int approveRemoveTeller(String customerId);
+
+	@Modifying
+	@Transactional
+	@Query(nativeQuery = true, value = "update tellermaster set verified='N' where customerId=?1")
+	int rejectRemoveTeller(String customerId);
 }

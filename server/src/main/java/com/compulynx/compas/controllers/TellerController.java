@@ -213,6 +213,27 @@ public class TellerController {
 	    	return new ResponseEntity<>(resp, HttpStatus.OK);
 	   }
     }
+
+    @GetMapping(value = "/tellersToApproveDetach")
+	public ResponseEntity<?> getTellersToApproveDetach() {
+    	try{
+			List<TellerToApprove> tellers = tellerService.getTellersToApproveDetach();
+			if(tellers.size() > 0) {
+				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"000",
+						true, "tellers to approve detach found",
+						new HashSet<>(tellers)),HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"201",
+						false, "no tellers to approve detach found",
+						new HashSet<>(tellers)),HttpStatus.OK);
+			}
+		}catch (Exception e) {
+			GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
+
     @PostMapping(value = "/approveTeller")
     public ResponseEntity<?> approveCustomer (
     		@RequestBody Teller teller) {
@@ -315,6 +336,48 @@ public class TellerController {
 			}
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
+
+	@PostMapping(value = "/approveRemoveTeller")
+	public ResponseEntity<?> approveRemoveTeller(@RequestBody Teller teller){
+    	try{
+    		int updates = tellerService.approveRemoveTeller(teller.getCustomerId());
+
+			if(updates > 0){
+				return new ResponseEntity<>(
+						new GlobalResponse("000", "removal of teller " + teller.getCustomerId() + " approved successfully", true, GlobalResponse.APIV),
+						HttpStatus.OK);
+			}else{
+				return new ResponseEntity<>(
+						new GlobalResponse(GlobalResponse.APIV, "201", false, "removal of teller " + teller.getCustomerId() + " not approved successfully"),
+						HttpStatus.OK);
+			}
+		}catch(Exception e){
+			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
+
+	@PostMapping(value = "/rejectRemoveTeller")
+	public ResponseEntity<?> rejectRemoveTeller(@RequestBody Teller teller){
+		try{
+			int updates = tellerService.rejectRemoveTeller(teller.getCustomerId());
+
+			if(updates > 0){
+				return new ResponseEntity<>(
+						new GlobalResponse("000", "removal of teller " + teller.getCustomerId() + " rejected successfully", true, GlobalResponse.APIV),
+						HttpStatus.OK);
+			}else{
+				return new ResponseEntity<>(
+						new GlobalResponse(GlobalResponse.APIV, "201", false, "removal of teller " + teller.getCustomerId() + " not rejected successfully"),
+						HttpStatus.OK);
+			}
+		}catch(Exception e){
+			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
 			return new ResponseEntity<>(resp, HttpStatus.OK);
 		}

@@ -76,4 +76,15 @@ export class CustomerService {
     return this.http.post(`${this.API_URL.url}/convertStaffToCustomer`, customerDetails);
   }
 
+  getCustomersToApproveDetach(){
+    return this.http.get(`${this.API_URL.url}/customersToApproveDetach`);
+  }
+
+  approveRemoveCustomer(customerDetails){
+    return this.http.post(`${this.API_URL.url}/approveRemoveCustomer`, customerDetails);
+  }
+
+  rejectRemoveCustomer(customerDetails){
+    return this.http.post(`${this.API_URL.url}/rejectRemoveCustomer`, customerDetails);
+  }
 }

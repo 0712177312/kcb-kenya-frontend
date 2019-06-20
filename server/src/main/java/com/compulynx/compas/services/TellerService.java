@@ -91,4 +91,16 @@ public class TellerService {
 	public int staffUnDeleted(int createdBy, String tellerId) {
 		return tellerRepository.staffUnDeleted(createdBy, tellerId);
 	}
+
+	public List<TellerToApprove> getTellersToApproveDetach() {
+		return tellerRepository.getTellersToApproveDetach();
+	}
+
+	public int approveRemoveTeller(String customerId){
+		return tellerRepository.approveRemoveTeller(customerId);
+	}
+
+	public int rejectRemoveTeller(String customerId){
+		return tellerRepository.rejectRemoveTeller(customerId);
+	}
 }

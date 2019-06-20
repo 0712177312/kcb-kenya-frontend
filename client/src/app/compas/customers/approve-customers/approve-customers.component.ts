@@ -549,7 +549,7 @@ upCustDet() {
       'rejectedBy': this.rightId
     };
     if(this.rightId === this.customer.createdBy){
-      return this.toastr.error('User cannot reject staff that they created', 'Error!', { timeOut: 4000 });
+      return this.toastr.error('User cannot reject customer that they created', 'Error!', { timeOut: 4000 });
     }
     this.blockUI.start('Rejecting the Customer...');
     //remove user from database

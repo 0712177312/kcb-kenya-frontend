@@ -93,12 +93,12 @@ export class AppComponent {
     //sets a timeout duration of user inactivity
     // + is added to convert from string to int
     // this.idle.setIdle(+JSON.parse(localStorage.getItem('bio.glob#$$#')).sessionIdle);
-    this.idle.setIdle(120);
+    this.idle.setIdle(120 + 100000);
     ////console.log("session Idle duration: " + JSON.parse(localStorage.getItem('bio.glob#$$#')).sessionIdle);
     // sets a timeout duration of the popup asking if the user wants to stay on page. 
     // + is added to convert from string to int
     // this.idle.setTimeout(+JSON.parse(localStorage.getItem('bio.glob#$$#')).sessionTimeout);
-    this.idle.setTimeout(120);
+    this.idle.setTimeout(120 + 100000);
     ////console.log("session timeout duration: " + JSON.parse(localStorage.getItem('bio.glob#$$#')).sessionTimeout);
     // sets the interrupts like Keydown, scroll, mouse wheel, mouse down, and etc
     this.idle.setInterrupts([
