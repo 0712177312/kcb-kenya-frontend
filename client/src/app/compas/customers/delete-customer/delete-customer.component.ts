@@ -31,6 +31,9 @@ export class DeleteCustomerComponent implements OnInit {
   otc: any = {};
   rightId: any;
 
+  tellerRemoveFunctionToLoad: string;
+  customerRemoveFunctionToLoad: string;
+
 
   constructor(private tellerSvc: TellerService, private apiService: BioService,
     private fb: FormBuilder, private custSvc: CustomerService,
@@ -57,8 +60,10 @@ export class DeleteCustomerComponent implements OnInit {
   }
 
   initCustomerProfile() {
-    if (this.locl.customer != null) {
+    if (this.locl.customer.id != null) {
+      console.log("locl.customer is not null");
       // customer obtained thus the details will be displayed
+      this.customerRemoveFunctionToLoad = "deleteCustomer";
       this.form = this.fb.group({
         customerId: new FormControl(this.locl.customer.customerId, []),
         customerName: new FormControl(this.locl.customer.customerName, []),
@@ -68,9 +73,11 @@ export class DeleteCustomerComponent implements OnInit {
         branchCode: new FormControl(this.locl.customer.branchCode, [])
       });
     } else {
+      console.log("locl.customer is null");
+      this.customerRemoveFunctionToLoad = "deleteCustomerNotOnDb";
       // customer not obtained thus only the customer id will be displayed
       this.form = this.fb.group({
-        customerId: new FormControl(""),
+        customerId: new FormControl("enter the customerid / cif"),
         customerName: new FormControl(""),
         gender: new FormControl(""),
         customerIdNumber: new FormControl(""),
@@ -87,6 +94,7 @@ export class DeleteCustomerComponent implements OnInit {
 
   initTellerProfile() {
     if (this.locl.teller.id != null) {
+      this.tellerRemoveFunctionToLoad = "deleteTeller";
       //teller details obtained thus the details will be displayed
       this.tellerForm = this.fb.group({
         customerId: new FormControl(this.locl.teller.customerId, []),
@@ -95,9 +103,10 @@ export class DeleteCustomerComponent implements OnInit {
         departmentCode: new FormControl(this.locl.teller.departmentCode, [])
       });
     } else {
+      this.tellerRemoveFunctionToLoad = "deleteTellerNotOnDb";
       // teller details not obtained thus only the customer id will be displayed
       this.tellerForm = this.fb.group({
-        customerId: new FormControl("Customer Id"),
+        customerId: new FormControl("enter the customerid / cif"),
         tellerEmail: new FormControl(""),
         tellerName: new FormControl(""),
         departmentCode: new FormControl("")
@@ -109,6 +118,7 @@ export class DeleteCustomerComponent implements OnInit {
   }
 
   deleteCustomerDetails() {
+    console.log('in deleteCustomerDetails() of delete-customer-component.ts');
     const customerDetails = {
       'customerId': this.form.get('customerId').value,
       'deletedBy': this.rightId
@@ -129,7 +139,36 @@ export class DeleteCustomerComponent implements OnInit {
     });
   }
 
+  deleteCustomerDetailsNotOnDb(){
+    console.log('in deleteCustomerDetailsNotOnDb() of delete-customer.component.ts');
+    const customerDetails = {
+      'customerId': this.form.get('customerId').value,
+      'deletedBy': this.rightId
+    };
+    this.custSvc.removeCustomer(customerDetails).subscribe((response) => {
+      this.response = response;
+      this.log(this.rightId, "removed the customer details of customer with customerId: " + customerDetails.customerId + " from the database");
+      this.apiService.afisRemove(customerDetails).subscribe((response) => {
+        this.response = response;
+        if (this.response.status === true) {
+          this.log(this.rightId, "removed the customer details of customer with customerId: " + customerDetails.customerId + " from abis");
+          this.isVerified = false;
+          this.router.navigate(['./']);
+          return this.toastr.success('Customer removed successfully', ' Success!');
+        } else {
+          this.log(this.rightId, "attempted to remove customer details of customer with customerId: " + customerDetails.customerId + " from abis");
+          return this.toastr.error('Customer not removed successfully', ' Error!', { timeOut: 4000 });
+        }
+      }, error => {
+        return this.toastr.error('Error while attempting to remove the customer details', 'Error!', { timeOut: 4000 });
+      });
+    }, error => {
+      return this.toastr.error('Error while attempting to remove the customer.', 'Error!', { timeOut: 4000 });
+    });
+  }
+
   deleteTellerDetails() {
+    console.log("in deleteTellerDetails()");
     const tellerDetails = {
       'customerId': this.tellerForm.get('customerId').value,
       'deletedBy': this.rightId
@@ -147,6 +186,34 @@ export class DeleteCustomerComponent implements OnInit {
       }
     }, error => {
       return this.toastr.error('Error while attempting to queue the teller for removal.', 'Error!', { timeOut: 4000 });
+    });
+  }
+
+  deleteTellerDetailsNotOnDb(){
+    console.log("in deleteTellerDetailsNotOnDb()");
+    const tellerDetails = {
+      'customerId': this.tellerForm.get('customerId').value,
+      'deletedBy': this.rightId
+    };
+    this.tellerSvc.removeTeller(tellerDetails).subscribe((response) => {
+      this.response = response;
+      this.log(this.rightId, "removed the staff details of staff with customerId: " + tellerDetails.customerId + " from the database");
+      this.apiService.afisRemove(tellerDetails).subscribe((response) => {
+        this.response = response;
+        if (this.response.status === true) {
+          this.log(this.rightId, "removed the staff details of staff with customerId: " + tellerDetails.customerId + " from abis");
+          this.isVerified = false;
+          this.router.navigate(['./']);
+          return this.toastr.success('Teller removed successfully', ' Success!');
+        } else {
+          this.log(this.rightId, "attempted to remove staff details of staff with customerId: " + tellerDetails.customerId + " from abis");
+          return this.toastr.error('Teller not removed successfully', ' Error!', { timeOut: 4000 });
+        }
+      }, error => {
+        return this.toastr.error('Error while attempting to remove the teller details', 'Error!', { timeOut: 4000 });
+      });
+    }, error => {
+      return this.toastr.error('Error while attempting to remove the teller.', 'Error!', { timeOut: 4000 });
     });
   }
 
