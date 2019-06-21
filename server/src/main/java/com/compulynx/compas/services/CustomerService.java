@@ -33,8 +33,8 @@ public class CustomerService {
 		return customerRepository.save(customer);
 	}
 	
-	public List<CustomersToApprove> getCustomersToVerify() {
-		return customerRepository.getCustomersToApprove();
+	public List<CustomersToApprove> getCustomersToVerify(String branchCode) {
+		return customerRepository.getCustomersToApprove(branchCode);
 	}
 
 	public int approveCustomer(int verifiedBy,String customerId) {

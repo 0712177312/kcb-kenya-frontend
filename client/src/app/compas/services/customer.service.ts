@@ -28,8 +28,8 @@ export class CustomerService {
     return this.http.get(`${this.API_URL.url}/branches`);
   }
 
-  getCustomersToAuthorize() {
-    return this.http.get(`${this.API_URL.url}/customersToApprove`);
+  getCustomersToAuthorize(customer) {
+    return this.http.post(`${this.API_URL.url}/customersToApprove`, customer);
   }
 
   afisApprove(customer) {

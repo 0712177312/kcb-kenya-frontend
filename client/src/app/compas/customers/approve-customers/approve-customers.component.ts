@@ -84,6 +84,7 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
   length: any;
   otc: any = {};
   rightId: any;
+  branch: any;
   dupResult: number;
   disabled: boolean;
   greetings: any[];
@@ -105,9 +106,12 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
 settings = settings;
 
 ngOnInit() {
-    this.gtCustomers();
     this.otc = JSON.parse(localStorage.getItem('otc'));
     this.rightId = this.otc.rightId;
+    // the specific branch of the logged in user
+    this.branch = this.otc.branch;
+    console.log("this.branch at ngOnInit() of approve-customers.component.ts " + this.branch);
+    this.gtCustomers();
 }
 
 log(userId, activity) {
@@ -451,7 +455,10 @@ showGreeting(message) {
 
 gtCustomers() {
   this.blockUI.start('Loading data...');
-  this.custSvc.getCustomersToAuthorize().subscribe(data => {
+  const customerDetails = {
+    'branchCode': this.branch
+  }
+  this.custSvc.getCustomersToAuthorize(customerDetails).subscribe(data => {
     this.customers = data;
     // console.log('custs', this.customers);
     this.customers = this.customers.collection;

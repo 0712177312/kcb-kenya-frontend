@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit {
       this.authService.login(this.user).subscribe(res => {
         // this.blockUI.start('Authenticating user...');
         this.response = res;
-
+        console.log(this.response);
         if (this.response.status === false) {
           this.log(0, 'failed to log in ' + this.user.username);
           this.blockUI.stop();
@@ -85,6 +85,9 @@ export class LoginComponent implements OnInit {
 
               this.storageObject.rightId = this.response.model.id;
               this.storageObject.rights = this.menus.collection;
+              
+              this.storageObject.branch = this.response.model.branch;
+
               localStorage.setItem('otc', JSON.stringify(this.storageObject));
               this.globalService.setAuth(true);
               this.globalService.setRightId(this.user.id);
@@ -97,6 +100,9 @@ export class LoginComponent implements OnInit {
 
               this.storageObject.rightId = this.user.id;
               this.storageObject.rights = this.menus.collection;
+
+              this.storageObject.branch = this.user.branch;
+
               localStorage.setItem('otc', JSON.stringify(this.storageObject));
               this.globalService.setAuth(true);
               this.globalService.setRightId(this.user.id);
@@ -188,6 +194,9 @@ export class LoginComponent implements OnInit {
 
             this.storageObject.rightId = this.response.model.id;
             this.storageObject.rights = this.menus.collection;
+
+            this.storageObject.branch = this.response.model.branch;
+
             localStorage.setItem('otc', JSON.stringify(this.storageObject));
             this.globalService.setAuth(true);
             this.globalService.setRightId(this.user.id);
@@ -199,6 +208,9 @@ export class LoginComponent implements OnInit {
 
             this.storageObject.rightId = this.user.id;
             this.storageObject.rights = this.menus.collection;
+
+            this.storageObject.branch = this.user.branch;
+
             localStorage.setItem('otc', JSON.stringify(this.storageObject));
             this.globalService.setAuth(true);
             this.globalService.setRightId(this.user.id);

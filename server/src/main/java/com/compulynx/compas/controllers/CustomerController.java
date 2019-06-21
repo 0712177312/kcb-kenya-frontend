@@ -205,10 +205,11 @@ public class CustomerController {
         }
     }
 
-    @GetMapping(value = "/customersToApprove")
-    public ResponseEntity<?> getCustomersToApprove() {
+    @PostMapping(value = "/customersToApprove")
+    public ResponseEntity<?> getCustomersToApprove(@RequestBody Customer customer) {
         try {
-            List<CustomersToApprove> customers = customerService.getCustomersToVerify();
+            System.out.println("branch code: " + customer.getBranchCode());
+            List<CustomersToApprove> customers = customerService.getCustomersToVerify(customer.getBranchCode());
             if (customers.size() > 0) {
                 return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", false,
                         "customers to verify found", new HashSet<>(customers)), HttpStatus.OK);
