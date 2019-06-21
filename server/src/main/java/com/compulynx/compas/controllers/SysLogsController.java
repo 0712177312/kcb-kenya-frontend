@@ -21,6 +21,8 @@ import com.compulynx.compas.models.SysLogs;
 import com.compulynx.compas.models.reports.RptSysLogs;
 import com.compulynx.compas.services.SysLogService;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping(value = Api.REST)
 public class SysLogsController {
@@ -28,8 +30,10 @@ public class SysLogsController {
     private SysLogService sysLogService;
 
     @PostMapping(value = "/sysLog")
-    public ResponseEntity<?> approveCustomerWaive(@RequestBody SysLogs log) {
+    public ResponseEntity<?> approveCustomerWaive(@RequestBody SysLogs log, HttpServletRequest request) {
         try {
+            String ipAddress = request.getRemoteAddr();
+            log.setActivity(log.getActivity() + ". ipAddress: " + ipAddress);
             int logs = sysLogService.log(log.getUserId(), log.getActivity());
             if (logs > 0) {
                 return new ResponseEntity<>(new GlobalResponse(
