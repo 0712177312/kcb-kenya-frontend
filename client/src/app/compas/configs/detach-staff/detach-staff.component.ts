@@ -76,8 +76,10 @@ export class DetachStaffComponent implements OnInit, OnDestroy {
   gtStaff() {
     this.blockUI.start('Loading Staff data...');
     this.tellerSvc.getTellersToApproveDetach().subscribe((data: any) => {
+      this.blockUI.stop();
       this.tellers = data.collection;
     }, error => {
+      this.blockUI.stop();
       return this.toastr.error('Error in inquiring Staff data.', 'Error!', { timeOut: 1500 });
     });
   }
@@ -86,11 +88,16 @@ export class DetachStaffComponent implements OnInit, OnDestroy {
     const staffDetails = {
       'customerId': this.teller.customerId
     };
+    if(this.rightId === this.teller.createdBy){
+      return this.toastr.error('User cannot approve detachment of staff that they created', 'Error!', { timeOut: 4000 });
+    }
+    this.blockUI.start('Approving the Staff Detachment...');
     // update from compas and remove from abis
     this.tellerSvc.approveRemoveTeller(staffDetails).subscribe((response) => {
       this.response = response;
       this.log(this.rightId, "approved removal of staff details of staff with customerId: " + staffDetails.customerId + " from the database");
       this.apiService.afisRemove(staffDetails).subscribe((response) => {
+        this.blockUI.stop();
         this.response = response;
         if (this.response.status === true) {
           this.log(this.rightId, "removed the staff details of staff with customerId: " + staffDetails.customerId + " from abis");
@@ -102,9 +109,11 @@ export class DetachStaffComponent implements OnInit, OnDestroy {
           return this.toastr.error('Staff not removed successfully', ' Error!', { timeOut: 4000 });
         }
       }, error => {
+        this.blockUI.stop();
         return this.toastr.error('Error while attempting to remove the staff details', 'Error!', { timeOut: 4000 });
       });
     }, error => {
+      this.blockUI.stop();
       return this.toastr.error('Error while attempting to remove the staff.', 'Error!', { timeOut: 4000 });
     });
   }
@@ -120,6 +129,7 @@ export class DetachStaffComponent implements OnInit, OnDestroy {
     this.blockUI.start('Rejecting the Staff...');
     this.tellerSvc.rejectRemoveTeller(staffDetails).subscribe(data => {
       this.response = data;
+      this.blockUI.stop();
       if (this.response.status === true) {
         this.editMode = false;
         this.log(this.rightId, 'rejected the removal of staff with customerId ' + staffDetails.customerId);
@@ -130,6 +140,7 @@ export class DetachStaffComponent implements OnInit, OnDestroy {
         return this.toastr.success('Staff reject of detachment not done successfully..', ' Warning!');
       }
     }, error => {
+      this.blockUI.stop();
       return this.toastr.error('Error while attempting to reject the detachment of the staff.', 'Error!', { timeOut: 4000 });
     });
   }

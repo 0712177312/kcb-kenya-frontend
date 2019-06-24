@@ -63,7 +63,6 @@ export class DetachCustomerComponent implements OnInit, OnDestroy {
   }
 
   initEditcustomer($event) {
-    // console.log('customer', $event.data);
     this.editMode = true;
     this.isVerified = true;
     this.customer.id = $event.data.id;
@@ -97,11 +96,16 @@ export class DetachCustomerComponent implements OnInit, OnDestroy {
     const customerDetails = {
       'customerId': this.customer.customerId
     };
+    if(this.rightId === this.customer.createdBy){
+      return this.toastr.error('User cannot approved detachment of customer that they created', 'Error!', { timeOut: 4000 });
+    }
+    this.blockUI.start('Approving the Customer Detachment...');
     // update from compas and remove from abis
     this.custSvc.approveRemoveCustomer(customerDetails).subscribe((response) => {
       this.response = response;
       this.log(this.rightId, "approved removal of customer details of customer with customerId: " + customerDetails.customerId + " from the database");
       this.apiService.afisRemove(customerDetails).subscribe((response) => {
+        this.blockUI.stop();
         this.response = response;
         if (this.response.status === true) {
           this.log(this.rightId, "removed the customer details of customer with customerId: " + customerDetails.customerId + " from abis");
@@ -113,9 +117,11 @@ export class DetachCustomerComponent implements OnInit, OnDestroy {
           return this.toastr.error('Customer not removed successfully', ' Error!', { timeOut: 4000 });
         }
       }, error => {
+        this.blockUI.stop();
         return this.toastr.error('Error while attempting to remove the customer details', 'Error!', { timeOut: 4000 });
       });
     }, error => {
+      this.blockUI.stop();
       return this.toastr.error('Error while attempting to remove the customer.', 'Error!', { timeOut: 4000 });
     });
   }
@@ -131,6 +137,7 @@ export class DetachCustomerComponent implements OnInit, OnDestroy {
     this.blockUI.start('Rejecting the Customer...');
     this.custSvc.rejectRemoveCustomer(customerDetails).subscribe(data => {
       this.response = data;
+      this.blockUI.stop();
       if (this.response.status === true) {
         this.editMode = false;
         this.log(this.rightId, 'rejected the removal of customer with customerId ' + customerDetails.customerId);
@@ -141,6 +148,7 @@ export class DetachCustomerComponent implements OnInit, OnDestroy {
         return this.toastr.success('Customer reject of detachment not done successfully..', ' Warning!');
       }
     }, error => {
+      this.blockUI.stop();
       return this.toastr.error('Error while attempting to reject the detachment of the customer.', 'Error!', { timeOut: 4000 });
     });
   }
