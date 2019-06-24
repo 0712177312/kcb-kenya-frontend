@@ -50,16 +50,8 @@
             <button type="button" class="btn btn-success" (click)="getLogsRpt()" style="width: 150px;">Preview</button>
           </div>
           <div class="col-sm-3">
-            <div ngbDropdown class="d-inline-block">
-              <button class="btn btn-default" id="dropdownBasic1" ngbDropdownToggle>Export</button>
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <a class="dropdown-item" target="_blank" (click)="getPdfSystemReport()">PDF</a>
-                <a class="dropdown-item" target="_blank" href="{{xls_url}}" (click)="getExcelCustomerReport()">EXCEL</a>
-                <!-- <a class="dropdown-item" target="_blank" href="{{csv_url}}" (click)="geteCsvCustomerReport()">CSV</a> -->
-                <a class="dropdown-item" target="_blank" href="about:blank" (click)="getUserActivityCsv()">CSV</a>
-
-              </div>
-            </div>
+            <button class="btn btn-default" (click)="getPdfSystemReport()">Export</button>
+            <!-- <a class="dropdown-item" target="_blank" href="about:blank" (click)="getUserActivityCsv()">CSV</a> -->
           </div>
         </div>
       </form>
