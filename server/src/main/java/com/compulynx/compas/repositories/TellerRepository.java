@@ -2,6 +2,7 @@ package com.compulynx.compas.repositories;
 
 import java.util.List;
 
+import com.compulynx.compas.models.extras.TellersToApproveDetach;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -35,10 +36,10 @@ public interface TellerRepository extends JpaRepository<Teller, Long>{
 	List<TellerToApprove> getTellersToApprove();
 
 	@Query(nativeQuery = true, value ="SELECT ROWNUM AS COUNTER,customerId, " +
-			"CU.tellerName,TO_CHAR(CU.CREATED_AT,'dd-mm-rrrr') AS ENROLLEDON,UM.FULLNAME AS CREATEDBY, UM.ID AS USERSID " +
+			"CU.tellerName,TO_CHAR(CU.CREATED_AT,'dd-mm-rrrr') AS ENROLLEDON, CU.DELETED_BY AS DELETEDBY, UM.FULLNAME AS CREATEDBY, UM.ID AS USERSID " +
 			"from tellermaster CU " +
 			"INNER JOIN USERMASTER UM ON UM.ID = CU.createdBy AND CU.VERIFIED = 'D'")
-	List<TellerToApprove> getTellersToApproveDetach();
+	List<TellersToApproveDetach> getTellersToApproveDetach();
 
 //	@Query("select u from Teller u where u.customerId=?1 OR tellerSignOnName=?2  AND u.enrollStatus<>'A'")
 //	Teller getTellerToVerify(String customerId, String mnemonic);

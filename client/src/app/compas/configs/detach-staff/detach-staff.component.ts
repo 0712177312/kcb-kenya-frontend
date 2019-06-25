@@ -68,6 +68,9 @@ export class DetachStaffComponent implements OnInit, OnDestroy {
     this.isVerified = true;
     this.teller.tellerName = $event.data.tellerName;
     this.teller.customerId = $event.data.customerId;
+    this.teller.deletedBy = $event.data.deletedBy;
+    console.log("teller deletedby: " + this.teller.deletedBy);
+    console.log("right id: " + this.rightId);
     this.isNew = false;
     this.title = 'Edit Profile';
     this.button = 'Update Profile';
@@ -88,8 +91,8 @@ export class DetachStaffComponent implements OnInit, OnDestroy {
     const staffDetails = {
       'customerId': this.teller.customerId
     };
-    if(this.rightId === this.teller.createdBy){
-      return this.toastr.error('User cannot approve detachment of staff that they created', 'Error!', { timeOut: 4000 });
+    if(this.rightId == this.teller.deletedBy){ 
+      return this.toastr.error('User cannot approve detachment of staff that they queued for removal', 'Error!', { timeOut: 4000 });
     }
     this.blockUI.start('Approving the Staff Detachment...');
     // update from compas and remove from abis
@@ -123,8 +126,8 @@ export class DetachStaffComponent implements OnInit, OnDestroy {
     const staffDetails = {
       'customerId': this.teller.customerId
     };
-    if (this.rightId === this.teller.createdBy) {
-      return this.toastr.error('User cannot reject detachment of staff that they created', 'Error!', { timeOut: 4000 });
+    if (this.rightId == this.teller.deletedBy) {
+      return this.toastr.error('User cannot reject detachment of staff that they queued for removal', 'Error!', { timeOut: 4000 });
     }
     this.blockUI.start('Rejecting the Staff...');
     this.tellerSvc.rejectRemoveTeller(staffDetails).subscribe(data => {

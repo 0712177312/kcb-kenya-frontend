@@ -3,6 +3,7 @@ package com.compulynx.compas.repositories;
 import java.util.Date;
 import java.util.List;
 
+import com.compulynx.compas.models.extras.CustomersToApproveDetach;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -29,10 +30,10 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	List<CustomersToApprove> getCustomersToApprove(String branchCode);
 
 	@Query(nativeQuery = true, value ="SELECT ROWNUM AS COUNTER,CUSTOMERID, " +
-			"CU.CUSTOMERNAME,CUSTOMERIDNUMBER,CU.PHONENUMBER,CU.COUNTRY,TO_CHAR(CU.CREATED_AT,'dd-mm-rrrr') AS ENROLLEDON,UM.FULLNAME AS CREATEDBY, UM.ID AS USERSID " +
+			"CU.CUSTOMERNAME,CUSTOMERIDNUMBER,CU.PHONENUMBER,CU.COUNTRY,TO_CHAR(CU.CREATED_AT,'dd-mm-rrrr') AS ENROLLEDON, CU.DELETED_BY AS DELETEDBY, UM.FULLNAME AS CREATEDBY, UM.ID AS USERSID " +
 			"from CUSTOMER CU " +
 			"INNER JOIN USERMASTER UM ON UM.ID = CU.CREATED_BY AND CU.VERIFIED = 'D'")
-	List<CustomersToApprove> getCustomersToApproveDetach();
+	List<CustomersToApproveDetach> getCustomersToApproveDetach();
 	
 	@Modifying
 	@Transactional

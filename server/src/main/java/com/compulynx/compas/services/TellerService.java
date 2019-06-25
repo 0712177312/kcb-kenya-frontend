@@ -2,6 +2,7 @@ package com.compulynx.compas.services;
 
 import java.util.List;
 
+import com.compulynx.compas.models.extras.TellersToApproveDetach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -92,7 +93,7 @@ public class TellerService {
 		return tellerRepository.staffUnDeleted(createdBy, tellerId);
 	}
 
-	public List<TellerToApprove> getTellersToApproveDetach() {
+	public List<TellersToApproveDetach> getTellersToApproveDetach() {
 		return tellerRepository.getTellersToApproveDetach();
 	}
 

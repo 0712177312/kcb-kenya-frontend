@@ -2,6 +2,8 @@ package com.compulynx.compas.controllers;
 
 import java.util.HashSet;
 import java.util.List;
+
+import com.compulynx.compas.models.extras.TellersToApproveDetach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -217,7 +219,7 @@ public class TellerController {
     @GetMapping(value = "/tellersToApproveDetach")
 	public ResponseEntity<?> getTellersToApproveDetach() {
     	try{
-			List<TellerToApprove> tellers = tellerService.getTellersToApproveDetach();
+			List<TellersToApproveDetach> tellers = tellerService.getTellersToApproveDetach();
 			if(tellers.size() > 0) {
 				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"000",
 						true, "tellers to approve detach found",

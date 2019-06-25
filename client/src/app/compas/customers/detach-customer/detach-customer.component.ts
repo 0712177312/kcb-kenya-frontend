@@ -78,6 +78,8 @@ export class DetachCustomerComponent implements OnInit, OnDestroy {
     this.customer.mnemonic = $event.data.mnemonic;
     this.customer.createdBy = $event.data.createdBy;
     this.customer.usersId = $event.data.usersId;
+    this.customer.deletedBy = $event.data.deletedBy;
+    console.log("customer deletedBy: " + this.customer.deletedBy);
     this.isNew = false;
     this.title = 'Edit Profile';
     this.button = 'Update Profile';
@@ -96,8 +98,8 @@ export class DetachCustomerComponent implements OnInit, OnDestroy {
     const customerDetails = {
       'customerId': this.customer.customerId
     };
-    if(this.rightId === this.customer.createdBy){
-      return this.toastr.error('User cannot approved detachment of customer that they created', 'Error!', { timeOut: 4000 });
+    if(this.rightId == this.customer.deletedBy){
+      return this.toastr.error('User cannot approve detachment of customer that they queued for removal', 'Error!', { timeOut: 4000 });
     }
     this.blockUI.start('Approving the Customer Detachment...');
     // update from compas and remove from abis
@@ -131,8 +133,8 @@ export class DetachCustomerComponent implements OnInit, OnDestroy {
     const customerDetails = {
       'customerId': this.customer.customerId
     };
-    if (this.rightId === this.customer.createdBy) {
-      return this.toastr.error('User cannot reject detachment of customer that they created', 'Error!', { timeOut: 4000 });
+    if (this.rightId == this.customer.deletedBy) {
+      return this.toastr.error('User cannot reject detachment of customer that they queued for removal', 'Error!', { timeOut: 4000 });
     }
     this.blockUI.start('Rejecting the Customer...');
     this.custSvc.rejectRemoveCustomer(customerDetails).subscribe(data => {

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
+import com.compulynx.compas.models.extras.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,6 @@ import com.compulynx.compas.customs.responses.CustomerResponse;
 import com.compulynx.compas.customs.responses.GlobalResponse;
 import com.compulynx.compas.models.Customer;
 import com.compulynx.compas.models.Teller;
-import com.compulynx.compas.models.extras.CustomersToApprove;
-import com.compulynx.compas.models.extras.MatchingTeller;
-import com.compulynx.compas.models.extras.TResponse;
-import com.compulynx.compas.models.extras.UpdateProfile;
 import com.compulynx.compas.services.CustomerService;
 import com.compulynx.compas.services.TellerService;
 
@@ -227,7 +224,7 @@ public class CustomerController {
     @GetMapping(value = "/customersToApproveDetach")
     public ResponseEntity<?> getCustomersToApproveDetach(){
         try{
-            List<CustomersToApprove> customers = customerService.getCustomersToApproveDetach();
+            List<CustomersToApproveDetach> customers = customerService.getCustomersToApproveDetach();
             if (customers.size() > 0) {
                 return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true,
                         "customers to approve detach found", new HashSet<>(customers)), HttpStatus.OK);

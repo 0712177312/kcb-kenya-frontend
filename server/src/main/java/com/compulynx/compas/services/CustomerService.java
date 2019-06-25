@@ -3,6 +3,7 @@ package com.compulynx.compas.services;
 import java.util.Date;
 import java.util.List;
 
+import com.compulynx.compas.models.extras.CustomersToApproveDetach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -129,7 +130,7 @@ public class CustomerService {
 //		return customerRepository.getAll(fromDate,toDate);
 //	}
 
-	public List<CustomersToApprove> getCustomersToApproveDetach() {
+	public List<CustomersToApproveDetach> getCustomersToApproveDetach() {
 		return customerRepository.getCustomersToApproveDetach();
 	}
 
