@@ -50,7 +50,7 @@
             <button type="button" class="btn btn-success" (click)="getLogsRpt()" style="width: 150px;">Preview</button>
           </div>
           <div class="col-sm-3">
-            <button class="btn btn-default" (click)="getPdfSystemReport()">Export</button>
+            <button class="btn btn-default" [disabled]="exportButtonDisabled" (click)="getPdfSystemReport()">Export</button>
             <!-- <a class="dropdown-item" target="_blank" href="about:blank" (click)="getUserActivityCsv()">CSV</a> -->
           </div>
         </div>

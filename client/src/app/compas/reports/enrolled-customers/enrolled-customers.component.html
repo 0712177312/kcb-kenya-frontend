@@ -53,7 +53,7 @@
                 <button type="button" class="btn btn-success" (click)="getCustomersReport()" style="width: 150px;">Preview</button>
               </div>
               <div class="col-sm-3">
-                <button class="btn btn-default" (click)="getPdfCustomerReport()">Export</button>
+                <button class="btn btn-default" [disabled]="exportButtonDisabled" (click)="getPdfCustomerReport()">Export</button>
               </div>
             </div>
           </form>

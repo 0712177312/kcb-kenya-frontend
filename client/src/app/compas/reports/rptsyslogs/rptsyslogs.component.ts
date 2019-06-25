@@ -29,6 +29,8 @@ export class RptsyslogsComponent implements OnInit {
   resp: any = {};
   xls_url: any;
 
+  exportButtonDisabled: boolean;
+
   @ViewChild('dataTable') table;
   dataTable: any;
   dtOptions: any;
@@ -87,6 +89,7 @@ export class RptsyslogsComponent implements OnInit {
   getPdfSystemReport() {
     console.log(this.fromDate);
     console.log('clicked....');
+    this.exportButtonDisabled = true;
     // tslint:disable-next-line:max-line-length
     this.dtOptions = {
       dom: 'Bfrtip',

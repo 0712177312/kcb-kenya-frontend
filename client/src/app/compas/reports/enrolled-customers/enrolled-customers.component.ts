@@ -27,6 +27,8 @@ export class EnrolledCustomersComponent implements OnInit {
   customerStatus = [];
   enrolledType: String;
 
+  exportButtonDisabled: boolean;
+
   @ViewChild('dataTable') table;
   dataTable: any;
   dtOptions: any;
@@ -60,6 +62,7 @@ export class EnrolledCustomersComponent implements OnInit {
   getPdfCustomerReport() {
     console.log(this.fromDate);
     console.log('clicked....');
+    this.exportButtonDisabled = true;
     // tslint:disable-next-line:max-line-length
     //this.pdf_url = `reports/enrolledCustomers?reportType=CER&exportType=P&FromDt=${this.formatDate(this.fromDate)}&ToDt=${this.formatDate(this.toDate)}&enrolledType=${this.enrolledType}`;
     this.dtOptions = {
