@@ -147,7 +147,11 @@ export class DeleteCustomerComponent implements OnInit {
     };
     this.custSvc.removeCustomer(customerDetails).subscribe((response) => {
       this.response = response;
-      this.log(this.rightId, "removed the customer details of customer with customerId: " + customerDetails.customerId + " from the database");
+      if(this.response.status === true){
+        this.log(this.rightId, "removed the customer details of customer with customerId: " + customerDetails.customerId + " from the database");
+      }else{
+        this.log(this.rightId, "attempted to remove the customer details of customer with customerId: " + customerDetails.customerId + " from the database");
+      }
       this.apiService.afisRemove(customerDetails).subscribe((response) => {
         this.response = response;
         if (this.response.status === true) {
@@ -197,7 +201,11 @@ export class DeleteCustomerComponent implements OnInit {
     };
     this.tellerSvc.removeTeller(tellerDetails).subscribe((response) => {
       this.response = response;
-      this.log(this.rightId, "removed the staff details of staff with customerId: " + tellerDetails.customerId + " from the database");
+      if(this.response.status === true){
+        this.log(this.rightId, "removed the staff details of staff with customerId: " + tellerDetails.customerId + " from the database");
+      }else{
+        this.log(this.rightId, "attempted to remove the staff details of staff with customerId: " + tellerDetails.customerId + " from the database");
+      }
       this.apiService.afisRemove(tellerDetails).subscribe((response) => {
         this.response = response;
         if (this.response.status === true) {
