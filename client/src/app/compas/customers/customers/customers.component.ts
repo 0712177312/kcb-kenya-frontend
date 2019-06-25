@@ -786,13 +786,30 @@ private getThumbs(data) {
                 return this.toastr.success('Profile details saved successfuly. Awaiting authorization', ' Success!');
            } else {
                 this.log(this.rightId, this.response.respMessage);
-
+                this.removeCustomer(this.customer);
                 return this.toastr.warning(this.response.respMessage, 'Warning!');
         }
     }, error => {
         this.log(this.rightId, 'error updating country details');
-
+        this.removeCustomer(this.customer);
         return this.toastr.error('Error in updating Customer data.', 'Error!', { timeOut: 4000 });
+      });
+  }
+
+  removeCustomer(customer){
+      // remove prints from abis in case the entry has not been added to the database but 
+      // has probably been added to abis
+      const customerDetails = {
+        'customerId': customer.customerId
+      };
+      this.apiService.afisRemove(customerDetails).subscribe((response: any) => {
+        if(response.status === true){
+          this.log(this.rightId, + "customer details of customer with customerId: "+ customerDetails.customerId + " removed after timeout during enrollment");
+        }else{
+          this.log(this.rightId, + "customer details of customer with customerId: "+ customerDetails.customerId + " not removed after timeout during enrollment");
+        }
+      }, error => {
+          this.log(this.rightId, + "customer details of customer with customerId: "+ customerDetails.customerId + " not removed after timeout during enrollment due to an error");
       });
   }
 
