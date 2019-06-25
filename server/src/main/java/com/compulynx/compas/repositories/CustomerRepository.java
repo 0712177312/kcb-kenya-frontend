@@ -58,7 +58,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	@Query(nativeQuery=true, value="UPDATE customer set waived=?1, waive_approved_by=?2, approvedcustomerwaive_on=systimestamp WHERE customerId=?3 ")
 	int approveCustomerWaive(String waived, int approvedBy, String customerId);
 
-	@Query("select u from Customer u where u.customerId=?1 and (u.verified <> 'R' or u.verified <> 'D')")
+	@Query("select u from Customer u where u.customerId=?1 and (u.verified <> 'R' AND u.verified <> 'D')")
 	Customer getMatchedCustomers(String customerId);
 	
 	@Query(nativeQuery=true, value="select u.id, u.customerId, u.tellerName as customerName, u.tellerId as customerIdNumber, '' as country, "
