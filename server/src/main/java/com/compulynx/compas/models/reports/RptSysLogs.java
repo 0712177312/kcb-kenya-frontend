@@ -5,8 +5,7 @@ public interface RptSysLogs {
 	String getUsername();
 	String getActivity();
 	String getIpAddress();
-	String getActTime();
-	String getActDate();
+	String getCreatedAt();
 //	String getDate();
 //	String getTime();
 }

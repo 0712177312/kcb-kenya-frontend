@@ -23,8 +23,8 @@ public interface SysLogRepository extends JpaRepository<SysLogs, Long>{
 	@Query(nativeQuery=true, value="CALL GET_USERLOGS({})")
 	List<RptSysLogs> getLogs();
 	
-	@Query(nativeQuery=true, value="SELECT UM.FULLNAME AS fullname, UM.USERNAME AS username, SY.SYSACTIVITY as activity, SY.IP_ADDRESS as ipAddress, to_char(cast(SY.CREATED_AT as date),'hh24:mi:ss') AS ACTTIME, "
-			+ " to_char(cast(SY.CREATED_AT as date),'DD-MM-YYYY') AS ACTDATE FROM SYSLOGS SY INNER JOIN USERMASTER UM ON UM.ID=SY.USER_ID"
+	@Query(nativeQuery=true, value="SELECT UM.FULLNAME AS fullname, UM.USERNAME AS username, SY.SYSACTIVITY as activity, SY.IP_ADDRESS as ipAddress, SY.CREATED_AT as createdAt "
+			+ " FROM SYSLOGS SY INNER JOIN USERMASTER UM ON UM.ID=SY.USER_ID"
 			+ " WHERE SY.CREATED_AT BETWEEN :fromDate AND :toDate AND UM.ID=:userId ORDER BY SY.ID")
 	List<RptSysLogs> getSystemLogs(Date fromDate, Date toDate,Long userId);
 }

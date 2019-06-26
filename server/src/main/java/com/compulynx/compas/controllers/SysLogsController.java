@@ -110,8 +110,7 @@ public class SysLogsController {
         for (RptSysLogs log : logs) {
             response += log.getUsername() + ", ";
             response += log.getActivity() + ", ";
-            response += log.getActTime() + ", ";
-            response += log.getActDate() + "";
+            response += log.getCreatedAt() + "";
             response += "\n";
         }
         response += "\n";
