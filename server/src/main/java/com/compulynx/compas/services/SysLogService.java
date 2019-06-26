@@ -14,9 +14,9 @@ public class SysLogService {
 	@Autowired
 	private SysLogRepository sysLogRepository;
 
-	public int log(int userId, String activity) {
+	public int log(int userId, String activity, String ipAddress) {
 		// TODO Auto-generated method stub
-		return sysLogRepository.sysLogRepository(userId, activity);
+		return sysLogRepository.sysLogRepository(userId, activity, ipAddress);
 	}
 
 	public List<RptSysLogs> getSysLogs() {

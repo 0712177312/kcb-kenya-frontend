@@ -17,6 +17,9 @@ public class SysLogs extends BaseModel {
    
    @Column(name="sysactivity")
    private String activity;
+
+   @Column(name="ip_address")
+   private String ipAddress;
    
    @Column(name = "created_at", nullable = false,updatable = false)
    @CreationTimestamp
@@ -56,5 +59,13 @@ public class SysLogs extends BaseModel {
 	
 	public void setCreatedOn(Date createdOn) {
 		this.createdOn = createdOn;
+	}
+
+	public String getIpAddress() {
+		return ipAddress;
+	}
+
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
 	}
 }

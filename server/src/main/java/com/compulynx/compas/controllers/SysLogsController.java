@@ -33,8 +33,7 @@ public class SysLogsController {
     public ResponseEntity<?> approveCustomerWaive(@RequestBody SysLogs log, HttpServletRequest request) {
         try {
             String ipAddress = request.getRemoteAddr();
-            log.setActivity(log.getActivity() + ". ipAddress: " + ipAddress);
-            int logs = sysLogService.log(log.getUserId(), log.getActivity());
+            int logs = sysLogService.log(log.getUserId(), log.getActivity(), ipAddress);
             if (logs > 0) {
                 return new ResponseEntity<>(new GlobalResponse(
                         "000", "logged", true, GlobalResponse.APIV), HttpStatus.OK);

@@ -17,13 +17,13 @@ public interface SysLogRepository extends JpaRepository<SysLogs, Long>{
 	
 	@Modifying
 	@Transactional
-	@Query(nativeQuery=true, value="INSERT INTO syslogs (USER_ID,SYSACTIVITY,CREATED_AT) VALUES (?1, ?2,systimestamp)")
-	int sysLogRepository(int userId, String activity);
+	@Query(nativeQuery=true, value="INSERT INTO syslogs (USER_ID,SYSACTIVITY,IP_ADDRESS,CREATED_AT) VALUES (?1, ?2, ?3, systimestamp)")
+	int sysLogRepository(int userId, String activity, String ipAddress);
 	
 	@Query(nativeQuery=true, value="CALL GET_USERLOGS({})")
 	List<RptSysLogs> getLogs();
 	
-	@Query(nativeQuery=true, value="SELECT UM.FULLNAME AS fullname, UM.USERNAME AS username, SY.SYSACTIVITY as activity, to_char(cast(SY.CREATED_AT as date),'hh24:mi:ss') AS ACTTIME, "
+	@Query(nativeQuery=true, value="SELECT UM.FULLNAME AS fullname, UM.USERNAME AS username, SY.SYSACTIVITY as activity, SY.IP_ADDRESS as ipAddress, to_char(cast(SY.CREATED_AT as date),'hh24:mi:ss') AS ACTTIME, "
 			+ " to_char(cast(SY.CREATED_AT as date),'DD-MM-YYYY') AS ACTDATE FROM SYSLOGS SY INNER JOIN USERMASTER UM ON UM.ID=SY.USER_ID"
 			+ " WHERE SY.CREATED_AT BETWEEN :fromDate AND :toDate AND UM.ID=:userId ORDER BY SY.ID")
 	List<RptSysLogs> getSystemLogs(Date fromDate, Date toDate,Long userId);
