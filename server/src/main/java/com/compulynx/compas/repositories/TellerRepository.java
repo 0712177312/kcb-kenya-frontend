@@ -78,7 +78,7 @@ public interface TellerRepository extends JpaRepository<Teller, Long>{
 	@Query("select u from Teller u where u.tellerId=?1 and verified='A'")
 	Teller checkStaffApproved(String tellerId);
 
-	@Query("select u from Teller u where u.tellerId=?1 and (verified='D' or verified='R')")
+	@Query("select u from Teller u where u.tellerId=?1 and (verified='AD' or verified='R')")
 	Teller checkStaffDeleted(String tellerId);
 
 	@Modifying
