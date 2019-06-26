@@ -832,16 +832,16 @@ private getThumbs(data) {
         this.response = response;
 
         if (this.response.status === true) {
-                    this.log(this.rightId, 'enrolled ' + this.customer.customerName +
+                    this.log(this.rightId, 'enrolled ' + this.customer.customerName + " cif: " + this.customer.customerId +
                     ' missing FP ' + missingCount + ' FP ' +  this.enrolledFPrints.length);
                 this.storeCustomer();
             } else {
-                this.log(this.rightId, 'failed to enroll ' + this.customer.customerName +
+                this.log(this.rightId, 'failed to enroll ' + this.customer.customerName + " cif: " + this.customer.customerId +
                     ' missing FP ' + missingCount + ' FP ' +  this.enrolledFPrints.length);
             this.toastr.warning(this.response.message + ' customer id ' + this.response.customerId + '' , 'Warning!', {timeOut: 4000});
            }
         }, error => {
-            this.log(this.rightId, 'failed to enroll  ' + this.customer.customerName +
+            this.log(this.rightId, 'failed to enroll  ' + this.customer.customerName + " cif: " + this.customer.customerId +
                     ' missing FP ' + missingCount + ' FP ' +  this.enrolledFPrints.length);
             return this.toastr.error('Error updating data.', 'Error!', { timeOut: 4000 });
         });
@@ -872,18 +872,18 @@ private getThumbs(data) {
       this.response = response;
 
       if (this.response.status === true) {
-                  this.log(this.rightId, 'enrolled teller' + this.teller.tellerName +
+                  this.log(this.rightId, 'enrolled teller' + this.teller.tellerName + " cif: " + this.teller.customerId +
                   ' missing FP ' + missingCount + ' FP ' +  this.enrolledFPrints.length);
                   this.teller.createdBy = this.rightId;
               this.storeTeller(this.teller);
           } else {
-              this.log(this.rightId, 'failed to enroll teller ' + this.teller.tellerName +
+              this.log(this.rightId, 'failed to enroll teller ' + this.teller.tellerName + " cif: " + this.teller.customerId +
                   ' missing FP ' + missingCount + ' FP ' +  this.enrolledFPrints.length);
 
           this.toastr.warning(this.response.message + ' teller id ' + this.response.customerId + '' , 'Warning!', {timeOut: 4000});
          }
       }, error => {
-          this.log(this.rightId, 'failed to enroll  ' + this.teller.tellerName +
+          this.log(this.rightId, 'failed to enroll  ' + this.teller.tellerName + " cif: " + this.teller.customerId +
                   ' missing FP ' + missingCount + ' FP ' +  this.enrolledFPrints.length);
 
         return this.toastr.error('Error updating data.', 'Error!', { timeOut: 4000 });
