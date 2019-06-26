@@ -482,16 +482,18 @@ upCustDet() {
 
 
     if (this.response.status === true ) {
+              this.log(this.rightId, 'approved the enrollment of customer with customerId ' + this.customer.customerId);
               this.customer = {};
               this.editMode = false;
               this.gtCustomers();
 
               return this.toastr.success('Profile details upddated successfuly.', ' Success!');
         } else {
+              this.log(this.rightId, 'attempted to approve the enrollment of customer with customerId ' + this.customer.customerId);
               return this.toastr.warning('There was problem updating profile details .', 'Warning!');
            }
           }, error => {
-
+            this.log(this.rightId, 'attempted to approve the enrollment of customer with customerId ' + this.customer.customerId + ' but it failed due to an error');
             return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 1500 });
          });
 }
