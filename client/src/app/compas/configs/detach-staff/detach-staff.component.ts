@@ -153,6 +153,11 @@ export class DetachStaffComponent implements OnInit, OnDestroy {
     this.teller = {};
   }
 
+  cancel(){
+    this.editMode = false;
+    this.isVerified = false;
+  }
+
 }
 
 export let settings = {

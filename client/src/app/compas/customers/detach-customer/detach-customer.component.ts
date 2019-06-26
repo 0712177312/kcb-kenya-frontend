@@ -160,6 +160,11 @@ export class DetachCustomerComponent implements OnInit, OnDestroy {
     this.customer = {};
   }
 
+  cancel(){
+    this.editMode = false;
+    this.isVerified = false;
+  }
+
 }
 
 export let settings = {
