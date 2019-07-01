@@ -123,7 +123,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
             this.tellersResp = data;
             this.tellers = this.tellersResp.collection;
         }, error => {
-            return this.toastr.error('Error fetching tellers.', 'Error!', { timeOut: 4000 });
+            return this.toastr.error('Error fetching staff.', 'Error!', { timeOut: 4000 });
         });
     }
     ngOnChanges(changes) {
