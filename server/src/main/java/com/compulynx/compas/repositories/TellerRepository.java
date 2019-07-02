@@ -15,7 +15,7 @@ import com.compulynx.compas.models.extras.TellerToApprove;
 @Repository
 public interface TellerRepository extends JpaRepository<Teller, Long>{
 
-	@Query("select u from Teller u where u.tellerId=?1 and (u.verified='A' or u.verified='N' or u.verified='T')")
+	@Query("select u from Teller u where u.tellerId=?1 and (u.verified='A' or u.verified='N' or u.verified='T' or u.verified='D')")
 	Teller checkTeller(String tellerId);
 	
 	@Query("select u from Teller u where u.tellerSignOnName=?1")

@@ -753,7 +753,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
         this.fings = [];
         this.capturedLPrints = [];
         this.capturedRPrints = [];
-        return this.toastr.success('Teller details saved successfuly. Awaiting authorization', ' Success!');
+        return this.toastr.success('Staff details saved successfully. Awaiting authorization', ' Success!');
       } else {
         this.log(this.rightId, this.response.respMessage);
         this.removeTeller(teller);
