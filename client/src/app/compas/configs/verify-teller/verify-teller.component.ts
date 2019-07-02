@@ -634,7 +634,7 @@ rejectTeller() {
     'customerId': this.teller.customerId,
     'rejectedBy': this.rightId
   };
-  if(this.rightId === this.teller.createdBy){
+  if(this.rightId == this.teller.createdBy){
     return this.toastr.error('Cannot reject staff that one has created', 'Error!', { timeOut: 4000 });
   }
   this.blockUI.start('Rejecting the Staff...');
