@@ -187,8 +187,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
       // waivedBy: 0,
       // waivedApprovedBy: 0,
       enrollStatus: 'N',
-      verifiedBy: 0,
-      createdBy: new FormControl(this.rightId)
+      verifiedBy: 0
     });
     this.editMode = true;
     this.isVerified = true;
