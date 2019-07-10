@@ -838,20 +838,27 @@ export class CustomersComponent implements OnInit, OnDestroy {
   }
 
   enrollCustomerDetails() {
-    const missingCount = this.rightMissing.length + this.leftMissing.length + this.thumbsMissing;
+    const missingCount = this.rightMissing.length + this.leftMissing.length + this.thumbsMissing.length;
+    this.customer = this.form.value;
+    this.customer.fingerPrints = this.enrolledFPrints;
 
     if (this.enrolledFPrints.length > 10) {
       return this.toastr.warning('It appears you have captured more than the required 10 finger prints, '
         + ' kindly reset device to continue!', 'Warning',
         { timeOut: 4000 });
     }
+    //Capture Atleast one finger print
+    if (this.enrolledFPrints.length < 1) {
+      this.log(this.rightId, 'Trying to enroll less than one fingerprint for CIF ' + this.customer.customerId);
+      return this.toastr.error('Kindly ensure you have captured atleast one fingerprint to continue.', 'Error!', { timeOut: 4000 });
+    }
+    //No missing fingers
     if (missingCount === 0 && this.enrolledFPrints.length < 10) {
       this.log(this.rightId, 'Enrolled less than 10 FP for CIF ' + this.customer.customerId +
         ' missing FPs: ' + missingCount + '. Enrolled FP(s): ' + this.enrolledFPrints.length);
       return this.toastr.error('Kindly ensure you have captured all the fingerprints to continue .', 'Error!', { timeOut: 4000 });
     }
-    this.customer = this.form.value;
-    this.customer.fingerPrints = this.enrolledFPrints;
+
     this.apiService.afisEnroll(this.customer).subscribe((response) => {
       this.response = response;
 
@@ -866,26 +873,33 @@ export class CustomersComponent implements OnInit, OnDestroy {
       }
     }, error => {
       this.log(this.rightId, 'Failed to enroll ' + this.customer.customerName + " CIF: " + this.customer.customerId +
-          ' missing FPs: ' + missingCount + ' Failed FP(s) ' + this.enrolledFPrints.length);
+        ' missing FPs: ' + missingCount + ' Failed FP(s) ' + this.enrolledFPrints.length);
       return this.toastr.error('Error updating data.', 'Error!', { timeOut: 4000 });
     });
     // }
   }
   enrollTellerDetails() {
-    const missingCount = this.rightMissing.length + this.leftMissing.length + this.thumbsMissing;
+    const missingCount = this.rightMissing.length + this.leftMissing.length + this.thumbsMissing.length;
+    this.teller = this.tellerForm.value;
+    this.teller.createdBy = this.rightId;
 
     if (this.enrolledFPrints.length > 10) {
       return this.toastr.warning('It appears you have captured more than the required 10 finger prints, '
         + ' kindly reset device to continue!', 'Warning',
         { timeOut: 4000 });
     }
+
+    //Capture Atleast one finger print
+    if (this.enrolledFPrints.length < 1) {
+      this.log(this.rightId, 'Trying to enroll less than one fingerprint for Staff: ' + this.teller.tellerSignOnName);
+      return this.toastr.error('Kindly ensure you have captured atleast one fingerprint to continue.', 'Error!', { timeOut: 4000 });
+    }
+    //No missing fingers
     if (missingCount === 0 && this.enrolledFPrints.length < 10) {
       this.log(this.rightId, 'Enrolling less than 10 FP for staff: ' + this.teller.tellerSignOnName +
         ' missing FPs: ' + missingCount + ' Enrolling FP(s) :' + this.enrolledFPrints.length);
       return this.toastr.error('Kindly ensure you have captured all the fingerprints to continue .', 'Error!', { timeOut: 4000 });
     }
-    this.teller = this.tellerForm.value;
-    this.teller.createdBy = this.rightId;
 
     // this.teller.fingerPrints = this.enrolledFPrints;
     const tller = {

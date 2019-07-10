@@ -23,7 +23,7 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
   fileText: any;
   enroleMode = true;
   inquireMode = false;
-  verificationType='SEC';
+  verificationType = 'SEC';
   locl: any;
   account_number: any;
   toCaptureBtns = ['right', 'thumbs', 'left'];
@@ -228,39 +228,39 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
 
   secugenVerify() {
     if (this.teller.createdBy === this.rightId) {
-      return  this.toastr.warning('User cannot approve customer they enrolled', 'Alert!', { timeOut: 1500 });
-      } else {
-        this.apiService.capturePrint().subscribe((data: Array<object>) => {
-          this.bio = data;
-          const profilePrint: any = {};
-          if (this.bio.ErrorCode === 0) {
+      return this.toastr.warning('User cannot approve customer they enrolled', 'Alert!', { timeOut: 1500 });
+    } else {
+      this.apiService.capturePrint().subscribe((data: Array<object>) => {
+        this.bio = data;
+        const profilePrint: any = {};
+        if (this.bio.ErrorCode === 0) {
 
-            if (this.bio !== null && this.bio.BMPBase64.length > 0) {
-              this.document.getElementById('finger').src =
-                'data:image/bmp;base64,' + this.bio.BMPBase64;
-                profilePrint.singlePrint = {
-                position: 0,
-                fingerPrint: this.bio.BMPBase64
-              };
-              profilePrint.transactionType = 'T';
-              profilePrint.customerId = this.teller.customerId;
-              profilePrint.transactionId = '';
-              this.afisVerifyUser(profilePrint);
-            }
-          } else {
-            return this.toastr.warning('failed to Capture finger print, please retry', 'Warning!');
+          if (this.bio !== null && this.bio.BMPBase64.length > 0) {
+            this.document.getElementById('finger').src =
+              'data:image/bmp;base64,' + this.bio.BMPBase64;
+            profilePrint.singlePrint = {
+              position: 0,
+              fingerPrint: this.bio.BMPBase64
+            };
+            profilePrint.transactionType = 'T';
+            profilePrint.customerId = this.teller.customerId;
+            profilePrint.transactionId = '';
+            this.afisVerifyUser(profilePrint);
           }
-        });
-      }
+        } else {
+          return this.toastr.warning('failed to Capture finger print, please retry', 'Warning!');
+        }
+      });
+    }
   }
 
-afisVerifyUser($event) {
+  afisVerifyUser($event) {
     this.apiService.afisVer($event).subscribe(dat => {
       this.response = dat;
 
       if (this.response.status === true) {
-          this.editMode = false;
-          this.upCustDet();
+        this.editMode = false;
+        this.upCustDet();
       } else {
         return this.toastr.warning('Failed to verify. Try Again!', 'Warning!', { timeOut: 3000 });
       }
@@ -268,7 +268,7 @@ afisVerifyUser($event) {
 
       return this.toastr.error('Error in loading data.', 'Error!', { timeOut: 3000 });
     });
-}
+  }
 
   private getRightPrint(data) {
     this.btnClass = false;
@@ -431,299 +431,305 @@ afisVerifyUser($event) {
     this.hand = {
       'req': fin
     };
-    console.log({ 'name': fin, 'missingStatus': this.missingStatus, 'missingCount': count, 'missing': this.missing  });
- // this.stompClient.send(
- //   '/app/getImage',
- //   {},
- //   JSON.stringify({ 'name': fin, 'missingStatus': this.missingStatus,
- //   'missingCount': count, 'missing': this.missing, 'customerId': this.account_number })
- // );
- this.apiService.getFingerPrintImage({
-    'name': fin, 'missingStatus': this.missingStatus,
-    'missingCount': count, 'missing': this.missing, 'customerId': this.account_number
-  }).subscribe(data => {
-    this.hands = data;
-    if (this.hands.status === true) {
-      if (this.hands.hand === 'left') {
-        this.getLeftPrint(this.hands);
-        // this.getLeftPrint();
-      } else if (this.hands.hand === 'right') {
-        this.getRightPrint(this.hands);
-        // this.getRightPrint();
-      } else if (this.hands.hand === 'thumbs') {
-        this.getThumbs(this.hands);
-      }
-    } else {
-      this.btnClass = false;
-      return this.toastr.warning(this.hands.responseMessage, 'Alert!', { timeOut: 4000 });
-    }
-  }, error => {
-    console.log('error', error);
-  });
-}
-// private sendName(fin) {
-//   let count: any = 0;
-//   if ( fin === 'left' && this.leftMissing.length === 4) {
-//       return this.toastr.warning('No Left hand prints to capture, already specified all are missing ', 'Alert!', { timeOut: 4000 });
-//   }
-//   if (fin === 'thumbs' && this.thumbsMissing.length === 2) {
-//       return this.toastr.warning('No thumbs to capture , you already specified all are missing', 'Alert!', { timeOut: 4000 });
-//   }
-//   if (fin === 'right' && this.rightMissing.length === 4) {
-//       return this.toastr.warning('No right hand prints to capture, already specified all are missing', 'Alert!', { timeOut: 4000 });
-//   }
-//     if ( this.leftMissing.length > 0 || this.rightMissing.length || this.thumbsMissing.length ) {
-//       this.missingStatus = true;
-//       if (fin === 'left') {
-//           count = 4 - this.leftMissing.length;
-//           this.missing = this.leftMissing;
-//           console.log('$$missing left', this.missing);
-//         } else if (fin === 'right') {
-//             count = 4 - this.rightMissing.length;
-//            this.missing = this.rightMissing;
-//            console.log('$$missing right', this.missing);
-//         } else if (fin === 'thumbs') {
-//             count = 2 - this.thumbsMissing.length;
-//            this.missing = this.thumbsMissing;
-//            console.log('$$missing thumbs', this.missing);
-//         } else if (fin === 'stop') {
-//                 this.missing = [];
-//                 count = 0;
-//                 this.btnClass = false;
-//                 this.missingStatus = false;
-//           }
-//       }
-//       if (fin === 'stop') {
-//         this.missing = [];
-//         count = 0;
-//         this.missingStatus = false;
-//       }
-//     this.hand = {
-//         'req': fin
-//     };
-//    console.log({ 'name': fin, 'missingStatus': this.missingStatus,
-//    'missingCount': count, 'missing': this.missing });
-//   // this.stompClient.send(
-//   //   '/app/getImage',
-//   //   {},
-//   //   JSON.stringify({ 'name': fin, 'missingStatus': this.missingStatus,
-//   //   'missingCount': count, 'missing': this.missing })
-//   // );
-//   this.apiService.getFingerPrintImage({ 'name': fin, 'missingStatus': this.missingStatus,
-//   'missingCount': count, 'missing': this.missing, 'customerId': this.account_number }).subscribe(data => {
-//       this.hands = data;
-//       if ( this.hands.status === true) {
-//           if (this.hands.hand === 'left') {
-//              this.getLeftPrint(this.hands);
-//           // this.getLeftPrint();
-//            } else if ( this.hands.hand === 'right') {
-//               this.getRightPrint(this.hands);
-//             // this.getRightPrint();
-//           } else if (this.hands.hand === 'thumbs') {
-//               this.getThumbs(this.hands);
-//           }
-//         } else {
-//             this.btnClass = false;
-//             return this.toastr.warning(this.hands.responseMessage, 'Alert!', { timeOut: 4000 });
-//         }
-//   }, error => {
-//       console.log('error', error);
-//   });
-// }
-
-showGreeting(message) {
-  console.log('message', message);
-  this.greetings.push(message);
-}
-
-gtTellers() {
-  this.blockUI.start('Loading data...');
-  this.tellerSvc.getTellersToApprove().subscribe(data => {
-    this.tellers = data;
-    console.log('tellers', this.tellers);
-    this.tellers = this.tellers.collection;
-    console.log('tellers##', this.tellers);
-    this.blockUI.stop();
-  }, error => {
-    this.blockUI.stop();
-    return this.toastr.error('Error in inquiring Teller data.', 'Error!', { timeOut: 1500 });
-  });
-}
-
-upCustDet() {
-  const teller = {
-    'customerId': this.teller.customerId,
-    'verifiedBy': this.rightId,
-    'verifiedOn': new Date()
-  };
-  console.log('timestamp', new Date());
-  this.tellerSvc.approveTeller(teller).subscribe((response) => {
-    this.response = response;
-
-
-    if (this.response.status === true) {
-      this.log(this.rightId, 'approved the enrollment of staff with customerId ' + this.teller.customerId);
-      this.teller = {};
-      this.editMode = false;
-      this.gtTellers();
-      this.blockUI.stop();
-      return this.toastr.success('Profile details upddated successfuly.', ' Success!');
-    } else {
-      this.log(this.rightId, 'attempted to approve the enrollment of staff with customerId ' + this.teller.customerId);
-      return this.toastr.warning('There was problem updating profile details .', 'Warning!');
-    }
-  }, error => {
-    this.log(this.rightId, 'attempted to approve the enrollment of staff with customerId ' + this.teller.customerId + 'but it failed due to an error');
-    this.blockUI.stop();
-    return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 1500 });
-  });
-}
-
-afisUpdate() {
-  if (this.teller.usersId === this.rightId) {
-    return this.toastr.warning('User cannot approve customer they enrolled', 'Alert!', { timeOut: 1500 });
-  } else {
-    console.log('customer', this.teller);
-    const customer = {
-      'customerId': this.teller.customerId,
-      'fingerPrints': this.fingerPrints
-    };
-    console.log('customer to authorize..', customer);
-    this.biosvc.afisVerify(customer).subscribe(data => {
-      this.respo = data;
-      console.log('repo', this.respo);
-      if (this.respo.status === true) {
-        this.editMode = false;
-        this.upCustDet();
+    console.log({ 'name': fin, 'missingStatus': this.missingStatus, 'missingCount': count, 'missing': this.missing });
+    // this.stompClient.send(
+    //   '/app/getImage',
+    //   {},
+    //   JSON.stringify({ 'name': fin, 'missingStatus': this.missingStatus,
+    //   'missingCount': count, 'missing': this.missing, 'customerId': this.account_number })
+    // );
+    this.apiService.getFingerPrintImage({
+      'name': fin, 'missingStatus': this.missingStatus,
+      'missingCount': count, 'missing': this.missing, 'customerId': this.account_number
+    }).subscribe(data => {
+      this.hands = data;
+      if (this.hands.status === true) {
+        if (this.hands.hand === 'left') {
+          this.getLeftPrint(this.hands);
+          // this.getLeftPrint();
+        } else if (this.hands.hand === 'right') {
+          this.getRightPrint(this.hands);
+          // this.getRightPrint();
+        } else if (this.hands.hand === 'thumbs') {
+          this.getThumbs(this.hands);
+        }
       } else {
-        this.blockUI.stop();
-        return this.toastr.warning('There was problem authorizing customer details .', 'Warning!');
+        this.btnClass = false;
+        return this.toastr.warning(this.hands.responseMessage, 'Alert!', { timeOut: 4000 });
       }
     }, error => {
-      this.blockUI.stop();
-      return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 1500 });
+      console.log('error', error);
     });
   }
-}
-resetDevice() {
-  this.fingerPrints = [];
-  this.element = document.createElement('img');
-  this.fingerPrints = [];
-  this.teller.fingerPrints = [];
-  this.btnClass = false;
-  this.capturedFings = [];
-  this.capturedRPrints = [];
-  this.capturedThumbs = [];
-  let captS: any;
-  this.btnsCaptured = [];
-  console.log('captured', this.captured);
-  for (let i = 0; i < this.captured.length; i++) {
-    captS = this.captured[i];
-    console.log('position', captS);
-    this.document.getElementById(captS).src = 'assets/images/enroll/' + captS + '.png';
-    (<HTMLInputElement>document.getElementById('left')).disabled = false;
-    (<HTMLInputElement>document.getElementById('thumbs')).disabled = false;
-    (<HTMLInputElement>document.getElementById('right')).disabled = false;
+  // private sendName(fin) {
+  //   let count: any = 0;
+  //   if ( fin === 'left' && this.leftMissing.length === 4) {
+  //       return this.toastr.warning('No Left hand prints to capture, already specified all are missing ', 'Alert!', { timeOut: 4000 });
+  //   }
+  //   if (fin === 'thumbs' && this.thumbsMissing.length === 2) {
+  //       return this.toastr.warning('No thumbs to capture , you already specified all are missing', 'Alert!', { timeOut: 4000 });
+  //   }
+  //   if (fin === 'right' && this.rightMissing.length === 4) {
+  //       return this.toastr.warning('No right hand prints to capture, already specified all are missing', 'Alert!', { timeOut: 4000 });
+  //   }
+  //     if ( this.leftMissing.length > 0 || this.rightMissing.length || this.thumbsMissing.length ) {
+  //       this.missingStatus = true;
+  //       if (fin === 'left') {
+  //           count = 4 - this.leftMissing.length;
+  //           this.missing = this.leftMissing;
+  //           console.log('$$missing left', this.missing);
+  //         } else if (fin === 'right') {
+  //             count = 4 - this.rightMissing.length;
+  //            this.missing = this.rightMissing;
+  //            console.log('$$missing right', this.missing);
+  //         } else if (fin === 'thumbs') {
+  //             count = 2 - this.thumbsMissing.length;
+  //            this.missing = this.thumbsMissing;
+  //            console.log('$$missing thumbs', this.missing);
+  //         } else if (fin === 'stop') {
+  //                 this.missing = [];
+  //                 count = 0;
+  //                 this.btnClass = false;
+  //                 this.missingStatus = false;
+  //           }
+  //       }
+  //       if (fin === 'stop') {
+  //         this.missing = [];
+  //         count = 0;
+  //         this.missingStatus = false;
+  //       }
+  //     this.hand = {
+  //         'req': fin
+  //     };
+  //    console.log({ 'name': fin, 'missingStatus': this.missingStatus,
+  //    'missingCount': count, 'missing': this.missing });
+  //   // this.stompClient.send(
+  //   //   '/app/getImage',
+  //   //   {},
+  //   //   JSON.stringify({ 'name': fin, 'missingStatus': this.missingStatus,
+  //   //   'missingCount': count, 'missing': this.missing })
+  //   // );
+  //   this.apiService.getFingerPrintImage({ 'name': fin, 'missingStatus': this.missingStatus,
+  //   'missingCount': count, 'missing': this.missing, 'customerId': this.account_number }).subscribe(data => {
+  //       this.hands = data;
+  //       if ( this.hands.status === true) {
+  //           if (this.hands.hand === 'left') {
+  //              this.getLeftPrint(this.hands);
+  //           // this.getLeftPrint();
+  //            } else if ( this.hands.hand === 'right') {
+  //               this.getRightPrint(this.hands);
+  //             // this.getRightPrint();
+  //           } else if (this.hands.hand === 'thumbs') {
+  //               this.getThumbs(this.hands);
+  //           }
+  //         } else {
+  //             this.btnClass = false;
+  //             return this.toastr.warning(this.hands.responseMessage, 'Alert!', { timeOut: 4000 });
+  //         }
+  //   }, error => {
+  //       console.log('error', error);
+  //   });
+  // }
+
+  showGreeting(message) {
+    console.log('message', message);
+    this.greetings.push(message);
   }
-  console.log('removed bios', this.capturedRPrints);
-  return this.toastr.success('Device was reset successfully .. .', 'Success!', { timeOut: 3000 });
-}
 
-rejectTeller() {
-  const tellerDetails = {
-    'customerId': this.teller.customerId,
-    'rejectedBy': this.rightId
-  };
-  if(this.rightId == this.teller.createdBy){
-    return this.toastr.error('Cannot reject staff that one has created', 'Error!', { timeOut: 4000 });
+  gtTellers() {
+    this.blockUI.start('Loading data...');
+    this.tellerSvc.getTellersToApprove().subscribe(data => {
+      this.tellers = data;
+      console.log('tellers', this.tellers);
+      this.tellers = this.tellers.collection;
+      console.log('tellers##', this.tellers);
+      this.blockUI.stop();
+    }, error => {
+      this.blockUI.stop();
+      return this.toastr.error('Error in inquiring Teller data.', 'Error!', { timeOut: 1500 });
+    });
   }
-  this.blockUI.start('Rejecting the Staff...');
-  //remove teller from database
-  this.tellerSvc.rejectTellerApproval(tellerDetails).subscribe(data => {
-    this.respo = data;
-    if (this.respo.status === true) {
-      this.log(this.rightId, 'rejected the staff '+ tellerDetails.customerId);
-      //remove from abis
-      this.biosvc.afisRemove(tellerDetails).subscribe(data => {
-        if(this.respo.status === true){
-          this.editMode = false;
-          this.log(this.rightId, 'removed staff details of '+ tellerDetails.customerId);
-          this.gtTellers();
-          return this.toastr.success('Staff was rejected successfully.', 'Success!');
-        }else{
-          this.log(this.rightId, 'attempted to remove staff details of '+ tellerDetails.customerId);
-          return this.toastr.success('Staff was not removed successfully.', 'Warning!');
-        }
-      }, error => {
-        return this.toastr.error('Error while attempting to remove the staff print details', 'Error!', { timeOut: 4000 });
-      });
-    }else{
-      this.log(this.rightId, 'attempted to reject the staff '+ tellerDetails.customerId);
-      return this.toastr.warning('There was a problem rejecting staff details. ', 'Warning!');
-    }
-  }, error => {
-    return this.toastr.error('Error while attempting to reject the staff.', 'Error!', { timeOut: 4000 });
-  });
-}
 
-open2(content) {
-  this.modalService.open(content).result.then(
-    result => {
-      this.closeResult = `Closed with: ${result}`;
-    },
-    reason => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    }
-  );
-}
+  upCustDet() {
+    const teller = {
+      'customerId': this.teller.customerId,
+      'verifiedBy': this.rightId,
+      'verifiedOn': new Date()
+    };
+    console.log('timestamp', new Date());
+    this.tellerSvc.approveTeller(teller).subscribe((response) => {
+      this.response = response;
 
-open(content) {
-  this.modalService2.open(content, { windowClass: 'dark-modal' });
-}
+
+      if (this.response.status === true) {
+        this.log(this.rightId, 'approved the enrollment of staff with customerId ' + this.teller.customerId);
+        this.teller = {};
+        this.editMode = false;
+        this.gtTellers();
+        this.blockUI.stop();
+        return this.toastr.success('Profile details upddated successfuly.', ' Success!');
+      } else {
+        this.log(this.rightId, 'attempted to approve the enrollment of staff with customerId ' + this.teller.customerId);
+        return this.toastr.warning('There was problem updating profile details .', 'Warning!');
+      }
+    }, error => {
+      this.log(this.rightId, 'attempted to approve the enrollment of staff with customerId ' + this.teller.customerId + 'but it failed due to an error');
+      this.blockUI.stop();
+      return this.toastr.error('Error aproving Staff.', 'Error!', { timeOut: 1500 });
+    });
+  }
+
+  afisUpdate() {
+    if (this.teller.usersId === this.rightId) {
+      return this.toastr.warning('User cannot approve customer they enrolled', 'Alert!', { timeOut: 1500 });
+    } else {
+      console.log('customer', this.teller);
+      const customer = {
+        'customerId': this.teller.customerId,
+        'fingerPrints': this.fingerPrints
+      };
+      console.log('customer to authorize..', customer);
+      //Ensure finger prints are captured
+      if (this.fingerPrints.length > 0) {
+        this.biosvc.afisVerify(customer).subscribe(data => {
+          this.respo = data;
+          console.log('repo', this.respo);
+          if (this.respo.status === true) {
+            this.editMode = false;
+            this.upCustDet();
+          } else {
+            this.blockUI.stop();
+            return this.toastr.warning('There was problem authorizing customer details .', 'Warning!');
+          }
+        }, error => {
+          this.blockUI.stop();
+          return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 1500 });
+        });
+      } else {
+        this.blockUI.stop();
+        return this.toastr.error('Capture atleast one finger print.', 'Error!', { timeOut: 1500 });
+      }
+    }
+  }
+  resetDevice() {
+    this.fingerPrints = [];
+    this.element = document.createElement('img');
+    this.fingerPrints = [];
+    this.teller.fingerPrints = [];
+    this.btnClass = false;
+    this.capturedFings = [];
+    this.capturedRPrints = [];
+    this.capturedThumbs = [];
+    let captS: any;
+    this.btnsCaptured = [];
+    console.log('captured', this.captured);
+    for (let i = 0; i < this.captured.length; i++) {
+      captS = this.captured[i];
+      console.log('position', captS);
+      this.document.getElementById(captS).src = 'assets/images/enroll/' + captS + '.png';
+      (<HTMLInputElement>document.getElementById('left')).disabled = false;
+      (<HTMLInputElement>document.getElementById('thumbs')).disabled = false;
+      (<HTMLInputElement>document.getElementById('right')).disabled = false;
+    }
+    console.log('removed bios', this.capturedRPrints);
+    return this.toastr.success('Device was reset successfully .. .', 'Success!', { timeOut: 3000 });
+  }
+
+  rejectTeller() {
+    const tellerDetails = {
+      'customerId': this.teller.customerId,
+      'rejectedBy': this.rightId
+    };
+    if (this.rightId == this.teller.createdBy) {
+      return this.toastr.error('Cannot reject staff that one has created', 'Error!', { timeOut: 4000 });
+    }
+    this.blockUI.start('Rejecting the Staff...');
+    //remove teller from database
+    this.tellerSvc.rejectTellerApproval(tellerDetails).subscribe(data => {
+      this.respo = data;
+      if (this.respo.status === true) {
+        this.log(this.rightId, 'rejected the staff ' + tellerDetails.customerId);
+        //remove from abis
+        this.biosvc.afisRemove(tellerDetails).subscribe(data => {
+          if (this.respo.status === true) {
+            this.editMode = false;
+            this.log(this.rightId, 'removed staff details of ' + tellerDetails.customerId);
+            this.gtTellers();
+            return this.toastr.success('Staff was rejected successfully.', 'Success!');
+          } else {
+            this.log(this.rightId, 'attempted to remove staff details of ' + tellerDetails.customerId);
+            return this.toastr.success('Staff was not removed successfully.', 'Warning!');
+          }
+        }, error => {
+          return this.toastr.error('Error while attempting to remove the staff print details', 'Error!', { timeOut: 4000 });
+        });
+      } else {
+        this.log(this.rightId, 'attempted to reject the staff ' + tellerDetails.customerId);
+        return this.toastr.warning('There was a problem rejecting staff details. ', 'Warning!');
+      }
+    }, error => {
+      return this.toastr.error('Error while attempting to reject the staff.', 'Error!', { timeOut: 4000 });
+    });
+  }
+
+  open2(content) {
+    this.modalService.open(content).result.then(
+      result => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      reason => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
+  }
+
+  open(content) {
+    this.modalService2.open(content, { windowClass: 'dark-modal' });
+  }
 
   private getDismissReason(reason: any): string {
-  if (reason === ModalDismissReasons.ESC) {
-    return 'by pressing ESC';
-  } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-    return 'by clicking on a backdrop';
-  } else {
-    return `with: ${reason}`;
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
-}
-cancelEnr() {
-  this.editMode = false;
-  this.teller = {};
-  this.gtTellers();
-  this.btnClass = false;
-  this.teller.bios = [];
-  this.bios = [];
-  this.btnsCaptured = [];
-  this.btnClass = false;
-  this.fingerprint = [];
-}
+  cancelEnr() {
+    this.editMode = false;
+    this.teller = {};
+    this.gtTellers();
+    this.btnClass = false;
+    this.teller.bios = [];
+    this.bios = [];
+    this.btnsCaptured = [];
+    this.btnClass = false;
+    this.fingerprint = [];
+  }
 
-cancel() {
-  this.btnClass = false;
-  this.editMode = false;
-  this.account_number = '';
-  this.bios = [];
-  this.custbios = [];
-  this.teller = {};
-  this.btnsCaptured = [];
-  this.btnClass = false;
-  this.profpic = '';
+  cancel() {
+    this.btnClass = false;
+    this.editMode = false;
+    this.account_number = '';
+    this.bios = [];
+    this.custbios = [];
+    this.teller = {};
+    this.btnsCaptured = [];
+    this.btnClass = false;
+    this.profpic = '';
 
-}
+  }
 
-ngOnDestroy() {
-  this.editMode = false;
-  this.account_number = '';
-  this.bios = [];
-  this.custbios = [];
-  this.disconnect();
-  this.teller = {};
-  this.profpic = '';
-}
+  ngOnDestroy() {
+    this.editMode = false;
+    this.account_number = '';
+    this.bios = [];
+    this.custbios = [];
+    this.disconnect();
+    this.teller = {};
+    this.profpic = '';
+  }
 
 
 }
