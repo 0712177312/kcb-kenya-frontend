@@ -37,7 +37,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	
 	@Modifying
 	@Transactional
-	@Query(nativeQuery = true, value ="UPDATE customer set verified='A',verified_by=?1, verified_on=systimestamp  WHERE customerId=?2 and verified<>'D'")
+	@Query(nativeQuery = true, value ="UPDATE customer set verified='A',verified_by=?1, verified_on=systimestamp  WHERE customerId=?2 and verified='N'")
 	int approveCustomers(int verifiedBy, String customerId);
 	
 	@Query(nativeQuery=true, value="SELECT * from customer  where customerId =?1")
@@ -122,22 +122,26 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
 	@Modifying
 	@Transactional
-	@Query(nativeQuery=true, value="UPDATE customer set verified='R',rejected_by=?1,rejected_on=systimestamp WHERE customerId=?2")
+	/*Only reject customer if not approved*/
+	@Query(nativeQuery=true, value="UPDATE customer set verified='R',rejected_by=?1,rejected_on=systimestamp WHERE customerId=?2 AND verified='N'")
 	int rejectCustomerEnrollment(int rejectedBy,String customerId);
 
 	@Modifying
 	@Transactional
-	@Query(nativeQuery = true, value ="UPDATE customer set verified='D',deleted_by=?1, deleted_on=systimestamp  WHERE customerId=?2")
+	/*Only remove customer if not removed or not approve removed*/
+	@Query(nativeQuery = true, value ="UPDATE customer set verified='D',deleted_by=?1, deleted_on=systimestamp  WHERE customerId=?2 AND (verified<>'D' OR verified='AD')")
 	int deleteCustomers(int deletedBy, String customerId);
 
 	@Modifying
 	@Transactional
-	@Query(nativeQuery = true, value ="UPDATE customer set verified='AD' WHERE customerId=?1")
+	/*Only approve remove customer if removed(verified='D')*/
+	@Query(nativeQuery = true, value ="UPDATE customer set verified='AD' WHERE customerId=?1 AND verified='D'")
 	int approveRemoveCustomer(String customerId);
 
 	@Modifying
 	@Transactional
-	@Query(nativeQuery = true, value ="UPDATE customer set verified='N' WHERE customerId=?1")
+	/*Only reject remove customer if removed(verified='D')*/
+	@Query(nativeQuery = true, value ="UPDATE customer set verified='N' WHERE customerId=?1 AND verified='D'")
 	int rejectRemoveCustomer(String customerId);
 
 
