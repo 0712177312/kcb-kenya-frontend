@@ -35,14 +35,12 @@ public class Teller extends BaseModel {
     private Integer deletedBy;
 
     @Column(name = "deleted_on", nullable = true, updatable = true)
-    @CreationTimestamp
     private Date deletedOn;
 
     @Column(name = "rejected_by")
     private Integer rejectedBy;
 
     @Column(name = "rejected_on", nullable = true, updatable = true)
-    @CreationTimestamp
     private Date rejectedOn;
 
     protected Teller() {
