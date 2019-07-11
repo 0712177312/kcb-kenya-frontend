@@ -129,7 +129,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	@Modifying
 	@Transactional
 	/*Only remove customer if not removed or not approve removed*/
-	@Query(nativeQuery = true, value ="UPDATE customer set verified='D',deleted_by=?1, deleted_on=systimestamp  WHERE customerId=?2 AND (verified<>'D' OR verified='AD')")
+	@Query(nativeQuery = true, value ="UPDATE customer set verified='D',deleted_by=?1, deleted_on=systimestamp  WHERE customerId=?2 AND (verified<>'D' AND verified<>'AD')")
 	int deleteCustomers(int deletedBy, String customerId);
 
 	@Modifying
