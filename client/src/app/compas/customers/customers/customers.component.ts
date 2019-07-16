@@ -1049,8 +1049,9 @@ export class CustomersComponent implements OnInit, OnDestroy {
   }
   tellerCoBankingInq(teller) {
     // this.tellerSvc.getTllrDetails().subscribe (data => {
+    this.blockUI.start('Searching for the Staff...')
     this.tellerSvc.getTellerDetails(teller).subscribe(data => {
-
+      this.blockUI.stop();
       this.tellerInq = data;
       if (this.tellerInq.requestStatus === true && this.tellerInq.payload.cif !== '') {
         this.account_number = ' ';
@@ -1066,7 +1067,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
         return this.toastr.warning('Specified staff id was not found or invalid , kindly verify to proceed .', 'Warning!');
       }
     }, error => {
-
+      this.blockUI.stop();
       return this.toastr.error('Error in inquiring staff data.', 'Error!', { timeOut: 4000 });
     });
   }
