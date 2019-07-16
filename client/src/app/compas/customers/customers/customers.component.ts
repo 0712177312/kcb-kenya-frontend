@@ -1049,7 +1049,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
   }
   tellerCoBankingInq(teller) {
     // this.tellerSvc.getTllrDetails().subscribe (data => {
-    this.blockUI.start('Searching for the Staff...')
+    this.blockUI.start('Searching for the Staff...');
     this.tellerSvc.getTellerDetails(teller).subscribe(data => {
       this.blockUI.stop();
       this.tellerInq = data;
@@ -1074,8 +1074,9 @@ export class CustomersComponent implements OnInit, OnDestroy {
   coBankingInq(customer) {
     // this.blockUI.start('Inquiring customer details...');
     // this.apiService.getCustomerDetails().subscribe (data => {
+    this.blockUI.start('Searching for the Customer...');
     this.apiService.getCustomerByAccountNo(customer).subscribe(data => {
-
+      this.blockUI.stop();
       this.custInquiry = data;
       if (this.custInquiry.requestStatus === true && this.custInquiry.cif !== '') {
         this.initProfile();
@@ -1088,7 +1089,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
         return this.toastr.warning('Specified customer id was not found or invalid , kindly verify to proceed .', 'Warning!');
       }
     }, error => {
-
+      this.blockUI.stop();
       return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
     });
   }
