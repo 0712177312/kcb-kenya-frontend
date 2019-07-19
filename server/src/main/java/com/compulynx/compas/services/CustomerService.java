@@ -145,4 +145,12 @@ public class CustomerService {
 		return customerRepository.rejectRemoveCustomer(customerId);
 	}
 
+	public Customer checkCustomerDeleted(String customerId){
+		return customerRepository.checkCustomerDeleted(customerId);
+	}
+
+	public int customerUnDelete(int createdBy, String customerId){
+		return customerRepository.customerUnDelete(createdBy, customerId);
+	}
+
 }

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.compulynx.compas.models.extras.TellersToApproveDetach;
+import com.compulynx.compas.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,9 @@ public class TellerController {
 	
 	@Autowired
 	private CustomerService customerSvc;
+
+	@Autowired
+	private UserService userService;
 	
     @GetMapping(value ="/gtTellers")
     public ResponseEntity<?> getTellers() {
@@ -101,14 +105,14 @@ public class TellerController {
       try {
         System.out.println("####" + teller.getTellerId());
 		  Teller cust=null;
-		  int tellerdeleted=0;
+		  int tellerUndeleted=0;
         if(tellerService.checkStaffDeleted(teller.getTellerId())!=null){
-			tellerdeleted = tellerService.staffUnDeleted(teller.getCreatedBy(),teller.getTellerId());
+			tellerUndeleted = tellerService.staffUnDelete(teller.getCreatedBy(),teller.getTellerId());
 		}else {
 			cust = tellerService.upTellerDetails(teller);
 		}
         log.info("teller details updated succesfull for " + teller.getCustomerId());
-        if (cust != null||tellerdeleted>0)
+        if (cust != null||tellerUndeleted>0)
         {
 
           try
@@ -261,21 +265,32 @@ public class TellerController {
     		@RequestBody Teller teller) {
     	try {
         	System.out.println("####" + teller.getTellerId());
-        	Teller cust = tellerService.upTellerDetails(teller);
-        	if(cust != null) {
+			Teller cust=null;
+			int tellerUndeleted=0;
+			if(tellerService.checkStaffDeleted(teller.getTellerId())!=null){
+				tellerUndeleted = tellerService.staffUnDelete(teller.getCreatedBy(),teller.getTellerId());
+			}else {
+				cust = tellerService.upTellerDetails(teller);
+			}
+        	if(cust != null ||tellerUndeleted>0) {
         		int prof = this.customerSvc.upgradeCustomerProfile(teller.getCustomerId());
         		if(prof > 0) {
-
-            		return new ResponseEntity<>(new GlobalResponse(
-            				"000","customer upgraded successfully",true,GlobalResponse.APIV),HttpStatus.OK);
-        		} else {
-            		return new ResponseEntity<>(new GlobalResponse(
-            				"201","failed to upgrade customer details",false,GlobalResponse.APIV),HttpStatus.OK);
-        		}
+					int userStatusUpdate = userService.updateStatusToTrue(teller.getTellerSignOnName());
+					if(userStatusUpdate > 0) {
+						return new ResponseEntity<>(new GlobalResponse(
+								"000", "customer upgraded successfully", true, GlobalResponse.APIV), HttpStatus.OK);
+					}else {
+						return new ResponseEntity<>(new GlobalResponse(
+								"201","failed to update user status",false,GlobalResponse.APIV),HttpStatus.OK);
+					}
+        		}else{
+					return new ResponseEntity<>(new GlobalResponse(
+							"201","failed to upgrade customer details",false,GlobalResponse.APIV),HttpStatus.OK);
+				}
         	} else {
 	    		return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"201",
 	    				false, "no customers found"),HttpStatus.OK);
-        	  }
+        	}
         } catch (Exception e) {
 		    GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 	     	e.printStackTrace();

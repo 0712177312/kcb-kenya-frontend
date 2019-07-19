@@ -117,7 +117,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
 	@Modifying
 	@Transactional
-	@Query(nativeQuery=true, value="update customer set WAIVED='T'  WHERE customerId=?1 ")
+	@Query(nativeQuery=true, value="update customer set WAIVED='T', verified='T' WHERE customerId=?1 and verified='A'")
 	int upgradeCustomerDetails(String customerId);
 
 	@Modifying
@@ -143,6 +143,14 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	/*Only reject remove customer if removed(verified='D')*/
 	@Query(nativeQuery = true, value ="UPDATE customer set verified='N' WHERE customerId=?1 AND verified='D'")
 	int rejectRemoveCustomer(String customerId);
+
+	@Query("select u from Customer u where u.customerId=?1 and (verified='AD' or verified='R')")
+	Customer checkCustomerDeleted(String customerId);
+
+	@Modifying
+	@Transactional
+	@Query(nativeQuery = true, value="update customer set verified='N', createdby=?1, created_at=systimestamp WHERE customerId=?2")
+	int customerUnDelete(int createdBy, String customerId);
 
 
 }

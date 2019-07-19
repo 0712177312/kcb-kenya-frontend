@@ -56,4 +56,12 @@ public class UserService {
 		// TODO Auto-generated method stub
 		return userRepo.updateUsers(group, status, userId);
 	}
+
+	public int updateStatusToFalse(String username){
+		return userRepo.updateStatusToFalse(username);
+	}
+
+	public int updateStatusToTrue(String username){
+		return userRepo.updateStatusToTrue(username);
+	}
 }

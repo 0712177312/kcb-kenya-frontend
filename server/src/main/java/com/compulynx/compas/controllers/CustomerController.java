@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.compulynx.compas.models.extras.*;
+import com.compulynx.compas.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,9 @@ public class CustomerController {
 
     @Autowired
     private TellerService tellerService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping(value = "/gtCustomers")
     public ResponseEntity<?> getCustomers() {
@@ -458,12 +462,31 @@ public class CustomerController {
     public ResponseEntity<?> convertStaffToCustomer(@RequestBody Customer customerRequestBody) {
         try {
             // create the new customer based on the details obtained from the staff details
-            Customer customer = customerService.upCustomerDetails(customerRequestBody);
-            if (customer != null) {
+            Customer customer = null;
+            int customerUndeleted = 0;
+            if(customerService.checkCustomerDeleted(customerRequestBody.getCustomerId()) != null){
+                customerUndeleted = customerService.customerUnDelete(customer.getCreatedBy(), customer.getCustomerId());
+            }else{
+                customerService.upCustomerDetails(customerRequestBody);
+            }
+            if (customer != null || customerUndeleted > 0) {
                 int conversionUpdateReturnValue = this.tellerService.convertStaffToCustomer(customerRequestBody.getCustomerId());
                 if (conversionUpdateReturnValue > 0) {
-                    return new ResponseEntity<>(new GlobalResponse(
-                            "000", "Conversion of Staff to Customer done successfully", true, GlobalResponse.APIV), HttpStatus.OK);
+                    Teller teller = tellerService.checkTeller(customerRequestBody.getCustomerId());
+                    if(teller != null){
+                       int userStatusUpdate =  userService.updateStatusToFalse(teller.getTellerSignOnName());
+                       if(userStatusUpdate > 0){
+                           return new ResponseEntity<>(new GlobalResponse(
+                                   "000", "Conversion of Staff to Customer done successfully", true, GlobalResponse.APIV), HttpStatus.OK);
+                       }else{
+                           return new ResponseEntity<>(new GlobalResponse(
+                                   "201", "Conversion of Staff to Customer not done successfully", false, GlobalResponse.APIV), HttpStatus.OK);
+                       }
+                    }else{
+                        return new ResponseEntity<>(new GlobalResponse(
+                                "201", "Teller not found", false, GlobalResponse.APIV), HttpStatus.OK);
+                    }
+
                 } else {
                     return new ResponseEntity<>(new GlobalResponse(
                             "201", "Conversion of Staff to Customer not done successfully", false, GlobalResponse.APIV), HttpStatus.OK);

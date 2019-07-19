@@ -53,4 +53,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
 //	@Query(nativeQuery = true, value = "UPDATE users set verified='N',fullname=?1,email=?2,phone=?3,group_id=?4,branchId=?5 WHERE id=?6")
 	@Query(nativeQuery = true, value = "UPDATE USERMASTER set verified='N',group_id=?1, status=?2 WHERE id=?3")
 	int updateUsers(int group, boolean status, Long userId);
+
+	@Modifying
+	@Transactional
+	@Query(nativeQuery = true, value = "UPDATE USERMASTER set status='1', verified='N' WHERE username=?1")
+	int updateStatusToTrue(String username);
+
+	@Modifying
+	@Transactional
+	@Query(nativeQuery = true, value = "UPDATE USERMASTER set status='0' WHERE username=?1")
+	int updateStatusToFalse(String username);
+
 }
