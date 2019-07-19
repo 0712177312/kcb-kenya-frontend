@@ -158,9 +158,14 @@ public class CustomerController {
     @PostMapping({"/upCustomerDetails"})
     public ResponseEntity<?> upCustomerDetails(@RequestBody Customer customer) {
         try {
-
-            Customer cust = customerService.upCustomerDetails(customer);
-            if (cust != null) {
+            Customer cust = null;
+            int customerUndeleted = 0;
+            if(customerService.checkCustomerDeleted(customer.getCustomerId()) != null){
+                customerUndeleted = customerService.customerUnDelete(customer.getCreatedBy(), customer.getCustomerId());
+            }else{
+                cust = customerService.upCustomerDetails(customer);
+            }
+            if (cust != null || customerUndeleted > 0) {
 
                 try {
 
@@ -465,9 +470,9 @@ public class CustomerController {
             Customer customer = null;
             int customerUndeleted = 0;
             if(customerService.checkCustomerDeleted(customerRequestBody.getCustomerId()) != null){
-                customerUndeleted = customerService.customerUnDelete(customer.getCreatedBy(), customer.getCustomerId());
+                customerUndeleted = customerService.customerUnDelete(customerRequestBody.getCreatedBy(), customerRequestBody.getCustomerId());
             }else{
-                customerService.upCustomerDetails(customerRequestBody);
+                customer = customerService.upCustomerDetails(customerRequestBody);
             }
             if (customer != null || customerUndeleted > 0) {
                 int conversionUpdateReturnValue = this.tellerService.convertStaffToCustomer(customerRequestBody.getCustomerId());
