@@ -89,9 +89,11 @@ export class ConvertStaffToCustomerComponent implements OnInit {
       "customerType": "CUST",
       "verified": this.tellerResponse.teller.verified,
       "verifiedBy": this.tellerResponse.teller.verifiedBy,
-      "verifiedOn": this.tellerResponse.teller.verifiedOn,
+      "verifiedOn": this.tellerResponse.teller.approvedOn,
        //the mnemonic number of the customer will be the teller id of the person who was staff
-      "mnemonic": this.tellerResponse.teller.tellerId
+      "mnemonic": this.tellerResponse.teller.tellerId,
+      "waived": "N",
+      "branchCode": this.tellerResponse.teller.deptCode
     };
     this.custSvc.convertStaffToCustomer(customerDetails).subscribe((response) => {
       this.convertStaffToCustomerResponse = response;
