@@ -122,7 +122,7 @@ public class CustomerService {
 
 	public int deleteCustomer(int deletedBy,String customerId) {
 		// TODO Auto-generated method stub
-		return customerRepository.deleteCustomers(deletedBy,customerId);
+		return customerRepository.deleteCustomer(deletedBy,customerId);
 	}
 
 //	public List<Customer> gtEnrolledCustomers(Date fromDate, Date toDate) {

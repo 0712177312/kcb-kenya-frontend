@@ -125,12 +125,12 @@ export class DeleteCustomerComponent implements OnInit {
     };
     this.custSvc.removeCustomer(customerDetails).subscribe((response) => {
       this.response = response;
-      if(this.response.status === true){
+      if (this.response.status === true) {
         this.log(this.rightId, "selected to remove customer with customerId: " + customerDetails.customerId + " .Awaiting authorization");
         this.isVerified = false;
         this.router.navigate(['./']);
         return this.toastr.success('Customer queued for removal. Awaiting authorization', ' Success!');
-      }else{
+      } else {
         this.log(this.rightId, "attempted to select to remove customer of customerId: " + customerDetails.customerId + "");
         return this.toastr.error('An error occurred. Customer not queued for removal', ' Error!', { timeOut: 4000 });
       }
@@ -139,7 +139,7 @@ export class DeleteCustomerComponent implements OnInit {
     });
   }
 
-  deleteCustomerDetailsNotOnDb(){
+  deleteCustomerDetailsNotOnDb() {
     console.log('in deleteCustomerDetailsNotOnDb() of delete-customer.component.ts');
     const customerDetails = {
       'customerId': this.form.get('customerId').value,
@@ -147,10 +147,20 @@ export class DeleteCustomerComponent implements OnInit {
     };
     this.custSvc.removeCustomer(customerDetails).subscribe((response) => {
       this.response = response;
-      if(this.response.status === true){
+      if (this.response.status === true) {
         this.log(this.rightId, "removed the customer details of customer with customerId: " + customerDetails.customerId + " from the database");
-      }else{
+      } else {
         this.log(this.rightId, "attempted to remove the customer details of customer with customerId: " + customerDetails.customerId + " from the database");
+        this.tellerSvc.removeTeller(customerDetails).subscribe((response) => {
+          this.response = response;
+          if (this.response.status === true) {
+            this.log(this.rightId, "removed the details of staff with customerId: " + customerDetails.customerId + " from the database");
+          } else {
+            this.log(this.rightId, "attempted to remove the details of staff with customerId: " + customerDetails.customerId + " from the database");
+          }
+        }, error => {
+          return this.toastr.error('Error while attempting to remove the staff.', 'Error!', { timeOut: 4000 });
+        });
       }
       this.apiService.afisRemove(customerDetails).subscribe((response) => {
         this.response = response;
@@ -179,12 +189,12 @@ export class DeleteCustomerComponent implements OnInit {
     };
     this.tellerSvc.removeTeller(tellerDetails).subscribe((response) => {
       this.response = response;
-      if(this.response.status === true){
+      if (this.response.status === true) {
         this.log(this.rightId, "selected to remove teller with customerId: " + tellerDetails.customerId + " .Awaiting authorization");
         this.isVerified = false;
         this.router.navigate(['./']);
         return this.toastr.success('Teller queued for removal. Awaiting authorization', ' Success!');
-      }else{
+      } else {
         this.log(this.rightId, "attempted to select to remove teller of customerId: " + tellerDetails.customerId + "");
         return this.toastr.error('An error occurred. Teller not queued for removal', ' Error!', { timeOut: 4000 });
       }
@@ -193,7 +203,7 @@ export class DeleteCustomerComponent implements OnInit {
     });
   }
 
-  deleteTellerDetailsNotOnDb(){
+  deleteTellerDetailsNotOnDb() {
     console.log("in deleteTellerDetailsNotOnDb()");
     const tellerDetails = {
       'customerId': this.tellerForm.get('customerId').value,
@@ -201,10 +211,20 @@ export class DeleteCustomerComponent implements OnInit {
     };
     this.tellerSvc.removeTeller(tellerDetails).subscribe((response) => {
       this.response = response;
-      if(this.response.status === true){
+      if (this.response.status === true) {
         this.log(this.rightId, "removed the staff details of staff with customerId: " + tellerDetails.customerId + " from the database");
-      }else{
+      } else {
         this.log(this.rightId, "attempted to remove the staff details of staff with customerId: " + tellerDetails.customerId + " from the database");
+        this.custSvc.removeCustomer(tellerDetails).subscribe((response) => {
+          this.response = response;
+          if (this.response.status === true) {
+            this.log(this.rightId, "removed the details of customer with customerId: " + tellerDetails.customerId + " from the database");
+          } else {
+            this.log(this.rightId, "attempted to remove the details of customer with customerId: " + tellerDetails.customerId + " from the database");
+          }
+        }, error => {
+          return this.toastr.error('Error while attempting to remove the customer.', 'Error!', { timeOut: 4000 });
+        });
       }
       this.apiService.afisRemove(tellerDetails).subscribe((response) => {
         this.response = response;
