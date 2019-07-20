@@ -426,6 +426,8 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
         this.bioflag = 0;
         const cust: any = {};
         cust.fingerPrints = this.fingerPrints;
+        // The transation type that denotes Identify
+        cust.transactionType = 'I';
         console.log('abis $$$', this.customer);
         this.blockUI.start('Verify Customer data...');
 
