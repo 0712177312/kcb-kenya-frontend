@@ -117,7 +117,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
 	@Modifying
 	@Transactional
-	@Query(nativeQuery=true, value="update customer set WAIVED='T', verified='T' WHERE customerId=?1 and verified='A'")
+	@Query(nativeQuery=true, value="update customer set WAIVED='T', verified='AD' WHERE customerId=?1 and verified='A'")
 	int upgradeCustomerDetails(String customerId);
 
 	@Modifying
