@@ -242,7 +242,7 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
               position: 0,
               fingerPrint: this.bio.BMPBase64
             };
-            profilePrint.transactionType = 'T';
+            profilePrint.transactionType = 'I';
             profilePrint.customerId = this.teller.customerId;
             profilePrint.transactionId = '';
             this.afisVerifyUser(profilePrint);

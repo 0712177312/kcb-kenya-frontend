@@ -250,7 +250,7 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
               position: 0,
               fingerPrint: this.bio.BMPBase64
             };
-            profilePrint.transactionType = 'T';
+            profilePrint.transactionType = 'IC';
             profilePrint.customerId = this.customer.customerId;
             profilePrint.transactionId = '';
             this.afisVerifyUser(profilePrint);
