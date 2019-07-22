@@ -55,7 +55,7 @@ export class ConvertStaffToCustomerComponent implements OnInit {
         this.initTellerProfile();
         return this.toastr.success('Staff with the specified id was found', 'Success!');
       } else {
-        return this.toastr.warning('Staff with the specific id was was not found', ' Warning!');
+        return this.toastr.warning('Staff with the specific id was not found or not approved', ' Warning!');
       }
     }, error => {
       return this.toastr.error('Error while searching for the staff details', 'Error!', { timeOut: 4000 });

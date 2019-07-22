@@ -477,7 +477,7 @@ public class CustomerController {
             if (customer != null || customerUndeleted > 0) {
                 int conversionUpdateReturnValue = this.tellerService.convertStaffToCustomer(customerRequestBody.getCustomerId());
                 if (conversionUpdateReturnValue > 0) {
-                    Teller teller = tellerService.checkTeller(customerRequestBody.getCustomerId());
+                    Teller teller = tellerService.checkStaffDeleted(customerRequestBody.getCustomerIdNumber());
                     if(teller != null){
                        int userStatusUpdate =  userService.updateStatusToFalse(teller.getTellerSignOnName());
                        if(userStatusUpdate > 0){
