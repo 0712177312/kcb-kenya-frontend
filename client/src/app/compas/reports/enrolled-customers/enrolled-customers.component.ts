@@ -52,7 +52,6 @@ export class EnrolledCustomersComponent implements OnInit {
     } else {
       console.log('dates $$$$', this.toDate, this.fromDate);
       this.reportSvc.getCustomerPreview(this.formatDate(this.fromDate), this.formatDate(this.toDate), this.enrolledType).subscribe(data => {
-        this.filtered = true;
         this.response = data;
         this.response = this.response.collection;
         console.log(this.response);
