@@ -84,6 +84,7 @@ import {NgIdleKeepaliveModule} from '@ng-idle/keepalive';
 import { DataTablesModule } from 'angular-datatables';
 import { DetachCustomerComponent } from './compas/customers/detach-customer/detach-customer.component';
 import { DetachStaffComponent } from './compas/configs/detach-staff/detach-staff.component';
+import { EnrolledStaffComponent } from './compas/reports/enrolled-staff/enrolled-staff.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -139,7 +140,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DeleteCustomerComponent,
     ConvertStaffToCustomerComponent,
     DetachCustomerComponent,
-    DetachStaffComponent
+    DetachStaffComponent,
+    EnrolledStaffComponent
   ],
   imports: [
     CommonModule,
