@@ -1,5 +1,6 @@
 package com.compulynx.compas.controllers;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -399,4 +401,27 @@ public class TellerController {
 			return new ResponseEntity<>(resp, HttpStatus.OK);
 		}
 	}
+
+	@GetMapping("/previewStaff")
+	public ResponseEntity<?> previewStaff(
+			@RequestParam("FromDt") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
+			@RequestParam(value = "ToDt") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate,
+			@RequestParam(value = "enrolledType") String enrolledType) {
+		try {
+			List<Teller> staff = tellerService.getEnrolledStaff(fromDate, toDate, enrolledType);
+			if (staff.size() > 0) {
+				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true, "staff found",
+						new HashSet<>(staff)), HttpStatus.OK);
+			}
+			return new ResponseEntity<>(
+					new GlobalResponse(GlobalResponse.APIV, "000", false, "staff not found", new HashSet<>(staff)),
+					HttpStatus.OK);
+		} catch (Exception e) {
+			GlobalResponse resp = new GlobalResponse("404", "error processing staff details request", false,
+					GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
+
 }

@@ -21,7 +21,7 @@ export class ReportsService {
   }
 
   getStaffPreview(fromDate, toDate, enrolledType) {
-    return  this.http.get(`${this.API_URL.url}/previewStaff?FromDt=${fromDate}&ToDt=${toDate}&enrolledType=${enrolledType}`);
+    return  this.http.get(`${this.API_URL.url}/tellers/previewStaff?FromDt=${fromDate}&ToDt=${toDate}&enrolledType=${enrolledType}`);
   }
 
   getPdfCustomerReport(fromDt, toDt) {

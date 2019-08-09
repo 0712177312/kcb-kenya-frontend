@@ -1,5 +1,6 @@
 package com.compulynx.compas.services;
 
+import java.util.Date;
 import java.util.List;
 
 import com.compulynx.compas.models.extras.TellersToApproveDetach;
@@ -104,4 +105,9 @@ public class TellerService {
 	public int rejectRemoveTeller(String customerId){
 		return tellerRepository.rejectRemoveTeller(customerId);
 	}
+
+	public List<Teller> getEnrolledStaff(Date fromDate, Date toDate, String enrolledType){
+		return tellerRepository.getEnrolledStaff(fromDate, toDate, enrolledType);
+	}
+
 }

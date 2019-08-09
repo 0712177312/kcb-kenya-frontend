@@ -1,11 +1,13 @@
 package com.compulynx.compas.repositories;
 
+import java.util.Date;
 import java.util.List;
 
 import com.compulynx.compas.models.extras.TellersToApproveDetach;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,4 +97,9 @@ public interface TellerRepository extends JpaRepository<Teller, Long>{
 	@Transactional
 	@Query(nativeQuery = true, value = "update tellermaster set verified='N' where customerId=?1")
 	int rejectRemoveTeller(String customerId);
+
+	@Query("select u from Teller u where u.createdOn BETWEEN :fromDate AND :toDate AND u.verified=:enrolledType")
+	List<Teller> getEnrolledStaff(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate, @Param("enrolledType") String enrolledType);
+
+
 }
