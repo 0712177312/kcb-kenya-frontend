@@ -30,6 +30,7 @@ import { DeleteCustomerComponent } from './compas/customers/delete-customer/dele
 import {ConvertStaffToCustomerComponent} from './compas/customers/convert-staff-to-customer/convert-staff-to-customer.component';
 import { DetachCustomerComponent } from './compas/customers/detach-customer/detach-customer.component';
 import { DetachStaffComponent } from './compas/configs/detach-staff/detach-staff.component';
+import { EnrolledStaffComponent } from './compas/reports/enrolled-staff/enrolled-staff.component';
 export const Approutes: Routes = [
   {
     path: '',
@@ -170,6 +171,11 @@ export const Approutes: Routes = [
       {
         path: 'masters/verifyprint-staff',
         component: DetachStaffComponent,
+        canActivate: [ServiceGuard]
+      },
+      {
+        path: 'reports/staff',
+        component: EnrolledStaffComponent,
         canActivate: [ServiceGuard]
       }
     ]

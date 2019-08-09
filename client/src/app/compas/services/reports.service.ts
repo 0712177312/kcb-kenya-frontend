@@ -20,6 +20,10 @@ export class ReportsService {
     return  this.http.get(`${this.API_URL.url}/previewCustomers?FromDt=${fromDate}&ToDt=${toDate}&enrolledType=${enrolledType}`);
   }
 
+  getStaffPreview(fromDate, toDate, enrolledType) {
+    return  this.http.get(`${this.API_URL.url}/previewStaff?FromDt=${fromDate}&ToDt=${toDate}&enrolledType=${enrolledType}`);
+  }
+
   getPdfCustomerReport(fromDt, toDt) {
     return  this.http.get(`${this.EXP_API}reportType=BD&exportType=P&FromDt=${fromDt}&ToDt=${toDt}`);
   }
