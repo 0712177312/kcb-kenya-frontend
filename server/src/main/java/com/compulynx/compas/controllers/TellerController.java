@@ -26,163 +26,163 @@ import com.compulynx.compas.customs.responses.GlobalResponse;
 import com.compulynx.compas.customs.responses.TellerResponse;
 import com.compulynx.compas.models.Customer;
 import com.compulynx.compas.models.Teller;
+import com.compulynx.compas.models.UserGroup;
 import com.compulynx.compas.models.extras.CustomersToApprove;
 import com.compulynx.compas.models.extras.TellerToApprove;
 import com.compulynx.compas.services.CustomerService;
 import com.compulynx.compas.services.TellerService;
+import com.compulynx.compas.services.UserGroupService;
 
 @RestController
-@RequestMapping(value=Api.REST + "/tellers")
+@RequestMapping(value = Api.REST + "/tellers")
 public class TellerController {
-	  private static final Logger log = LoggerFactory.getLogger(TellerController.class);
-	  @Autowired
-	  private Environment env;
+	private static final Logger log = LoggerFactory.getLogger(TellerController.class);
+	@Autowired
+	private Environment env;
 	@Autowired
 	private TellerService tellerService;
-	
+
 	@Autowired
 	private CustomerService customerSvc;
 
 	@Autowired
 	private UserService userService;
-	
-    @GetMapping(value ="/gtTellers")
-    public ResponseEntity<?> getTellers() {
-      try {
-    	List<Teller> tellers = tellerService.getTellers();
-    	if(tellers.size() > 0) {
-    		return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"000",
-    				true, "tellers found",
-    				new HashSet<>(tellers)),HttpStatus.OK);
-    	}   	
-		return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"201",
-				false, "no tellers found",
-				new HashSet<>(tellers)),HttpStatus.OK);
-	  	} catch (Exception e) {
-		    GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
-	     	e.printStackTrace();
-	    	return new ResponseEntity<>(resp, HttpStatus.OK);
-	    }
-    }
-    @GetMapping(value ="/gtBranchTellers")
-    public ResponseEntity<?> getBranchTellers(
-    		@RequestParam(value="branch") String branch) {
-      try {
-    	List<Teller> tellers = tellerService.getBranchTellers(branch);
-    	if(tellers.size() > 0) {
-    		return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"000",
-    				true, "tellers found",
-    				new HashSet<>(tellers)),HttpStatus.OK);
-    	}   	
-		return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"201",
-				false, "no tellers found",
-				new HashSet<>(tellers)),HttpStatus.OK);
-	  	} catch (Exception e) {
-		    GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
-	     	e.printStackTrace();
-	    	return new ResponseEntity<>(resp, HttpStatus.OK);
-	    }
-    }
-    @GetMapping(value ="/gtTeller")
-    public ResponseEntity<?> getTellerDetails(
-    		@RequestParam(value ="tellr") String tellr) {
-      try {
-    	Teller teller = tellerService.getTeller(tellr);
-    	if(teller != null) {
-    		return new ResponseEntity<>(new TellerResponse("000","teller found",
-    				true,GlobalResponse.APIV,teller),HttpStatus.OK);
-    	} else {	
-		return new ResponseEntity<>(new TellerResponse("201","teller not found",
-				false,GlobalResponse.APIV,teller),HttpStatus.OK);
-    	}
-	  	} catch (Exception e) {
-		    GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
-	     	e.printStackTrace();
-	    	return new ResponseEntity<>(resp, HttpStatus.OK);
-	    }
-    }
-    
-    @PostMapping({"/upTellerDetails"})
-    public ResponseEntity<?> upCustomerDetails(@RequestBody Teller teller) {
-      try {
-        System.out.println("####" + teller.getTellerId());
-		  Teller cust=null;
-		  int tellerUndeleted=0;
-        if(tellerService.checkStaffDeleted(teller.getTellerId())!=null){
-			tellerUndeleted = tellerService.staffUnDelete(teller.getCreatedBy(),teller.getTellerId());
-		}else {
-			cust = tellerService.upTellerDetails(teller);
-		}
-        log.info("teller details updated succesfull for " + teller.getCustomerId());
-        if (cust != null||tellerUndeleted>0)
-        {
 
-          try
-          {
-            String t24Url = env.getProperty("tserver") + teller.getCustomerId() + "/true";
-            String customerId = teller.getCustomerId();
-            log.info("update url for " + t24Url);
+	@Autowired
+	private UserGroupService userGroupService;
 
-            String response = HttpRestProccesor.postJson(t24Url, customerId);
-
-            log.info("T24 response response " + response);
-          }
-          catch (Exception e) {
-            log.error("upTellerDetails", e);
-          }
-
-          return new ResponseEntity(new GlobalResponse(
-            "000", "customer found", true, "1.0.0"), HttpStatus.OK);
-        }
-        return new ResponseEntity(new GlobalResponse("1.0.0", "201", 
-          false, "no customers found"), HttpStatus.OK);
-      }
-      catch (Exception e) {
-        log.error("upTellerDetails", e);
-        GlobalResponse resp = new GlobalResponse("404", "error processing request", false, "1.0.0");
-        e.printStackTrace();
-        return new ResponseEntity(resp, HttpStatus.OK);
-      }
-    }
-	
-    @PostMapping(value="/checkTeller")
-    public ResponseEntity<?> checkCustomer(@RequestBody Teller teller) {
-    	try {
-    	System.out.println("teller id" + teller.getTellerId());
-    	Teller cust = tellerService.checkTeller(teller.getTellerId());
-    	if(cust != null) {
-    		return new ResponseEntity<>(new GlobalResponse(
-    				"000","teller already enrolled",true,GlobalResponse.APIV),HttpStatus.OK);
-    	} else {
-		return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"201",
-				false, "teller not enrolled"),HttpStatus.OK);
-    	 }
-        } catch (Exception e) {
-		    GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
-	     	e.printStackTrace();
-	    	return new ResponseEntity<>(resp, HttpStatus.OK);
-	  }
-    }
-
-	@PostMapping(value="/checkStaffApproved")
-	public ResponseEntity<?> checkStaffApproved(@RequestBody Teller teller) {
+	@GetMapping(value = "/gtTellers")
+	public ResponseEntity<?> getTellers() {
 		try {
-			Teller cust = tellerService.checkStaffApproved(teller.getTellerId());
-			if(cust != null) {
-				return new ResponseEntity<>(new TellerResponse("000","teller found",
-						true,GlobalResponse.APIV,cust),HttpStatus.OK);
-			} else {
-				return new ResponseEntity<>(new TellerResponse("201","teller not found",
-						false,GlobalResponse.APIV,teller),HttpStatus.OK);
+			List<Teller> tellers = tellerService.getTellers();
+			if (tellers.size() > 0) {
+				return new ResponseEntity<>(
+						new GlobalResponse(GlobalResponse.APIV, "000", true, "tellers found", new HashSet<>(tellers)),
+						HttpStatus.OK);
 			}
+			return new ResponseEntity<>(
+					new GlobalResponse(GlobalResponse.APIV, "201", false, "no tellers found", new HashSet<>(tellers)),
+					HttpStatus.OK);
 		} catch (Exception e) {
-			GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
+			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
 			return new ResponseEntity<>(resp, HttpStatus.OK);
 		}
 	}
 
-    
+	@GetMapping(value = "/gtBranchTellers")
+	public ResponseEntity<?> getBranchTellers(@RequestParam(value = "branch") String branch) {
+		try {
+			List<Teller> tellers = tellerService.getBranchTellers(branch);
+			if (tellers.size() > 0) {
+				return new ResponseEntity<>(
+						new GlobalResponse(GlobalResponse.APIV, "000", true, "tellers found", new HashSet<>(tellers)),
+						HttpStatus.OK);
+			}
+			return new ResponseEntity<>(
+					new GlobalResponse(GlobalResponse.APIV, "201", false, "no tellers found", new HashSet<>(tellers)),
+					HttpStatus.OK);
+		} catch (Exception e) {
+			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
+
+	@GetMapping(value = "/gtTeller")
+	public ResponseEntity<?> getTellerDetails(@RequestParam(value = "tellr") String tellr) {
+		try {
+			Teller teller = tellerService.getTeller(tellr);
+			if (teller != null) {
+				return new ResponseEntity<>(
+						new TellerResponse("000", "teller found", true, GlobalResponse.APIV, teller), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(
+						new TellerResponse("201", "teller not found", false, GlobalResponse.APIV, teller),
+						HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
+
+	@PostMapping({ "/upTellerDetails" })
+	public ResponseEntity<?> upCustomerDetails(@RequestBody Teller teller) {
+		try {
+			System.out.println("####" + teller.getTellerId());
+			Teller cust = null;
+			int tellerUndeleted = 0;
+			if (tellerService.checkStaffDeleted(teller.getTellerId()) != null) {
+				tellerUndeleted = tellerService.staffUnDelete(teller.getCreatedBy(), teller.getTellerId());
+			} else {
+				cust = tellerService.upTellerDetails(teller);
+			}
+			log.info("teller details updated succesfull for " + teller.getCustomerId());
+			if (cust != null || tellerUndeleted > 0) {
+
+				try {
+					String t24Url = env.getProperty("tserver") + teller.getCustomerId() + "/true";
+					String customerId = teller.getCustomerId();
+					log.info("update url for " + t24Url);
+
+					String response = HttpRestProccesor.postJson(t24Url, customerId);
+
+					log.info("T24 response response " + response);
+				} catch (Exception e) {
+					log.error("upTellerDetails", e);
+				}
+
+				return new ResponseEntity(new GlobalResponse("000", "customer found", true, "1.0.0"), HttpStatus.OK);
+			}
+			return new ResponseEntity(new GlobalResponse("1.0.0", "201", false, "no customers found"), HttpStatus.OK);
+		} catch (Exception e) {
+			log.error("upTellerDetails", e);
+			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, "1.0.0");
+			e.printStackTrace();
+			return new ResponseEntity(resp, HttpStatus.OK);
+		}
+	}
+
+	@PostMapping(value = "/checkTeller")
+	public ResponseEntity<?> checkCustomer(@RequestBody Teller teller) {
+		try {
+			System.out.println("teller id" + teller.getTellerId());
+			Teller cust = tellerService.checkTeller(teller.getTellerId());
+			if (cust != null) {
+				return new ResponseEntity<>(
+						new GlobalResponse("000", "teller already enrolled", true, GlobalResponse.APIV), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(
+						new GlobalResponse(GlobalResponse.APIV, "201", false, "teller not enrolled"), HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
+
+	@PostMapping(value = "/checkStaffApproved")
+	public ResponseEntity<?> checkStaffApproved(@RequestBody Teller teller) {
+		try {
+			Teller cust = tellerService.checkStaffApproved(teller.getTellerId());
+			if (cust != null) {
+				return new ResponseEntity<>(new TellerResponse("000", "teller found", true, GlobalResponse.APIV, cust),
+						HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(
+						new TellerResponse("201", "teller not found", false, GlobalResponse.APIV, teller),
+						HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
+
 //    @PostMapping(value="/getTellerDetailsToVerify")
 //    public ResponseEntity<?> getTellerDetailsToVerify(@RequestBody Teller teller) {
 //    	try {
@@ -201,180 +201,193 @@ public class TellerController {
 //	    	return new ResponseEntity<>(resp, HttpStatus.OK);
 //	  }
 //    }
-	
-    @GetMapping(value = "/tellersToApprove")
-    public ResponseEntity<?> getCustomersToApprove() {
-    	try {
-    	List<TellerToApprove> tellers = tellerService.getTellersToVerify();
-           if(tellers.size() > 0) {
-		      return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"000",
-				    false, "tellers to verify found",
-			     	new HashSet<>(tellers)),HttpStatus.OK);
-    	} else {
-	    	return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"201",
-				false, "no tellers to verify found",
-				new HashSet<>(tellers)),HttpStatus.OK);
-          }
-    	} catch (Exception e) {
-		    GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
-	     	e.printStackTrace();
-	    	return new ResponseEntity<>(resp, HttpStatus.OK);
-	   }
-    }
 
-    @GetMapping(value = "/tellersToApproveDetach")
-	public ResponseEntity<?> getTellersToApproveDetach() {
-    	try{
-			List<TellersToApproveDetach> tellers = tellerService.getTellersToApproveDetach();
-			if(tellers.size() > 0) {
-				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"000",
-						true, "tellers to approve detach found",
-						new HashSet<>(tellers)),HttpStatus.OK);
+	@GetMapping(value = "/tellersToApprove")
+	public ResponseEntity<?> getCustomersToApprove(@RequestParam(value = "branchCode") String branchCode,
+			@RequestParam(value = "groupid") String groupid) {
+		try {
+			System.out.println("Barnch Code: " + branchCode);
+			System.out.println("Right ID: " + groupid);
+
+			UserGroup userGroup = userGroupService.getRightCode(Long.valueOf(groupid));
+			List<TellerToApprove> tellers;
+			// Do not filter for sys admins and regional supervisors
+			if (userGroup.getGroupCode().equalsIgnoreCase("G001")
+					|| userGroup.getGroupCode().equalsIgnoreCase("G002")) {
+				tellers = tellerService.getTellersToVerifyAll();
 			} else {
-				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"201",
-						false, "no tellers to approve detach found",
-						new HashSet<>(tellers)),HttpStatus.OK);
+				tellers = tellerService.getTellersToVerify(branchCode);
 			}
-		}catch (Exception e) {
-			GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
+
+			if (tellers.size() > 0) {
+				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", false,
+						"tellers to verify found", new HashSet<>(tellers)), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "201", false,
+						"no tellers to verify found", new HashSet<>(tellers)), HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
 			return new ResponseEntity<>(resp, HttpStatus.OK);
 		}
 	}
 
-    @PostMapping(value = "/approveTeller")
-    public ResponseEntity<?> approveCustomer (
-    		@RequestBody Teller teller) {
-    	try {
-    		int cust = tellerService.approveTeller(teller.getVerifiedBy(), teller.getCustomerId());
-    		
-    		if(cust > 0) {
-        		return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"000",
-        				true, "teller  " + teller.getCustomerId() + " verified successfully"),HttpStatus.OK);
+	@GetMapping(value = "/tellersToApproveDetach")
+	public ResponseEntity<?> getTellersToApproveDetach() {
+		try {
+			List<TellersToApproveDetach> tellers = tellerService.getTellersToApproveDetach();
+			if (tellers.size() > 0) {
+				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true,
+						"tellers to approve detach found", new HashSet<>(tellers)), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "201", false,
+						"no tellers to approve detach found", new HashSet<>(tellers)), HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
 
-    		} else {
-    		return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"201",
-    				false, "no teller found"),HttpStatus.OK);
-    		}
-        } catch (Exception e) {
-		    GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
-	     	e.printStackTrace();
-	    	return new ResponseEntity<>(resp, HttpStatus.OK);
-	   }
-    }
-    @PostMapping(value = "/upgradeCustomerProfile")
-    public ResponseEntity<?> upgradeCustomerProfile (
-    		@RequestBody Teller teller) {
-    	try {
-        	System.out.println("####" + teller.getTellerId());
-			Teller cust=null;
-			int tellerUndeleted=0;
-			if(tellerService.checkStaffDeleted(teller.getTellerId())!=null){
-				tellerUndeleted = tellerService.staffUnDelete(teller.getCreatedBy(),teller.getTellerId());
-			}else {
+	@PostMapping(value = "/approveTeller")
+	public ResponseEntity<?> approveCustomer(@RequestBody Teller teller) {
+		try {
+			int cust = tellerService.approveTeller(teller.getVerifiedBy(), teller.getCustomerId());
+
+			if (cust > 0) {
+				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true,
+						"teller  " + teller.getCustomerId() + " verified successfully"), HttpStatus.OK);
+
+			} else {
+				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "201", false, "no teller found"),
+						HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
+
+	@PostMapping(value = "/upgradeCustomerProfile")
+	public ResponseEntity<?> upgradeCustomerProfile(@RequestBody Teller teller) {
+		try {
+			System.out.println("####" + teller.getTellerId());
+			Teller cust = null;
+			int tellerUndeleted = 0;
+			if (tellerService.checkStaffDeleted(teller.getTellerId()) != null) {
+				tellerUndeleted = tellerService.staffUnDelete(teller.getCreatedBy(), teller.getTellerId());
+			} else {
 				cust = tellerService.upTellerDetails(teller);
 			}
-        	if(cust != null ||tellerUndeleted>0) {
-        		int prof = this.customerSvc.upgradeCustomerProfile(teller.getCustomerId());
-        		if(prof > 0) {
+			if (cust != null || tellerUndeleted > 0) {
+				int prof = this.customerSvc.upgradeCustomerProfile(teller.getCustomerId());
+				if (prof > 0) {
 					int userStatusUpdate = userService.updateStatusToTrue(teller.getTellerSignOnName());
-					if(userStatusUpdate > 0) {
-						return new ResponseEntity<>(new GlobalResponse(
-								"000", "customer upgraded successfully", true, GlobalResponse.APIV), HttpStatus.OK);
-					}else {
-						return new ResponseEntity<>(new GlobalResponse(
-								"201","failed to update user status",false,GlobalResponse.APIV),HttpStatus.OK);
+					if (userStatusUpdate > 0) {
+						return new ResponseEntity<>(
+								new GlobalResponse("000", "customer upgraded successfully", true, GlobalResponse.APIV),
+								HttpStatus.OK);
+					} else {
+						return new ResponseEntity<>(
+								new GlobalResponse("201", "failed to update user status", false, GlobalResponse.APIV),
+								HttpStatus.OK);
 					}
-        		}else{
-					return new ResponseEntity<>(new GlobalResponse(
-							"201","failed to upgrade customer details",false,GlobalResponse.APIV),HttpStatus.OK);
+				} else {
+					return new ResponseEntity<>(
+							new GlobalResponse("201", "failed to upgrade customer details", false, GlobalResponse.APIV),
+							HttpStatus.OK);
 				}
-        	} else {
-	    		return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"201",
-	    				false, "no customers found"),HttpStatus.OK);
-        	}
-        } catch (Exception e) {
-		    GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
-	     	e.printStackTrace();
-	    	return new ResponseEntity<>(resp, HttpStatus.OK);
-	   }
-    }
+			} else {
+				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "201", false, "no customers found"),
+						HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
 
-    @PostMapping(value = "/rejectTellerApproval")
-	public ResponseEntity<?> rejectTellerApproval (@RequestBody Teller teller){
-    	try{
-    		int updates = tellerService.rejectTellerApproval(teller.getRejectedBy(), teller.getCustomerId());
-    		if(updates > 0){
+	@PostMapping(value = "/rejectTellerApproval")
+	public ResponseEntity<?> rejectTellerApproval(@RequestBody Teller teller) {
+		try {
+			int updates = tellerService.rejectTellerApproval(teller.getRejectedBy(), teller.getCustomerId());
+			if (updates > 0) {
 				return new ResponseEntity<>(
 						new GlobalResponse("000", "Teller rejected successfully", true, GlobalResponse.APIV),
 						HttpStatus.OK);
-			}else{
+			} else {
 				return new ResponseEntity<>(
 						new GlobalResponse(GlobalResponse.APIV, "201", false, "Teller not successfully rejected"),
 						HttpStatus.OK);
 			}
-		}catch(Exception e){
-			GlobalResponse resp = new GlobalResponse("404", "An Exception occurred while attempting to reject the teller", false,
-					GlobalResponse.APIV);
+		} catch (Exception e) {
+			GlobalResponse resp = new GlobalResponse("404",
+					"An Exception occurred while attempting to reject the teller", false, GlobalResponse.APIV);
 			e.printStackTrace();
 			return new ResponseEntity<>(resp, HttpStatus.OK);
 		}
 	}
 
 	@PostMapping(value = "/removeTeller")
-	public ResponseEntity<?> removeTeller (@RequestBody Teller teller){
-		try{
+	public ResponseEntity<?> removeTeller(@RequestBody Teller teller) {
+		try {
 			int updates = tellerService.removeTeller(teller.getDeletedBy(), teller.getCustomerId());
-			if(updates > 0){
+			if (updates > 0) {
 				return new ResponseEntity<>(
 						new GlobalResponse("000", "Teller removed successfully", true, GlobalResponse.APIV),
 						HttpStatus.OK);
-			}else{
+			} else {
 				return new ResponseEntity<>(
 						new GlobalResponse(GlobalResponse.APIV, "201", false, "Teller not removed successfully"),
 						HttpStatus.OK);
 			}
-		}catch(Exception e){
-			GlobalResponse resp = new GlobalResponse("404", "An Exception occurred while attempting to remove the teller", false,
-					GlobalResponse.APIV);
+		} catch (Exception e) {
+			GlobalResponse resp = new GlobalResponse("404",
+					"An Exception occurred while attempting to remove the teller", false, GlobalResponse.APIV);
 			e.printStackTrace();
 			return new ResponseEntity<>(resp, HttpStatus.OK);
 		}
 	}
-	@PostMapping(value="/obtainTellerDetails")
+
+	@PostMapping(value = "/obtainTellerDetails")
 	public ResponseEntity<?> obtainTellerDetails(@RequestBody Teller teller) {
 		try {
 			System.out.println("teller id" + teller.getTellerId());
 			Teller cust = tellerService.checkTeller(teller.getTellerId());
-			if(cust != null) {
-				return new ResponseEntity<>(new TellerResponse(
-						"000","teller found",true,GlobalResponse.APIV,cust),HttpStatus.OK);
+			if (cust != null) {
+				return new ResponseEntity<>(new TellerResponse("000", "teller found", true, GlobalResponse.APIV, cust),
+						HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"201",
-						false, "teller not enrolled"),HttpStatus.OK);
+				return new ResponseEntity<>(
+						new GlobalResponse(GlobalResponse.APIV, "201", false, "teller not enrolled"), HttpStatus.OK);
 			}
 		} catch (Exception e) {
-			GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
+			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
 			return new ResponseEntity<>(resp, HttpStatus.OK);
 		}
 	}
 
 	@PostMapping(value = "/approveRemoveTeller")
-	public ResponseEntity<?> approveRemoveTeller(@RequestBody Teller teller){
-    	try{
-    		int updates = tellerService.approveRemoveTeller(teller.getCustomerId());
+	public ResponseEntity<?> approveRemoveTeller(@RequestBody Teller teller) {
+		try {
+			int updates = tellerService.approveRemoveTeller(teller.getCustomerId());
 
-			if(updates > 0){
+			if (updates > 0) {
+				return new ResponseEntity<>(new GlobalResponse("000",
+						"removal of teller " + teller.getCustomerId() + " approved successfully", true,
+						GlobalResponse.APIV), HttpStatus.OK);
+			} else {
 				return new ResponseEntity<>(
-						new GlobalResponse("000", "removal of teller " + teller.getCustomerId() + " approved successfully", true, GlobalResponse.APIV),
-						HttpStatus.OK);
-			}else{
-				return new ResponseEntity<>(
-						new GlobalResponse(GlobalResponse.APIV, "201", false, "removal of teller " + teller.getCustomerId() + " not approved successfully"),
+						new GlobalResponse(GlobalResponse.APIV, "201", false,
+								"removal of teller " + teller.getCustomerId() + " not approved successfully"),
 						HttpStatus.OK);
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
 			return new ResponseEntity<>(resp, HttpStatus.OK);
@@ -382,20 +395,21 @@ public class TellerController {
 	}
 
 	@PostMapping(value = "/rejectRemoveTeller")
-	public ResponseEntity<?> rejectRemoveTeller(@RequestBody Teller teller){
-		try{
+	public ResponseEntity<?> rejectRemoveTeller(@RequestBody Teller teller) {
+		try {
 			int updates = tellerService.rejectRemoveTeller(teller.getCustomerId());
 
-			if(updates > 0){
+			if (updates > 0) {
+				return new ResponseEntity<>(new GlobalResponse("000",
+						"removal of teller " + teller.getCustomerId() + " rejected successfully", true,
+						GlobalResponse.APIV), HttpStatus.OK);
+			} else {
 				return new ResponseEntity<>(
-						new GlobalResponse("000", "removal of teller " + teller.getCustomerId() + " rejected successfully", true, GlobalResponse.APIV),
-						HttpStatus.OK);
-			}else{
-				return new ResponseEntity<>(
-						new GlobalResponse(GlobalResponse.APIV, "201", false, "removal of teller " + teller.getCustomerId() + " not rejected successfully"),
+						new GlobalResponse(GlobalResponse.APIV, "201", false,
+								"removal of teller " + teller.getCustomerId() + " not rejected successfully"),
 						HttpStatus.OK);
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
 			return new ResponseEntity<>(resp, HttpStatus.OK);
@@ -403,15 +417,15 @@ public class TellerController {
 	}
 
 	@GetMapping("/previewStaff")
-	public ResponseEntity<?> previewStaff(
-			@RequestParam("FromDt") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
+	public ResponseEntity<?> previewStaff(@RequestParam("FromDt") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
 			@RequestParam(value = "ToDt") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate,
 			@RequestParam(value = "enrolledType") String enrolledType) {
 		try {
 			List<Teller> staff = tellerService.getEnrolledStaff(fromDate, toDate, enrolledType);
 			if (staff.size() > 0) {
-				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true, "staff found",
-						new HashSet<>(staff)), HttpStatus.OK);
+				return new ResponseEntity<>(
+						new GlobalResponse(GlobalResponse.APIV, "000", true, "staff found", new HashSet<>(staff)),
+						HttpStatus.OK);
 			}
 			return new ResponseEntity<>(
 					new GlobalResponse(GlobalResponse.APIV, "000", false, "staff not found", new HashSet<>(staff)),

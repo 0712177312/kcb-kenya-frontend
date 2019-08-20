@@ -15,32 +15,38 @@ import com.compulynx.compas.repositories.CustomerRepository;
 
 @Service
 public class CustomerService {
-	
+
 	@Autowired
 	private CustomerRepository customerRepository;
-	
+
 	public List<Customer> getCustomers() {
 		// TODO Auto-generated method stub
 		return customerRepository.findAll();
 	}
 
-	public Customer checkCustomer(String gifNumber,String customerId) {
+	public Customer checkCustomer(String gifNumber, String customerId) {
 		// TODO Auto-generated method stub
-		return customerRepository.findCustomerByCustomerId(gifNumber,customerId);
+		return customerRepository.findCustomerByCustomerId(gifNumber, customerId);
 	}
 
 	public Customer upCustomerDetails(Customer customer) {
 		// TODO Auto-generated method stub
 		return customerRepository.save(customer);
 	}
-	
+
 	public List<CustomersToApprove> getCustomersToVerify(String branchCode) {
 		return customerRepository.getCustomersToApprove(branchCode);
 	}
 
-	public int approveCustomer(int verifiedBy,String customerId) {
+	public List<CustomersToApprove> getCustomersToVerifyAll() {
+		return customerRepository.getCustomersToApproveAll();
+	}
+
+
+
+	public int approveCustomer(int verifiedBy, String customerId) {
 		// TODO Auto-generated method stub
-		return customerRepository.approveCustomers(verifiedBy,customerId);
+		return customerRepository.approveCustomers(verifiedBy, customerId);
 	}
 
 	public Customer identifyCustomer(String customerId) {
@@ -52,7 +58,7 @@ public class CustomerService {
 		// TODO Auto-generated method stub
 		return customerRepository.getCustomerToWaive(customerId);
 	}
-	
+
 	public int waiveCustomer(int waivedBy, String customerId) {
 		// TODO Auto-generated method stub
 		return customerRepository.waiveCustomer(waivedBy, customerId);
@@ -65,14 +71,14 @@ public class CustomerService {
 
 	public int approveCustomerWaive(String waived, int approvedBy, String customerId) {
 		// TODO Auto-generated method stub
-		return customerRepository.approveCustomerWaive(waived, approvedBy,customerId);
+		return customerRepository.approveCustomerWaive(waived, approvedBy, customerId);
 	}
 
 	public Customer getMatchedCustomers(String customerId) {
 		// TODO Auto-generated method stub
 		return customerRepository.getMatchedCustomers(customerId);
 	}
-	
+
 	public MatchingTeller getMatchedTellers(String customerId) {
 		// TODO Auto-generated method stub
 		return customerRepository.getMatchedTellers(customerId);
@@ -80,14 +86,14 @@ public class CustomerService {
 
 	public int rejectCustomerWaive(int waivedApprovedBy, String customerId) {
 		// TODO Auto-generated method stub
-		return customerRepository.rejeCustomerWaive(waivedApprovedBy,customerId);
+		return customerRepository.rejeCustomerWaive(waivedApprovedBy, customerId);
 	}
 
 	public List<Customer> gtEnrolledCustomers(Date fromDate, Date toDate, String enrolledType) {
 		// TODO Auto-generated method stub
-		System.out.println("from date: "+ fromDate);
-		System.out.println("to date: "+ toDate);
-		System.out.println("enrolled type: "+ enrolledType);
+		System.out.println("from date: " + fromDate);
+		System.out.println("to date: " + toDate);
+		System.out.println("enrolled type: " + enrolledType);
 		return customerRepository.getEnrolledCustomers(fromDate, toDate, enrolledType);
 	}
 
@@ -105,7 +111,7 @@ public class CustomerService {
 //		// TODO Auto-generated method stub
 //		return customerRepository.removeCustomerPrints(profileId);
 //	}
-	
+
 //	public int removeCustomerProfile(String customerId) {
 //		// TODO Auto-generated method stub
 //		return customerRepository.removeCustomerDetails(customerId);
@@ -116,13 +122,13 @@ public class CustomerService {
 		return customerRepository.upgradeCustomerDetails(customerId);
 	}
 
-	public int rejectCustomerEnrollment(int rejectedBy,String customerId) {
-		return customerRepository.rejectCustomerEnrollment(rejectedBy,customerId);
+	public int rejectCustomerEnrollment(int rejectedBy, String customerId) {
+		return customerRepository.rejectCustomerEnrollment(rejectedBy, customerId);
 	}
 
-	public int deleteCustomer(int deletedBy,String customerId) {
+	public int deleteCustomer(int deletedBy, String customerId) {
 		// TODO Auto-generated method stub
-		return customerRepository.deleteCustomer(deletedBy,customerId);
+		return customerRepository.deleteCustomer(deletedBy, customerId);
 	}
 
 //	public List<Customer> gtEnrolledCustomers(Date fromDate, Date toDate) {
@@ -139,17 +145,16 @@ public class CustomerService {
 		return customerRepository.approveRemoveCustomer(customerId);
 	}
 
-
 	public int rejectRemoveCustomer(String customerId) {
 		// TODO Auto-generated method stub
 		return customerRepository.rejectRemoveCustomer(customerId);
 	}
 
-	public Customer checkCustomerDeleted(String customerId){
+	public Customer checkCustomerDeleted(String customerId) {
 		return customerRepository.checkCustomerDeleted(customerId);
 	}
 
-	public int customerUnDelete(int createdBy, String customerId){
+	public int customerUnDelete(int createdBy, String customerId) {
 		return customerRepository.customerUnDelete(createdBy, customerId);
 	}
 

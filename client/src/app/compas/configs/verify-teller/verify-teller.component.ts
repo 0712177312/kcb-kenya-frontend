@@ -97,6 +97,8 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
   rightFP: any;
   thumbsFP: any;
   hand: { 'req': any; };
+  branch: any;
+  groupid: any;
   constructor(private apiService: BioService,
     private modalService: NgbModal,
     private modalService2: NgbModal, private logs: LogsService, private sockService: WebSocketServiceService,
@@ -106,9 +108,13 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
   settings = settings;
 
   ngOnInit() {
-    this.gtTellers();
     this.otc = JSON.parse(localStorage.getItem('otc'));
     this.rightId = this.otc.rightId;
+    // the specific branch of the logged in user
+    this.branch = this.otc.branch;
+    this.groupid = this.otc.group;
+    this.gtTellers();
+
   }
 
   log(userId, activity) {
@@ -538,7 +544,7 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
 
   gtTellers() {
     this.blockUI.start('Loading data...');
-    this.tellerSvc.getTellersToApprove().subscribe(data => {
+    this.tellerSvc.getTellersToApprove(this.branch, this.groupid).subscribe(data => {
       this.tellers = data;
       console.log('tellers', this.tellers);
       this.tellers = this.tellers.collection;

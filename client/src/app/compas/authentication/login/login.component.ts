@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
   loginform = true;
   recoverform = false;
   ngOnInit() {
-    console.log("Initialization:  "+localStorage.getItem('bio.glob#$$#'));
+    console.log("Initialization:  " + localStorage.getItem('bio.glob#$$#'));
     localStorage.getItem('bio.glob#$$#') ? this.doNothing() : this.getGlobals();
   }
   showRecoverForm() {
@@ -82,32 +82,34 @@ export class LoginComponent implements OnInit {
 
             if (this.menus.status === true) {
               this.storageObject.username = this.user.username;
-
               this.storageObject.rightId = this.response.model.id;
               this.storageObject.rights = this.menus.collection;
-              
               this.storageObject.branch = this.response.model.branch;
+              this.storageObject.group = this.response.model.group;
 
               localStorage.setItem('otc', JSON.stringify(this.storageObject));
               this.globalService.setAuth(true);
               this.globalService.setRightId(this.user.id);
               this.globalService.setUsername(this.user.username);
               this.globalService.setRights(this.menus.collection);
+              this.globalService.setBranch(this.response.model.branch);
+              this.globalService.setGroup(this.response.model.group);
               this.router.navigate(['/dashboard']);
               this.getGlobals();
             } else {
               this.storageObject.username = this.user.username;
-
               this.storageObject.rightId = this.user.id;
               this.storageObject.rights = this.menus.collection;
-
               this.storageObject.branch = this.user.branch;
+              this.storageObject.group = this.response.model.group;
 
               localStorage.setItem('otc', JSON.stringify(this.storageObject));
               this.globalService.setAuth(true);
               this.globalService.setRightId(this.user.id);
               this.globalService.setUsername(this.user.username);
               this.globalService.setRights(this.menus.collection);
+              this.globalService.setBranch(this.response.model.branch);
+              this.globalService.setGroup(this.response.model.group);
               this.getGlobals();
               this.router.navigate(['/dashboard']);
               //  this.blockUI.stop();
@@ -191,31 +193,32 @@ export class LoginComponent implements OnInit {
           this.blockUI.stop();
           if (this.menus.status === true) {
             this.storageObject.username = this.user.username;
-
             this.storageObject.rightId = this.response.model.id;
             this.storageObject.rights = this.menus.collection;
-
             this.storageObject.branch = this.response.model.branch;
+            this.storageObject.group = this.response.model.group;
 
             localStorage.setItem('otc', JSON.stringify(this.storageObject));
             this.globalService.setAuth(true);
             this.globalService.setRightId(this.user.id);
             this.globalService.setUsername(this.user.username);
             this.globalService.setRights(this.menus.collection);
+            this.globalService.setBranch(this.response.model.branch);
+            this.globalService.setGroup(this.response.model.group);
             this.router.navigate(['/dashboard']);
           } else {
             this.storageObject.username = this.user.username;
-
             this.storageObject.rightId = this.user.id;
             this.storageObject.rights = this.menus.collection;
-
             this.storageObject.branch = this.user.branch;
-
+            this.storageObject.group = this.response.model.group;
             localStorage.setItem('otc', JSON.stringify(this.storageObject));
             this.globalService.setAuth(true);
             this.globalService.setRightId(this.user.id);
             this.globalService.setUsername(this.user.username);
             this.globalService.setRights(this.menus.collection);
+            this.globalService.setBranch(this.response.model.branch);
+            this.globalService.setGroup(this.response.model.group);
             this.router.navigate(['/dashboard']);
             return this.toastr.warning(this.menus.respMessage, 'Alert!', { timeOut: 1500 });
           }

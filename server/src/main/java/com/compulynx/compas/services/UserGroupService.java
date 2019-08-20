@@ -40,4 +40,7 @@ public class UserGroupService {
 		// TODO Auto-generated method stub
 		return useGroupRepositories.getUserGroups(id,id2,id3);
 	}
+	public UserGroup getRightCode(Long groupid) {
+		return useGroupRepositories.getRightCode(groupid);
+	}
 }

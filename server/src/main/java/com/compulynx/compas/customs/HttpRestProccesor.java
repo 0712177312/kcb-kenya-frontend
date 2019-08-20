@@ -38,6 +38,10 @@ public class HttpRestProccesor
       con.setDoOutput(true);
       con.setDoInput(true);
       
+      //Set timeout
+      con.setReadTimeout(30000);
+      con.setConnectTimeout(10000);
+      
       int responseCode = con.getResponseCode();
       log.info("Response Code : " + responseCode);
 

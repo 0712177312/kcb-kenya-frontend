@@ -85,6 +85,7 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
   otc: any = {};
   rightId: any;
   branch: any;
+  groupid: any;
   dupResult: number;
   disabled: boolean;
   greetings: any[];
@@ -110,6 +111,7 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
     this.rightId = this.otc.rightId;
     // the specific branch of the logged in user
     this.branch = this.otc.branch;
+    this.groupid = this.otc.group;
     console.log("this.branch at ngOnInit() of approve-customers.component.ts " + this.branch);
     this.gtCustomers();
   }
@@ -478,7 +480,8 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
   gtCustomers() {
     this.blockUI.start('Loading data...');
     const customerDetails = {
-      'branchCode': this.branch
+      'branchCode': this.branch,
+      'verifiedBy': this.groupid //manipulate to store group id verified_by due constraints on back end expected input
     }
     this.custSvc.getCustomersToAuthorize(customerDetails).subscribe(data => {
       this.customers = data;

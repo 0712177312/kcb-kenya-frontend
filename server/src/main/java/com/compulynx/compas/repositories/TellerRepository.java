@@ -30,12 +30,19 @@ public interface TellerRepository extends JpaRepository<Teller, Long>{
 	@Transactional
 	@Query(nativeQuery = true, value ="UPDATE tellermaster set verified='A',verifiedby=?1, verified_on=systimestamp  WHERE customerId=?2 and verified<>'D'")
 	int approveTellers(int createdBy, String customerId);
-	
+	//Fetch all without filters
 	@Query(nativeQuery = true, value ="SELECT ROWNUM AS COUNTER,customerId, " + 
 			"CU.tellerName,TO_CHAR(CU.CREATED_AT,'dd-mm-rrrr') AS ENROLLEDON,UM.FULLNAME AS CREATEDBY, UM.ID AS USERSID " + 
 			"from tellermaster CU " + 
 			"INNER JOIN USERMASTER UM ON UM.ID = CU.createdBy AND CU.VERIFIED = 'N'")
-	List<TellerToApprove> getTellersToApprove();
+	List<TellerToApprove> getTellersToApproveAll();
+	
+	//Fetch with branch filter
+	@Query(nativeQuery = true, value ="SELECT ROWNUM AS COUNTER,customerId, " + 
+			"CU.tellerName,TO_CHAR(CU.CREATED_AT,'dd-mm-rrrr') AS ENROLLEDON,UM.FULLNAME AS CREATEDBY, UM.ID AS USERSID " + 
+			"from tellermaster CU " + 
+			"INNER JOIN USERMASTER UM ON UM.ID = CU.createdBy AND CU.VERIFIED = 'N' AND CU.DEPTCODE=?")
+	List<TellerToApprove> getTellersToApprove(String branchCode);
 
 	@Query(nativeQuery = true, value ="SELECT ROWNUM AS COUNTER,customerId, " +
 			"CU.tellerName,TO_CHAR(CU.CREATED_AT,'dd-mm-rrrr') AS ENROLLEDON, CU.DELETED_BY AS DELETEDBY, UM.FULLNAME AS CREATEDBY, UM.ID AS USERSID " +

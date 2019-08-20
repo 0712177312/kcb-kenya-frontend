@@ -6,6 +6,8 @@ export class MySharedService {
   rights: any;
   rightId: any;
   configs: any;
+  branch: any;
+  group: any;
   timeout: any = 10000;
   // dataChange: Observable<any>;
 
@@ -37,5 +39,13 @@ export class MySharedService {
 
   setConfigs(configs) {
     this.configs = configs;
+  }
+
+  setBranch(branch) {
+    this.branch = branch;
+  }
+
+  setGroup(group) {
+    this.group = group;
   }
 }

@@ -13,7 +13,7 @@ import com.compulynx.compas.repositories.TellerRepository;
 
 @Service
 public class TellerService {
-	
+
 	@Autowired
 	private TellerRepository tellerRepository;
 
@@ -44,12 +44,19 @@ public class TellerService {
 
 	public int approveTeller(int createdBy, String customerId) {
 		// TODO Auto-generated method stub
-		return tellerRepository.approveTellers(createdBy,customerId);
+		return tellerRepository.approveTellers(createdBy, customerId);
 	}
 
-	public List<TellerToApprove> getTellersToVerify() {
+	// Filtered by branch
+	public List<TellerToApprove> getTellersToVerify(String branchCode) {
 		// TODO Auto-generated method stub
-		return tellerRepository.getTellersToApprove();
+		return tellerRepository.getTellersToApprove(branchCode);
+	}
+
+	// All without filters
+	public List<TellerToApprove> getTellersToVerifyAll() {
+		// TODO Auto-generated method stub
+		return tellerRepository.getTellersToApproveAll();
 	}
 
 //	public Teller getTellerToVerify(String customerId, String mnemonic) {
@@ -72,24 +79,26 @@ public class TellerService {
 //		return this.tellerRepository.removeTellerDetails(customerId);
 //	}
 
-	public int rejectTellerApproval(int rejectedBy, String customerId){
+	public int rejectTellerApproval(int rejectedBy, String customerId) {
 		return tellerRepository.rejectTellerApproval(rejectedBy, customerId);
 	}
 
-	public int removeTeller(int deletedBy, String customerId){
+	public int removeTeller(int deletedBy, String customerId) {
 		return tellerRepository.removeTeller(deletedBy, customerId);
 	}
 
-	public int convertStaffToCustomer(String customerId){
+	public int convertStaffToCustomer(String customerId) {
 		return tellerRepository.convertStaffToCustomer(customerId);
 	}
 
 	public Teller checkStaffApproved(String tellerId) {
 		return tellerRepository.checkStaffApproved(tellerId);
 	}
+
 	public Teller checkStaffDeleted(String tellerId) {
 		return tellerRepository.checkStaffDeleted(tellerId);
 	}
+
 	public int staffUnDelete(int createdBy, String tellerId) {
 		return tellerRepository.staffUnDelete(createdBy, tellerId);
 	}
@@ -98,15 +107,15 @@ public class TellerService {
 		return tellerRepository.getTellersToApproveDetach();
 	}
 
-	public int approveRemoveTeller(String customerId){
+	public int approveRemoveTeller(String customerId) {
 		return tellerRepository.approveRemoveTeller(customerId);
 	}
 
-	public int rejectRemoveTeller(String customerId){
+	public int rejectRemoveTeller(String customerId) {
 		return tellerRepository.rejectRemoveTeller(customerId);
 	}
 
-	public List<Teller> getEnrolledStaff(Date fromDate, Date toDate, String enrolledType){
+	public List<Teller> getEnrolledStaff(Date fromDate, Date toDate, String enrolledType) {
 		return tellerRepository.getEnrolledStaff(fromDate, toDate, enrolledType);
 	}
 

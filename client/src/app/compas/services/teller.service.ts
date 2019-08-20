@@ -35,8 +35,8 @@ export class TellerService {
   approveTeller(teller) {
     return this.http.post(`${this.API_URL.url}/tellers/approveTeller`, teller);
   }
-  getTellersToApprove() {
-    return this.http.get(`${this.API_URL.url}/tellers/tellersToApprove`);
+  getTellersToApprove(branchCode,groupid) {
+    return this.http.get(`${this.API_URL.url}/tellers/tellersToApprove?branchCode=${branchCode}&groupid=${groupid}`);
   }
   getTllrDetails() {
       return this.http.get(this.CUST_D);
