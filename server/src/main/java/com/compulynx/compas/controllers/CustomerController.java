@@ -219,7 +219,7 @@ public class CustomerController {
 	@PostMapping(value = "/customersToApprove")
 	public ResponseEntity<?> getCustomersToApprove(@RequestBody Customer customer) {
 		try {
-			System.out.println("Barnch Code: " + customer.getBranchCode());
+			System.out.println("Branch Code: " + customer.getBranchCode());
 			System.out.println("Right ID: " + customer.getVerifiedBy());
 			UserGroup userGroup = userGroupService.getRightCode(Long.valueOf(customer.getVerifiedBy()));
 			List<CustomersToApprove> customers = null;

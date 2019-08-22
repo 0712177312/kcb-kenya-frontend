@@ -206,7 +206,7 @@ public class TellerController {
 	public ResponseEntity<?> getCustomersToApprove(@RequestParam(value = "branchCode") String branchCode,
 			@RequestParam(value = "groupid") String groupid) {
 		try {
-			System.out.println("Barnch Code: " + branchCode);
+			System.out.println("Branch Code: " + branchCode);
 			System.out.println("Right ID: " + groupid);
 
 			UserGroup userGroup = userGroupService.getRightCode(Long.valueOf(groupid));
