@@ -85,6 +85,10 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	List<Customer> getEnrolledCustomers(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate,
 			@Param("enrolledType") String enrolledType);
 
+    @Query("select u from Customer u where u.createdOn BETWEEN :fromDate AND :toDate AND u.verified=:enrolledType AND u.branchCode=:branchCode")
+    List<Customer> getEnrolledCustomersByBranch(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate,
+                                        @Param("enrolledType") String enrolledType, @Param("branchCode") String branchCode);
+
 //	 
 //	 
 //	 @Query("select count(u) from Customer u")

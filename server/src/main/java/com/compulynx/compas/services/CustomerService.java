@@ -97,6 +97,11 @@ public class CustomerService {
 		return customerRepository.getEnrolledCustomers(fromDate, toDate, enrolledType);
 	}
 
+	public List<Customer> getEnrolledCustomersByBranch(Date fromDate, Date toDate, String enrolledType,
+													   String branchCode) {
+		return customerRepository.getEnrolledCustomersByBranch(fromDate, toDate, enrolledType, branchCode);
+	}
+
 //	public Customer getCustomerToVerify(String mnemonic, String mnemonic2) {
 //		// TODO Auto-generated method stub
 //		return customerRepository.getCustomerToVerify(mnemonic, mnemonic2);

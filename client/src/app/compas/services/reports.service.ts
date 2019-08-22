@@ -16,8 +16,8 @@ export class ReportsService {
     return  this.http.get(`${this.API_URL.url}/gtBranchesPrev?status=` + status);
   }
 
-  getCustomerPreview(fromDate, toDate, enrolledType) {
-    return  this.http.get(`${this.API_URL.url}/previewCustomers?FromDt=${fromDate}&ToDt=${toDate}&enrolledType=${enrolledType}`);
+  getCustomerPreview(fromDate, toDate, enrolledType, branchCode, groupId) {
+    return  this.http.get(`${this.API_URL.url}/previewCustomers?FromDt=${fromDate}&ToDt=${toDate}&enrolledType=${enrolledType}&branchCode=${branchCode}&groupid=${groupId}`);
   }
 
   getStaffPreview(fromDate, toDate, enrolledType) {

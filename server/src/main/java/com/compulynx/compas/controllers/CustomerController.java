@@ -401,9 +401,19 @@ public class CustomerController {
 	public ResponseEntity<?> previewCustomers(
 			@RequestParam("FromDt") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
 			@RequestParam(value = "ToDt") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate,
-			@RequestParam(value = "enrolledType") String enrolledType) {
+			@RequestParam(value = "enrolledType") String enrolledType, @RequestParam(value = "branchCode") String branchCode,
+            @RequestParam(value = "groupid") String groupId) {
 		try {
-			List<Customer> customers = customerService.gtEnrolledCustomers(fromDate, toDate, enrolledType);
+            List<Customer> customers;
+            UserGroup userGroup = userGroupService.getRightCode(Long.valueOf(groupId));
+            // the system administrators to be able to view all the reports
+            if (userGroup.getGroupCode().equalsIgnoreCase("G001")
+                    || userGroup.getGroupCode().equalsIgnoreCase("G002")) {
+                customers = customerService.gtEnrolledCustomers(fromDate, toDate, enrolledType);
+            }else{
+                // other system users to view reports based on their branches
+                customers = customerService.getEnrolledCustomersByBranch(fromDate, toDate, enrolledType, branchCode);
+            }
 			if (customers.size() > 0) {
 				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true, "customers found",
 						new HashSet<>(customers)), HttpStatus.OK);
