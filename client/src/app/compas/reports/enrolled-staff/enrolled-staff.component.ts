@@ -24,10 +24,17 @@ export class EnrolledStaffComponent implements OnInit {
   dataTable: any;
   dtOptions: any;
 
+  otc: any = {};
+  branch: any;
+  groupid: any;
+
   constructor(calendar: NgbCalendar, private toastr: ToastrService, private reportSvc: ReportsService) { }
 
   ngOnInit() {
     this.staffStatus = [{ name: 'Enrolled', id: 'N' }, { name: 'Verified', id: 'A' }, { name: 'Rejected', id: 'R' }, { name: 'Deleted', id: 'AD' }];
+    this.otc = JSON.parse(localStorage.getItem('otc'));
+    this.branch = this.otc.branch;
+    this.groupid = this.otc.group;
   }
 
   getStaffReport() {
@@ -36,7 +43,7 @@ export class EnrolledStaffComponent implements OnInit {
     } else if (this.toDate === undefined) {
       return this.toastr.warning('Kindly specify to date to continue', 'Warning!', { timeOut: 3000 });
     } else {
-      this.reportSvc.getStaffPreview(this.formatDate(this.fromDate), this.formatDate(this.toDate), this.enrolledType).subscribe(data => {
+      this.reportSvc.getStaffPreview(this.formatDate(this.fromDate), this.formatDate(this.toDate), this.enrolledType, this.branch, this.groupid).subscribe(data => {
         this.response = data;
         this.response = this.response.collection;
       });

@@ -419,9 +419,19 @@ public class TellerController {
 	@GetMapping("/previewStaff")
 	public ResponseEntity<?> previewStaff(@RequestParam("FromDt") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
 			@RequestParam(value = "ToDt") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate,
-			@RequestParam(value = "enrolledType") String enrolledType) {
+			@RequestParam(value = "enrolledType") String enrolledType, @RequestParam(value = "branchCode") String branchCode,
+                                          @RequestParam(value = "groupid") String groupId) {
 		try {
-			List<Teller> staff = tellerService.getEnrolledStaff(fromDate, toDate, enrolledType);
+            List<Teller> staff;
+            UserGroup userGroup = userGroupService.getRightCode(Long.valueOf(groupId));
+            // the system administrators to be able to view all the reports
+            if (userGroup.getGroupCode().equalsIgnoreCase("G001")
+                    || userGroup.getGroupCode().equalsIgnoreCase("G002")) {
+                staff = tellerService.getEnrolledStaff(fromDate, toDate, enrolledType);
+            }else{
+                // other system users to view reports based on their branches
+                staff = tellerService.getEnrolledStaffByBranch(fromDate, toDate, enrolledType, branchCode);
+            }
 			if (staff.size() > 0) {
 				return new ResponseEntity<>(
 						new GlobalResponse(GlobalResponse.APIV, "000", true, "staff found", new HashSet<>(staff)),

@@ -119,4 +119,8 @@ public class TellerService {
 		return tellerRepository.getEnrolledStaff(fromDate, toDate, enrolledType);
 	}
 
+    public List<Teller> getEnrolledStaffByBranch(Date fromDate, Date toDate, String enrolledType, String branchCode) {
+        return tellerRepository.getEnrolledStaffByBranch(fromDate, toDate, enrolledType, branchCode);
+    }
+
 }

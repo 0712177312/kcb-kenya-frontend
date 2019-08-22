@@ -108,5 +108,7 @@ public interface TellerRepository extends JpaRepository<Teller, Long>{
 	@Query("select u from Teller u where u.createdOn BETWEEN :fromDate AND :toDate AND u.verified=:enrolledType")
 	List<Teller> getEnrolledStaff(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate, @Param("enrolledType") String enrolledType);
 
-
+    @Query("select u from Teller u where u.createdOn BETWEEN :fromDate AND :toDate AND u.verified=:enrolledType AND u.deptCode=:branchCode")
+    List<Teller> getEnrolledStaffByBranch(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate, @Param("enrolledType") String enrolledType,
+                                          @Param("branchCode") String branchCode);
 }
