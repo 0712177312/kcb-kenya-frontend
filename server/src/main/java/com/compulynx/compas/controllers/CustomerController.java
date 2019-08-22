@@ -224,8 +224,8 @@ public class CustomerController {
 			UserGroup userGroup = userGroupService.getRightCode(Long.valueOf(customer.getVerifiedBy()));
 			List<CustomersToApprove> customers = null;
 			// Do not filter for sys admins and regional supervisors
-			if (userGroup.getGroupCode().equalsIgnoreCase("G001")
-					|| userGroup.getGroupCode().equalsIgnoreCase("G002")) {
+			if (userGroup.getGroupCode().equalsIgnoreCase("G003")
+					|| userGroup.getGroupCode().equalsIgnoreCase("G004")) {
 				customers = customerService.getCustomersToVerifyAll();
 			} else {
 				customers = customerService.getCustomersToVerify(customer.getBranchCode());
@@ -407,8 +407,8 @@ public class CustomerController {
             List<Customer> customers;
             UserGroup userGroup = userGroupService.getRightCode(Long.valueOf(groupId));
             // the system administrators to be able to view all the reports
-            if (userGroup.getGroupCode().equalsIgnoreCase("G001")
-                    || userGroup.getGroupCode().equalsIgnoreCase("G002")) {
+            if (userGroup.getGroupCode().equalsIgnoreCase("G003")
+                    || userGroup.getGroupCode().equalsIgnoreCase("G004")) {
                 customers = customerService.gtEnrolledCustomers(fromDate, toDate, enrolledType);
             }else{
                 // other system users to view reports based on their branches
