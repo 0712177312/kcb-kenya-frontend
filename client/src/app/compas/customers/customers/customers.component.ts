@@ -99,6 +99,12 @@ export class CustomersComponent implements OnInit, OnDestroy {
   name: string;
   sockResp: any = {};
   private stompClient = null;
+
+  // user assigned rights for the logged in user
+  canViewUser: Boolean;
+  canAddUser: Boolean;
+  canEditUser: Boolean;
+
   constructor(private tellerSvc: TellerService, private apiService: BioService,
     private fb: FormBuilder, private sockService: WebSocketServiceService,
     private custSvc: CustomerService, @Inject(DOCUMENT) private document: any,
@@ -146,7 +152,27 @@ export class CustomersComponent implements OnInit, OnDestroy {
         allowSearchFilter: true
       };
     });
+
+    this.getUserAssignedRights();
   }
+
+  getUserAssignedRights(){
+    let userAssignedRights = this.otc.userAssignedRights;
+    let rightsIndex = -1;
+    for(let i = 0; i < userAssignedRights[0].rights.length; i++){
+        if(userAssignedRights[0].rights[i].path == "/customers/customers"){
+            rightsIndex = i;
+            break;
+        }
+    }
+
+    if(rightsIndex >= 0){
+        this.canViewUser = userAssignedRights[0].rights[rightsIndex].allowView;
+        this.canAddUser = userAssignedRights[0].rights[rightsIndex].allowAdd;
+        this.canEditUser = userAssignedRights[0].rights[rightsIndex].allowEdit;
+    }
+  }
+
   getConfigs() {
     this.bioconfigs = JSON.parse(localStorage.getItem('bio.glob#$$#'));
     return this.bioconfigs;
@@ -533,6 +559,9 @@ export class CustomersComponent implements OnInit, OnDestroy {
   }
 
   initInquery() {
+    if(this.canAddUser === false){
+      return this.toastr.warning('You are not allowed to add a user', 'Warning!', { timeOut: 3000 });
+    }
     this.account_number = '';
     this.profType = '';
     this.staffId = '';
