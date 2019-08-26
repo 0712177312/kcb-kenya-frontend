@@ -30,6 +30,9 @@ export class LoginComponent implements OnInit {
   verifyUser: any = {};
   menus: any;
   storageObject: any = {};
+
+  userAssignedRights: any;
+
   constructor(private authService: AuthService, private appService: AppService, private toastr: ToastrService,
     private router: Router, private apiService: BioService, private globalService: MySharedService,
     private logs: LogsService,
@@ -76,44 +79,56 @@ export class LoginComponent implements OnInit {
           return this.toastr.warning(this.response.respMessage, 'Alert!', { timeOut: 1500 });
         }
         if (this.response.status === true) {
-          this.log(this.response.model.id, 'logged in');
-          this.appService.getUserMenus(this.response.model.group).subscribe(resp => {
-            this.menus = resp;
+          this.appService.getUserAssignedRights(this.response.model.group).subscribe(resp => {
+            this.userAssignedRights = resp;
+            if (this.userAssignedRights.status === true) {
+              this.log(this.response.model.id, 'logged in');
+              this.appService.getUserMenus(this.response.model.group).subscribe(resp => {
+                this.menus = resp;
 
-            if (this.menus.status === true) {
-              this.storageObject.username = this.user.username;
-              this.storageObject.rightId = this.response.model.id;
-              this.storageObject.rights = this.menus.collection;
-              this.storageObject.branch = this.response.model.branch;
-              this.storageObject.group = this.response.model.group;
+                if (this.menus.status === true) {
+                  this.storageObject.username = this.user.username;
+                  this.storageObject.rightId = this.response.model.id;
+                  this.storageObject.rights = this.menus.collection;
+                  this.storageObject.branch = this.response.model.branch;
+                  this.storageObject.group = this.response.model.group;
+                  this.storageObject.userAssignedRights = this.userAssignedRights.collection;
 
-              localStorage.setItem('otc', JSON.stringify(this.storageObject));
-              this.globalService.setAuth(true);
-              this.globalService.setRightId(this.user.id);
-              this.globalService.setUsername(this.user.username);
-              this.globalService.setRights(this.menus.collection);
-              this.globalService.setBranch(this.response.model.branch);
-              this.globalService.setGroup(this.response.model.group);
-              this.router.navigate(['/dashboard']);
-              this.getGlobals();
+                  localStorage.setItem('otc', JSON.stringify(this.storageObject));
+                  this.globalService.setAuth(true);
+                  this.globalService.setRightId(this.user.id);
+                  this.globalService.setUsername(this.user.username);
+                  this.globalService.setRights(this.menus.collection);
+                  this.globalService.setBranch(this.response.model.branch);
+                  this.globalService.setGroup(this.response.model.group);
+                  this.globalService.setUserAssignedRights(this.userAssignedRights.collection);
+                  this.router.navigate(['/dashboard']);
+                  this.getGlobals();
+                } else {
+                  this.storageObject.username = this.user.username;
+                  this.storageObject.rightId = this.user.id;
+                  this.storageObject.rights = this.menus.collection;
+                  this.storageObject.branch = this.user.branch;
+                  this.storageObject.group = this.response.model.group;
+                  this.storageObject.userAssignedRights = this.userAssignedRights.collection;
+
+                  localStorage.setItem('otc', JSON.stringify(this.storageObject));
+                  this.globalService.setAuth(true);
+                  this.globalService.setRightId(this.user.id);
+                  this.globalService.setUsername(this.user.username);
+                  this.globalService.setRights(this.menus.collection);
+                  this.globalService.setBranch(this.response.model.branch);
+                  this.globalService.setGroup(this.response.model.group);
+                  this.globalService.setUserAssignedRights(this.userAssignedRights.collection);
+                  this.getGlobals();
+                  this.router.navigate(['/dashboard']);
+                  //  this.blockUI.stop();
+                  return this.toastr.warning(this.menus.respMessage, 'Alert!', { timeOut: 1500 });
+                }
+              });
             } else {
-              this.storageObject.username = this.user.username;
-              this.storageObject.rightId = this.user.id;
-              this.storageObject.rights = this.menus.collection;
-              this.storageObject.branch = this.user.branch;
-              this.storageObject.group = this.response.model.group;
-
-              localStorage.setItem('otc', JSON.stringify(this.storageObject));
-              this.globalService.setAuth(true);
-              this.globalService.setRightId(this.user.id);
-              this.globalService.setUsername(this.user.username);
-              this.globalService.setRights(this.menus.collection);
-              this.globalService.setBranch(this.response.model.branch);
-              this.globalService.setGroup(this.response.model.group);
-              this.getGlobals();
-              this.router.navigate(['/dashboard']);
-              //  this.blockUI.stop();
-              return this.toastr.warning(this.menus.respMessage, 'Alert!', { timeOut: 1500 });
+              this.blockUI.stop();
+              return this.toastr.warning(this.response.respMessage, 'User Assigned Rights not fetched!', { timeOut: 1500 });
             }
           });
         }
@@ -197,6 +212,7 @@ export class LoginComponent implements OnInit {
             this.storageObject.rights = this.menus.collection;
             this.storageObject.branch = this.response.model.branch;
             this.storageObject.group = this.response.model.group;
+            this.storageObject.userAssignedRights = this.userAssignedRights.collection;
 
             localStorage.setItem('otc', JSON.stringify(this.storageObject));
             this.globalService.setAuth(true);
@@ -205,6 +221,7 @@ export class LoginComponent implements OnInit {
             this.globalService.setRights(this.menus.collection);
             this.globalService.setBranch(this.response.model.branch);
             this.globalService.setGroup(this.response.model.group);
+            this.globalService.setUserAssignedRights(this.userAssignedRights.collection);
             this.router.navigate(['/dashboard']);
           } else {
             this.storageObject.username = this.user.username;
@@ -212,6 +229,7 @@ export class LoginComponent implements OnInit {
             this.storageObject.rights = this.menus.collection;
             this.storageObject.branch = this.user.branch;
             this.storageObject.group = this.response.model.group;
+            this.storageObject.userAssignedRights = this.userAssignedRights.collection;
             localStorage.setItem('otc', JSON.stringify(this.storageObject));
             this.globalService.setAuth(true);
             this.globalService.setRightId(this.user.id);
@@ -219,6 +237,7 @@ export class LoginComponent implements OnInit {
             this.globalService.setRights(this.menus.collection);
             this.globalService.setBranch(this.response.model.branch);
             this.globalService.setGroup(this.response.model.group);
+            this.globalService.setUserAssignedRights(this.userAssignedRights.collection);
             this.router.navigate(['/dashboard']);
             return this.toastr.warning(this.menus.respMessage, 'Alert!', { timeOut: 1500 });
           }

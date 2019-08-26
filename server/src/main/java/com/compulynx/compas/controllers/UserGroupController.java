@@ -92,6 +92,35 @@ public class UserGroupController {
 			return new ResponseEntity<>(resp, HttpStatus.OK);
 		}
 	}
+
+	@GetMapping("/usergroups/getUserGroupUsingGroupId")
+	public ResponseEntity<?> getUserGroupUsingGroupId(@RequestParam(value="groupId") Long groupId) {
+		try {
+			UserGroup group = userGroupService.getRightCode(groupId);
+			List<UserGroupImpl> rts = new ArrayList<UserGroupImpl>();
+			if(group == null) {
+				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"404",
+						false, "cannot find usergroup",
+						new HashSet<>(rts)),HttpStatus.NOT_FOUND );
+			}
+			UserGroupImpl obj = new UserGroupImpl();
+			obj.setId(group.getId());
+			obj.setActive(group.isActive());
+			obj.setCreatedBy(group.getCreatedBy());
+			obj.setGroupCode(group.getGroupCode());
+			obj.setGroupName(group.getGroupName());
+			List<UserGroupRights> rights=userGroupService.getGroupRights(group.getId(),group.getId(),group.getId());
+			obj.setRights(rights);
+			rts.add(obj);
+
+			return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"000", true, "usergroup",
+					new HashSet<>(rts)),HttpStatus.OK);
+		} catch (Exception e) {
+			GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
 	
 	@GetMapping("/usergroups/usergroup")
 	public ResponseEntity<?> userGroup(

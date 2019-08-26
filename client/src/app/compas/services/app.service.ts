@@ -11,4 +11,9 @@ export class AppService {
   getUserMenus(group) {
     return this.http.get(`${this.API_URL.url}/menulist/group?groupId=` + group);
   }
+
+
+  getUserAssignedRights(groupId){
+    return this.http.get(`${this.API_URL.url}/usergroups/getUserGroupUsingGroupId?groupId=` + groupId);
+  }
 }

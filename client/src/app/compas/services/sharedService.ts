@@ -9,6 +9,7 @@ export class MySharedService {
   branch: any;
   group: any;
   timeout: any = 10000;
+  userAssignedRights: any;
   // dataChange: Observable<any>;
 
   _userActionOccured: Subject<void> = new Subject();
@@ -47,5 +48,9 @@ export class MySharedService {
 
   setGroup(group) {
     this.group = group;
+  }
+
+  setUserAssignedRights(userAssignedRights){
+    this.userAssignedRights = userAssignedRights;
   }
 }

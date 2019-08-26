@@ -95,6 +95,12 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
     myUsername: String;
     groupRights: any;
     storageObject: any = {};
+
+    // user assigned rights for the logged in user
+    canViewUserProfile: Boolean;
+    canAddUserProfile: Boolean;
+    canEditUserProfile: Boolean;
+
     constructor(private blockUIService: BlockUIService,
         private renderer: Renderer2, private regionSvc: RegionService, private apiService: AdministrationService,
         private toastr: ToastrService,
@@ -115,7 +121,17 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         this.otc = JSON.parse(localStorage.getItem('otc'));
         this.rightId = this.otc.rightId;
         console.log('right id', this.rightId);
+
+        this.getUserAssignedRights();
     }
+
+    getUserAssignedRights(){
+        let userAssignedRights = this.otc.userAssignedRights;
+        this.canViewUserProfile = userAssignedRights[0].rights[1].allowView;
+        this.canAddUserProfile = userAssignedRights[0].rights[1].allowAdd;
+        this.canEditUserProfile = userAssignedRights[0].rights[1].allowEdit;
+    }
+
     get f() { return this.form.controls; }
 
     getTellers(branch) {
@@ -156,6 +172,11 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         }
     }
     initEditUser($event) {
+        console.log("canEditUserProfile: " + this.canEditUserProfile);
+        if(this.canEditUserProfile === false){
+            console.log("in if");
+            return this.toastr.warning('You are not allowed to edit a user profile', 'Warning!', { timeOut: 3000 });
+        }
         this.form = this.fb.group({
             country: new FormControl($event.data.country, [Validators.required]),
             branch: new FormControl($event.data.branch, [Validators.required]),
@@ -219,6 +240,10 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
     }
     initAddUser() {
         // tslint:disable-next-line:max-line-length
+        console.log("canAddUserProfile: " + this.canAddUserProfile);
+        if(this.canAddUserProfile === false){
+            return this.toastr.warning('You are not allowed to add a user profile', 'Warning!', { timeOut: 3000 });
+        }
         const validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         this.form = this.fb.group({
             id: new FormControl(0),
