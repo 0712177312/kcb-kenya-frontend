@@ -26,14 +26,14 @@ public interface UseGroupRepositories extends JpaRepository<UserGroup, Long> {
 //			+ " 'false' as allowView, 'false' as allowAdd, 'false' as allowEdit,"
 //			+ "  'false' as allowDelete FROM RIGHTSMASTER")
 
-	@Query(nativeQuery = true, value = "SELECT UR.RIGHTID,RM.RIGHTDISPLAYNAME as rightName,  "
+	@Query(nativeQuery = true, value = "SELECT UR.RIGHTID,RM.RIGHTDISPLAYNAME as rightName,  RM.RIGHTVIEWNAME as path, "
 			+ "       (CASE UR.ALLOWVIEW WHEN 1 THEN 'true' else 'false' end) AS allowView, "
 			+ "       (CASE UR.ALLOWADD WHEN 1 THEN 'true' else 'false' end) AS allowAdd, "
 			+ "       (CASE UR.ALLOWEDIT WHEN 1 THEN 'true' else 'false' end) AS allowEdit, "
 			+ "       (CASE UR.ALLOWDELETE WHEN 1 THEN 'true' else 'false' end) AS allowDelete "
 			+ "        FROM USERGROUPSMASTER GR " + "        INNER JOIN USERASSIGNEDRIGHTS UR ON UR.GROUPID = GR.ID "
 			+ "        RIGHT JOIN  RIGHTSMASTER RM ON RM.ID=UR.RIGHTID " + "        WHERE GR.ID=?1 "
-			+ "        UNION ALL " + "        SELECT RM.ID,RM.RIGHTDISPLAYNAME as rightName,'false' as allowView,  "
+			+ "        UNION ALL " + "        SELECT RM.ID,RM.RIGHTDISPLAYNAME as rightName,RM.RIGHTVIEWNAME as path, 'false' as allowView,  "
 			+ "        'false' as allowAdd, 'false' as allowEdit,'false' as allowDelete "
 			+ "          FROM USERGROUPSMASTER GM ,RIGHTSMASTER RM "
 			+ "          WHERE GM.ID=?2 AND RM.ID NOT IN (SELECT ASR.RIGHTID  FROM USERASSIGNEDRIGHTS ASR WHERE ASR.GROUPID = ?3)")

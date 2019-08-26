@@ -7,4 +7,5 @@ public interface UserGroupRights {
   boolean getAllowAdd();
   boolean getAllowEdit();
   boolean getAllowDelete();
+  String getPath();
 }

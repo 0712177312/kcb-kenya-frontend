@@ -130,8 +130,8 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         console.log("userAssignedRights: ", userAssignedRights);
         let rightsIndex = -1;
         for(let i = 0; i < userAssignedRights[0].rights.length; i++){
-            console.log("userAssignedRights name: " + userAssignedRights[0].rights[i].rightName);
-            if(userAssignedRights[0].rights[i].rightName == "User Profile"){
+            console.log("userAssignedRights path: " + userAssignedRights[0].rights[i].path);
+            if(userAssignedRights[0].rights[i].path == "/administration/userProfile"){
                 rightsIndex = i;
                 break;
             }
