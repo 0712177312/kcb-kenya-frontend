@@ -146,7 +146,7 @@
                     <div class="form-group row">
                         <label for="group" class="control-label text-left col-md-2">User Group</label>
                         <div class="col-md-10">
-                          <ng-select [items]="userGroups"
+                          <ng-select [items]="this.button === 'Add user' ? userGroupsFiltered : userGroups"
                               bindLabel="groupName"
                               bindValue="id"
                               formControlName="group">

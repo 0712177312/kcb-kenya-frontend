@@ -101,6 +101,21 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
     canAddUserProfile: Boolean;
     canEditUserProfile: Boolean;
 
+    userGroupsFiltered = [];
+
+    // the groupId of the logged in user
+    groupId: any; 
+
+    // map containing what codes a given code can access
+    groupCodesMap = new Map([['G001', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008']]
+        , ['G002', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008']],
+    ['G003', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008']],
+    ['G004', ['G005', 'G006', 'G007', 'G008']],
+    ['G005', ['G007', 'G008']],
+    ['G006', ['G007', 'G008']],
+    ['G007', []],
+    ['G008', []]]);
+
     constructor(private blockUIService: BlockUIService,
         private renderer: Renderer2, private regionSvc: RegionService, private apiService: AdministrationService,
         private toastr: ToastrService,
@@ -121,7 +136,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         this.otc = JSON.parse(localStorage.getItem('otc'));
         this.rightId = this.otc.rightId;
         console.log('right id', this.rightId);
-
+        this.groupId = this.otc.group;
         this.getUserAssignedRights();
     }
 
@@ -253,6 +268,21 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         if(this.canAddUserProfile === false){
             return this.toastr.warning('You are not allowed to add a user profile', 'Warning!', { timeOut: 3000 });
         }
+
+        // fetch the groupCode of the logged in user
+        let userAssignedRights = this.otc.userAssignedRights;
+        let groupCode = userAssignedRights[0].groupCode;
+
+        // filter the user groups displayed based on the groupCodesMap
+        this.userGroupsFiltered = [];
+        let userGroupsFilteredIndex = 0;
+        for(let i = 0; i < this.userGroups.length; i++){
+            let currentgroupCode = this.userGroups[i].groupCode;
+            if(this.groupCodesMap.get(groupCode).includes(currentgroupCode)){
+                this.userGroupsFiltered[userGroupsFilteredIndex++] = this.userGroups[i]; 
+            }
+        }
+
         const validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         this.form = this.fb.group({
             id: new FormControl(0),
