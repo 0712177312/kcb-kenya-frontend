@@ -106,6 +106,9 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
     // the groupId of the logged in user
     groupId: any; 
 
+    // the branch of the logged  in user
+    branch: any;
+
     // map containing what codes a given code can access
     groupCodesMap = new Map([['G001', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008']]
         , ['G002', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008']],
@@ -115,6 +118,10 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
     ['G006', ['G007', 'G008']],
     ['G007', []],
     ['G008', []]]);
+
+    // the id of the logged in user. This will be used to filter out the currently logged in user
+    // from the list of users in the user profiles page
+    userId: any;
 
     constructor(private blockUIService: BlockUIService,
         private renderer: Renderer2, private regionSvc: RegionService, private apiService: AdministrationService,
@@ -128,15 +135,17 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
     settings = settings;
 
     ngOnInit() {
+        this.otc = JSON.parse(localStorage.getItem('otc'));
+        this.groupId = this.otc.group;
+        this.branch = this.otc.branch;
+        this.userId = this.otc.rightId;
         //this.getTellers();
         this.getUserProfiles();
         this.getUserGroups();
         //this.getActiveBranches();
         this.getActiveCountries();
-        this.otc = JSON.parse(localStorage.getItem('otc'));
         this.rightId = this.otc.rightId;
         console.log('right id', this.rightId);
-        this.groupId = this.otc.group;
         this.getUserAssignedRights();
     }
 
@@ -223,7 +232,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
 
     getUserProfiles() {
         this.blockUI.start('Loading data...');
-        this.apiService.getUserProfiles().subscribe(data => {
+        this.apiService.getUserProfilesByBranchExcludingCurrentUser(this.branch, this.groupId, this.userId).subscribe(data => {
             this.blockUI.stop();
             this.response = data;
             this.userProfiles = this.response.collection;

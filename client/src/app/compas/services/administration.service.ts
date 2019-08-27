@@ -14,6 +14,10 @@ export class AdministrationService {
     return this.http.get(`${this.API_URL.url}/allUsers`);
   }
 
+  getUserProfilesByBranchExcludingCurrentUser(branchCode, groupId, userId){
+    return this.http.get(`${this.API_URL.url}/allUsersByBranchExcludingCurrentUser?branchCode=${branchCode}&groupid=${groupId}&userId=${userId}`);
+  }
+
   getUserGroupsAndRights() {
     return this.http.get(`${this.API_URL.url}/usergroups/gtUserGroups`);
   }
