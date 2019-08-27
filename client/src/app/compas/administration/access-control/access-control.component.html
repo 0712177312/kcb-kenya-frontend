@@ -93,12 +93,12 @@
                           </td>
                           <td style="padding: 1px;">
                             <label>
-                              <input type="checkbox" [disabled]="false" [(ngModel)]="right.allowAdd" [ngModelOptions]="{standalone: true}">
+                              <input type="checkbox" [disabled]="false" [(ngModel)]="right.allowAdd" (click)="enableAllowView(right)" [ngModelOptions]="{standalone: true}">
                             </label>
                           </td>
                           <td style="padding: 1px;">
                             <label>
-                              <input type="checkbox" [disabled]="false" [(ngModel)]="right.allowEdit" [ngModelOptions]="{standalone: true}">
+                              <input type="checkbox" [disabled]="false" [(ngModel)]="right.allowEdit" (click)="enableAllowView2(right)" [ngModelOptions]="{standalone: true}">
                             </label>
                           </td>
                           <!-- <td style="padding: 1px;">
