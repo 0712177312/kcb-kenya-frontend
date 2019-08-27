@@ -184,6 +184,18 @@ export class AccessControlComponent implements OnInit, OnDestroy {
         }
     }
 
+    enableAllowView(right){
+        if(!right.allowAdd){
+            right.allowView = true;
+        }
+    }
+
+    enableAllowView2(right){
+        if(!right.allowEdit){
+            right.allowView = true;
+        }
+    }
+
     ngOnDestroy() {
         //
         this.userGroups = [];
