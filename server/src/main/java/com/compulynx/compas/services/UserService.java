@@ -25,6 +25,10 @@ public class UserService {
 		return userRepo.findAll();
 	}
 
+	public List<User> getAllUsersByBranchExcludingCurrentUser(String branchCode, Long userId) {
+		return userRepo.getAllUsersByBranchExcludingCurrentUser(branchCode, userId);
+	}
+
 	public User findByUsername(String username) {
 		// TODO Auto-generated method stub
 		return userRepo.findByUsername(username);

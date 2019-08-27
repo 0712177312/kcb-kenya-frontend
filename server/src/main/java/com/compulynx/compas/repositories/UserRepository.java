@@ -64,4 +64,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query(nativeQuery = true, value = "UPDATE USERMASTER set status='0' WHERE username=?1")
 	int updateStatusToFalse(String username);
 
+	@Query("select u from User u where u.branch=:branchCode and id<>:userId")
+	List<User> getAllUsersByBranchExcludingCurrentUser(String branchCode, Long userId);
+
 }

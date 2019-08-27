@@ -2,6 +2,8 @@ package com.compulynx.compas.controllers;
 
 import java.util.List;
 
+import com.compulynx.compas.models.UserGroup;
+import com.compulynx.compas.services.UserGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,9 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private UserGroupService userGroupService;
 	
 	@GetMapping("/allUsers")
 	public ResponseEntity<?> getUsers() throws Exception {
@@ -39,6 +44,32 @@ public class UserController {
 		}
 		
 		    return new ResponseEntity<>(new UserResponse(users,"users found",true,"000",Api.API_VERSION), HttpStatus.OK);
+		} catch (Exception e) {
+			GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
+			e.printStackTrace();
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}
+	}
+
+	@GetMapping("/allUsersByBranchExcludingCurrentUser")
+	public ResponseEntity<?> getAllUsersByBranchExcludingCurrentUser(
+			@RequestParam(value = "branchCode") String branchCode,
+			@RequestParam(value = "groupid") String groupId,
+			@RequestParam(value = "userId") Long userId) throws Exception {
+		try {
+			List<User> users;
+			UserGroup userGroup = userGroupService.getRightCode(Long.valueOf(groupId));
+			// the system administrators to be able to view all the users
+			if (userGroup.getGroupCode().equalsIgnoreCase("G001")
+					|| userGroup.getGroupCode().equalsIgnoreCase("G002")) {
+				users =  userService.getUsers();
+			}else {
+				users = userService.getAllUsersByBranchExcludingCurrentUser(branchCode, userId);
+			}
+			if(users.isEmpty()) {
+				return new ResponseEntity<>(new UserResponse(users,"no users found",false,"000",Api.API_VERSION), HttpStatus.OK);
+			}
+			return new ResponseEntity<>(new UserResponse(users,"users found",true,"000",Api.API_VERSION), HttpStatus.OK);
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 			e.printStackTrace();
