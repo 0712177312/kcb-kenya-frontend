@@ -122,18 +122,6 @@ public class TellerController {
 			log.info("teller details updated succesfull for " + teller.getCustomerId());
 			if (cust != null || tellerUndeleted > 0) {
 
-				try {
-					String t24Url = env.getProperty("tserver") + teller.getCustomerId() + "/true";
-					String customerId = teller.getCustomerId();
-					log.info("update url for " + t24Url);
-
-					String response = HttpRestProccesor.postJson(t24Url, customerId);
-
-					log.info("T24 response response " + response);
-				} catch (Exception e) {
-					log.error("upTellerDetails", e);
-				}
-
 				return new ResponseEntity(new GlobalResponse("000", "customer found", true, "1.0.0"), HttpStatus.OK);
 			}
 			return new ResponseEntity(new GlobalResponse("1.0.0", "201", false, "no customers found"), HttpStatus.OK);
@@ -257,6 +245,18 @@ public class TellerController {
 			int cust = tellerService.approveTeller(teller.getVerifiedBy(), teller.getCustomerId());
 
 			if (cust > 0) {
+                try {
+                    String t24Url = env.getProperty("tserver") + teller.getCustomerId() + "/true";
+                    String customerId = teller.getCustomerId();
+                    log.info("update url for " + t24Url);
+
+                    String response = HttpRestProccesor.postJson(t24Url, customerId);
+
+                    log.info("T24 response response " + response);
+                } catch (Exception e) {
+                    log.error("upTellerDetails", e);
+                }
+
 				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true,
 						"teller  " + teller.getCustomerId() + " verified successfully"), HttpStatus.OK);
 
