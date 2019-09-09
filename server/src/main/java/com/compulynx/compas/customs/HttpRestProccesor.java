@@ -2,7 +2,9 @@ package com.compulynx.compas.customs;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.security.KeyManagementException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
@@ -33,7 +35,16 @@ public class HttpRestProccesor
       disableSslVerification();
       
       URL myurl = new URL(httpsURL);
-      HttpsURLConnection con = (HttpsURLConnection)myurl.openConnection();
+      URLConnection urlConnection = myurl.openConnection();
+      HttpURLConnection con = null;
+      if(urlConnection instanceof  HttpsURLConnection) {
+          con = (HttpsURLConnection) urlConnection;
+      }else if(urlConnection instanceof HttpURLConnection){
+          con = (HttpURLConnection) urlConnection;
+      }else{
+          log.error("urlConnection is not instance of either HttpsURLConnection or HttpURLConnection");
+          return "failed";
+      }
       con.setRequestMethod("GET");
       con.setDoOutput(true);
       con.setDoInput(true);
