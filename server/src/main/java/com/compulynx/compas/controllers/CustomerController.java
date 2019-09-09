@@ -186,23 +186,28 @@ public class CustomerController {
 
 	@PostMapping(value = "/approveCustomer")
 	public ResponseEntity<?> approveCustomer(@RequestBody Customer customer) {
+        try {
+            String t24Url = env.getProperty("tserver") + customer.getCustomerId() + "/true";
+            String customerId = customer.getCustomerId();
+            log.info("update url for " + t24Url);
+
+            String response = HttpRestProccesor.postJson(t24Url, customerId);
+
+            log.info("T24 response response " + response);
+            if(response.equals("failed")){
+                return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "HpptRestProcessor Failed", false, "no customers found"),
+                        HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            log.error("Error in proccesing ", e);
+            return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "HpptRestProcessor Exception", false, "no customers found"),
+                    HttpStatus.OK);
+        }
+
 		try {
 			int cust = customerService.approveCustomer(customer.getCreatedBy(), customer.getCustomerId());
 
 			if (cust > 0) {
-                try {
-
-                    String t24Url = env.getProperty("tserver") + customer.getCustomerId() + "/true";
-                    String customerId = customer.getCustomerId();
-                    log.info("update url for " + t24Url);
-
-                    String response = HttpRestProccesor.postJson(t24Url, customerId);
-
-                    log.info("T24 response response " + response);
-                } catch (Exception e) {
-                    log.error("Error in proccesing ", e);
-                }
-
 				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true,
 						"customer  " + customer.getCustomerId() + " verified successfully"), HttpStatus.OK);
 

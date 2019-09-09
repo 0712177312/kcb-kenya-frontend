@@ -514,8 +514,16 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
 
         return this.toastr.success('Profile details upddated successfuly.', ' Success!');
       } else {
-        this.log(this.rightId, 'attempted to approve the enrollment of customer with customerId ' + this.customer.customerId);
-        return this.toastr.warning('There was problem updating profile details .', 'Warning!');
+        if(this.response.respMessage === 'HpptRestProcessor Failed'){
+          this.log(this.rightId, 'attempted to approve the enrollment of customer with customerId ' + this.customer.customerId + ' .HpptRestProcessor Failed');
+          return this.toastr.warning('Error while connecting to t24 endpoing', 'Warning!');
+        }else if(this.response.respMessage === 'HpptRestProcessor Exception'){
+          this.log(this.rightId, 'attempted to approve the enrollment of customer with customerId ' + this.customer.customerId + ' .HpptRestProcessor Exception');
+          return this.toastr.warning('Exception while connecting to t24 endpoing', 'Warning!');
+        }else{
+          this.log(this.rightId, 'attempted to approve the enrollment of customer with customerId ' + this.customer.customerId);
+          return this.toastr.warning('There was problem approving customer details .', 'Warning!');
+        }
       }
     }, error => {
       this.log(this.rightId, 'attempted to approve the enrollment of customer with customerId ' + this.customer.customerId + ' but it failed due to an error');

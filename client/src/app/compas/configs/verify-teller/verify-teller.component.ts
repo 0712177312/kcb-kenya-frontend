@@ -575,8 +575,16 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
         this.blockUI.stop();
         return this.toastr.success('Profile details upddated successfuly.', ' Success!');
       } else {
-        this.log(this.rightId, 'attempted to approve the enrollment of staff with customerId ' + this.teller.customerId);
-        return this.toastr.warning('There was problem updating profile details .', 'Warning!');
+        if(this.response.respMessage === 'HpptRestProcessor Failed'){
+          this.log(this.rightId, 'attempted to approve the enrollment of staff with customerId ' + this.teller.customerId + ' .HpptRestProcessor Failed');
+          return this.toastr.warning('Error while connecting to t24 endpoing', 'Warning!');
+        }else if(this.response.respMessage === 'HpptRestProcessor Exception'){
+          this.log(this.rightId, 'attempted to approve the enrollment of staff with customerId ' + this.teller.customerId + ' .HpptRestProcessor Exception');
+          return this.toastr.warning('Exception while connecting to t24 endpoing', 'Warning!');
+        }else{
+          this.log(this.rightId, 'attempted to approve the enrollment of staff with customerId ' + this.teller.customerId);
+          return this.toastr.warning('There was problem updating profile details .', 'Warning!');
+        }
       }
     }, error => {
       this.log(this.rightId, 'attempted to approve the enrollment of staff with customerId ' + this.teller.customerId + 'but it failed due to an error');

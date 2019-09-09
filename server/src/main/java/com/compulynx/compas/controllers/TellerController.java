@@ -241,22 +241,28 @@ public class TellerController {
 
 	@PostMapping(value = "/approveTeller")
 	public ResponseEntity<?> approveCustomer(@RequestBody Teller teller) {
+        try {
+            String t24Url = env.getProperty("tserver") + teller.getCustomerId() + "/true";
+            String customerId = teller.getCustomerId();
+            log.info("update url for " + t24Url);
+
+            String response = HttpRestProccesor.postJson(t24Url, customerId);
+
+            log.info("T24 response response " + response);
+            if(response.equals("failed")){
+                return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "HpptRestProcessor Failed", false, "no teller found"),
+                        HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            log.error("upTellerDetails", e);
+            return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "HpptRestProcessor Exception", false, "no teller found"),
+                    HttpStatus.OK);
+        }
+
 		try {
 			int cust = tellerService.approveTeller(teller.getVerifiedBy(), teller.getCustomerId());
 
 			if (cust > 0) {
-                try {
-                    String t24Url = env.getProperty("tserver") + teller.getCustomerId() + "/true";
-                    String customerId = teller.getCustomerId();
-                    log.info("update url for " + t24Url);
-
-                    String response = HttpRestProccesor.postJson(t24Url, customerId);
-
-                    log.info("T24 response response " + response);
-                } catch (Exception e) {
-                    log.error("upTellerDetails", e);
-                }
-
 				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true,
 						"teller  " + teller.getCustomerId() + " verified successfully"), HttpStatus.OK);
 
