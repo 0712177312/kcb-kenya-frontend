@@ -458,6 +458,20 @@ public class CustomerController {
 	@PostMapping(value = "/approveRemoveCustomer")
 	public ResponseEntity<?> approveRemoveCustomer(@RequestBody Customer customer) {
 		try {
+			String t24Url = env.getProperty("tserver") + customer.getCustomerId() + "/false";
+			String customerId = customer.getCustomerId();
+
+			String response = HttpRestProccesor.postJson(t24Url, customerId);
+
+			log.info("T24 response: " + response);
+			if(response.equals("failed")){
+				log.error("Accessing the T24 endpoint in approveRemoveCustomer has failed");
+			}
+		} catch (Exception e) {
+			log.error("Exception while accessing the T24 endpoint in approveRemoveCustomer ", e);
+		}
+
+		try {
 			int cust = customerService.approveRemoveCustomer(customer.getCustomerId());
 
 			if (cust > 0) {
