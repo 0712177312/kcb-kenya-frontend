@@ -460,6 +460,7 @@ public class CustomerController {
 		try {
 			String t24Url = env.getProperty("tserver") + customer.getCustomerId() + "/false";
 			String customerId = customer.getCustomerId();
+            log.info("update url for " + t24Url);
 
 			String response = HttpRestProccesor.postJson(t24Url, customerId);
 
