@@ -199,7 +199,7 @@ public class TellerController {
 
 			UserGroup userGroup = userGroupService.getRightCode(Long.valueOf(groupid));
 			List<TellerToApprove> tellers;
-			// Do not filter for sys admins and regional supervisors
+			// Do not filter for sys admins and regional supervisor checkers
 			if (userGroup.getGroupCode().equalsIgnoreCase("G003")
 					|| userGroup.getGroupCode().equalsIgnoreCase("G004")) {
 				tellers = tellerService.getTellersToVerifyAll();

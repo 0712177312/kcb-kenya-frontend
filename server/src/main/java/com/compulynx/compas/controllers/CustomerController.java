@@ -229,7 +229,7 @@ public class CustomerController {
 			System.out.println("Right ID: " + customer.getVerifiedBy());
 			UserGroup userGroup = userGroupService.getRightCode(Long.valueOf(customer.getVerifiedBy()));
 			List<CustomersToApprove> customers = null;
-			// Do not filter for sys admins and regional supervisors
+			// Do not filter for sys admins and regional supervisor checkers
 			if (userGroup.getGroupCode().equalsIgnoreCase("G003")
 					|| userGroup.getGroupCode().equalsIgnoreCase("G004")) {
 				customers = customerService.getCustomersToVerifyAll();

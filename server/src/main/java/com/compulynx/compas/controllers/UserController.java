@@ -59,7 +59,7 @@ public class UserController {
 		try {
 			List<User> users;
 			UserGroup userGroup = userGroupService.getRightCode(Long.valueOf(groupId));
-			// the system administrators to be able to view all the users
+			// Users of groups of Profile Management and User Management to be able to view all the users
 			if (userGroup.getGroupCode().equalsIgnoreCase("G001")
 					|| userGroup.getGroupCode().equalsIgnoreCase("G002")) {
 				users =  userService.getUsers();
