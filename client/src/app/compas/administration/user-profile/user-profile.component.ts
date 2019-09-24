@@ -110,14 +110,15 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
     branch: any;
 
     // map containing what codes a given code can access
-    groupCodesMap = new Map([['G001', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008']]
-        , ['G002', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008']],
-    ['G003', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008']],
+    groupCodesMap = new Map([['G001', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008', 'G009']]
+        , ['G002', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008', 'G009']],
+    ['G003', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008', 'G009']],
     ['G004', ['G005', 'G006', 'G007', 'G008']],
     ['G005', ['G007', 'G008']],
     ['G006', ['G007', 'G008']],
     ['G007', []],
-    ['G008', []]]);
+    ['G008', []],
+    ['G009', ['G005', 'G006', 'G007', 'G008']]]);
 
     // the id of the logged in user. This will be used to filter out the currently logged in user
     // from the list of users in the user profiles page
