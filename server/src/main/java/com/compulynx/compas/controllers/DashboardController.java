@@ -3,11 +3,14 @@ package com.compulynx.compas.controllers;
 import java.util.HashSet;
 import java.util.List;
 
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,7 +33,7 @@ public class DashboardController {
 	
 	@Autowired
 	private BranchRepository branchRepository;
-	
+	Gson gson=new Gson();
 //	@Autowired
 //	private CountryRepository countryRepository;
 //	
@@ -58,8 +61,8 @@ public class DashboardController {
 	    }		
 	}
 	@GetMapping(value ="/dashboard/configs")
-	public ResponseEntity<?> getConfigs() {
-		System.out.println("in dashboard configs");
+	public ResponseEntity<?> getConfigs(@RequestHeader HttpHeaders httpHeaders) {
+		System.out.println("in dashboard configs:: "+httpHeaders.get("Authorization").get(0));
 		try {
 			String authName=env.getProperty("cobankingAuthName");
 			String authPass=env.getProperty("cobankingAuthPass");
@@ -71,6 +74,9 @@ public class DashboardController {
 			String sessionTimeout = env.getProperty("sessionTimeout");
 			String sessionIdle = env.getProperty("sessionIdle");
 			ServerConfig resp = new ServerConfig(t24se,cobanking, abis,greenbit,secugen,authPass, authName, sessionTimeout, sessionIdle);
+
+			System.out.println("authName" + gson.toJson(resp).toString());
+
       		return new ResponseEntity<>(resp, HttpStatus.OK);
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404","Server failure authenticating user",false,GlobalResponse.APIV);
