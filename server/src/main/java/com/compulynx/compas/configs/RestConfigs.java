@@ -16,13 +16,28 @@ public class RestConfigs extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
                                     final FilterChain filterChain) throws ServletException, IOException {
-        response.addHeader("Access-Control-Allow-Origin", "*");
-        response.addHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, PATCH, HEAD, OPTIONS");
-        response.addHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers ,Origin, Accept, X-Requested-With, Content-Type," +
-                " Access-Control-Request-Method, Access-Control-Request-Headers, Authorization, X-Auth-Token");
+
+        response.addHeader("Access-Control-Allow-Methods", "GET, POST");
+        response.addHeader("Access-Control-Max-Age", "3600");
+        response.addHeader("Access-Control-Allow-Headers","Origin, Content-Type, Accept,Access-Control-Allow-Headers, Authorization, X-Requested-With, timeout");
+        // Added HTTP headers for security vulnerability
+        response.addHeader("Access-Control-Allow-Origin","https://bios.*,http://10.*,http://172.*");
+        response.addHeader("X-Frame-Options","");
+        if (request.isSecure()) {
+            response.addHeader("Strict-Transport-Security","max-age=31536000; includeSubDomains");
+        }
+        response.addHeader("X-Content-Type-Options","nosniff");
+        response.addHeader("X-XSS-Protection","1; mode=block");
+        response.addHeader("Cache-Control","no-store");
+        response.addHeader("Pragma"," no-cache");
+        // For HTTP OPTIONS verb/method reply with ACCEPTED status code -- per CORS
+        // handshake
+        if (request.getMethod().equals("OPTIONS")) {
+            response.setStatus(HttpServletResponse.SC_ACCEPTED);
+            return;
+        }
         response.addHeader("Access-Control-Expose-Headers", "*");
         response.addHeader("Access-Control-Allow-Credentials", "true");
-        response.addIntHeader("Access-Control-Max-Age", 10);
         filterChain.doFilter(request, response);
     }
 }
