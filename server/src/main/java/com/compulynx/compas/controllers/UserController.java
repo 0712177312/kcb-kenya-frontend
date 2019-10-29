@@ -3,7 +3,9 @@ package com.compulynx.compas.controllers;
 import java.util.List;
 
 import com.compulynx.compas.models.UserGroup;
+import com.compulynx.compas.security.AESsecure;
 import com.compulynx.compas.services.UserGroupService;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,8 @@ public class UserController {
 
     @Autowired
     private UserGroupService userGroupService;
+
+    Gson gson = new Gson();
 
     @GetMapping("/allUsers")
     public ResponseEntity<?> getUsers() throws Exception {
@@ -140,6 +144,7 @@ public class UserController {
 
     @PostMapping(value = "/sysusers/auth")
     public ResponseEntity<?> authUser(@RequestBody User user) throws Exception {
+        String response = "";
         try {
             User userpro = userService.authUser(user);
             System.out.println(userpro);
@@ -153,17 +158,18 @@ public class UserController {
 //		}
             else if (userpro != null && userpro.isStatus() != false) {
                 System.out.println("email" + user.getEmail());
-                return new ResponseEntity<>(new UserResponse(userpro, "successfully authenticated!",
-                        true, "000", Api.API_VERSION), HttpStatus.OK);
+                response = AESsecure.encrypt(gson.toJson(new UserResponse(userpro, "successfully authenticated!",
+                        true, "000", Api.API_VERSION)));
             } else {
-                return new ResponseEntity<>(new UserResponse("successfully authenticated!",
-                        false, "201", Api.API_VERSION), HttpStatus.OK);
+                response = AESsecure.encrypt(gson.toJson(new UserResponse("successfully authenticated!",
+                        false, "201", Api.API_VERSION)));
             }
         } catch (Exception e) {
             GlobalResponse resp = new GlobalResponse("404", "Server failure authenticating user", false, GlobalResponse.APIV);
             e.printStackTrace();
-            return new ResponseEntity<>(resp, HttpStatus.OK);
+            response = AESsecure.encrypt(gson.toJson(resp));
         }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @SuppressWarnings("unused")

@@ -27,7 +27,7 @@ export class AuthService {
     return this.http.get(`${this.API_URL.url}/dashboard/configs`, { responseType: 'text' });
   }
   login(user) {
-    return this.http.post(`${this.API_URL.url}/sysusers/auth`, user, this.globalService.getTokenHeader());
+    return this.http.post(`${this.API_URL.url}/sysusers/auth`, user, {responseType: 'text', headers: this.globalService.getTokenHeader().headers});
   }
 
   printAuth(user) {

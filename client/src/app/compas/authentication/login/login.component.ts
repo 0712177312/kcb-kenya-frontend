@@ -71,8 +71,8 @@ export class LoginComponent implements OnInit {
     } else {
       this.authService.login(this.user).subscribe(res => {
         // this.blockUI.start('Authenticating user...');
-        this.response = res;
-        console.log(this.response);
+        //decrypt response
+        this.response = JSON.parse(this.globalService.decryptData(res));
         if (this.response.status === false) {
           this.log(0, 'failed to log in ' + this.user.username);
           this.blockUI.stop();
