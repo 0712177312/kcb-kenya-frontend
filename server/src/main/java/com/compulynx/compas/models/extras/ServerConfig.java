@@ -10,9 +10,10 @@ public class ServerConfig {
 	private String authUsr;
 	private String sessionTimeout;
 	private String sessionIdle;
+	private String jwt;
 	
 	public ServerConfig(String t24, String cobanking, String abis, String greenbit, String secugen, String authPs, String authUsr,
-	String sessionTimeout, String sessionIdle) {
+	String sessionTimeout, String sessionIdle, String jwt) {
 		super();
 		this.t24 = t24;
 		this.cobanking = cobanking;
@@ -23,6 +24,7 @@ public class ServerConfig {
 		this.authUsr=authUsr;
 		this.sessionTimeout = sessionTimeout;
 		this.sessionIdle = sessionIdle;
+		this.jwt = jwt;
 	}
 	public String getGreenbit() {
 		return greenbit;
@@ -82,4 +84,7 @@ public class ServerConfig {
 	public void setSessionIdle(String sessionIdle) {
 		this.sessionIdle = sessionIdle;
 	}
+
+	public String getJwt() { return jwt; }
+	public void setJwt(String jwt) { this.jwt = jwt; }
 }

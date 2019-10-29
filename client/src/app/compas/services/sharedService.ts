@@ -25,9 +25,14 @@ export class MySharedService {
     //   });
   }
 
+  getConfigs() {
+    let configs = JSON.parse(localStorage.getItem('bio.glob#$$#'));
+    return configs;
+  }
+
   getTokenHeader() {
     let localheaders = new HttpHeaders({
-      'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTU3MzEzOTM0NH0.xeWe8cTzxagG3XLM_lxUJU1HF6c6AolZdokUtKEk1uYXEtpmDMgrZL3LkqvTgStTIlXpmBqM8piaUt2Y8DJRPQ',
+      'Authorization': this.getConfigs().jwt,
       "Access-Control-Expose-Headers": "Authorization"
     });
     let headers = { headers: localheaders };

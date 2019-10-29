@@ -75,7 +75,8 @@ public class DashboardController {
             String secugen = env.getProperty("secugen");
             String sessionTimeout = env.getProperty("sessionTimeout");
             String sessionIdle = env.getProperty("sessionIdle");
-            ServerConfig resp = new ServerConfig(t24se, cobanking, abis, greenbit, secugen, authPass, authName, sessionTimeout, sessionIdle);
+            String jwt = env.getProperty("jwt");
+            ServerConfig resp = new ServerConfig(t24se, cobanking, abis, greenbit, secugen, authPass, authName, sessionTimeout, sessionIdle, jwt);
             response = AESsecure.encrypt(gson.toJson(resp).toString());
         } catch (Exception e) {
             GlobalResponse resp = new GlobalResponse("404", "Server failure authenticating user", false, GlobalResponse.APIV);
