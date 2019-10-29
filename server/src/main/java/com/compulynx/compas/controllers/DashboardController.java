@@ -3,6 +3,7 @@ package com.compulynx.compas.controllers;
 import java.util.HashSet;
 import java.util.List;
 
+import com.compulynx.compas.security.AESsecure;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -25,84 +26,83 @@ import com.compulynx.compas.repositories.CustomerRepository;
 @RestController
 @RequestMapping(value = Api.REST)
 public class DashboardController {
-	@Autowired
-	private Environment env;
-	
-	@Autowired
-	private CustomerRepository customerRepository;
-	
-	@Autowired
-	private BranchRepository branchRepository;
-	Gson gson=new Gson();
+    @Autowired
+    private Environment env;
+
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
+    private BranchRepository branchRepository;
+    Gson gson = new Gson();
 //	@Autowired
 //	private CountryRepository countryRepository;
 //	
 //	@Autowired
 //	private UserRepository userRepository;
-	
-	@GetMapping("/dashboard/cardinfo")
-	public ResponseEntity<?> cardInfo() {
-			try {
-				int customers = customerRepository.getCustomerCount();
-				int branches = customerRepository.getEnrolledBranchesCount();
-				int waivedBranches = branchRepository.getWaivedBranchesCount();
-				
-				CardInfo cin = new CardInfo();
-				
-				cin.setBraches(branches);
-				cin.setCustomers(customers);
-				cin.setWaivedBranches(waivedBranches);
-				
-				return new ResponseEntity<>(cin, HttpStatus.OK);					
-		     } catch (Exception e) {
-					GlobalResponse resp = new GlobalResponse("404","Server failure authenticating user",false,GlobalResponse.APIV);
-					e.printStackTrace();
-					return new ResponseEntity<>(resp, HttpStatus.OK);
-	    }		
-	}
-	@GetMapping(value ="/dashboard/configs")
-	public ResponseEntity<?> getConfigs(@RequestHeader HttpHeaders httpHeaders) {
-		System.out.println("in dashboard configs:: "+httpHeaders.get("Authorization").get(0));
-		try {
-			String authName=env.getProperty("cobankingAuthName");
-			String authPass=env.getProperty("cobankingAuthPass");
-			String t24se = env.getProperty("tserver");
-			String cobanking = env.getProperty("cobanking");
-			String abis = env.getProperty("abis");
-			String greenbit = env.getProperty("greenbit");
-			String secugen = env.getProperty("secugen");
-			String sessionTimeout = env.getProperty("sessionTimeout");
-			String sessionIdle = env.getProperty("sessionIdle");
-			ServerConfig resp = new ServerConfig(t24se,cobanking, abis,greenbit,secugen,authPass, authName, sessionTimeout, sessionIdle);
 
-			System.out.println("authName" + gson.toJson(resp).toString());
+    @GetMapping("/dashboard/cardinfo")
+    public ResponseEntity<?> cardInfo() {
+        try {
+            int customers = customerRepository.getCustomerCount();
+            int branches = customerRepository.getEnrolledBranchesCount();
+            int waivedBranches = branchRepository.getWaivedBranchesCount();
 
-      		return new ResponseEntity<>(resp, HttpStatus.OK);
-		} catch (Exception e) {
-			GlobalResponse resp = new GlobalResponse("404","Server failure authenticating user",false,GlobalResponse.APIV);
-			e.printStackTrace();
-			return new ResponseEntity<>(resp, HttpStatus.OK);
-}	
-	}
-	
-	@GetMapping("/dashboard/topbranches")
-	public ResponseEntity<?> topBranches() {
-	      try {
-	      	List<TopFiveBranches> customers = customerRepository.getTopFiveBranches();
-	      	if(customers.size() > 0) {
-	      		return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"000",
-	      				true, "customers found",
-	      				new HashSet<>(customers)),HttpStatus.OK);
-	      	}   	
-	  		return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"201",
-	  				false, "no customers found",
-	  				new HashSet<>(customers)),HttpStatus.OK);
-	  	  	} catch (Exception e) {
-	  		    GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
-	  	     	e.printStackTrace();
-	  	    	return new ResponseEntity<>(resp, HttpStatus.OK);
-	  	    }		
-	}
+            CardInfo cin = new CardInfo();
+
+            cin.setBraches(branches);
+            cin.setCustomers(customers);
+            cin.setWaivedBranches(waivedBranches);
+
+            return new ResponseEntity<>(cin, HttpStatus.OK);
+        } catch (Exception e) {
+            GlobalResponse resp = new GlobalResponse("404", "Server failure authenticating user", false, GlobalResponse.APIV);
+            e.printStackTrace();
+            return new ResponseEntity<>(resp, HttpStatus.OK);
+        }
+    }
+
+    @GetMapping(value = "/dashboard/configs")
+    public ResponseEntity<?> getConfigs(@RequestHeader HttpHeaders httpHeaders) {
+        String response = "";
+        try {
+            String authName = env.getProperty("cobankingAuthName");
+            String authPass = env.getProperty("cobankingAuthPass");
+            String t24se = env.getProperty("tserver");
+            String cobanking = env.getProperty("cobanking");
+            String abis = env.getProperty("abis");
+            String greenbit = env.getProperty("greenbit");
+            String secugen = env.getProperty("secugen");
+            String sessionTimeout = env.getProperty("sessionTimeout");
+            String sessionIdle = env.getProperty("sessionIdle");
+            ServerConfig resp = new ServerConfig(t24se, cobanking, abis, greenbit, secugen, authPass, authName, sessionTimeout, sessionIdle);
+            response = AESsecure.encrypt(gson.toJson(resp).toString());
+        } catch (Exception e) {
+            GlobalResponse resp = new GlobalResponse("404", "Server failure authenticating user", false, GlobalResponse.APIV);
+            e.printStackTrace();
+            response = AESsecure.encrypt(gson.toJson(resp).toString());
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/dashboard/topbranches")
+    public ResponseEntity<?> topBranches() {
+        try {
+            List<TopFiveBranches> customers = customerRepository.getTopFiveBranches();
+            if (customers.size() > 0) {
+                return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000",
+                        true, "customers found",
+                        new HashSet<>(customers)), HttpStatus.OK);
+            }
+            return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "201",
+                    false, "no customers found",
+                    new HashSet<>(customers)), HttpStatus.OK);
+        } catch (Exception e) {
+            GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
+            e.printStackTrace();
+            return new ResponseEntity<>(resp, HttpStatus.OK);
+        }
+    }
 //	@GetMapping("/dashboard/stats")
 //	public ResponseEntity<?> starts() {
 //		int year = Calendar.getInstance().get(Calendar.YEAR);

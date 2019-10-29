@@ -251,8 +251,8 @@ export class LoginComponent implements OnInit {
 
   getGlobals() {
     this.authService.getGlobals().subscribe(data => {
-      console.log("Data Configs:: " + data);
-      localStorage.setItem('bio.glob#$$#', JSON.stringify(data));
+      console.log("Data Configs:: " + this.globalService.decryptData(data));
+      localStorage.setItem('bio.glob#$$#', JSON.stringify(this.globalService.decryptData(data)));
     }, error => {
       return this.toastr.error('Error in loading configs.', 'Error!', { timeOut: 1500 });
     });

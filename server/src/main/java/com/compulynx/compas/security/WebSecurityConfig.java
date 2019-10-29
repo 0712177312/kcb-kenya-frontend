@@ -21,7 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeRequests().antMatchers("/", "/ping").permitAll()
+		http.csrf().disable().authorizeRequests().antMatchers("/", "/ping","/rest/v1/dashboard/configs").permitAll()
 				.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 				.antMatchers(HttpMethod.POST, "/login").permitAll().anyRequest().authenticated().and()
 				// We filter the api/login requests

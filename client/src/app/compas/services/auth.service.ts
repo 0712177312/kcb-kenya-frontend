@@ -24,9 +24,7 @@ export class AuthService {
   }
 
   getGlobals() {
-    let httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    httpOptions.headers = httpOptions.headers.append('Token', 'sample');
-    return this.http.get(`${this.API_URL.url}/dashboard/configs`,this.globalService.getTokenHeader());
+    return this.http.get(`${this.API_URL.url}/dashboard/configs`, { responseType: 'text' });
   }
   login(user) {
     return this.http.post(`${this.API_URL.url}/sysusers/auth`, user, this.globalService.getTokenHeader());

@@ -1,5 +1,6 @@
 import { Subject, Observable } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
+import * as CryptoJS from 'crypto-js';
 
 export class MySharedService {
   username: string;
@@ -12,6 +13,8 @@ export class MySharedService {
   timeout: any = 10000;
   userAssignedRights: any;
   // dataChange: Observable<any>;
+
+  encPassword = '@compulynx#54321';
 
   _userActionOccured: Subject<void> = new Subject();
   get userActionOccured(): Observable<void> { return this._userActionOccured.asObservable(); }
@@ -29,6 +32,33 @@ export class MySharedService {
     });
     let headers = { headers: localheaders };
     return headers;
+  }
+
+  encrpytData(data) {
+    console.log('sending: ', data);
+    const akey2 = CryptoJS.enc.Utf8.parse(this.encPassword);
+    const iv2 = CryptoJS.enc.Utf8.parse(this.encPassword);
+    const encData = CryptoJS.AES.encrypt(JSON.stringify(data), akey2, {
+      keySize: 16,
+      iv: iv2,
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.Pkcs7
+    }).toString();
+    data = encData;
+    return data;
+  }
+
+  decryptData(data: string): string {
+    const akey2 = CryptoJS.enc.Utf8.parse(this.encPassword);
+    const iv2 = CryptoJS.enc.Utf8.parse(this.encPassword);
+    const bytes  = CryptoJS.AES.decrypt(data.toString(), akey2, {
+      keySize: 16,
+      iv: iv2,
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.Pkcs7
+    });
+    const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+    return decryptedData;
   }
 
   setUsername(username) {

@@ -15,17 +15,17 @@ public class AESsecure {
 	private static SecretKeySpec secretKey;
 	private static byte[] key;
 
-	public static void setKey(String myKey) {
+	public static void setKey() {
 		try {
-			secretKey = new SecretKeySpec(myKey.getBytes("UTF-8"), "AES");
+			secretKey = new SecretKeySpec("@compulynx#54321".getBytes("UTF-8"), "AES");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static String encrypt(String strToEncrypt, String key) {
+	public static String encrypt(String strToEncrypt) {
 		try {
-			setKey(key);
+			setKey();
 			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
 			cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 			return Base64.getEncoder().encodeToString(cipher.doFinal(strToEncrypt.getBytes("UTF-8")));
@@ -35,9 +35,9 @@ public class AESsecure {
 		return null;
 	}
 
-	public static String decrypt(String strToDecrypt, String key) {
+	public static String decrypt(String strToDecrypt) {
 		try {
-			setKey(key);
+			setKey();
 			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
 			cipher.init(Cipher.DECRYPT_MODE, secretKey);
 			return new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt)));
