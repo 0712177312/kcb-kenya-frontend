@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import 'rxjs/add/operator/catch';
 import { MySharedService } from './sharedService';
 import { Router } from '@angular/router';
@@ -7,20 +7,29 @@ import { Urls } from './url';
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthService {
+
+  requestOptions: any = {};
+
   redirectUrl: string;
   otc: any = {};
   // API_URL = 'rest/v1';
   API_URL = new Urls();
-  headers = { 'Content-Type': 'application/json'};
-  constructor(private http: HttpClient, private sharedService: MySharedService, private router: Router) {
+  constructor(private http: HttpClient, private sharedService: MySharedService, private router: Router
+    , private globalService: MySharedService) {
+
+
 
   }
+
   getGlobals() {
-    return this.http.get(`${this.API_URL.url}/dashboard/configs`);
+    let httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    httpOptions.headers = httpOptions.headers.append('Token', 'sample');
+    return this.http.get(`${this.API_URL.url}/dashboard/configs`,this.globalService.getTokenHeader());
   }
   login(user) {
-    return this.http.post(`${this.API_URL.url}/sysusers/auth`, user);
+    return this.http.post(`${this.API_URL.url}/sysusers/auth`, user, this.globalService.getTokenHeader());
   }
 
   printAuth(user) {
