@@ -38,7 +38,7 @@ export class BioService {
     return this.uris;
   }
   getCustomer(accountNumber) {
-    return this.http.get(`${this.API_URL.url}/customers/${accountNumber}`)
+    return this.http.get(`${this.API_URL.url}/customers/${accountNumber}`, this.globalService.getTokenHeader())
       .catch((err: HttpErrorResponse) => {
         console.error('An error occurred:', err.error);
         return err.error;
@@ -51,15 +51,15 @@ export class BioService {
   }
 
   getCustomers() {
-    return this.http.get(`${this.API_URL.url}/customers`);
+    return this.http.get(`${this.API_URL.url}/customers`, this.globalService.getTokenHeader());
   }
 
   addCustomer(customer) {
-    return this.http.post(`${this.API_URL.url}/upCustomerDetails`, customer);
+    return this.http.post(`${this.API_URL.url}/upCustomerDetails`, customer, this.globalService.getTokenHeader());
   }
 
   upCustomerBio(bios) {
-    return this.http.post(`${this.API_URL.url}/customers/upbio`, bios);
+    return this.http.post(`${this.API_URL.url}/customers/upbio`, bios, this.globalService.getTokenHeader());
   }
 
   afisEnroll(applicant) {
@@ -83,7 +83,7 @@ export class BioService {
   }
 
   appoveCustomer(cust) {
-    return this.http.post(`${this.API_URL.url}/approveCustomer`, cust);
+    return this.http.post(`${this.API_URL.url}/approveCustomer`, cust, this.globalService.getTokenHeader());
   }
 
   getCustomerByAccountNo(customer) {
@@ -103,7 +103,7 @@ export class BioService {
   }
 
   getMatchedCustomers(customers) {
-    return this.http.post(`${this.API_URL.url}/getMatchedCustomers`, customers);
+    return this.http.post(`${this.API_URL.url}/getMatchedCustomers`, customers, this.globalService.getTokenHeader());
   }
 
   getFingerPrintImage(hand) {

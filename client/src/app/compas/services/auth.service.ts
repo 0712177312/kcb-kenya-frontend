@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   printAuth(user) {
-    return this.http.post(`${this.API_URL.url}/sysusers/print/auth`, user);
+    return this.http.post(`${this.API_URL.url}/sysusers/print/auth`, user, this.globalService.getTokenHeader());
   }
 
   logOutUser() {

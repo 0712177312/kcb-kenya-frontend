@@ -17,63 +17,63 @@ export class TellerService {
     return this.ur;
   }
   getTellers() {
-    return this.http.get(`${this.API_URL.url}/tellers/gtTellers`);
+    return this.http.get(`${this.API_URL.url}/tellers/gtTellers`, this.globalService.getTokenHeader());
   }
   getTellerDetail(teller)  {
-     return this.http.get(`${this.API_URL.url}/tellers/gtTeller?tellr=${teller}`);
+     return this.http.get(`${this.API_URL.url}/tellers/gtTeller?tellr=${teller}`, this.globalService.getTokenHeader());
   }
   checkTellerExists(teller) {
-    return this.http.post(`${this.API_URL.url}/tellers/checkTeller`, teller);
+    return this.http.post(`${this.API_URL.url}/tellers/checkTeller`, teller, this.globalService.getTokenHeader());
   }
 
   getTellerDetails(teller) {
     return this.http.post(`${this.getConfigs().cobanking}/userSearch`, teller);
   }
   addTeller(teller) {
-    return  this.http.post(`${this.API_URL.url}/tellers/upTellerDetails`, teller);
+    return  this.http.post(`${this.API_URL.url}/tellers/upTellerDetails`, teller, this.globalService.getTokenHeader());
   }
   approveTeller(teller) {
-    return this.http.post(`${this.API_URL.url}/tellers/approveTeller`, teller);
+    return this.http.post(`${this.API_URL.url}/tellers/approveTeller`, teller, this.globalService.getTokenHeader());
   }
   getTellersToApprove(branchCode,groupid) {
-    return this.http.get(`${this.API_URL.url}/tellers/tellersToApprove?branchCode=${branchCode}&groupid=${groupid}`);
+    return this.http.get(`${this.API_URL.url}/tellers/tellersToApprove?branchCode=${branchCode}&groupid=${groupid}`, this.globalService.getTokenHeader());
   }
   getTllrDetails() {
       return this.http.get(this.CUST_D);
   }
   getBranchTellers(branch) {
-    return this.http.get(`${this.API_URL.url}/tellers/gtBranchTellers?branch=${branch}`);
+    return this.http.get(`${this.API_URL.url}/tellers/gtBranchTellers?branch=${branch}`, this.globalService.getTokenHeader());
   }
   upgradeTellerProfile(cust) {
-    return this.http.post(`${this.API_URL.url}/tellers/upgradeCustomerProfile`, cust);
+    return this.http.post(`${this.API_URL.url}/tellers/upgradeCustomerProfile`, cust, this.globalService.getTokenHeader());
   }
 
   rejectTellerApproval(tellerDetails){
-    return this.http.post(`${this.API_URL.url}/tellers/rejectTellerApproval`, tellerDetails);
+    return this.http.post(`${this.API_URL.url}/tellers/rejectTellerApproval`, tellerDetails, this.globalService.getTokenHeader());
   }
 
   removeTeller(tellerDetails){
-    return this.http.post(`${this.API_URL.url}/tellers/removeTeller`, tellerDetails);
+    return this.http.post(`${this.API_URL.url}/tellers/removeTeller`, tellerDetails, this.globalService.getTokenHeader());
   }
 
   checkStaffApproved(teller) {
-    return this.http.post(`${this.API_URL.url}/tellers/checkStaffApproved`, teller);
+    return this.http.post(`${this.API_URL.url}/tellers/checkStaffApproved`, teller, this.globalService.getTokenHeader());
   }
 
   obtainTellerDetails(teller){
-    return this.http.post(`${this.API_URL.url}/tellers/obtainTellerDetails`, teller);
+    return this.http.post(`${this.API_URL.url}/tellers/obtainTellerDetails`, teller, this.globalService.getTokenHeader());
   }
 
   getTellersToApproveDetach(){
-    return this.http.get(`${this.API_URL.url}/tellers/tellersToApproveDetach`);
+    return this.http.get(`${this.API_URL.url}/tellers/tellersToApproveDetach`, this.globalService.getTokenHeader());
   }
 
   approveRemoveTeller(tellerDetails){
-    return this.http.post(`${this.API_URL.url}/tellers/approveRemoveTeller`, tellerDetails);
+    return this.http.post(`${this.API_URL.url}/tellers/approveRemoveTeller`, tellerDetails, this.globalService.getTokenHeader());
   }
 
   
   rejectRemoveTeller(tellerDetails){
-    return this.http.post(`${this.API_URL.url}/tellers/rejectRemoveTeller`, tellerDetails);
+    return this.http.post(`${this.API_URL.url}/tellers/rejectRemoveTeller`, tellerDetails, this.globalService.getTokenHeader());
   }
 }
