@@ -152,8 +152,8 @@ public class UserController {
             User userpro = userService.authUser(user);
             System.out.println(userpro);
             if (userpro == null) {
-                return new ResponseEntity<>(new UserResponse("invalid or unknown user credentials, kindly verify to continue",
-                        false, "201", Api.API_VERSION), HttpStatus.OK);
+                response = AESsecure.encrypt(gson.toJson(new UserResponse("invalid or unknown user credentials, kindly verify to continue",
+                        false, "201", Api.API_VERSION)));
             }
 //		else if(!userpro.getApproved().equalsIgnoreCase("V") || userpro.isStatus() == false  ) {
 //			return new ResponseEntity<>(new UserResponse("user specified is neither verified or active, kindly ensure  you verified and actived ",
