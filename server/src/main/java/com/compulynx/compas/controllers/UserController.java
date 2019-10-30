@@ -73,8 +73,9 @@ public class UserController {
             }
             if (users.isEmpty()) {
                 response = AESsecure.encrypt(gson.toJson(new UserResponse(users, "no users found", false, "000", Api.API_VERSION)));
+            } else {
+                response = AESsecure.encrypt(gson.toJson(new UserResponse(users, "users found", true, "000", Api.API_VERSION)));
             }
-            response = AESsecure.encrypt(gson.toJson(new UserResponse(users, "users found", true, "000", Api.API_VERSION)));
         } catch (Exception e) {
             GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
             e.printStackTrace();
