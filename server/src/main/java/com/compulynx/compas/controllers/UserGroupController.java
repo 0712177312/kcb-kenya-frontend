@@ -30,11 +30,11 @@ public class UserGroupController {
 		List<UserGroup> userGroups =userGroupService.userGroups();
 		
 		if(userGroups.isEmpty()) {
-			return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"404", 
+			return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"404",
 					false, "cannot find usergroups",
 					new HashSet<>(userGroups)),HttpStatus.NOT_FOUND );
 		}
-		
+
 		return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV,"000", true, "usergroups",
 				new HashSet<>(userGroups)),HttpStatus.OK);
 		} catch (Exception e) {

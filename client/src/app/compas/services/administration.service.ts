@@ -16,7 +16,7 @@ export class AdministrationService {
   }
 
   getUserProfilesByBranchExcludingCurrentUser(branchCode, groupId, userId){
-    return this.http.get(`${this.API_URL.url}/allUsersByBranchExcludingCurrentUser?branchCode=${branchCode}&groupid=${groupId}&userId=${userId}`, this.globalService.getTokenHeader());
+    return this.http.get(`${this.API_URL.url}/allUsersByBranchExcludingCurrentUser?branchCode=${branchCode}&groupid=${groupId}&userId=${userId}`, {responseType: 'text', headers: this.globalService.getTokenHeader().headers});
   }
 
   getUserGroupsAndRights() {
@@ -40,7 +40,7 @@ export class AdministrationService {
   }
 
   addUserProfile(userProfile) {
-    return this.http.post(`${this.API_URL.url}/upUser`, userProfile, this.globalService.getTokenHeader());
+    return this.http.post(`${this.API_URL.url}/upUser`, userProfile, {responseType: 'text', headers: this.globalService.getTokenHeader().headers});
   }
 
   getUserGroupsByUserType(userTypeId) {
@@ -73,7 +73,7 @@ export class AdministrationService {
   }
 
   editUserProfile(userProfile){
-    return this.http.post(`${this.API_URL.url}/editUserProfile`, userProfile, this.globalService.getTokenHeader());
+    return this.http.post(`${this.API_URL.url}/editUserProfile`, userProfile, {responseType: 'text', headers: this.globalService.getTokenHeader().headers});
   }
 
 }

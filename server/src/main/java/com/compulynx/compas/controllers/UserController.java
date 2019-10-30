@@ -60,6 +60,7 @@ public class UserController {
             @RequestParam(value = "branchCode") String branchCode,
             @RequestParam(value = "groupid") String groupId,
             @RequestParam(value = "userId") Long userId) throws Exception {
+        String response = "";
         try {
             List<User> users;
             UserGroup userGroup = userGroupService.getRightCode(Long.valueOf(groupId));
@@ -71,14 +72,15 @@ public class UserController {
                 users = userService.getAllUsersByBranchExcludingCurrentUser(branchCode, userId);
             }
             if (users.isEmpty()) {
-                return new ResponseEntity<>(new UserResponse(users, "no users found", false, "000", Api.API_VERSION), HttpStatus.OK);
+                response = AESsecure.encrypt(gson.toJson(new UserResponse(users, "no users found", false, "000", Api.API_VERSION)));
             }
-            return new ResponseEntity<>(new UserResponse(users, "users found", true, "000", Api.API_VERSION), HttpStatus.OK);
+            response = AESsecure.encrypt(gson.toJson(new UserResponse(users, "users found", true, "000", Api.API_VERSION)));
         } catch (Exception e) {
             GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
             e.printStackTrace();
-            return new ResponseEntity<>(resp, HttpStatus.OK);
+            response = AESsecure.encrypt(gson.toJson(resp));
         }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/editUserProfile")
@@ -89,16 +91,16 @@ public class UserController {
                     user.getBranch() + user.getId());
             int userUpdate = userService.updateUsers(user.getGroup(), user.isStatus(), user.getId());
             if (userUpdate > 0) {
-                return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true, "User updated successfully"),
+                return new ResponseEntity<>(AESsecure.encrypt(gson.toJson(new GlobalResponse(GlobalResponse.APIV, "000", true, "User updated successfully"))),
                         HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "201",
-                        false, "user not updated successfully"), HttpStatus.OK);
+                return new ResponseEntity<>(AESsecure.encrypt(gson.toJson(new GlobalResponse(GlobalResponse.APIV, "201",
+                        false, "user not updated successfully"))), HttpStatus.OK);
             }
         } catch (Exception e) {
             GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
             e.printStackTrace();
-            return new ResponseEntity<>(resp, HttpStatus.OK);
+            return new ResponseEntity<>(AESsecure.encrypt(gson.toJson(resp)), HttpStatus.OK);
         }
     }
 
@@ -110,8 +112,8 @@ public class UserController {
             User username = userService.findByUsername(user.getUsername());
 
             if (username != null && user.getId() == 0) {
-                return new ResponseEntity<>(new UserResponse(user, "user with same username already exist",
-                        false, "201", Api.API_VERSION), HttpStatus.OK);
+                return new ResponseEntity<>(AESsecure.encrypt(gson.toJson(new UserResponse(user, "user with same username already exist",
+                        false, "201", Api.API_VERSION))), HttpStatus.OK);
             }
             System.out.println("username" + user.getPassword());
             if (user.getPassword() != null) {
@@ -123,8 +125,8 @@ public class UserController {
             User usr = userService.addUser(user);
 
             if (usr == null) {
-                return new ResponseEntity<>(new UserResponse(user, "failed to add user",
-                        false, "201", Api.API_VERSION), HttpStatus.OK);
+                return new ResponseEntity<>(AESsecure.encrypt(gson.toJson(new UserResponse(user, "failed to add user",
+                        false, "201", Api.API_VERSION))), HttpStatus.OK);
             }
 //		try {
 ////			SendMail mail = new SendMail();
@@ -133,12 +135,12 @@ public class UserController {
 //			e.printStackTrace();
 //		}
 
-            return new ResponseEntity<>(new UserResponse(user, "user updated successfully",
-                    true, "000", Api.API_VERSION), HttpStatus.OK);
+            return new ResponseEntity<>(AESsecure.encrypt(gson.toJson(new UserResponse(user, "user updated successfully",
+                    true, "000", Api.API_VERSION))), HttpStatus.OK);
         } catch (Exception e) {
             GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
             e.printStackTrace();
-            return new ResponseEntity<>(resp, HttpStatus.OK);
+            return new ResponseEntity<>(AESsecure.encrypt(gson.toJson(resp)), HttpStatus.OK);
         }
     }
 

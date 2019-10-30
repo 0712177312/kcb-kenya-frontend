@@ -48,7 +48,6 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
     captured = ['L0', 'L1', 'L2', 'L3', 'L4', 'R0', 'R1', 'R2', 'R3', 'R4'];
     searchText;
     submited = false;
-    globalService: any;
     matchResp: any;
     customerNo: any;
     element: HTMLImageElement;
@@ -130,7 +129,8 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         private bioService: BioService, private tellerSvc: TellerService, private fb: FormBuilder,
         private modalService: NgbModal,
         private modalService2: NgbModal, private logs: LogsService,
-        @Inject(DOCUMENT) private document: any) {
+        @Inject(DOCUMENT) private document: any, 
+        private globalService: MySharedService) {
         this.source = new LocalDataSource(this.userProfiles); // create the source
     }
     settings = settings;
@@ -235,7 +235,8 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         this.blockUI.start('Loading data...');
         this.apiService.getUserProfilesByBranchExcludingCurrentUser(this.branch, this.groupId, this.userId).subscribe(data => {
             this.blockUI.stop();
-            this.response = data;
+            this.response = JSON.parse(this.globalService.decryptData(data));
+            console.log('response: ', this.response);
             this.userProfiles = this.response.collection;
             this.source = new LocalDataSource(this.userProfiles);
         });
@@ -378,7 +379,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
                     console.log('user profile details ####$$', this.userProfile);
                     this.apiService.addUserProfile(this.userProfile).subscribe(res => {
                         this.blockUI.stop();
-                        this.response = res;
+                        this.response =  JSON.parse(this.globalService.decryptData(res));
                         if (this.response.status === false) {
                             this.toastr.warning(this.response.respMessage, 'Alert!', { timeOut: 1500 });
                         }
@@ -414,7 +415,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
             console.log("userProfile: "+ this.userProfile);
             this.apiService.editUserProfile(this.userProfile).subscribe(res => {
                 this.blockUI.stop();
-                this.response = res;
+                this.response =  JSON.parse(this.globalService.decryptData(res));;
                 if (this.response.status === false) {
                     this.toastr.warning(this.response.respMessage, 'Alert!', { timeOut: 1500 });
                 }
