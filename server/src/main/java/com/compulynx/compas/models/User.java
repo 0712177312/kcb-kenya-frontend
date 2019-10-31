@@ -64,7 +64,9 @@ public class User extends BaseModel {
     @Column(name = "created_at", nullable = false,updatable = false)
     @CreationTimestamp
     private Date createdOn;
-    
+
+    private boolean locked= false;
+    private int trials;
     
 	public User(String email, String firstName, String fullName, String password, String phone, String surName,
 			String username, String otherNames, int group, int createdBy, boolean status, String approved,
@@ -237,7 +239,20 @@ public class User extends BaseModel {
 	public void setCreatedOn(Date createdOn) {
 		this.createdOn = createdOn;
 	}
-	
-	
-	
+
+	public boolean isLocked() {
+		return locked;
+	}
+
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+	}
+
+	public int getTrials() {
+		return trials;
+	}
+
+	public void setTrials(int trials) {
+		this.trials = trials;
+	}
 }

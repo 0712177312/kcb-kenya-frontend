@@ -54,6 +54,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query(nativeQuery = true, value = "UPDATE USERMASTER set verified='N',group_id=?1, status=?2 WHERE id=?3")
 	int updateUsers(int group, boolean status, Long userId);
 
+
+	@Modifying
+	@Transactional
+	@Query(nativeQuery = true, value = "UPDATE USERMASTER set verified='N',group_id=?1, status=?2, locked='0', trials='0' WHERE id=?3")
+	int updateUsersAndUnlock(int group, boolean status, Long userId);
+
 	@Modifying
 	@Transactional
 	@Query(nativeQuery = true, value = "UPDATE USERMASTER set status='1', verified='N' WHERE username=?1")
@@ -66,5 +72,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Query("select u from User u where u.branch=:branchCode and id<>:userId")
 	List<User> getAllUsersByBranchExcludingCurrentUser(String branchCode, Long userId);
+	@Modifying
+	@Transactional
+	@Query(nativeQuery = true, value = "UPDATE USERMASTER set trials=trials+1 WHERE username=?1")
+	int updateUsertrials(String username);
+	@Modifying
+	@Transactional
+	@Query(nativeQuery = true, value = "UPDATE USERMASTER set locked='1' WHERE username=?1")
+	int updateUserlocked(String username);
 
 }

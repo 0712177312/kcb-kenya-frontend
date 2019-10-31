@@ -61,11 +61,23 @@ public class UserService {
 		return userRepo.updateUsers(group, status, userId);
 	}
 
+	public int updateUsersAndUnlock(int group, boolean status, Long userId) {
+		// TODO Auto-generated method stub
+		return userRepo.updateUsersAndUnlock(group, status, userId);
+	}
+
 	public int updateStatusToFalse(String username){
 		return userRepo.updateStatusToFalse(username);
 	}
 
 	public int updateStatusToTrue(String username){
 		return userRepo.updateStatusToTrue(username);
+	}
+
+	public int updateUsertrials(String username) {
+			return userRepo.updateUsertrials(username);
+	}
+	public int updateUserlocked(String username) {
+		return userRepo.updateUserlocked(username);
 	}
 }

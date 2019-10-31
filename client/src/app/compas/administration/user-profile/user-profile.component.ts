@@ -220,6 +220,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
             // password: new FormControl($event.data.password, Validators.required),
             // confirmPassword: new FormControl($event.data.password, Validators.required),
             status: new FormControl($event.data.status, Validators.required),
+            locked: new FormControl($event.data.locked, Validators.required),
             createdBy: new FormControl($event.data.createdBy, Validators.required),
             id: new FormControl($event.data.id, Validators.required),
             approved: new FormControl($event.data.approved, Validators.required)
@@ -306,6 +307,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
             // confirmPassword:
             //     new FormControl('', [Validators.required, Validators.minLength(8)]),
             status: new FormControl(false),
+            locked: new FormControl(false),
             createdBy: new FormControl(this.rightId),
             // bios: new FormControl([]),
             approved: new FormControl('N')

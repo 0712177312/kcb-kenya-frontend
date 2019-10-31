@@ -90,7 +90,13 @@ public class UserController {
             System.out.println(user);
             System.out.println(user.getFullName() + user.getEmail() + user.getPhone() + user.getGroup() +
                     user.getBranch() + user.getId());
-            int userUpdate = userService.updateUsers(user.getGroup(), user.isStatus(), user.getId());
+            int userUpdate = 0;
+            // user checked the button to unlock the particular user
+            if(user.isLocked()){
+                userUpdate = userService.updateUsersAndUnlock(user.getGroup(), user.isStatus(), user.getId());
+            }else {
+                userUpdate = userService.updateUsers(user.getGroup(), user.isStatus(), user.getId());
+            }
             if (userUpdate > 0) {
                 return new ResponseEntity<>(AESsecure.encrypt(gson.toJson(new GlobalResponse(GlobalResponse.APIV, "000", true, "User updated successfully"))),
                         HttpStatus.OK);
@@ -148,31 +154,49 @@ public class UserController {
     @PostMapping(value = "/sysusers/auth")
     public ResponseEntity<?> authUser(@RequestBody User user) throws Exception {
         String response = "";
+        UserResponse userresponse;
+        User userpro=null;
+        User usertrials=null;
         try {
-            User userpro = userService.authUser(user);
+            userpro= userService.authUser(user);
             System.out.println(userpro);
             if (userpro == null) {
-                response = AESsecure.encrypt(gson.toJson(new UserResponse("invalid or unknown user credentials, kindly verify to continue",
-                        false, "201", Api.API_VERSION)));
+                userresponse=new UserResponse("invalid or unknown user credentials, kindly verify to continue",
+                        false, "201", Api.API_VERSION);
+                User currentuser=userService.findByUsername(user.getUsername());
+                if(currentuser!=null) {
+                    userService.updateUsertrials(user.getUsername());
+                    usertrials = userService.findByUsername(user.getUsername());
+                    if (usertrials.getTrials() >= 3) {
+                        userService.updateUserlocked(user.getUsername());
+                        userresponse = new UserResponse("Account has been locked",
+                                false, "201", Api.API_VERSION);
+                    }
+                }
             }
+
 //		else if(!userpro.getApproved().equalsIgnoreCase("V") || userpro.isStatus() == false  ) {
 //			return new ResponseEntity<>(new UserResponse("user specified is neither verified or active, kindly ensure  you verified and actived ",
 //					false,"201",Api.API_VERSION), HttpStatus.OK);
 //		}
+            else if(userpro.isLocked()){
+                userresponse=new UserResponse("Account has been locked.",
+                        false, "201", Api.API_VERSION);
+            }
             else if (userpro != null && userpro.isStatus() != false) {
                 System.out.println("email" + user.getEmail());
-                response = AESsecure.encrypt(gson.toJson(new UserResponse(userpro, "successfully authenticated!",
-                        true, "000", Api.API_VERSION)));
+                userresponse = new UserResponse(userpro, "successfully authenticated!",
+                        true, "000", Api.API_VERSION);
             } else {
-                response = AESsecure.encrypt(gson.toJson(new UserResponse("successfully authenticated!",
-                        false, "201", Api.API_VERSION)));
+                userresponse =new UserResponse("successfully authenticated!",
+                        false, "201", Api.API_VERSION);
             }
         } catch (Exception e) {
-            GlobalResponse resp = new GlobalResponse("404", "Server failure authenticating user", false, GlobalResponse.APIV);
+            userresponse =new UserResponse("An error occurred!",
+                    false, "404", Api.API_VERSION);
             e.printStackTrace();
-            response = AESsecure.encrypt(gson.toJson(resp));
         }
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(AESsecure.encrypt(gson.toJson(userresponse)), HttpStatus.OK);
     }
 
     @SuppressWarnings("unused")
