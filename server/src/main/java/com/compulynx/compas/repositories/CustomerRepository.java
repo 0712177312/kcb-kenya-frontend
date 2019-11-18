@@ -27,7 +27,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	@Query(nativeQuery = true, value = "SELECT ROWNUM AS COUNTER,CUSTOMERID, "
 			+ "CU.CUSTOMERNAME,CUSTOMERIDNUMBER,CU.PHONENUMBER,CU.COUNTRY,TO_CHAR(CU.CREATED_AT,'dd-mm-rrrr') AS ENROLLEDON,UM.FULLNAME AS CREATEDBY, UM.ID AS USERSID "
 			+ "from CUSTOMER CU "
-			+ "INNER JOIN USERMASTER UM ON UM.ID = CU.CREATED_BY AND CU.VERIFIED = 'N' AND CU.BRANCH_CODE=?1")
+			+ "INNER JOIN USERMASTER UM ON UM.ID = CU.CREATED_BY AND CU.VERIFIED = 'N' AND UM.BRANCH=?1")
 	List<CustomersToApprove> getCustomersToApprove(String branchCode);
 
 	// Get All customers to approve(Admin user access all branches)
