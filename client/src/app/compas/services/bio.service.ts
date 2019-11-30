@@ -63,23 +63,23 @@ export class BioService {
   }
 
   afisEnroll(applicant) {
-    return this.http.post(`${this.getConfigs().abis}/Enroll`, applicant);
+    return this.http.post(`${this.getConfigs().abis}/Enroll`, applicant, this.globalService.getTokenHeader());
   }
 
   afisVerify(applicant) {
-    return this.http.post(`${this.getConfigs().abis}/verifyMultiple`, applicant);
+    return this.http.post(`${this.getConfigs().abis}/verifyMultiple`, applicant, this.globalService.getTokenHeader());
   }
 
   afisVer(applicant) {
-    return this.http.post(`${this.getConfigs().abis}/verify`, applicant);
+    return this.http.post(`${this.getConfigs().abis}/verify`, applicant, this.globalService.getTokenHeader());
   }
 
   afisIdentify(applicant) {
-    return this.http.post(`${this.getConfigs().abis}/identify`, applicant);
+    return this.http.post(`${this.getConfigs().abis}/identify`, applicant, this.globalService.getTokenHeader());
   }
 
   afisRemove(applicant){
-    return this.http.post(`${this.getConfigs().abis}/delete`, applicant);
+    return this.http.post(`${this.getConfigs().abis}/delete`, applicant, this.globalService.getTokenHeader());
   }
 
   appoveCustomer(cust) {
