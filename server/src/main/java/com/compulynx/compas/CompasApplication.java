@@ -5,6 +5,7 @@ import java.util.Properties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.rest.RepositoryRestMvcAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebAutoConfiguration;
 import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -16,7 +17,7 @@ import com.compulynx.compas.configs.ResourceConfig;
 
 @SpringBootApplication(exclude = SpringDataWebAutoConfiguration.class)
 @EnableJpaRepositories
-@EnableAutoConfiguration(exclude = FlywayAutoConfiguration.class)
+@EnableAutoConfiguration(exclude = {FlywayAutoConfiguration.class, RepositoryRestMvcAutoConfiguration.class})
 @EnableAspectJAutoProxy(proxyTargetClass=true)
 public class CompasApplication extends SpringBootServletInitializer {
 	
