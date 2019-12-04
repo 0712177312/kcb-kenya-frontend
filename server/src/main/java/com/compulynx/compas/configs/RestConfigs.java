@@ -19,7 +19,7 @@ public class RestConfigs extends OncePerRequestFilter {
 
         response.addHeader("Access-Control-Allow-Methods", "GET, POST");
         response.addHeader("Access-Control-Max-Age", "3600");
-        response.addHeader("Access-Control-Allow-Headers","Origin, Content-Type, Accept,Access-Control-Allow-Headers, Authorization, X-Requested-With, timeout");
+        response.addHeader("Access-Control-Allow-Headers","Origin, Content-Type, Accept, Authorization, X-Requested-With, timeout, Access-Control-Expose-Headers");
         // Added HTTP headers for security vulnerability
         response.addHeader("Access-Control-Allow-Origin","https://bios.*,http://10.*,http://172.*");
         response.addHeader("X-Frame-Options","");
