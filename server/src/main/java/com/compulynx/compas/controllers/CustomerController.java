@@ -208,6 +208,14 @@ public class CustomerController {
 			int cust = customerService.approveCustomer(customer.getCreatedBy(), customer.getCustomerId());
 
 			if (cust > 0) {
+				// send sms after approving customer
+				String smsUrl = "";
+				String phoneNumber = customer.getPhoneNumber();
+				String smsApiUsername = "";
+				String smsApiPassword = "";
+				String getResponse = HttpRestProccesor.sendGetRequest(smsUrl, "sms", phoneNumber, smsApiUsername, smsApiPassword);
+				log.info("SMS Get Request Response for the following phoneNumber: " + phoneNumber + " is "+  getResponse);
+
 				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true,
 						"customer  " + customer.getCustomerId() + " verified successfully"), HttpStatus.OK);
 
