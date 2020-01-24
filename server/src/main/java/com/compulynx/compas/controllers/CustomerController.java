@@ -209,10 +209,10 @@ public class CustomerController {
 
 			if (cust > 0) {
 				// send sms after approving customer
-				String smsUrl = "";
+				String smsUrl = env.getProperty("smsUrl");
 				String phoneNumber = customer.getPhoneNumber();
-				String smsApiUsername = "";
-				String smsApiPassword = "";
+				String smsApiUsername = env.getProperty("smsApiUsername");
+				String smsApiPassword = env.getProperty("smsApiPassword");
 				String getResponse = HttpRestProccesor.sendGetRequest(smsUrl, "sms", phoneNumber, smsApiUsername, smsApiPassword);
 				log.info("SMS Get Request Response for the following phoneNumber: " + phoneNumber + " is "+  getResponse);
 
