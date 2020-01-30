@@ -119,9 +119,15 @@ public class HttpRestProccesor {
         Map<String, String> parameters = new HashMap<>();
 
         if (tag.equals("sms")) {
-            parameters.put("phoneNumber", params[0]);
-            parameters.put("smsApiUsername", params[1]);
-            parameters.put("smsApiPassword", params[2]);
+            String customerName = params[0];
+            String recipient = convertPhoneToFormatThatSmsGatewayRecognizes(params[1]);
+            parameters.put("action", "sendmessage");
+            parameters.put("username", params[2]);
+            parameters.put("password", params[3]);
+            parameters.put("recipient", recipient);
+            parameters.put("messagetype", "SMS");
+            parameters.put("messagedata", "Dear " + customerName + ", your biometric details have been successfully registered. For any queries please call 0711087000 or 0732187000.");
+
         } else {
             for (int i = 0; i < params.length; i++) {
                 parameters.put("param" + i, params[i]);
@@ -150,6 +156,22 @@ public class HttpRestProccesor {
         in.close();
         con.disconnect();
         return content.toString();
+    }
+
+    /*
+     * The sms gateway recongnizes phones of the form 245XXXXXXXXX
+     */
+    private static String convertPhoneToFormatThatSmsGatewayRecognizes(String phoneNumber) {
+        // if number begins with +, then remove the +
+        if (phoneNumber.startsWith("+")) {
+            return phoneNumber.substring(1);
+        } else if (phoneNumber.startsWith("0")) {
+            // if number begins with 0, then replace the 0 with 254
+            phoneNumber = phoneNumber.substring(1);
+            return "254" + phoneNumber;
+        }else{
+            return phoneNumber;
+        }
     }
 
     public static class ParameterStringBuilder {
