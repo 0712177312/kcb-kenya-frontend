@@ -499,7 +499,9 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
     const cust = {
       'customerId': this.customer.customerId,
       'verifiedBy': this.rightId,
-      'verifiedOn': new Date()
+      'verifiedOn': new Date(),
+      'customerName': this.customer.customerName,
+      'phoneNumber': this.customer.phoneNumber
     };
     // console.log('timestamp', new Date());
     this.apiService.appoveCustomer(cust).subscribe((response) => {
