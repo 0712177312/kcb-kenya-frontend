@@ -162,6 +162,9 @@ public class HttpRestProccesor {
      * The sms gateway recongnizes phones of the form 245XXXXXXXXX
      */
     private static String convertPhoneToFormatThatSmsGatewayRecognizes(String phoneNumber) {
+        if(phoneNumber == null){
+            return "";
+        }
         // if number begins with +, then remove the +
         if (phoneNumber.startsWith("+")) {
             return phoneNumber.substring(1);
