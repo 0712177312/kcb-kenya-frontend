@@ -208,7 +208,7 @@ public class CustomerController {
 			int cust = customerService.approveCustomer(customer.getCreatedBy(), customer.getCustomerId());
 
 			if (cust > 0) {
-				// send sms after approving customer
+				// send sms after approving customer using REST
 				String smsUrl = env.getProperty("smsUrl");
                 String customerName = customer.getCustomerName();
                 String phoneNumber = customer.getPhoneNumber();
