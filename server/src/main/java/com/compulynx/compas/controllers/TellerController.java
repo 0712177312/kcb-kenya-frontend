@@ -266,11 +266,15 @@ public class TellerController {
 			if (cust > 0) {
 				//send email after approving the staff
 				String recipient = teller.getTellerEmail();
-				String subject = "Biometric Details of Staff Captured";
-				String emailContent = "Dear " + teller.getTellerName() + ", your biometric details have been successfully registered. For any queries please call 0711087000 or 0732187000.";
-				EmailSender emailSender = new EmailSender();
-				emailSender.sendEmail(recipient, subject, emailContent);
-				log.info("Email to staff scheduled to be sent to " + teller.getTellerName());
+				if(recipient == null){
+					log.info("Email for " + teller.getTellerName() + " is null");
+				}else {
+					String subject = "Biometric Details of Staff Captured";
+					String emailContent = "Dear " + teller.getTellerName() + ", your biometric details have been successfully registered. For any queries please call 0711087000 or 0732187000.";
+					EmailSender emailSender = new EmailSender();
+					emailSender.sendEmail(recipient, subject, emailContent);
+					log.info("Email to staff scheduled to be sent to " + teller.getTellerName());
+				}
 
 				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true,
 						"teller  " + teller.getCustomerId() + " verified successfully"), HttpStatus.OK);
