@@ -211,8 +211,13 @@ public class CustomerController {
 			if (cust > 0) {
 				// send email after approving the customer
 				String recipient = customer.getEmail();
-				if(recipient == null){
+				if(recipient == null) {
 					log.info("Email for " + customer.getCustomerName() + " is null");
+				}else if(!recipient.contains("@")){
+					// if the email does not contain the "@" sign, then it is likely that
+					// the t24 endpoint returned a string of "email not available" or similar
+					// denoting that the customer does not have an email address
+					log.info("Email for " + customer.getCustomerName() + " is not available");
 				}else {
 					String subject = "Biometric Details of Customer Captured";
 					String emailContent = "Dear " + customer.getCustomerName() + ", your biometric details have been successfully registered. For any queries please call 0711087000 or 0732187000.";
