@@ -9,7 +9,8 @@
         "nationality": "KE",
         "gender": "MALE",
         "mnemonic": "ID25836061",
-        "accountOfficer": "4001"
+        "accountOfficer": "4001",
+        "email": "test@email.com"
     },
     "requestStatus": true
 }
