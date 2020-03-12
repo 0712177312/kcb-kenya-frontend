@@ -628,7 +628,8 @@ export class CustomersComponent implements OnInit, OnDestroy {
       enrollStatus: 'N',
       waivedBy: 0,
       waivedApprovedBy: 0,
-      verifiedBy: 0
+      verifiedBy: 0,
+      email: new FormControl(this.custInquiry.payload.email)
     });
     this.missingFp = this.fb.group({
       missingFingers: new FormControl()
@@ -692,6 +693,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
       customerIdNumber: new FormControl($event.data.idNumber, [Validators.required,
       Validators.minLength(1), Validators.maxLength(15)]),
       phoneNumber: new FormControl($event.data.phoneNumber, [Validators.required]),
+      email: new FormControl($event.data.email, [Validators.required]),
       country: new FormControl($event.data.country),
       nationality: new FormControl($event.data.nationality),
       mnemonic: new FormControl($event.data.mnemonic, [Validators.required]),
@@ -1199,6 +1201,10 @@ export let settings = {
     },
     phoneNumber: {
       title: 'Phone Number',
+      filter: true
+    },
+    email: {
+      title: 'Email',
       filter: true
     },
     gender: {

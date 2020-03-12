@@ -1,12 +1,10 @@
 package com.compulynx.compas.models;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.*;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedBy;
 
 /**
  * @author Mutwol
@@ -21,7 +19,7 @@ public class Customer extends BaseModel {
 	private String customerId;
 	private String mnemonic;
 	private String phoneNumber;
-	private String customerEmail;
+	private String email;
 	private String gender;
 	private String country;
 	private String nationality;
@@ -81,7 +79,7 @@ public class Customer extends BaseModel {
 	}
 	
 	public Customer(String customerName, String customerIdNumber, String customerId, String mnemonic,
-			String phoneNumber, String customerEmail, String gender, String country, String nationality, String customerType, int branchId,
+			String phoneNumber, String email, String gender, String country, String nationality, String customerType, int branchId,
 			boolean active, int createdBy, String verified, int verifiedBy, Date verifiedOn,
 			Date createdOn,String branchCode, String waived, int waivedBy, Date waivedOn,
 			int waivedApprovedBy,Date approveWaiveOn, int deletedBy, Date deletedOn, int rejectedBy,
@@ -92,7 +90,7 @@ public class Customer extends BaseModel {
 		this.customerId = customerId;
 		this.mnemonic = mnemonic;
 		this.phoneNumber = phoneNumber;
-		this.customerEmail = customerEmail;
+		this.email = email;
 		this.gender = gender;
 		this.country = country;
 		this.nationality = nationality;
@@ -220,12 +218,12 @@ public class Customer extends BaseModel {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public String getCustomerEmail() {
-		return customerEmail;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setCustomerEmail(String customerEmail) {
-		this.customerEmail = customerEmail;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getGender() {
