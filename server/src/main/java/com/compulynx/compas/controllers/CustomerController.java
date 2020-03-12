@@ -211,11 +211,11 @@ public class CustomerController {
 			if (cust > 0) {
 				// send email after approving the customer
 				String recipient = customer.getEmail();
-				String subject = "Biometric Details Captured";
+				String subject = "Biometric Details of Customer Captured";
 				String emailContent = "Dear " + customer.getCustomerName() + ", your biometric details have been successfully registered. For any queries please call 0711087000 or 0732187000.";
 				EmailSender emailSender = new EmailSender();
 				emailSender.sendEmail(recipient, subject, emailContent);
-				log.info("Email scheduled to be sent to " + customer.getCustomerName());
+				log.info("Email to customer scheduled to be sent to " + customer.getCustomerName());
 
 				// send sms after approving customer using REST
 				String smsUrl = env.getProperty("smsUrl");

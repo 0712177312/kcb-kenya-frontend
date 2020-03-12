@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
+import com.compulynx.compas.mail.EmailSender;
 import com.compulynx.compas.models.extras.TellersToApproveDetach;
 import com.compulynx.compas.services.UserService;
 import org.slf4j.Logger;
@@ -263,6 +264,14 @@ public class TellerController {
 			int cust = tellerService.approveTeller(teller.getVerifiedBy(), teller.getCustomerId());
 
 			if (cust > 0) {
+				//send email after approving the staff
+				String recipient = teller.getTellerEmail();
+				String subject = "Biometric Details of Staff Captured";
+				String emailContent = "Dear " + teller.getTellerName() + ", your biometric details have been successfully registered. For any queries please call 0711087000 or 0732187000.";
+				EmailSender emailSender = new EmailSender();
+				emailSender.sendEmail(recipient, subject, emailContent);
+				log.info("Email to staff scheduled to be sent to " + teller.getTellerName());
+
 				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true,
 						"teller  " + teller.getCustomerId() + " verified successfully"), HttpStatus.OK);
 
