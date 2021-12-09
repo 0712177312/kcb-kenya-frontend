@@ -2,6 +2,7 @@ package com.compulynx.compas;
 
 import java.util.Properties;
 
+import com.compulynx.compas.customs.SendMail;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -29,11 +30,20 @@ public class CompasApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		System.out.println("catalina base ###"+ResourceConfig.CATALINA_BASE);
 		SpringApplication.run(CompasApplication.class, args);
+
+		SendMail mail = new SendMail();
+		try {
+			mail.sendEmail("michaelngigi76@gmail.com", "MichaelMbugua", "here is the password" );
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	static Properties getProperties() {
 	      Properties props = new Properties();
 	      props.put("spring.config.location", ResourceConfig.CATALINA_BASE+"/conf/");
+			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ResourceConfig.CATALINA_BASE+/conf/++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+			System.out.println(ResourceConfig.CATALINA_BASE+"/conf/");
 		   // props.put("spring.config.location", "D:\\Compulynx\\Projects\\prod_pbu_compas_otc_web\\backend\\src\\main\\resources");
 	      return props;
 	}

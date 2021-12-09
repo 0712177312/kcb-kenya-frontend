@@ -25,7 +25,10 @@ class TokenAuthenticationService {
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
 				.signWith(SignatureAlgorithm.HS512, SECRET).compact();
 		res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + JWT);
-		res.addHeader(HEADER_CUSTOM_HEADER, "*");
+
+
+		System.out.println("JWT");
+		System.out.println(JWT);
 	}
 
 	static Authentication getAuthentication(HttpServletRequest request) {
@@ -38,5 +41,17 @@ class TokenAuthenticationService {
 			return user != null ? new UsernamePasswordAuthenticationToken(user, null, emptyList()) : null;
 		}
 		return null;
+	}
+
+
+	public static void main(String[] args) {
+		String JWT = Jwts.builder().setSubject("admin")
+				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
+				.signWith(SignatureAlgorithm.HS512, SECRET).compact();
+
+		System.out.println("JWT");
+		System.out.println(JWT);
+
+
 	}
 }

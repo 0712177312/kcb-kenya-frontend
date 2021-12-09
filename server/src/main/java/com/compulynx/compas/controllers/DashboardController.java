@@ -65,7 +65,21 @@ public class DashboardController {
     @GetMapping(value = "/dashboard/configs")
     public ResponseEntity<?> getConfigs(@RequestHeader HttpHeaders httpHeaders) {
         String response = "";
+
+//        System.out.println("gson.toJson(env).toString()");
+//        System.out.println(env);
+
+        System.out.println("env.getProperty(cobankingAuthName)");
+        System.out.println(env.getProperty("abis"));
+        System.out.println(env.getProperty("greenbit"));
+        System.out.println(env.getProperty("sessionTimeout"));
+        System.out.println(env.getProperty("sessionIdle"));
+        System.out.println(env.getProperty("jwt"));
+        System.out.println(env.getProperty("secugen"));
+
         try {
+
+
             String authName = env.getProperty("cobankingAuthName");
             String authPass = env.getProperty("cobankingAuthPass");
             String t24se = env.getProperty("tserver");
@@ -76,11 +90,20 @@ public class DashboardController {
             String sessionTimeout = env.getProperty("sessionTimeout");
             String sessionIdle = env.getProperty("sessionIdle");
             String jwt = env.getProperty("jwt");
+
             ServerConfig resp = new ServerConfig(t24se, cobanking, abis, greenbit, secugen, authPass, authName, sessionTimeout, sessionIdle, jwt);
+
+            System.out.println("Here is the response");
+            System.out.println(resp);
+
+//            response = resp.toString();
             response = AESsecure.encrypt(gson.toJson(resp).toString());
         } catch (Exception e) {
             GlobalResponse resp = new GlobalResponse("404", "Server failure authenticating user", false, GlobalResponse.APIV);
             e.printStackTrace();
+            System.out.println("Here is the response");
+            System.out.println(resp);
+//            response = resp.toString();
             response = AESsecure.encrypt(gson.toJson(resp).toString());
         }
         return new ResponseEntity<>(response, HttpStatus.OK);

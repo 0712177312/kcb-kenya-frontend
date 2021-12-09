@@ -157,6 +157,8 @@ public class UserController {
         UserResponse userresponse;
         User userpro=null;
         User usertrials=null;
+
+        System.out.println("Got here");
         try {
             userpro= userService.authUser(user);
             System.out.println(userpro);

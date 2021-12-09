@@ -100,6 +100,17 @@ public class GlobalResponse {
 	public static String getApiv() {
 		return APIV;
 	}
-	
-	
+
+
+	@Override
+	public String toString() {
+		return "GlobalResponse{" +
+				"respCode='" + respCode + '\'' +
+				", respMessage='" + respMessage + '\'' +
+				", status=" + status +
+				", version='" + version + '\'' +
+				", collection=" + collection +
+				", model=" + model +
+				'}';
+	}
 }
