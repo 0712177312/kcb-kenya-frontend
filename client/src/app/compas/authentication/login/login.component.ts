@@ -69,6 +69,9 @@ export class LoginComponent implements OnInit {
     } else if (this.user.password === '') {
       return this.toastr.warning('Please specify the password', 'Alert!', { timeOut: 1500 });
     } else {
+
+      console.log(this.user);
+
       this.authService.login(this.user).subscribe(res => {
         // this.blockUI.start('Authenticating user...');
         //decrypt response

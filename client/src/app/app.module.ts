@@ -67,6 +67,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { IdleComponent } from './compas/idle/idle.component';
 import { WebSocketServiceService } from './compas/services/web-socket-service.service';
 import { RptbranchesComponent } from './compas/reports/rptbranches/rptbranches.component';
+import { ReportsTestComponent } from './compas/reports/reports-test/reports-test.component';
 import { RptsyslogsComponent } from './compas/reports/rptsyslogs/rptsyslogs.component';
 import { DashStatsComponent } from './compas/dashboardcomponents/dash-stats/dash-stats.component';
 import { AppInfoCardComponent } from './compas/dashboardcomponents/app-info-card/app-info-card.component';
@@ -141,7 +142,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ConvertStaffToCustomerComponent,
     DetachCustomerComponent,
     DetachStaffComponent,
-    EnrolledStaffComponent
+    EnrolledStaffComponent,
+    ReportsTestComponent
   ],
   imports: [
     CommonModule,

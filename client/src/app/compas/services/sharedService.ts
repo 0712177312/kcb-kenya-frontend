@@ -27,6 +27,9 @@ export class MySharedService {
 
   getConfigs() {
     let configs = JSON.parse(localStorage.getItem('bio.glob#$$#'));
+
+    console.log(configs);
+
     return configs;
   }
 
