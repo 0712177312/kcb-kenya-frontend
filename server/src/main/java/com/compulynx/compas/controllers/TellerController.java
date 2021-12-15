@@ -52,6 +52,9 @@ public class TellerController {
 	@Autowired
 	private UserGroupService userGroupService;
 
+	@Autowired
+	private EmailSender emailSender;
+
 	@GetMapping(value = "/gtTellers")
 	public ResponseEntity<?> getTellers() {
 		try {
@@ -276,7 +279,6 @@ public class TellerController {
 				}else {
 					String subject = "Biometric Details of Staff Captured";
 					String emailContent = "Dear " + teller.getTellerName() + ", your biometric details have been successfully registered. For any queries please call 0711087000 or 0732187000.";
-					EmailSender emailSender = new EmailSender();
 					emailSender.sendEmail(recipient, subject, emailContent);
 					log.info("Email to staff scheduled to be sent to " + teller.getTellerName());
 				}

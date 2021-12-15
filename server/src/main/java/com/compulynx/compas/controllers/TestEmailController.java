@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestEmailController {
 
     @Autowired
-    private JavaMailSender emailSender;
+    private EmailSender emailSender;
 
     @GetMapping("/sendEmail")
     public String sendEmail() throws Exception {
@@ -25,15 +25,10 @@ public class TestEmailController {
 
             String subject = "Biometric Details of Customer Captured";
             String emailContent = "Dear " + "Michael" + ", your biometric details have been successfully registered. For any queries please call 0711087000 or 0732187000.";
+            String recipient = "michaelmbugua.me@gmail.com";
 
-
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("michaelmbugua.me@gmail.com");
-            message.setTo("michaelmbugua.me@gmail.com");
-            message.setSubject(subject);
-            message.setText(emailContent);
-
-            this.emailSender.send(message);
+            emailSender.sendEmail(recipient, subject, emailContent);
+            System.out.println("Email to staff scheduled to be sent to " + recipient);
 
             return "Email Sent";
 

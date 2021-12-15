@@ -49,6 +49,9 @@ public class CustomerController {
 	@Autowired
 	private UserGroupService userGroupService;
 
+	@Autowired
+	private EmailSender emailSender;
+
 	@GetMapping(value = "/gtCustomers")
 	public ResponseEntity<?> getCustomers() {
 		try {
@@ -221,7 +224,6 @@ public class CustomerController {
 				}else {
 					String subject = "Biometric Details of Customer Captured";
 					String emailContent = "Dear " + customer.getCustomerName() + ", your biometric details have been successfully registered. For any queries please call 0711087000 or 0732187000.";
-					EmailSender emailSender = new EmailSender();
 					emailSender.sendEmail(recipient, subject, emailContent);
 					log.info("Email to customer scheduled to be sent to " + customer.getCustomerName());
 				}
