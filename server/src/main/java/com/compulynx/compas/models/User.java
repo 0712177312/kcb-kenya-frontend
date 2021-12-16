@@ -1,9 +1,11 @@
 package com.compulynx.compas.models;
 
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.*;
 
+import com.compulynx.compas.models.roles_authorities.RoleEntity;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
@@ -67,7 +69,18 @@ public class User extends BaseModel {
 
     private boolean locked= false;
     private int trials;
-    
+
+	@ManyToMany(
+			cascade = {CascadeType.PERSIST},
+			fetch = FetchType.EAGER)
+	@JoinTable(
+			name = "users_roles",
+			joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
+	private Collection<RoleEntity> roles;
+
+
+
 	public User(String email, String firstName, String fullName, String password, String phone, String surName,
 			String username, String otherNames, int group, int createdBy, boolean status, String approved,
 			int approvedBy, Date approvedOn, String country, String branch, String teller, Date createdOn) {
@@ -90,6 +103,30 @@ public class User extends BaseModel {
 		this.branch = branch;
 		this.teller = teller;
 		this.createdOn = createdOn;
+	}
+
+	public User(String email, String firstName, String fullName, String password, String phone, String surName, String username, String otherNames, int group, int createdBy, boolean status, String approved, int approvedBy, Date approvedOn, String country, String branch, String teller, Date createdOn, boolean locked, int trials, Collection<RoleEntity> roles) {
+		this.email = email;
+		this.firstName = firstName;
+		this.fullName = fullName;
+		this.password = password;
+		this.phone = phone;
+		this.surName = surName;
+		this.username = username;
+		this.otherNames = otherNames;
+		this.group = group;
+		this.createdBy = createdBy;
+		this.status = status;
+		this.approved = approved;
+		this.approvedBy = approvedBy;
+		this.approvedOn = approvedOn;
+		this.country = country;
+		this.branch = branch;
+		this.teller = teller;
+		this.createdOn = createdOn;
+		this.locked = locked;
+		this.trials = trials;
+		this.roles = roles;
 	}
 
 	public String getCountry() {
@@ -254,5 +291,13 @@ public class User extends BaseModel {
 
 	public void setTrials(int trials) {
 		this.trials = trials;
+	}
+
+	public Collection<RoleEntity> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Collection<RoleEntity> roles) {
+		this.roles = roles;
 	}
 }

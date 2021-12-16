@@ -7,10 +7,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class RestConfigs extends OncePerRequestFilter {
 
     @Override
@@ -18,11 +21,11 @@ public class RestConfigs extends OncePerRequestFilter {
                                     final FilterChain filterChain) throws ServletException, IOException {
 
         response.addHeader("Access-Control-Allow-Methods", "GET, POST");
+        response.addHeader("Access-Control-Allow-Headers","headers, x-xsrf-token, Origin, Content-Type, Accept, Authorization, X-Requested-With, timeout, Access-Control-Expose-Headers, X-Requested-With,Content-Type, Access-Control-Request-Method,  Access-Control-Request-Headers");
         response.addHeader("Access-Control-Max-Age", "3600");
-        response.addHeader("Access-Control-Allow-Headers","Origin, Content-Type, Accept, Authorization, X-Requested-With, timeout, Access-Control-Expose-Headers");
         // Added HTTP headers for security vulnerability
         response.addHeader("Access-Control-Allow-Origin","*");
-        response.addHeader("X-Frame-Options","");
+        response.addHeader("X-Frame-Options","DENY");
         if (request.isSecure()) {
             response.addHeader("Strict-Transport-Security","max-age=31536000; includeSubDomains");
         }
