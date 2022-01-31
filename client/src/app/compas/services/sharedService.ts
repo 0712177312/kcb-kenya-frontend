@@ -26,7 +26,7 @@ export class MySharedService {
   }
 
   getConfigs() {
-    let configs = JSON.parse(localStorage.getItem('bio.glob#$$#'));
+    const configs = JSON.parse(localStorage.getItem('bio.glob#$$#'));
 
     console.log(configs);
 
@@ -34,11 +34,11 @@ export class MySharedService {
   }
 
   getTokenHeader() {
-    let localheaders = new HttpHeaders({
+    const localheaders = new HttpHeaders({
       'Authorization': this.getConfigs().jwt,
-      "Access-Control-Expose-Headers": "Authorization"
+      'Access-Control-Expose-Headers': 'Authorization'
     });
-    let headers = { headers: localheaders };
+    const headers = { headers: localheaders };
     return headers;
   }
 
@@ -66,6 +66,10 @@ export class MySharedService {
       padding: CryptoJS.pad.Pkcs7
     });
     const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+
+    console.log('decryptedData');
+    console.log(decryptedData);
+
     return decryptedData;
   }
 
@@ -98,7 +102,7 @@ export class MySharedService {
     this.group = group;
   }
 
-  setUserAssignedRights(userAssignedRights){
+  setUserAssignedRights(userAssignedRights) {
     this.userAssignedRights = userAssignedRights;
   }
 }
