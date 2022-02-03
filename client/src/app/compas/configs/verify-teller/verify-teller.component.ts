@@ -99,6 +99,12 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
   hand: { 'req': any; };
   branch: any;
   groupid: any;
+
+  // manage rights buttons
+  canViewUserProfile;
+  canAddUserProfile;
+  canEditUserProfile;
+
   constructor(private apiService: BioService,
     private modalService: NgbModal,
     private modalService2: NgbModal, private logs: LogsService, private sockService: WebSocketServiceService,
@@ -115,6 +121,26 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
     this.groupid = this.otc.group;
     this.gtTellers();
 
+    this.getUserAssignedRights();
+  }
+
+  getUserAssignedRights() {
+    const userAssignedRights = this.otc.userAssignedRights;
+    console.log('userAssignedRights: ', userAssignedRights);
+    let rightsIndex = -1;
+    for (let i = 0; i < userAssignedRights[0].rights.length; i++) {
+      console.log('userAssignedRights path: ' + userAssignedRights[0].rights[i].path);
+      if (userAssignedRights[0].rights[i].path === '/masters/verifyEnrolledTellers') {
+        rightsIndex = i;
+        break;
+      }
+    }
+
+    if (rightsIndex >= 0) {
+      this.canViewUserProfile = userAssignedRights[0].rights[rightsIndex].allowView;
+      this.canAddUserProfile = userAssignedRights[0].rights[rightsIndex].allowAdd;
+      this.canEditUserProfile = userAssignedRights[0].rights[rightsIndex].allowEdit;
+    }
   }
 
   log(userId, activity) {
@@ -616,7 +642,7 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
             this.upCustDet();
           } else {
             this.blockUI.stop();
-            return this.toastr.warning('There was problem authorizing customer details .', 'Warning!');
+            return this.toastr.warning('Failed to verify. Try again', 'Warning!');
           }
         }, error => {
           this.blockUI.stop();
@@ -624,7 +650,7 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
         });
       } else {
         this.blockUI.stop();
-        return this.toastr.error('Capture atleast one finger print.', 'Error!', { timeOut: 1500 });
+        return this.toastr.error('Capture at least one finger print.', 'Error!', { timeOut: 1500 });
       }
     }
   }
@@ -778,7 +804,7 @@ export let settings = {
   },
   edit: {
     // tslint:disable-next-line:max-line-length
-    editButtonContent: '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>',
+    editButtonContent: (this.canEditUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>' : '',
     saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
     cancelButtonContent: '<i class="ti-close text-danger"></i>'
   },

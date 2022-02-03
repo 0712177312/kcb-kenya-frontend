@@ -160,7 +160,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
     let userAssignedRights = this.otc.userAssignedRights;
     let rightsIndex = -1;
     for(let i = 0; i < userAssignedRights[0].rights.length; i++){
-        if(userAssignedRights[0].rights[i].path == "/customers/customers"){
+        if(userAssignedRights[0].rights[i].path === "/customers/customers"){
             rightsIndex = i;
             break;
         }
@@ -1218,13 +1218,13 @@ export let settings = {
   },
   edit: {
     // tslint:disable-next-line:max-line-length
-    editButtonContent: '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>',
+    editButtonContent: (this.canEditUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>' : '',
     saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
     cancelButtonContent: '<i class="ti-close text-danger"></i>'
   },
   add: {
     // tslint:disable-next-line:max-line-length
-    addButtonContent: '<a class="btn btn-block btn-outline-info m-r-10" ngbPopover="Add Customer" triggers="mouseenter:mouseleave" popoverTitle="Add Customer"> <i class="fas fa-plus-circle"></i></a>',
+    addButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-info m-r-10" ngbPopover="Add Customer" triggers="mouseenter:mouseleave" popoverTitle="Add Customer"> <i class="fas fa-plus-circle"></i></a>' : '',
     createButtonContent: '<i class="nb-checkmark"></i>',
     cancelButtonContent: '<i class="nb-close"></i>',
   },

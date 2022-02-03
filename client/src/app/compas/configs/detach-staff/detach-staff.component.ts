@@ -40,6 +40,11 @@ export class DetachStaffComponent implements OnInit, OnDestroy {
 
   settings = settings;
 
+  // manage rights buttons
+  canViewUserProfile;
+  canAddUserProfile;
+  canEditUserProfile;
+
   constructor(private apiService: BioService,
     private modalService: NgbModal,
     private modalService2: NgbModal, private logs: LogsService, private sockService: WebSocketServiceService,
@@ -50,6 +55,26 @@ export class DetachStaffComponent implements OnInit, OnDestroy {
     this.gtStaff();
     this.otc = JSON.parse(localStorage.getItem('otc'));
     this.rightId = this.otc.rightId;
+    this.getUserAssignedRights();
+  }
+
+  getUserAssignedRights() {
+    const userAssignedRights = this.otc.userAssignedRights;
+    console.log('userAssignedRights: ', userAssignedRights);
+    let rightsIndex = -1;
+    for (let i = 0; i < userAssignedRights[0].rights.length; i++) {
+      console.log('userAssignedRights path: ' + userAssignedRights[0].rights[i].path);
+      if (userAssignedRights[0].rights[i].path === '/masters/verifyprint-staff') {
+        rightsIndex = i;
+        break;
+      }
+    }
+
+    if (rightsIndex >= 0) {
+      this.canViewUserProfile = userAssignedRights[0].rights[rightsIndex].allowView;
+      this.canAddUserProfile = userAssignedRights[0].rights[rightsIndex].allowAdd;
+      this.canEditUserProfile = userAssignedRights[0].rights[rightsIndex].allowEdit;
+    }
   }
 
   log(userId, activity) {
@@ -184,7 +209,7 @@ export let settings = {
   },
   edit: {
     // tslint:disable-next-line:max-line-length
-    editButtonContent: '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>',
+    editButtonContent: (this.canEditUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>' : '',
     saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
     cancelButtonContent: '<i class="ti-close text-danger"></i>'
   },

@@ -98,6 +98,12 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
   rightFP: any;
   thumbsFP: any;
   hand: { 'req': any; };
+
+  // manage rights buttons
+  canViewUserProfile;
+  canAddUserProfile;
+  canEditUserProfile;
+
   constructor(private apiService: BioService,
     private modalService: NgbModal,
     private modalService2: NgbModal, private logs: LogsService, private sockService: WebSocketServiceService,
@@ -112,8 +118,9 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
     // the specific branch of the logged in user
     this.branch = this.otc.branch;
     this.groupid = this.otc.group;
-    console.log("this.branch at ngOnInit() of approve-customers.component.ts " + this.branch);
+    console.log('this.branch at ngOnInit() of approve-customers.component.ts ' + this.branch);
     this.gtCustomers();
+    this.getUserAssignedRights();
   }
 
   log(userId, activity) {
@@ -481,7 +488,7 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
     this.blockUI.start('Loading data...');
     const customerDetails = {
       'branchCode': this.branch,
-      'verifiedBy': this.groupid //manipulate to store group id verified_by due constraints on back end expected input
+      'verifiedBy': this.groupid // manipulate to store group id verified_by due constraints on back end expected input
     }
     this.custSvc.getCustomersToAuthorize(customerDetails).subscribe(data => {
       this.customers = data;
@@ -556,7 +563,7 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
             this.upCustDet();
           } else {
 
-            return this.toastr.warning('There was problem authorizing customer details .', 'Warning!');
+            return this.toastr.warning('Failed to verify. Try again', 'Warning!');
           }
         }, error => {
 
@@ -691,6 +698,25 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
     this.profpic = '';
   }
 
+  getUserAssignedRights() {
+    const userAssignedRights = this.otc.userAssignedRights;
+    console.log('userAssignedRights: ', userAssignedRights);
+    let rightsIndex = -1;
+    for (let i = 0; i < userAssignedRights[0].rights.length; i++) {
+      console.log('userAssignedRights path: ' + userAssignedRights[0].rights[i].path);
+      if (userAssignedRights[0].rights[i].path === '/administration/userProfile') {
+        rightsIndex = i;
+        break;
+      }
+    }
+
+    if (rightsIndex >= 0) {
+      this.canViewUserProfile = userAssignedRights[0].rights[rightsIndex].allowView;
+      this.canAddUserProfile = userAssignedRights[0].rights[rightsIndex].allowAdd;
+      this.canEditUserProfile = userAssignedRights[0].rights[rightsIndex].allowEdit;
+    }
+  }
+
 
 }
 export let settings = {
@@ -737,7 +763,7 @@ export let settings = {
   },
   edit: {
     // tslint:disable-next-line:max-line-length
-    editButtonContent: '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>',
+    editButtonContent: (this.canEditUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>' : '',
     saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
     cancelButtonContent: '<i class="ti-close text-danger"></i>'
   },

@@ -1,21 +1,17 @@
-import { LogsService } from './../../services/logs.service';
-import { Component, OnInit, ViewChild, Inject, Renderer, Renderer2, ViewEncapsulation, OnChanges } from '@angular/core';
-import { AdministrationService } from '../../services/administration.service';
-import { LocalDataSource } from 'ng2-smart-table';
-import { ToastrService } from 'ngx-toastr';
-import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { BioService } from '../../services/bio.service';
-import { DOCUMENT } from '@angular/common';
-import { NgbTabChangeEvent, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { Applicant } from '../../models/applicant';
-import { NgBlockUI, BlockUI, BlockUIService } from 'ng-block-ui';
-import { MySharedService } from '../../services/sharedService';
-import { HostListener } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { ComponentCanDeactivate } from '../../guards/pending-changes-guard.guard';
-import { TellerService } from '../../services/teller.service';
-import { RegionService } from '../../services/region.service';
+import {LogsService} from './../../services/logs.service';
+import {Component, Inject, OnChanges, OnInit, Renderer2, ViewEncapsulation} from '@angular/core';
+import {AdministrationService} from '../../services/administration.service';
+import {LocalDataSource} from 'ng2-smart-table';
+import {ToastrService} from 'ngx-toastr';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Subject} from 'rxjs';
+import {BioService} from '../../services/bio.service';
+import {DOCUMENT} from '@angular/common';
+import {NgbModal, NgbTabChangeEvent} from '@ng-bootstrap/ng-bootstrap';
+import {BlockUI, BlockUIService, NgBlockUI} from 'ng-block-ui';
+import {MySharedService} from '../../services/sharedService';
+import {TellerService} from '../../services/teller.service';
+import {RegionService} from '../../services/region.service';
 
 @Component({
     selector: 'app-user-profile',
@@ -43,7 +39,6 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
     public title: string;
     public button: string;
     source: LocalDataSource;
-    private base64textString: String = '';
     imagSrc = 'assets/images/default.jpeg';
     captured = ['L0', 'L1', 'L2', 'L3', 'L4', 'R0', 'R1', 'R2', 'R3', 'R4'];
     searchText;
@@ -94,46 +89,46 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
     myUsername: String;
     groupRights: any;
     storageObject: any = {};
-
     // user assigned rights for the logged in user
     canViewUserProfile: Boolean;
     canAddUserProfile: Boolean;
     canEditUserProfile: Boolean;
-
     userGroupsFiltered = [];
-
     // the groupId of the logged in user
-    groupId: any; 
-
+    groupId: any;
     // the branch of the logged  in user
     branch: any;
-
     // map containing what codes a given code can access
     groupCodesMap = new Map([['G001', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008', 'G009']]
         , ['G002', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008', 'G009']],
-    ['G003', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008', 'G009']],
-    ['G004', ['G005', 'G006', 'G007', 'G008']],
-    ['G005', ['G007', 'G008']],
-    ['G006', ['G007', 'G008']],
-    ['G007', []],
-    ['G008', []],
-    ['G009', ['G005', 'G006', 'G007', 'G008']]]);
-
-    // the id of the logged in user. This will be used to filter out the currently logged in user
+        ['G003', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008', 'G009']],
+        ['G004', ['G005', 'G006', 'G007', 'G008']],
+        ['G005', ['G007', 'G008']],
+        ['G006', ['G007', 'G008']],
+        ['G007', []],
+        ['G008', []],
+        ['G009', ['G005', 'G006', 'G007', 'G008']]]);
     // from the list of users in the user profiles page
     userId: any;
 
+    // the id of the logged in user. This will be used to filter out the currently logged in user
+    settings = settings;
+    private base64textString: String = '';
+
     constructor(private blockUIService: BlockUIService,
-        private renderer: Renderer2, private regionSvc: RegionService, private apiService: AdministrationService,
-        private toastr: ToastrService,
-        private bioService: BioService, private tellerSvc: TellerService, private fb: FormBuilder,
-        private modalService: NgbModal,
-        private modalService2: NgbModal, private logs: LogsService,
-        @Inject(DOCUMENT) private document: any, 
-        private globalService: MySharedService) {
+                private renderer: Renderer2, private regionSvc: RegionService, private apiService: AdministrationService,
+                private toastr: ToastrService,
+                private bioService: BioService, private tellerSvc: TellerService, private fb: FormBuilder,
+                private modalService: NgbModal,
+                private modalService2: NgbModal, private logs: LogsService,
+                @Inject(DOCUMENT) private document: any,
+                private globalService: MySharedService) {
         this.source = new LocalDataSource(this.userProfiles); // create the source
     }
-    settings = settings;
+
+    get f() {
+        return this.form.controls;
+    }
 
     ngOnInit() {
         this.otc = JSON.parse(localStorage.getItem('otc'));
@@ -150,38 +145,38 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         this.getUserAssignedRights();
     }
 
-    getUserAssignedRights(){
+    getUserAssignedRights() {
         let userAssignedRights = this.otc.userAssignedRights;
-        console.log("userAssignedRights: ", userAssignedRights);
+        console.log('userAssignedRights: ', userAssignedRights);
         let rightsIndex = -1;
-        for(let i = 0; i < userAssignedRights[0].rights.length; i++){
-            console.log("userAssignedRights path: " + userAssignedRights[0].rights[i].path);
-            if(userAssignedRights[0].rights[i].path == "/administration/userProfile"){
+        for (let i = 0; i < userAssignedRights[0].rights.length; i++) {
+            console.log('userAssignedRights path: ' + userAssignedRights[0].rights[i].path);
+            if (userAssignedRights[0].rights[i].path === '/administration/userProfile') {
                 rightsIndex = i;
                 break;
             }
         }
 
-        if(rightsIndex >= 0){
+        if (rightsIndex >= 0) {
             this.canViewUserProfile = userAssignedRights[0].rights[rightsIndex].allowView;
             this.canAddUserProfile = userAssignedRights[0].rights[rightsIndex].allowAdd;
             this.canEditUserProfile = userAssignedRights[0].rights[rightsIndex].allowEdit;
         }
     }
 
-    get f() { return this.form.controls; }
-
     getTellers(branch) {
         this.tellerSvc.getBranchTellers(branch).subscribe(data => {
             this.tellersResp = data;
             this.tellers = this.tellersResp.collection;
         }, error => {
-            return this.toastr.error('Error fetching staff.', 'Error!', { timeOut: 4000 });
+            return this.toastr.error('Error fetching staff.', 'Error!', {timeOut: 4000});
         });
     }
+
     ngOnChanges(changes) {
         console.log(changes);
     }
+
     log(userId, activity) {
         const log = {
             'userId': userId,
@@ -191,9 +186,10 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
             console.log('logged');
         }, error => {
             this.blockUI.stop();
-            return this.toastr.error('Error logging.', 'Error!', { timeOut: 4000 });
+            return this.toastr.error('Error logging.', 'Error!', {timeOut: 4000});
         });
     }
+
     onSubmit() {
         this.submited = true;
         console.log('works...', this.form.value);
@@ -203,14 +199,16 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
             console.log('works...');
         }
     }
+
     passwordConfirming(c: AbstractControl): { invalid: boolean } {
         if (c.get('password').value !== c.get('confirmPassword').value) {
-            return { invalid: true };
+            return {invalid: true};
         }
     }
+
     initEditUser($event) {
-        if(this.canEditUserProfile === false){
-            return this.toastr.warning('You are not allowed to edit a user profile', 'Warning!', { timeOut: 3000 });
+        if (this.canEditUserProfile === false) {
+            return this.toastr.warning('You are not allowed to edit a user profile', 'Warning!', {timeOut: 3000});
         }
         this.form = this.fb.group({
             country: new FormControl($event.data.country, [Validators.required]),
@@ -272,13 +270,15 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         });
 
     }
+
     doSomething(event) {
         console.log(event); // logs model value
     }
+
     initAddUser() {
         // tslint:disable-next-line:max-line-length
-        if(this.canAddUserProfile === false){
-            return this.toastr.warning('You are not allowed to add a user profile', 'Warning!', { timeOut: 3000 });
+        if (this.canAddUserProfile === false) {
+            return this.toastr.warning('You are not allowed to add a user profile', 'Warning!', {timeOut: 3000});
         }
 
         // fetch the groupCode of the logged in user
@@ -288,10 +288,10 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         // filter the user groups displayed based on the groupCodesMap
         this.userGroupsFiltered = [];
         let userGroupsFilteredIndex = 0;
-        for(let i = 0; i < this.userGroups.length; i++){
+        for (let i = 0; i < this.userGroups.length; i++) {
             let currentgroupCode = this.userGroups[i].groupCode;
-            if(this.groupCodesMap.get(groupCode).includes(currentgroupCode)){
-                this.userGroupsFiltered[userGroupsFilteredIndex++] = this.userGroups[i]; 
+            if (this.groupCodesMap.get(groupCode).includes(currentgroupCode)) {
+                this.userGroupsFiltered[userGroupsFilteredIndex++] = this.userGroups[i];
             }
         }
 
@@ -318,6 +318,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         this.is_edit = false;
         this.isNew = true;
     }
+
     getActiveCountries() {
         this.regionSvc.getActiveCountries().subscribe(data => {
             this.countryResp = data;
@@ -332,6 +333,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
             console.log('error getting countries details');
         });
     }
+
     getActiveBranches(country) {
         console.log('country', country);
         this.regionSvc.getCountryBranches(country).subscribe(data => {
@@ -347,6 +349,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
             console.log('error getting branches details');
         });
     }
+
     getTellerDetail(teller) {
         this.tellerSvc.getTellerDetail(teller).subscribe(data => {
             this.tellerDet = data;
@@ -361,6 +364,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
             console.log('error getting teller details');
         });
     }
+
     addUser() {
         switch (this.button) {
             case 'Update user':
@@ -370,7 +374,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
                 console.log('user details', this.userProfile);
                 console.log('user ', this.userProfile);
                 if (this.form.invalid) {
-                    return this.toastr.warning('Kindly ensure all fields are correctly entered', 'Success!', { timeOut: 1500 });
+                    return this.toastr.warning('Kindly ensure all fields are correctly entered', 'Success!', {timeOut: 1500});
                 } else {
                     this.userProfile = this.form.value;
                     this.userProfile = this.form.value;
@@ -381,9 +385,9 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
                     console.log('user profile details ####$$', this.userProfile);
                     this.apiService.addUserProfile(this.userProfile).subscribe(res => {
                         this.blockUI.stop();
-                        this.response =  JSON.parse(this.globalService.decryptData(res));
+                        this.response = JSON.parse(this.globalService.decryptData(res));
                         if (this.response.status === false) {
-                            this.toastr.warning(this.response.respMessage, 'Alert!', { timeOut: 1500 });
+                            this.toastr.warning(this.response.respMessage, 'Alert!', {timeOut: 1500});
                         }
                         if (this.response.status === true) {
                             this.editMode = false;
@@ -402,7 +406,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
                             //     });
                             // }
                             this.userProfile = {};
-                            return this.toastr.success("Added successfully", 'Success!', { timeOut: 1500 });
+                            return this.toastr.success('Added successfully', 'Success!', {timeOut: 1500});
                         }
                     });
                 }
@@ -411,21 +415,22 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
 
     updateUser() {
         if (this.form.invalid) {
-            return this.toastr.warning('Kindly ensure all fields are correctly entered', 'Success!', { timeOut: 1500 });
+            return this.toastr.warning('Kindly ensure all fields are correctly entered', 'Success!', {timeOut: 1500});
         } else {
             this.userProfile = this.form.value;
-            console.log("userProfile: "+ this.userProfile);
+            console.log('userProfile: ' + this.userProfile);
             this.apiService.editUserProfile(this.userProfile).subscribe(res => {
                 this.blockUI.stop();
-                this.response =  JSON.parse(this.globalService.decryptData(res));;
+                this.response = JSON.parse(this.globalService.decryptData(res));
+                ;
                 if (this.response.status === false) {
-                    this.toastr.warning(this.response.respMessage, 'Alert!', { timeOut: 1500 });
+                    this.toastr.warning(this.response.respMessage, 'Alert!', {timeOut: 1500});
                 }
                 if (this.response.status === true) {
                     this.editMode = false;
                     this.getUserProfiles();
                     this.userProfile = {};
-                    return this.toastr.success("Edited User Profile Successfully", 'Success!', { timeOut: 1500 });
+                    return this.toastr.success('Edited User Profile Successfully', 'Success!', {timeOut: 1500});
                 }
             });
         }
@@ -456,41 +461,41 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         console.log('removed bios', this.bios);
         console.log('removed profile print', this.userProfile.bios);
         console.log('removed profile print', this.afisBio);
-        return this.toastr.success('Device was reset successfully .. .', 'Success!', { timeOut: 3000 });
+        return this.toastr.success('Device was reset successfully .. .', 'Success!', {timeOut: 3000});
     }
 
     validateUser($event: NgbTabChangeEvent) {
         if (this.userProfile.fullName === '') {
             $event.preventDefault();
-            this.toastr.warning('Please specify the user full name', 'Alert!', { timeOut: 1500 });
+            this.toastr.warning('Please specify the user full name', 'Alert!', {timeOut: 1500});
         } else if (this.userProfile.username === '') {
             $event.preventDefault();
-            this.toastr.warning('Please specify the  user name', 'Alert!', { timeOut: 1500 });
+            this.toastr.warning('Please specify the  user name', 'Alert!', {timeOut: 1500});
         } else if (this.userProfile.username === this.username) {
             console.log('username', this.username, 'this.', this.userProfile.username);
             $event.preventDefault();
-            this.toastr.warning('Username already exists, kindly input another', 'Alert!', { timeOut: 1500 });
+            this.toastr.warning('Username already exists, kindly input another', 'Alert!', {timeOut: 1500});
         } else if (this.userProfile.email === '') {
             $event.preventDefault();
-            this.toastr.warning('Please specify the user email', 'Alert!', { timeOut: 1500 });
+            this.toastr.warning('Please specify the user email', 'Alert!', {timeOut: 1500});
         } else if (this.userProfile.phone === '') {
             $event.preventDefault();
-            this.toastr.warning('Please specify the user phone number', 'Alert!', { timeOut: 1500 });
+            this.toastr.warning('Please specify the user phone number', 'Alert!', {timeOut: 1500});
         } else if (this.userProfile.group === 0) {
             $event.preventDefault();
-            this.toastr.warning('Please specify the user group', 'Alert!', { timeOut: 1500 });
+            this.toastr.warning('Please specify the user group', 'Alert!', {timeOut: 1500});
         } else if (this.userProfile.password === '') {
             $event.preventDefault();
-            this.toastr.warning('Please specify the user password', 'Alert!', { timeOut: 1500 });
+            this.toastr.warning('Please specify the user password', 'Alert!', {timeOut: 1500});
         } else if (this.userProfile.password.length < 7) {
             $event.preventDefault();
-            this.toastr.warning('The user password should be atleast 8 characters', 'Alert!', { timeOut: 1500 });
+            this.toastr.warning('The user password should be atleast 8 characters', 'Alert!', {timeOut: 1500});
         } else if (this.userProfile.confirmPassword === '') {
             $event.preventDefault();
-            this.toastr.warning('Please confirm the user password', 'Alert!', { timeOut: 1500 });
+            this.toastr.warning('Please confirm the user password', 'Alert!', {timeOut: 1500});
         } else if (this.userProfile.password !== this.userProfile.confirmPassword) {
             $event.preventDefault();
-            this.toastr.warning('The passwords do not match', 'Alert!', { timeOut: 1500 });
+            this.toastr.warning('The passwords do not match', 'Alert!', {timeOut: 1500});
         }
     }
 
@@ -526,13 +531,13 @@ export let settings = {
     },
     edit: {
         // tslint:disable-next-line:max-line-length
-        editButtonContent: '<a class="btn btn-block btn-outline-success m-r-10"> <i class="fas fa-check-circle text-info-custom"></i></a>',
+        editButtonContent: (this.canEditUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10"> <i class="fas fa-check-circle text-info-custom"></i></a>' : '',
         saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
         cancelButtonContent: '<i class="ti-close text-danger"></i>'
     },
     add: {
         // tslint:disable-next-line:max-line-length
-        addButtonContent: '<a class="btn btn-block btn-outline-info m-r-10"> <i class="fas fa-plus-circle"></i></a>',
+        addButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-info m-r-10"> <i class="fas fa-plus-circle"></i></a>' : '',
         createButtonContent: '<i class="nb-checkmark"></i>',
         cancelButtonContent: '<i class="nb-close"></i>',
     },

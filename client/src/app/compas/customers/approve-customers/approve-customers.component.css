@@ -433,3 +433,7 @@ table tr th {
 .custom-row {
   margin-left: 20% !important;
 }
+
+.hide-action td.ng2-smart-actions a {
+  display: none;
+}

@@ -44,13 +44,39 @@ export class CountryComponent implements OnInit {
   button: any;
   is_edit = true;
   source: LocalDataSource;
+
+    // manage rights buttons
+    canViewUserProfile;
+    canAddUserProfile;
+    canEditUserProfile;
+
   ngOnInit() {
     this.gtCountries();
     this.otc = JSON.parse(localStorage.getItem('otc'));
     this.rightId = this.otc.rightId;
     console.log('right id', this.rightId);
     setTimeout(() => (this.staticAlertClosed = true), 8000);
+    this.getUserAssignedRights();
   }
+
+    getUserAssignedRights() {
+        const userAssignedRights = this.otc.userAssignedRights;
+        console.log('userAssignedRights: ', userAssignedRights);
+        let rightsIndex = -1;
+        for (let i = 0; i < userAssignedRights[0].rights.length; i++) {
+            console.log('userAssignedRights path: ' + userAssignedRights[0].rights[i].path);
+            if (userAssignedRights[0].rights[i].path === '/regions/countries') {
+                rightsIndex = i;
+                break;
+            }
+        }
+
+        if (rightsIndex >= 0) {
+            this.canViewUserProfile = userAssignedRights[0].rights[rightsIndex].allowView;
+            this.canAddUserProfile = userAssignedRights[0].rights[rightsIndex].allowAdd;
+            this.canEditUserProfile = userAssignedRights[0].rights[rightsIndex].allowEdit;
+        }
+    }
 
   onSubmit() {
     this.submited = true;
@@ -201,13 +227,13 @@ export let settings = {
   },
   edit: {
       // tslint:disable-next-line:max-line-length
-      editButtonContent: '<a class="btn btn-block btn-outline-success m-r-10"> <i class="fas fa-check-circle text-info-custom"></i></a>',
+      editButtonContent: (this.canEditUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10"> <i class="fas fa-check-circle text-info-custom"></i></a>' : '',
       saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
       cancelButtonContent: '<i class="ti-close text-danger"></i>'
   },
   add: {
       // tslint:disable-next-line:max-line-length
-      addButtonContent: '<a class="btn btn-block btn-outline-info m-r-10"> <i class="fas fa-plus-circle"></i></a>',
+      addButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-info m-r-10"> <i class="fas fa-plus-circle"></i></a>' : '',
       createButtonContent: '<i class="nb-checkmark"></i>',
       cancelButtonContent: '<i class="nb-close"></i>',
   },

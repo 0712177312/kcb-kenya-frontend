@@ -41,12 +41,38 @@ export class BranchComponent implements OnInit {
     button: any;
     is_edit = false;
     source: LocalDataSource;
+
+    // manage rights buttons
+    canViewUserProfile;
+    canAddUserProfile;
+    canEditUserProfile;
+
     ngOnInit() {
       this.gtbranches();
       this.otc = JSON.parse(localStorage.getItem('otc'));
       this.rightId = this.otc.rightId;
       console.log('right id', this.rightId);
       setTimeout(() => (this.staticAlertClosed = true), 8000);
+      this.getUserAssignedRights();
+
+    }
+    getUserAssignedRights() {
+        const userAssignedRights = this.otc.userAssignedRights;
+        console.log('userAssignedRights: ', userAssignedRights);
+        let rightsIndex = -1;
+        for (let i = 0; i < userAssignedRights[0].rights.length; i++) {
+            console.log('userAssignedRights path: ' + userAssignedRights[0].rights[i].path);
+            if (userAssignedRights[0].rights[i].path === '/regions/branches') {
+                rightsIndex = i;
+                break;
+            }
+        }
+
+        if (rightsIndex >= 0) {
+            this.canViewUserProfile = userAssignedRights[0].rights[rightsIndex].allowView;
+            this.canAddUserProfile = userAssignedRights[0].rights[rightsIndex].allowAdd;
+            this.canEditUserProfile = userAssignedRights[0].rights[rightsIndex].allowEdit;
+        }
     }
 
     onSubmit() {
