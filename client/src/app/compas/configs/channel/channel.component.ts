@@ -6,6 +6,12 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { ToastrService } from 'ngx-toastr';
 import { ConfigsService } from '../../services/configs.service';
 
+
+
+let canViewUserProfile: Boolean;
+let canAddUserProfile: Boolean;
+let canEditUserProfile: Boolean;
+
 @Component({
   selector: 'app-channel',
   templateUrl: './channel.component.html',
@@ -13,6 +19,7 @@ import { ConfigsService } from '../../services/configs.service';
 })
 export class ChannelComponent implements OnInit {
     @BlockUI() blockUI: NgBlockUI;
+
     constructor(private blockUIService: BlockUIService, private toastr: ToastrService,
        private conSvc: ConfigsService, private fb: FormBuilder, private logs: LogsService
       ) {}
@@ -33,9 +40,6 @@ export class ChannelComponent implements OnInit {
     is_edit = false;
     source: LocalDataSource;
 
-    canViewUserProfile: Boolean;
-    canAddUserProfile: Boolean;
-    canEditUserProfile: Boolean;
 
 
     ngOnInit() {
@@ -60,9 +64,9 @@ export class ChannelComponent implements OnInit {
         }
 
         if (rightsIndex >= 0) {
-            this.canViewUserProfile = userAssignedRights[0].rights[rightsIndex].allowView;
-            this.canAddUserProfile = userAssignedRights[0].rights[rightsIndex].allowAdd;
-            this.canEditUserProfile = userAssignedRights[0].rights[rightsIndex].allowEdit;
+            canViewUserProfile = userAssignedRights[0].rights[rightsIndex].allowView;
+            canAddUserProfile = userAssignedRights[0].rights[rightsIndex].allowAdd;
+            canEditUserProfile = userAssignedRights[0].rights[rightsIndex].allowEdit;
         }
     }
 
@@ -210,13 +214,13 @@ export class ChannelComponent implements OnInit {
     },
     edit: {
         // tslint:disable-next-line:max-line-length
-        editButtonContent: (this.canEditUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10"> <i class="fas fa-check-circle text-info-custom"></i></a>' : '',
+        editButtonContent: (canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10"> <i class="fas fa-check-circle text-info-custom"></i></a>' : '',
         saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
         cancelButtonContent: '<i class="ti-close text-danger"></i>'
     },
     add: {
         // tslint:disable-next-line:max-line-length
-        addButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-info m-r-10"> <i class="fas fa-plus-circle"></i></a>' : '',
+        addButtonContent: (canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-info m-r-10"> <i class="fas fa-plus-circle"></i></a>' : '',
         createButtonContent: '<i class="nb-checkmark"></i>',
         cancelButtonContent: '<i class="nb-close"></i>',
     },
