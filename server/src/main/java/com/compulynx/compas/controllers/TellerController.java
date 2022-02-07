@@ -126,9 +126,9 @@ public class TellerController {
 			log.info("teller details updated succesfull for " + teller.getCustomerId());
 			if (cust != null || tellerUndeleted > 0) {
 
-				return new ResponseEntity(new GlobalResponse("000", "customer found", true, "1.0.0"), HttpStatus.OK);
+				return new ResponseEntity(new GlobalResponse("000", "staff found", true, "1.0.0"), HttpStatus.OK);
 			}
-			return new ResponseEntity(new GlobalResponse("1.0.0", "201", false, "no customers found"), HttpStatus.OK);
+			return new ResponseEntity(new GlobalResponse("1.0.0", "201", false, "no staff found"), HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("upTellerDetails", e);
 			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, "1.0.0");
