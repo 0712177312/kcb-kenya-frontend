@@ -111,42 +111,7 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
     private custSvc: CustomerService, @Inject(DOCUMENT) private document: any,
     private toastr: ToastrService, private tellerSvc: TellerService, private biosvc: BioService) {
   }
-  settings = {
-    mode: 'external',
-    actions: {
-      delete: false,
-      add: false,
-      position: 'right',
-    },
-    columns: {
-      counter: {
-        title: '#',
-        filter: false
-      },
-      tellerName: {
-        title: 'Teller Name',
-        filter: true
-      },
-      enrolledOn: {
-        title: 'Enrolled On',
-        filter: true
-      },
-      createdBy: {
-        title: 'Enrolled By',
-        filter: true
-      }
-
-    },
-    edit: {
-      // tslint:disable-next-line:max-line-length
-      editButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>' : '',
-      saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
-      cancelButtonContent: '<i class="ti-close text-danger"></i>'
-    },
-    pager: {
-      perPage: 200
-    }
-  };
+  settings;
 
   ngOnInit() {
     this.otc = JSON.parse(localStorage.getItem('otc'));
@@ -157,6 +122,42 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
     this.gtTellers();
 
     this.getUserAssignedRights();
+    this.settings = {
+      mode: 'external',
+      actions: {
+        delete: false,
+        add: false,
+        position: 'right',
+      },
+      columns: {
+        counter: {
+          title: '#',
+          filter: false
+        },
+        tellerName: {
+          title: 'Teller Name',
+          filter: true
+        },
+        enrolledOn: {
+          title: 'Enrolled On',
+          filter: true
+        },
+        createdBy: {
+          title: 'Enrolled By',
+          filter: true
+        }
+
+      },
+      edit: {
+        // tslint:disable-next-line:max-line-length
+        editButtonContent: (this.canEditUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>' : '',
+        saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
+        cancelButtonContent: '<i class="ti-close text-danger"></i>'
+      },
+      pager: {
+        perPage: 200
+      }
+    };
   }
 
   getUserAssignedRights() {

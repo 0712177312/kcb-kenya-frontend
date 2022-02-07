@@ -50,7 +50,16 @@ export class CountryComponent implements OnInit {
     canAddUserProfile;
     canEditUserProfile;
 
-    settings = {
+    settings;
+
+  ngOnInit() {
+    this.gtCountries();
+    this.otc = JSON.parse(localStorage.getItem('otc'));
+    this.rightId = this.otc.rightId;
+    console.log('right id', this.rightId);
+    setTimeout(() => (this.staticAlertClosed = true), 8000);
+    this.getUserAssignedRights();
+    this.settings = {
         mode: 'external',
         actions: {
             delete: false,
@@ -73,7 +82,7 @@ export class CountryComponent implements OnInit {
         },
         edit: {
             // tslint:disable-next-line:max-line-length
-            editButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10"> <i class="fas fa-check-circle text-info-custom"></i></a>' : '',
+            editButtonContent: (this.canEditUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10"> <i class="fas fa-check-circle text-info-custom"></i></a>' : '',
             saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
             cancelButtonContent: '<i class="ti-close text-danger"></i>'
         },
@@ -87,14 +96,6 @@ export class CountryComponent implements OnInit {
             class: 'table-bordered table-striped'
         },
     };
-
-  ngOnInit() {
-    this.gtCountries();
-    this.otc = JSON.parse(localStorage.getItem('otc'));
-    this.rightId = this.otc.rightId;
-    console.log('right id', this.rightId);
-    setTimeout(() => (this.staticAlertClosed = true), 8000);
-    this.getUserAssignedRights();
   }
 
     getUserAssignedRights() {

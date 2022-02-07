@@ -44,38 +44,7 @@ export class DetachStaffComponent implements OnInit, OnDestroy {
   canAddUserProfile;
   canEditUserProfile;
 
-  settings = {
-    mode: 'external',
-    actions: {
-      delete: false,
-      add: false,
-      position: 'right',
-    },
-    columns: {
-      counter: {
-        title: '#',
-        filter: false
-      },
-      tellerName: {
-        title: 'Teller Name',
-        filter: true
-      },
-      customerId: {
-        title: 'customerId',
-        filter: true
-      }
-
-    },
-    edit: {
-      // tslint:disable-next-line:max-line-length
-      editButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>' : '',
-      saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
-      cancelButtonContent: '<i class="ti-close text-danger"></i>'
-    },
-    pager: {
-      perPage: 200
-    }
-  };
+  settings;
 
 
   constructor(private apiService: BioService,
@@ -89,6 +58,38 @@ export class DetachStaffComponent implements OnInit, OnDestroy {
     this.otc = JSON.parse(localStorage.getItem('otc'));
     this.rightId = this.otc.rightId;
     this.getUserAssignedRights();
+    this.settings = {
+      mode: 'external',
+      actions: {
+        delete: false,
+        add: false,
+        position: 'right',
+      },
+      columns: {
+        counter: {
+          title: '#',
+          filter: false
+        },
+        tellerName: {
+          title: 'Teller Name',
+          filter: true
+        },
+        customerId: {
+          title: 'customerId',
+          filter: true
+        }
+
+      },
+      edit: {
+        // tslint:disable-next-line:max-line-length
+        editButtonContent: (this.canEditUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>' : '',
+        saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
+        cancelButtonContent: '<i class="ti-close text-danger"></i>'
+      },
+      pager: {
+        perPage: 200
+      }
+    };
   }
 
   getUserAssignedRights() {

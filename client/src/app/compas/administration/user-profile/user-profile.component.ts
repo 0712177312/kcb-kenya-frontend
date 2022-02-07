@@ -112,47 +112,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
     userId: any;
 
     // the id of the logged in user. This will be used to filter out the currently logged in user
-    settings = {
-        mode: 'external',
-        actions: {
-            delete: false,
-            position: 'right',
-        },
-        columns: {
-            id: {
-                title: '##',
-                filter: true
-            },
-            fullName: {
-                title: 'Full name',
-                filter: true
-            },
-            username: {
-                title: 'User name',
-                filter: true
-            },
-            email: {
-                title: 'Email',
-                filter: true
-            }
-            // phone: {
-            //     title: 'Phone number',
-            //     filter: true
-            // }
-        },
-        edit: {
-            // tslint:disable-next-line:max-line-length
-            editButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10"> <i class="fas fa-check-circle text-info-custom"></i></a>' : '',
-            saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
-            cancelButtonContent: '<i class="ti-close text-danger"></i>'
-        },
-        add: {
-            // tslint:disable-next-line:max-line-length
-            addButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-info m-r-10"> <i class="fas fa-plus-circle"></i></a>' : '',
-            createButtonContent: '<i class="nb-checkmark"></i>',
-            cancelButtonContent: '<i class="nb-close"></i>',
-        },
-    };
+    settings;
     private base64textString: String = '';
 
     constructor(private blockUIService: BlockUIService,
@@ -183,6 +143,47 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         this.rightId = this.otc.rightId;
         console.log('right id', this.rightId);
         this.getUserAssignedRights();
+        this.settings = {
+            mode: 'external',
+            actions: {
+                delete: false,
+                position: 'right',
+            },
+            columns: {
+                id: {
+                    title: '##',
+                    filter: true
+                },
+                fullName: {
+                    title: 'Full name',
+                    filter: true
+                },
+                username: {
+                    title: 'User name',
+                    filter: true
+                },
+                email: {
+                    title: 'Email',
+                    filter: true
+                }
+                // phone: {
+                //     title: 'Phone number',
+                //     filter: true
+                // }
+            },
+            edit: {
+                // tslint:disable-next-line:max-line-length
+                editButtonContent: (this.canEditUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10"> <i class="fas fa-check-circle text-info-custom"></i></a>' : '',
+                saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
+                cancelButtonContent: '<i class="ti-close text-danger"></i>'
+            },
+            add: {
+                // tslint:disable-next-line:max-line-length
+                addButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-info m-r-10"> <i class="fas fa-plus-circle"></i></a>' : '',
+                createButtonContent: '<i class="nb-checkmark"></i>',
+                cancelButtonContent: '<i class="nb-close"></i>',
+            },
+        };
     }
 
     getUserAssignedRights() {

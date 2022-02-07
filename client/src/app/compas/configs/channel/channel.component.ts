@@ -6,12 +6,6 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { ToastrService } from 'ngx-toastr';
 import { ConfigsService } from '../../services/configs.service';
 
-
-
-let canViewUserProfile: Boolean;
-let canAddUserProfile: Boolean;
-let canEditUserProfile: Boolean;
-
 @Component({
   selector: 'app-channel',
   templateUrl: './channel.component.html',
@@ -24,7 +18,7 @@ export class ChannelComponent implements OnInit {
        private conSvc: ConfigsService, private fb: FormBuilder, private logs: LogsService
       ) {}
     channels: any = [];
-    settings = settings;
+
     form: FormGroup;
     title: string;
     country: any = {};
@@ -40,7 +34,11 @@ export class ChannelComponent implements OnInit {
     is_edit = false;
     source: LocalDataSource;
 
+    canViewUserProfile: Boolean;
+    canAddUserProfile: Boolean;
+    canEditUserProfile: Boolean;
 
+    settings;
 
     ngOnInit() {
       this.gtChannels();
@@ -49,6 +47,47 @@ export class ChannelComponent implements OnInit {
       console.log('right id', this.rightId);
         setTimeout(() => (this.staticAlertClosed = true), 8000);
         this.getUserAssignedRights();
+        this.settings = {
+            mode: 'external',
+            actions: {
+                delete: false,
+                position: 'right',
+            },
+            // selectMode: 'multi',
+            columns: {
+                id: {
+                    title: '#',
+                    filter: true
+                },
+                channelCode: {
+                    title: 'Channel Code',
+                    filter: true
+                },
+                channelName: {
+                    title: 'Channel Name',
+                    filter: true
+                },
+                activeStatus: {
+                    title: 'Status',
+                    filter: false
+                }
+            },
+            edit: {
+                // tslint:disable-next-line:max-line-length
+                editButtonContent: (this.canEditUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10"> <i class="fas fa-check-circle text-info-custom"></i></a>' : '',
+                saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
+                cancelButtonContent: '<i class="ti-close text-danger"></i>'
+            },
+            add: {
+                // tslint:disable-next-line:max-line-length
+                addButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-info m-r-10"> <i class="fas fa-plus-circle"></i></a>' : '',
+                createButtonContent: '<i class="nb-checkmark"></i>',
+                cancelButtonContent: '<i class="nb-close"></i>',
+            },
+            attr: {
+                class: 'table-bordered table-striped'
+            },
+        };
     }
 
     getUserAssignedRights() {
@@ -64,9 +103,9 @@ export class ChannelComponent implements OnInit {
         }
 
         if (rightsIndex >= 0) {
-            canViewUserProfile = userAssignedRights[0].rights[rightsIndex].allowView;
-            canAddUserProfile = userAssignedRights[0].rights[rightsIndex].allowAdd;
-            canEditUserProfile = userAssignedRights[0].rights[rightsIndex].allowEdit;
+            this.canViewUserProfile = userAssignedRights[0].rights[rightsIndex].allowView;
+            this.canAddUserProfile = userAssignedRights[0].rights[rightsIndex].allowAdd;
+            this.canEditUserProfile = userAssignedRights[0].rights[rightsIndex].allowEdit;
         }
     }
 
@@ -187,44 +226,44 @@ export class ChannelComponent implements OnInit {
     }
   }
 
-  export let settings = {
-    mode: 'external',
-    actions: {
-        delete: false,
-        position: 'right',
-    },
-   // selectMode: 'multi',
-    columns: {
-      id: {
-        title: '#',
-        filter: true
-      },
-      channelCode: {
-            title: 'Channel Code',
-            filter: true
-        },
-     channelName: {
-            title: 'Channel Name',
-            filter: true
-        },
-        activeStatus: {
-            title: 'Status',
-            filter: false
-        }
-    },
-    edit: {
-        // tslint:disable-next-line:max-line-length
-        editButtonContent: (canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10"> <i class="fas fa-check-circle text-info-custom"></i></a>' : '',
-        saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
-        cancelButtonContent: '<i class="ti-close text-danger"></i>'
-    },
-    add: {
-        // tslint:disable-next-line:max-line-length
-        addButtonContent: (canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-info m-r-10"> <i class="fas fa-plus-circle"></i></a>' : '',
-        createButtonContent: '<i class="nb-checkmark"></i>',
-        cancelButtonContent: '<i class="nb-close"></i>',
-    },
-    attr: {
-      class: 'table-bordered table-striped'
-    },
-  };
+  // export let settings = {
+  //   mode: 'external',
+  //   actions: {
+  //       delete: false,
+  //       position: 'right',
+  //   },
+  //  // selectMode: 'multi',
+  //   columns: {
+  //     id: {
+  //       title: '#',
+  //       filter: true
+  //     },
+  //     channelCode: {
+  //           title: 'Channel Code',
+  //           filter: true
+  //       },
+  //    channelName: {
+  //           title: 'Channel Name',
+  //           filter: true
+  //       },
+  //       activeStatus: {
+  //           title: 'Status',
+  //           filter: false
+  //       }
+  //   },
+  //   edit: {
+  //       // tslint:disable-next-line:max-line-length
+  //       editButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10"> <i class="fas fa-check-circle text-info-custom"></i></a>' : '',
+  //       saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
+  //       cancelButtonContent: '<i class="ti-close text-danger"></i>'
+  //   },
+  //   add: {
+  //       // tslint:disable-next-line:max-line-length
+  //       addButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-info m-r-10"> <i class="fas fa-plus-circle"></i></a>' : '',
+  //       createButtonContent: '<i class="nb-checkmark"></i>',
+  //       cancelButtonContent: '<i class="nb-close"></i>',
+  //   },
+  //   attr: {
+  //     class: 'table-bordered table-striped'
+  //   },
+  // };

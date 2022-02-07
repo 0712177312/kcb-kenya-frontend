@@ -24,7 +24,7 @@ export class BranchComponent implements OnInit {
       private bioService: BioService, private conSvc: ConfigsService, private fb: FormBuilder, private globalService: MySharedService,
       @Inject(DOCUMENT) private document: any, private regionService: RegionService, private logs: LogsService) {}
     branches: any = [];
-    settings = settings;
+    
     form: FormGroup;
     title: string;
     country: any = {};
@@ -47,6 +47,8 @@ export class BranchComponent implements OnInit {
     canAddUserProfile;
     canEditUserProfile;
 
+    settings;
+
     ngOnInit() {
       this.gtbranches();
       this.otc = JSON.parse(localStorage.getItem('otc'));
@@ -54,6 +56,43 @@ export class BranchComponent implements OnInit {
       console.log('right id', this.rightId);
       setTimeout(() => (this.staticAlertClosed = true), 8000);
       this.getUserAssignedRights();
+      this.settings = {
+          mode: 'external',
+          actions: {
+              delete: false,
+              position: 'right',
+          },
+          // selectMode: 'multi',
+          columns: {
+              id: {
+                  title: '#',
+                  filter: true
+              },
+              branchCode: {
+                  title: 'Branch Code',
+                  filter: true
+              },
+              branchName: {
+                  title: 'Branch Name',
+                  filter: true
+              }
+          },
+          edit: {
+              // tslint:disable-next-line:max-line-length
+              editButtonContent: (this.canEditUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10"> <i class="fas fa-check-circle text-info-custom"></i></a>' : '',
+              saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
+              cancelButtonContent: '<i class="ti-close text-danger"></i>'
+          },
+          add: {
+              // tslint:disable-next-line:max-line-length
+              addButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-info m-r-10"> <i class="fas fa-plus-circle"></i></a>' : '',
+              createButtonContent: '<i class="nb-checkmark"></i>',
+              cancelButtonContent: '<i class="nb-close"></i>',
+          },
+          attr: {
+              class: 'table-bordered table-striped'
+          },
+      };
 
     }
     getUserAssignedRights() {
@@ -218,40 +257,40 @@ export class BranchComponent implements OnInit {
     }
   }
 
-  export let settings = {
-    mode: 'external',
-    actions: {
-        delete: false,
-        position: 'right',
-    },
-   // selectMode: 'multi',
-    columns: {
-      id: {
-        title: '#',
-        filter: true
-      },
-      branchCode: {
-            title: 'Branch Code',
-            filter: true
-        },
-      branchName: {
-            title: 'Branch Name',
-            filter: true
-        }
-    },
-    edit: {
-        // tslint:disable-next-line:max-line-length
-        editButtonContent: '<a class="btn btn-block btn-outline-success m-r-10"> <i class="fas fa-check-circle text-info-custom"></i></a>',
-        saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
-        cancelButtonContent: '<i class="ti-close text-danger"></i>'
-    },
-    add: {
-        // tslint:disable-next-line:max-line-length
-        addButtonContent: '<a class="btn btn-block btn-outline-info m-r-10"> <i class="fas fa-plus-circle"></i></a>',
-        createButtonContent: '<i class="nb-checkmark"></i>',
-        cancelButtonContent: '<i class="nb-close"></i>',
-    },
-    attr: {
-      class: 'table-bordered table-striped'
-    },
-  };
+  // export let settings = {
+  //   mode: 'external',
+  //   actions: {
+  //       delete: false,
+  //       position: 'right',
+  //   },
+  //  // selectMode: 'multi',
+  //   columns: {
+  //     id: {
+  //       title: '#',
+  //       filter: true
+  //     },
+  //     branchCode: {
+  //           title: 'Branch Code',
+  //           filter: true
+  //       },
+  //     branchName: {
+  //           title: 'Branch Name',
+  //           filter: true
+  //       }
+  //   },
+  //   edit: {
+  //       // tslint:disable-next-line:max-line-length
+  //       editButtonContent: '<a class="btn btn-block btn-outline-success m-r-10"> <i class="fas fa-check-circle text-info-custom"></i></a>',
+  //       saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
+  //       cancelButtonContent: '<i class="ti-close text-danger"></i>'
+  //   },
+  //   add: {
+  //       // tslint:disable-next-line:max-line-length
+  //       addButtonContent: '<a class="btn btn-block btn-outline-info m-r-10"> <i class="fas fa-plus-circle"></i></a>',
+  //       createButtonContent: '<i class="nb-checkmark"></i>',
+  //       cancelButtonContent: '<i class="nb-close"></i>',
+  //   },
+  //   attr: {
+  //     class: 'table-bordered table-striped'
+  //   },
+  // };

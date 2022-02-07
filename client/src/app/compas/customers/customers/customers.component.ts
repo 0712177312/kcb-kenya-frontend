@@ -111,60 +111,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
     private toastr: ToastrService, private regionService: RegionService, private logs: LogsService) {
 
   }
-  settings = {
-    mode: 'external',
-    actions: {
-      delete: false,
-      edit: false,
-      position: 'right',
-    },
-    columns: {
-      customerName: {
-        title: 'Full Name',
-        filter: true
-      },
-      customerIdNumber: {
-        title: 'Customer IdNumber',
-        filter: true
-      },
-      phoneNumber: {
-        title: 'Phone Number',
-        filter: true
-      },
-      email: {
-        title: 'Email',
-        filter: true
-      },
-      gender: {
-        title: 'Gender',
-        filter: true
-      },
-      country: {
-        title: 'Nationality',
-        filter: true
-      }
-    },
-    edit: {
-      // tslint:disable-next-line:max-line-length
-      editButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>' : '',
-      saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
-      cancelButtonContent: '<i class="ti-close text-danger"></i>'
-    },
-    add: {
-      // tslint:disable-next-line:max-line-length
-      addButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-info m-r-10" ngbPopover="Add Customer" triggers="mouseenter:mouseleave" popoverTitle="Add Customer"> <i class="fas fa-plus-circle"></i></a>' : '',
-      createButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-    },
-    pager: {
-      perPage: 200
-    },
-    rowClassFunction: function (row) {
-      if (row.editable) { return 'editable'; }
-      return '';
-
-    }
-  };
+  settings;
   companies: any[] = [];
   dropdownList = [];
   selectedItems = [];
@@ -207,9 +154,63 @@ export class CustomersComponent implements OnInit, OnDestroy {
     });
 
     this.getUserAssignedRights();
+    this.settings = {
+      mode: 'external',
+      actions: {
+        delete: false,
+        edit: false,
+        position: 'right',
+      },
+      columns: {
+        customerName: {
+          title: 'Full Name',
+          filter: true
+        },
+        customerIdNumber: {
+          title: 'Customer IdNumber',
+          filter: true
+        },
+        phoneNumber: {
+          title: 'Phone Number',
+          filter: true
+        },
+        email: {
+          title: 'Email',
+          filter: true
+        },
+        gender: {
+          title: 'Gender',
+          filter: true
+        },
+        country: {
+          title: 'Nationality',
+          filter: true
+        }
+      },
+      edit: {
+        // tslint:disable-next-line:max-line-length
+        editButtonContent: (this.canEditUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>' : '',
+        saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
+        cancelButtonContent: '<i class="ti-close text-danger"></i>'
+      },
+      add: {
+        // tslint:disable-next-line:max-line-length
+        addButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-info m-r-10" ngbPopover="Add Customer" triggers="mouseenter:mouseleave" popoverTitle="Add Customer"> <i class="fas fa-plus-circle"></i></a>' : '',
+        createButtonContent: '<i class="nb-checkmark"></i>',
+        cancelButtonContent: '<i class="nb-close"></i>',
+      },
+      pager: {
+        perPage: 200
+      },
+      rowClassFunction: function (row) {
+        if (row.editable) { return 'editable'; }
+        return '';
+
+      }
+    };
   }
 
-  getUserAssignedRights(){
+  getUserAssignedRights() {
     let userAssignedRights = this.otc.userAssignedRights;
     let rightsIndex = -1;
     for(let i = 0; i < userAssignedRights[0].rights.length; i++){
