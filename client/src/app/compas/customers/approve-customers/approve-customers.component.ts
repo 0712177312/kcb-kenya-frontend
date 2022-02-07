@@ -110,7 +110,58 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
     private custSvc: CustomerService, @Inject(DOCUMENT) private document: any,
     private toastr: ToastrService, private biosvc: BioService) {
   }
-  settings = settings;
+  settings =  {
+    mode: 'external',
+    actions: {
+      delete: false,
+      add: false,
+      position: 'right',
+    },
+    columns: {
+      counter: {
+        title: '#',
+        filter: false
+      },
+      customerName: {
+        title: 'Customer Name',
+        filter: true
+      },
+      customerId: {
+        title: 'Customer ID',
+        filter: true
+      },
+      country: {
+        title: 'Country',
+        filter: true
+      },
+      phoneNumber: {
+        title: 'Email Address',
+        filter: true
+      },
+      customerIdNumber: {
+        title: 'Customer ID Number',
+        filter: true
+      },
+      enrolledOn: {
+        title: 'Enrolled On',
+        filter: true
+      },
+      createdBy: {
+        title: 'Enrolled By',
+        filter: true
+      }
+
+    },
+    edit: {
+      // tslint:disable-next-line:max-line-length
+      editButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>' : '',
+      saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
+      cancelButtonContent: '<i class="ti-close text-danger"></i>'
+    },
+    pager: {
+      perPage: 200
+    }
+  };
 
   ngOnInit() {
     this.otc = JSON.parse(localStorage.getItem('otc'));
@@ -719,55 +770,55 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
 
 
 }
-export let settings = {
-  mode: 'external',
-  actions: {
-    delete: false,
-    add: false,
-    position: 'right',
-  },
-  columns: {
-    counter: {
-      title: '#',
-      filter: false
-    },
-    customerName: {
-      title: 'Customer Name',
-      filter: true
-    },
-    customerId: {
-      title: 'Customer ID',
-      filter: true
-    },
-    country: {
-      title: 'Country',
-      filter: true
-    },
-    phoneNumber: {
-      title: 'Email Address',
-      filter: true
-    },
-    customerIdNumber: {
-      title: 'Customer ID Number',
-      filter: true
-    },
-    enrolledOn: {
-      title: 'Enrolled On',
-      filter: true
-    },
-    createdBy: {
-      title: 'Enrolled By',
-      filter: true
-    }
-
-  },
-  edit: {
-    // tslint:disable-next-line:max-line-length
-    editButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>' : '',
-    saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
-    cancelButtonContent: '<i class="ti-close text-danger"></i>'
-  },
-  pager: {
-    perPage: 200
-  }
-};
+// export let settings = {
+//   mode: 'external',
+//   actions: {
+//     delete: false,
+//     add: false,
+//     position: 'right',
+//   },
+//   columns: {
+//     counter: {
+//       title: '#',
+//       filter: false
+//     },
+//     customerName: {
+//       title: 'Customer Name',
+//       filter: true
+//     },
+//     customerId: {
+//       title: 'Customer ID',
+//       filter: true
+//     },
+//     country: {
+//       title: 'Country',
+//       filter: true
+//     },
+//     phoneNumber: {
+//       title: 'Email Address',
+//       filter: true
+//     },
+//     customerIdNumber: {
+//       title: 'Customer ID Number',
+//       filter: true
+//     },
+//     enrolledOn: {
+//       title: 'Enrolled On',
+//       filter: true
+//     },
+//     createdBy: {
+//       title: 'Enrolled By',
+//       filter: true
+//     }
+//
+//   },
+//   edit: {
+//     // tslint:disable-next-line:max-line-length
+//     editButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>' : '',
+//     saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
+//     cancelButtonContent: '<i class="ti-close text-danger"></i>'
+//   },
+//   pager: {
+//     perPage: 200
+//   }
+// };

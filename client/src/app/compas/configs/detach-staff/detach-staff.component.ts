@@ -38,12 +38,45 @@ export class DetachStaffComponent implements OnInit, OnDestroy {
 
   account_number: any;
 
-  settings = settings;
 
   // manage rights buttons
   canViewUserProfile;
   canAddUserProfile;
   canEditUserProfile;
+
+  settings = {
+    mode: 'external',
+    actions: {
+      delete: false,
+      add: false,
+      position: 'right',
+    },
+    columns: {
+      counter: {
+        title: '#',
+        filter: false
+      },
+      tellerName: {
+        title: 'Teller Name',
+        filter: true
+      },
+      customerId: {
+        title: 'customerId',
+        filter: true
+      }
+
+    },
+    edit: {
+      // tslint:disable-next-line:max-line-length
+      editButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>' : '',
+      saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
+      cancelButtonContent: '<i class="ti-close text-danger"></i>'
+    },
+    pager: {
+      perPage: 200
+    }
+  };
+
 
   constructor(private apiService: BioService,
     private modalService: NgbModal,
@@ -185,35 +218,35 @@ export class DetachStaffComponent implements OnInit, OnDestroy {
 
 }
 
-export let settings = {
-  mode: 'external',
-  actions: {
-    delete: false,
-    add: false,
-    position: 'right',
-  },
-  columns: {
-    counter: {
-      title: '#',
-      filter: false
-    },
-    tellerName: {
-      title: 'Teller Name',
-      filter: true
-    },
-    customerId: {
-      title: 'customerId',
-      filter: true
-    }
-
-  },
-  edit: {
-    // tslint:disable-next-line:max-line-length
-    editButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>' : '',
-    saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
-    cancelButtonContent: '<i class="ti-close text-danger"></i>'
-  },
-  pager: {
-    perPage: 200
-  }
-};
+// export let settings = {
+//   mode: 'external',
+//   actions: {
+//     delete: false,
+//     add: false,
+//     position: 'right',
+//   },
+//   columns: {
+//     counter: {
+//       title: '#',
+//       filter: false
+//     },
+//     tellerName: {
+//       title: 'Teller Name',
+//       filter: true
+//     },
+//     customerId: {
+//       title: 'customerId',
+//       filter: true
+//     }
+//
+//   },
+//   edit: {
+//     // tslint:disable-next-line:max-line-length
+//     editButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>' : '',
+//     saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
+//     cancelButtonContent: '<i class="ti-close text-danger"></i>'
+//   },
+//   pager: {
+//     perPage: 200
+//   }
+// };

@@ -101,9 +101,9 @@ export class CustomersComponent implements OnInit, OnDestroy {
   private stompClient = null;
 
   // user assigned rights for the logged in user
-  canViewUser: Boolean;
-  canAddUser: Boolean;
-  canEditUser: Boolean;
+  canViewUserProfile: Boolean;
+  canAddUserProfile: Boolean;
+  canEditUserProfile: Boolean;
 
   constructor(private tellerSvc: TellerService, private apiService: BioService,
     private fb: FormBuilder, private sockService: WebSocketServiceService,
@@ -111,7 +111,60 @@ export class CustomersComponent implements OnInit, OnDestroy {
     private toastr: ToastrService, private regionService: RegionService, private logs: LogsService) {
 
   }
-  settings = settings;
+  settings = {
+    mode: 'external',
+    actions: {
+      delete: false,
+      edit: false,
+      position: 'right',
+    },
+    columns: {
+      customerName: {
+        title: 'Full Name',
+        filter: true
+      },
+      customerIdNumber: {
+        title: 'Customer IdNumber',
+        filter: true
+      },
+      phoneNumber: {
+        title: 'Phone Number',
+        filter: true
+      },
+      email: {
+        title: 'Email',
+        filter: true
+      },
+      gender: {
+        title: 'Gender',
+        filter: true
+      },
+      country: {
+        title: 'Nationality',
+        filter: true
+      }
+    },
+    edit: {
+      // tslint:disable-next-line:max-line-length
+      editButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>' : '',
+      saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
+      cancelButtonContent: '<i class="ti-close text-danger"></i>'
+    },
+    add: {
+      // tslint:disable-next-line:max-line-length
+      addButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-info m-r-10" ngbPopover="Add Customer" triggers="mouseenter:mouseleave" popoverTitle="Add Customer"> <i class="fas fa-plus-circle"></i></a>' : '',
+      createButtonContent: '<i class="nb-checkmark"></i>',
+      cancelButtonContent: '<i class="nb-close"></i>',
+    },
+    pager: {
+      perPage: 200
+    },
+    rowClassFunction: function (row) {
+      if (row.editable) { return 'editable'; }
+      return '';
+
+    }
+  };
   companies: any[] = [];
   dropdownList = [];
   selectedItems = [];
@@ -160,16 +213,16 @@ export class CustomersComponent implements OnInit, OnDestroy {
     let userAssignedRights = this.otc.userAssignedRights;
     let rightsIndex = -1;
     for(let i = 0; i < userAssignedRights[0].rights.length; i++){
-        if(userAssignedRights[0].rights[i].path === "/customers/customers"){
+        if(userAssignedRights[0].rights[i].path === '/customers/customers') {
             rightsIndex = i;
             break;
         }
     }
 
     if(rightsIndex >= 0){
-        this.canViewUser = userAssignedRights[0].rights[rightsIndex].allowView;
-        this.canAddUser = userAssignedRights[0].rights[rightsIndex].allowAdd;
-        this.canEditUser = userAssignedRights[0].rights[rightsIndex].allowEdit;
+      this.canViewUserProfile = userAssignedRights[0].rights[rightsIndex].allowView;
+      this.canAddUserProfile = userAssignedRights[0].rights[rightsIndex].allowAdd;
+      this.canEditUserProfile = userAssignedRights[0].rights[rightsIndex].allowEdit;
     }
   }
 
@@ -559,7 +612,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
   }
 
   initInquery() {
-    if(this.canAddUser === false){
+    if(this.canAddUserProfile === false){
       return this.toastr.warning('You are not allowed to add a user', 'Warning!', { timeOut: 3000 });
     }
     this.account_number = '';
@@ -1183,57 +1236,57 @@ export class CustomersComponent implements OnInit, OnDestroy {
     this.selectedItems = [];
   }
 }
-export let settings = {
-  mode: 'external',
-  actions: {
-    delete: false,
-    edit: false,
-    position: 'right',
-  },
-  columns: {
-    customerName: {
-      title: 'Full Name',
-      filter: true
-    },
-    customerIdNumber: {
-      title: 'Customer IdNumber',
-      filter: true
-    },
-    phoneNumber: {
-      title: 'Phone Number',
-      filter: true
-    },
-    email: {
-      title: 'Email',
-      filter: true
-    },
-    gender: {
-      title: 'Gender',
-      filter: true
-    },
-    country: {
-      title: 'Nationality',
-      filter: true
-    }
-  },
-  edit: {
-    // tslint:disable-next-line:max-line-length
-    editButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>' : '',
-    saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
-    cancelButtonContent: '<i class="ti-close text-danger"></i>'
-  },
-  add: {
-    // tslint:disable-next-line:max-line-length
-    addButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-info m-r-10" ngbPopover="Add Customer" triggers="mouseenter:mouseleave" popoverTitle="Add Customer"> <i class="fas fa-plus-circle"></i></a>' : '',
-    createButtonContent: '<i class="nb-checkmark"></i>',
-    cancelButtonContent: '<i class="nb-close"></i>',
-  },
-  pager: {
-    perPage: 200
-  },
-  rowClassFunction: function (row) {
-    if (row.editable) { return 'editable'; }
-    return '';
-
-  }
-};
+// export let settings = {
+//   mode: 'external',
+//   actions: {
+//     delete: false,
+//     edit: false,
+//     position: 'right',
+//   },
+//   columns: {
+//     customerName: {
+//       title: 'Full Name',
+//       filter: true
+//     },
+//     customerIdNumber: {
+//       title: 'Customer IdNumber',
+//       filter: true
+//     },
+//     phoneNumber: {
+//       title: 'Phone Number',
+//       filter: true
+//     },
+//     email: {
+//       title: 'Email',
+//       filter: true
+//     },
+//     gender: {
+//       title: 'Gender',
+//       filter: true
+//     },
+//     country: {
+//       title: 'Nationality',
+//       filter: true
+//     }
+//   },
+//   edit: {
+//     // tslint:disable-next-line:max-line-length
+//     editButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-success m-r-10" ngbPopover="Edit Customer" triggers="mouseenter:mouseleave" popoverTitle="Edit Customer"> <i class="fas fa-check-circle text-info-custom" ></i></a>' : '',
+//     saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
+//     cancelButtonContent: '<i class="ti-close text-danger"></i>'
+//   },
+//   add: {
+//     // tslint:disable-next-line:max-line-length
+//     addButtonContent: (this.canAddUserProfile === true) ? '<a class="btn btn-block btn-outline-info m-r-10" ngbPopover="Add Customer" triggers="mouseenter:mouseleave" popoverTitle="Add Customer"> <i class="fas fa-plus-circle"></i></a>' : '',
+//     createButtonContent: '<i class="nb-checkmark"></i>',
+//     cancelButtonContent: '<i class="nb-close"></i>',
+//   },
+//   pager: {
+//     perPage: 200
+//   },
+//   rowClassFunction: function (row) {
+//     if (row.editable) { return 'editable'; }
+//     return '';
+//
+//   }
+// };
