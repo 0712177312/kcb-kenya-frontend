@@ -25,10 +25,8 @@ import com.compulynx.compas.customs.Api;
 import com.compulynx.compas.customs.HttpRestProccesor;
 import com.compulynx.compas.customs.responses.GlobalResponse;
 import com.compulynx.compas.customs.responses.TellerResponse;
-import com.compulynx.compas.models.Customer;
 import com.compulynx.compas.models.Teller;
 import com.compulynx.compas.models.UserGroup;
-import com.compulynx.compas.models.extras.CustomersToApprove;
 import com.compulynx.compas.models.extras.TellerToApprove;
 import com.compulynx.compas.services.CustomerService;
 import com.compulynx.compas.services.TellerService;
@@ -246,11 +244,14 @@ public class TellerController {
 	@PostMapping(value = "/approveTeller")
 	public ResponseEntity<?> approveCustomer(@RequestBody Teller teller) {
         try {
-            String t24Url = env.getProperty("tserver") + teller.getCustomerId() + "/true";
+//            String t24Url = env.getProperty("tserver") + teller.getCustomerId() + "/true";
+
+            String t24Url = env.getProperty("tserver");
             String customerId = teller.getCustomerId();
             log.info("update url for " + t24Url);
 
-            String response = HttpRestProccesor.postJson(t24Url, customerId);
+//            String response = HttpRestProccesor.postJson(t24Url, customerId);
+            String response = HttpRestProccesor.postApproveUser(t24Url, customerId);
 
             log.info("T24 response response " + response);
             if(response.equals("failed")){

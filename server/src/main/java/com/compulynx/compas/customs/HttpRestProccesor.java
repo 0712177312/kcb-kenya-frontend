@@ -1,16 +1,18 @@
 package com.compulynx.compas.customs;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.*;
+import java.security.InvalidKeyException;
 import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -18,6 +20,15 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import com.google.gson.Gson;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,6 +86,65 @@ public class HttpRestProccesor {
             return "failed";
         }
         return result;
+    }
+
+    public static String postApproveUser(String url, String customID) {
+
+        try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+            disableSslVerification();
+
+            HttpPost httpPost = new HttpPost(url);
+            httpPost.setHeader("Content-type", "application/json");
+
+            String json = "{\n    " +
+                    "\"userName\": \"I0w8NjGOG/SIY2GgkiSU0w==\",\n    " +
+                    "\"passWord\": \"p6wS7JpG9FCD8Ic+tntr9Q==\",\n    " +
+                    "\"object\": " +
+                    "{\n        " +
+                    "\t\t\"id\" " + ":" + "\""
+                    + customID +
+                    "\"" +
+                    "\n" +
+                    "}\n" +
+                    "}\n";
+
+
+            System.out.println("calling the T24 url endpoint: " + url);
+            System.out.println("here is the json being sent");
+            System.out.println(json);
+
+
+
+            StringEntity stringEntity = new StringEntity(json);
+            httpPost.setEntity(stringEntity);
+
+            System.out.println("Executing request " + httpPost.getRequestLine());
+
+            // Create a custom response handler
+            ResponseHandler<String> responseHandler = response -> {
+                int status = response.getStatusLine().getStatusCode();
+                if (status >= 200 && status < 300) {
+                    HttpEntity entity = response.getEntity();
+
+                    return entity != null ? EntityUtils.toString(entity) : null;
+                } else {
+                    throw new ClientProtocolException("Unexpected response status: " + status);
+                }
+            };
+            String responseBody = httpclient.execute(httpPost, responseHandler);
+
+            ResponseBody resBody = new Gson().fromJson(responseBody, ResponseBody.class);
+
+            if (resBody != null) {
+                if (resBody.message != null){
+                    log.info("T24 response for---- " + customID + "----> " + resBody.message);
+                    return resBody.message;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "failed";
     }
 
     public static void disableSslVerification()
@@ -195,4 +265,11 @@ public class HttpRestProccesor {
                     : resultString;
         }
     }
+}
+
+class ResponseBody {
+    public String message;
+    public String payload;
+    public Boolean requestStatus;
+
 }
