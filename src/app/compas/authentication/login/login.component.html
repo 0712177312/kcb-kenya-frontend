@@ -1,0 +1,80 @@
+<block-ui>
+<div class="auth-wrapper d-flex no-block justify-content-center align-items-center" style="background-color:#eeeeee;">
+    <div class="auth-box">
+        <div [ngClass]="{'d-none': recoverform}">
+            <div class="logo">
+                <span class="db"><img src="assets/images/logo.svg" style="margin-bottom: 10px" class="img-fluid" alt="logo" /></span>
+                <h5 class="font-medium m-b-20">Sign In</h5>
+            </div>
+            <!-- Form -->
+            <div class="row">
+                <div class="col-12">
+                    <form class="form-horizontal m-t-20" id="loginform"  >
+                            <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1"><i class="ti-user"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control form-control-lg" placeholder="Username"  
+                                    [(ngModel)]="user.username" [ngModelOptions]="{standalone: true}">
+                                </div>
+                                <div class="input-group mb-3">                        
+                                    <div class="verify">
+                                        <a href="javascript:;" class="shortcuts shortcut">
+                                            <img id="finger" style="margin-left: 75%;" src="assets/images/fingerprint.png" height="200px" >
+                                          </a>
+                                    </div>
+                                </div>
+                                <div class="form-group text-center">
+                                    <div class="col-xs-12 p-b-20">
+                                        <button class="btn btn-block btn-lg btn-success" (click)="captureFP()">Log In</button>
+                                    </div>
+                                </div>
+                        <div class="form-group m-b-0 m-t-10" *ngIf="loginform">
+                            <div class="col-sm-12 text-center">
+                               Manual Login <a (click)="showRecoverForm()" href="javascript:void(0)" class="text-info m-l-5"><b>login</b></a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="recoverform" [ngClass]="{'d-block': recoverform}">
+            <div class="logo">
+                <span class="db"><img src="assets/images/logo.svg" style="margin-bottom: 10px" height="90" alt="logo" /></span>
+                <h5 class="font-medium m-b-20">Sign In</h5>
+            </div>
+            <!-- Form -->
+            <div class="row">
+                <div class="col-12">
+                    <form class="form-horizontal m-t-20" id="bioform" >
+                    <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="ti-user"></i></span>
+                            </div>
+                            <input type="text" class="form-control form-control-lg" placeholder="Username"  
+                            [(ngModel)]="user.username" [ngModelOptions]="{standalone: true}" required>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon2"><i class="ti-pencil"></i></span>
+                            </div>
+                            <input type="password" class="form-control form-control-lg" placeholder="Password"
+                            [(ngModel)]="user.password" [ngModelOptions]="{standalone: true}" required>
+                        </div>
+                        <div class="form-group text-center">
+                            <div class="col-xs-12 p-b-20">
+                                <button class="btn btn-block btn-lg btn-success" type="button" (click)="login()">Log In</button>
+                            </div>
+                        </div>
+                        <div class="form-group m-b-0 m-t-10" *ngIf="recoverform">
+                            <div class="col-sm-12 text-center">
+                                Don't have fingerprint? <a (click)="showRecoverForm()" href="javascript:void(0)" class="text-info m-l-5"><b>print</b></a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</block-ui>

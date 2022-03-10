@@ -1,0 +1,227 @@
+<block-ui>
+<div class="row" *ngIf="!editMode">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">User profile</h4>
+        <div class="table table-responsive smart-table">
+          <ng2-smart-table [settings]="settings" [source]="source" class=""   (create)="initAddUser($event)" (edit)="initEditUser($event)"></ng2-smart-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="editMode">
+  <div class="col-lg-12">
+    <div class="card ">
+      <div class="card-header bg-info">
+        <h4 class="card-title text-white">{{title}}</h4>
+      </div>
+      <ngb-tabset type="pills" [destroyOnHide]="false" class="custom-pills" #t="ngbTabset"><!-- (tabChange)="validateUser($event)"-->
+        <ngb-tab title="User details" id="tab1">
+          <ng-template ngbTabContent>
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-horizontal">
+              <div class="form-body">
+                <div class="card-body">
+                  <h4 class="card-title">{{title}}</h4>
+                  <hr>
+                  <!-- <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                          <label for="fullName" class="control-label text-left col-md-2">Full Name</label>
+                          <div class="col-md-10">
+                          <input type="text" class="form-control" id="fullName" formControlName="fullName" />
+                          <div *ngIf="submited && (form.controls['fullName'].invalid || form.controls['fullName'].dirty || form.controls['fullName'].touched)" class="error">
+                            <div *ngIf="f.fullName.errors?.required">FullName is required</div>
+                           <div *ngIf="f.fullName.errors?.minlength">Full Name must be a more than 6 characters</div>
+                           <div *ngIf="f.fullName.errors?.pattern">user full name must be text</div>
+                         </div>
+                        </div>
+                      </div>
+                     </div>
+                   </div>
+                   <div class="row">
+                      <div class="col-md-12">
+                      <div class="form-group row">
+                          <label for="username" class="control-label text-left col-md-2">Username</label>
+                          <div class="col-md-10">
+                          <fieldset [disabled]="is_edit">
+                               <input type="text" class="form-control" formControlName="username"/>
+                          </fieldset>
+                          <div *ngIf="submited && (form.controls['username'].invalid || form.controls['username'].dirty || form.controls['username'].touched)" class="error">
+                            <div *ngIf="f.username.errors?.required">Username is required</div>
+                            <div *ngIf="f.username.errors?.minlength">Username should be at least 6 characters</div>
+                         </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group row">
+                          <label for="email" class="control-label text-left col-md-2">Email</label>
+                          <div class="col-md-10">
+                          <input type="text" class="form-control" formControlName="email" id="email"/>
+                           <div *ngIf="submited && (form.controls['email'].invalid || form.controls['email'].dirty || form.controls['email'].touched)" class="error">
+                            <div *ngIf="f.email.errors?.required">Email is required</div>
+                           <div *ngIf="f.email.errors?.pattern">Email must be a valid email</div>
+                         </div>
+                        </div>
+                      </div>
+                    </div>
+                   </div>
+                   <div class="row">
+                      <div class="col-md-12">
+                      <div class="form-group row">
+                        <label for="phone" class="control-label text-left col-md-2">Phone</label>
+                          <div class="col-md-10">
+                          <input type="text" class="form-control" formControlName="phone" />
+                          <div *ngIf="submited && (form.controls['phone'].invalid || form.controls['phone'].dirty || form.controls['phone'].touched)" class="error">
+                            <div *ngIf="f.phone.errors?.required">Phone is required</div>
+                            <div *ngIf="f.phone.errors?.minLength">Phone Number should be at least 7 characters</div>
+                         </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div> -->
+                  <div class="row">
+                    <div class="col-md-12">
+                    <div class="form-group row">
+                        <label for="group" class="control-label text-left col-md-2">Country</label>
+                        <div class="col-md-10">
+                          <ng-select [items]="countries"
+                              bindLabel="name"
+                              [selectOnTab]="true"
+                              bindValue="countryCode"
+                              formControlName="country"
+                              (ngModelChange)="getActiveBranches($event)">
+                          </ng-select>
+                          <div *ngIf="submited && (form.controls['country'].invalid || form.controls['country'].dirty || form.controls['country'].touched)" class="error">
+                            <div *ngIf="f.group.errors?.required">Country is required</div>
+                           </div>
+                      </div>
+                    </div>
+                   </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                    <div class="form-group row">
+                        <label for="group" class="control-label text-left col-md-2">Branch</label>
+                        <div class="col-md-10">
+                          <ng-select [items]="branches"
+                              [selectOnTab]="true"
+                              bindLabel="branchName"
+                              bindValue="branchCode"
+                              formControlName="branch"
+                              (ngModelChange)="getTellers($event)">
+                          </ng-select>
+                          <div *ngIf="submited && (form.controls['branch'].invalid || form.controls['branch'].dirty || form.controls['branch'].touched)" class="error">
+                            <div *ngIf="f.group.errors?.required">Branch is required</div>
+                           </div>
+                      </div>
+                    </div>
+                   </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-12">
+                      <div class="form-group row">
+                          <label for="group" class="control-label text-left col-md-2">Staff</label>
+                          <div class="col-md-10">
+                            <ng-select [items]="tellers"
+                                [selectOnTab]="true"
+                                bindLabel="tellerName"
+                                bindValue="tellerSignOnName"
+                                formControlName="teller"
+                                (ngModelChange)="getTellerDetail($event)">
+                            </ng-select>
+                            <div *ngIf="submited && (form.controls['teller'].invalid || form.controls['teller'].dirty || form.controls['teller'].touched)" class="error">
+                              <div *ngIf="f.group.errors?.required">Staff is required</div>
+                             </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                    <div class="form-group row">
+                        <label for="group" class="control-label text-left col-md-2">User Group</label>
+                        <div class="col-md-10">
+                          <ng-select [items]="this.button === 'Add user' ? userGroupsFiltered : userGroups"
+                              bindLabel="groupName"
+                              bindValue="id"
+                              formControlName="group">
+                          </ng-select>
+                          <div *ngIf="submited && (form.controls['group'].invalid || form.controls['group'].dirty || form.controls['group'].touched)" class="error">
+                            <div *ngIf="f.group.errors?.required">Group is required</div>
+                           </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                  <!-- <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group row">
+                          <label for="password" class="control-label text-left col-md-2">Password</label>
+                          <div class="col-md-10">
+                          <input type="password" id="password" class="form-control" formControlName="password" />
+                          <div *ngIf="submited && (form.controls['password'].invalid || form.controls['password'].dirty || form.controls['password'].touched)" class="error">
+                            <div *ngIf="f.password.errors?.required">Password is required</div>
+                            <div *ngIf="f.password.errors?.minlength">Password must be at least 8 characters</div>
+                            <div *ngIf="f.password.errors?.pattern">Password must have mix of number,lower & uppercase and special characters</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div> -->
+                  <!-- <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group row">
+                          <label for="confirmPassword" class="control-label text-left col-md-2">Confirm Password</label>
+                          <div class="col-md-10">
+                          <input type="password" class="form-control" formControlName="confirmPassword" />
+                          <div *ngIf="submited && form.controls['confirmPassword'].hasError('required')  && (form.controls['confirmPassword'].invalid || form.controls['confirmPassword'].dirty || form.controls['confirmPassword'].touched)"
+                         class="error">
+                          Please Confirm password
+                          </div>
+                          <div *ngIf="submited && form.controls['confirmPassword'].value !== form.controls['password'].value"
+                          class="error">
+                            Password Missmatched
+                        </div>
+                       </div> 
+                      </div>
+                    </div>
+                  </div> -->
+                  <div class="form-group row">
+                      <label for="status" class="col-2 col-form-label">Active</label>
+                     <div class="custom-control chk-active custom-checkbox mr-sm-2 m-b-15">
+                       <input type="checkbox" formControlName="status" class="custom-control-input" id="status" value="check">
+                       <label class="custom-control-label" for="status"></label>
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="unlockUser" class="col-2 col-form-label">Unlock User</label>
+                   <div class="custom-control chk-active custom-checkbox mr-sm-2 m-b-15">
+                     <input type="checkbox" formControlName="locked" class="custom-control-input" id="unlockUser">
+                     <label class="custom-control-label" for="unlockUser"></label>
+                    </div>
+                </div>
+                  <!--/span-->
+                </div>
+                <div class="col-lg-12" style="text-align: left; padding-left: 16.7%">
+                  <button type="submit" class="btn btn-success" (click)="addUser()">{{button}}</button>
+                  <!-- <button *ngIf="isNew" type="submit" class="btn btn-success cust-btn" (click)="t.select('tab2')"> Capture biometrics</button>
+                 --> <button type="button" class="btn btn-warning" (click)="cancel()">Cancel</button> 
+                  <div [hidden]="!isDelayedRunning" class="spinner">
+                    <div class="double-bounce1"></div>
+                    <div class="double-bounce2"></div>
+                 </div>
+                </div>
+              </div>
+            </form>
+          </ng-template>
+        </ngb-tab>
+      </ngb-tabset>
+    </div>
+  </div>
+</div>
+</block-ui> 

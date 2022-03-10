@@ -1,0 +1,98 @@
+<block-ui>
+  <div class="row" *ngIf="!editMode">
+  
+    <div class="col-12">
+  
+      <div class="card">
+  
+        <div class="card-body">
+  
+          <h4 class="card-title">Customer Detachments to Approve</h4>
+          <hr>
+          <div id="cust-table" class="table table-bordered table-sm m-b-0 table-responsive smart-table ">
+            <ng2-smart-table [settings]="settings" [source]="customers" class=""          
+              (edit)="initEditcustomer($event)"></ng2-smart-table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="editMode">
+  <div class="row" *ngIf="isVerified">
+          <div class="col-lg-12 col-xlg-12 col-md-12">
+              <div class="card">
+                  <ngb-tabset type="pills" class="custom-pills" #t="ngbTabset">
+                      <ngb-tab title="Customer Details" id="tab1">
+                          <ng-template ngbTabContent>
+                            <div class="card-body" [hidden]="profDetails">
+                              <h4 class="card-title">Customer Details</h4>
+                              <hr>
+                              <form class="form form-material" action="#">
+                                  <div class="form-group row">
+                                      <label for="customerName" class="col-2 col-form-label">Full Name</label>
+                                      <div class="col-10">
+                                          <input class="form-control" [disabled]="true" [(ngModel)]="customer.customerName"  [ngModelOptions]="{standalone: true}"  type="text" id="customerName" placeholder="Full Name">
+                                      </div>
+                                  </div>
+                                  <div class="form-group row">
+                                      <label for="example-password-input" class="col-2 col-form-label">Gender </label>
+                                      <div class="col-10">
+                                        <div class="form-check">
+                                          <div class="custom-control custom-radio">
+                                            <input type="radio" [disabled]="true" value="MALE" [(ngModel)]="customer.gender" name="male" class="custom-control-input" id="customControlValidation2">
+                                            <label class="custom-control-label" for="customControlValidation2">Male</label>
+                                          </div>
+                                        </div>
+                                        <div class="form-check">
+                                          <div class="custom-control custom-radio">
+                                            <input type="radio" [disabled]="true" class="custom-control-input" value="FEMALE" name="female" [(ngModel)]="customer.gender" id="customControlValidation3">
+                                            <label class="custom-control-label" for="customControlValidation3">Female</label>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>                                
+                                  <div class="form-group row">
+                                      <label for="customerIdNumber" class="col-2 col-form-label">ID/Passport No</label>
+                                      <div class="col-10">
+                                          <input class="form-control" [disabled]="true" type="text"  [(ngModel)]="customer.customerIdNumber" id="customerIdNumber"  [ngModelOptions]="{standalone: true}"  placeholder="ID Number">
+                                      </div>
+                                  </div>
+                                  <div class="form-group row">
+                                      <label for="country" class="col-2 col-form-label">Nationality</label>
+                                      <div class="col-10">
+                                          <input class="form-control"  [disabled]="true" type="text"  [(ngModel)]="customer.country" id="country"  [ngModelOptions]="{standalone: true}"  placeholder="Nationality" required>
+                                      </div>
+                                  </div>
+                                  <div class="form-group row">
+                                      <label for="phoneNumber" class="col-2 col-form-label">Telephone</label>
+                                      <div class="col-10">
+                                          <input class="form-control" [disabled]="true" type="text"  ngModel #phoneNumberField="ngModel" [(ngModel)]="customer.phoneNumber"  [ngModelOptions]="{standalone: true}"  id="phoneNumber" placeholder="Telephone Number">
+                                      </div>
+                                  </div>
+                                  <div class="form-group row">
+                                      <label for="active" class="col-2 col-form-label">Active</label>
+                                     <div class="custom-control chk-active custom-checkbox mr-sm-2 m-b-15">
+                                       <input type="checkbox" [(ngModel)]="customer.active" [disabled]="true" [ngModelOptions]="{standalone: true}"  class="custom-control-input" id="active" value="check">
+                                       <label class="custom-control-label" for="active"></label>
+                                   </div>
+                                 </div>
+                                <div>
+                                    <div class="col-lg-12" style="text-align: left; padding-left: 16.7%">
+                                      <button type="submit" class="btn btn-success cust-btn" (click)="approveCustomerDetachment()">
+                                          Approve Customer Detachment</button>
+                                          <button type="button" class="btn btn-default" (click)="rejectCustomerDetachment()">Reject Customer Detachment</button>
+                                      <button type="button" class="btn btn-danger" (click)="cancel()">Cancel</button>
+                                    </div>
+                                  </div>
+                                </form>
+                          </div>
+                          </ng-template>
+                      </ngb-tab>
+                  </ngb-tabset>
+              </div>
+          </div>
+          <!-- Column -->
+        </div>
+      </div>
+  </block-ui>
+  

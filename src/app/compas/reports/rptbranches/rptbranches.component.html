@@ -1,0 +1,68 @@
+<block-ui>
+<div class="col-md-12 col-sm-12 col-lg-12">
+  <div class="card">
+      <div class="card-body">
+          <h3 class="card-title">Branches Summary</h3>
+          <form action="#">
+            <div class="row">
+              <div class="col-sm-6">
+                  <div class="form-group row">
+                    <label class="control-label text-left col-sm-4">Filter By</label>
+                    <div class="col-md-8">
+                        <ng-select [items]="filters"
+                                  bindLabel="name"
+                                  bindValue="id"
+                                  [(ngModel)]="brachStatus"
+                                  [ngModelOptions]="{standalone: true}">
+                        </ng-select>
+                    </div>
+                </div>
+              </div>
+              <div class="col-sm-3" *ngIf="!filtered">
+                  <button type="button" class="btn btn-success" (click)="getBranchesReports()" style="width: 150px;">Preview</button>
+              </div>
+              <div class="col-sm-3">
+                <div ngbDropdown class="d-inline-block">
+                    <button class="btn btn-default" id="dropdownBasic1" ngbDropdownToggle>Export</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                      <a class="dropdown-item" target="_blank" href="{{pdf_url}}" >PDF</a>
+                      <a class="dropdown-item" target="_blank" href="{{xls_url}}" >EXCEL</a>
+                      <a class="dropdown-item" target="_blank" href="{{csv_url}}" >CSV</a>
+      
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </form>
+          <hr/>
+          <div id="table-wrapper">
+            <div id="table-scroll">
+                <table class="table table-sm m-b-0 ">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Branch Code</th>
+                            <th scope="col">Branch Name</th>
+                            <th scope="col">Date Created</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <tr *ngFor="let branch of branches; let i = index">
+                            <th scope="row">{{i+1}}</th>
+                            <td>{{branch.branchCode}}</td>
+                            <td>{{branch.branchName}}</td>
+                            <td>{{branch.createdOn}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+             </div>
+          </div>
+          <div class="col">
+
+          </div>
+         <div>
+         </div>
+      </div>
+  </div>
+</div> 
+</block-ui>

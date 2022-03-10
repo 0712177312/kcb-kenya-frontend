@@ -1,0 +1,24 @@
+.topbar {
+    background: #0a4469 !important;
+}
+td {
+    height: 10px !important;
+}
+
+table tr td, table tr th {
+    font-size: .875em !important;
+    margin: 0 !important;
+    padding: 0px !important;
+}
+
+[_nghost-c6] table {
+    line-height: 0em;
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: table;
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+    word-break: normal;
+    word-break: keep-all;
+}

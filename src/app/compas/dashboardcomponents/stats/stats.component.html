@@ -1,0 +1,103 @@
+<div class="card">
+  <div class="card-body">
+      <div class="d-md-flex align-items-center">
+          <div>
+              <h4 class="card-title">Customer Enroll Summary</h4>
+              <h5 class="card-subtitle">This Month Overview</h5>
+          </div>
+          <!-- <div class="ml-auto d-flex no-block align-items-center">
+              <ul class="list-inline font-12 dl m-r-15 m-b-0">
+                  <li class="list-inline-item text-cyan">
+                      <i class="fa fa-circle"></i> Iphone</li>
+                  <li class="list-inline-item text-primary">
+                      <i class="fa fa-circle"></i> Ipad</li>
+              </ul>
+              <div class="dl">
+                  <select class="custom-select">
+                      <option value="0" selected>Monthly</option>
+                      <option value="1">Daily</option>
+                      <option value="2">Weekly</option>
+                      <option value="3">Yearly</option>
+                  </select>
+              </div>
+          </div> -->
+      </div>
+      <div class="row">
+          <!-- column -->
+          <div class="col-lg-4">
+              <h1 class="m-b-0 m-t-30">{{this.stats.monthlyEnrollment}}</h1>
+              <h6 class="font-light text-muted">Enrolled Customers</h6>
+              <h3 class="m-t-30 m-b-0">{{this.stats.activeMonthlyCusts}}</h3>
+              <h6 class="font-light text-muted">Active Customers</h6>
+              <a class="btn btn-info m-t-20 p-15 p-l-25 p-r-25 m-b-20" [routerLink]="['/reports/customers']">Last Month Summary</a>
+          </div>
+          <!-- column -->
+          <div class="col-lg-8">
+              <div class="linearea linechart">
+                  <!-- <x-chartist class="campaign ct-charts" [data]="lineChart.data" [type]="lineChart.type" [options]="lineChart.options" [responsiveOptions]="lineChart.responsiveOptions"
+                      [events]="lineChart.events"> </x-chartist> -->
+              </div>
+          </div>
+          <!-- column -->
+      </div>
+  </div>
+  <!-- ============================================================== -->
+  <!-- Info Box -->
+  <!-- ============================================================== -->
+  <!-- <div class="card-body border-top">
+      <div class="row m-b-0">
+          <div class="col-lg-3 col-md-6">
+              <div class="d-flex align-items-center">
+                  <div class="m-r-10">
+                      <span class="text-orange display-5">
+                          <i class="mdi mdi-account-circle"></i>
+                      </span>
+                  </div>
+                  <div>
+                      <span>System Users</span>
+                      <h3 class="font-medium m-b-0">{{this.stats.user}}</h3>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+              <div class="d-flex align-items-center">
+                  <div class="m-r-10">
+                      <span class="text-cyan display-5">
+                          <i class="mdi mdi-account-circle"></i>
+                      </span>
+                  </div>
+                  <div>
+                      <span>Enrolled Customers</span>
+                      <h3 class="font-medium m-b-0">{{this.stats.enrolledCustomers}}</h3>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+              <div class="d-flex align-items-center">
+                  <div class="m-r-10">
+                      <span class="text-success display-5">
+                          <i class="mdi mdi-checkbox-marked-circle"></i>
+                      </span>
+                  </div>
+                  <div>
+                      <span>Active Customers</span>
+                      <h3 class="font-medium m-b-0">{{this.stats.activeCustomers}}</h3>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+              <div class="d-flex align-items-center">
+                  <div class="m-r-10">
+                      <span class="text-primary display-5">
+                          <i class="mdi mdi-album"></i>
+                      </span>
+                  </div>
+                  <div>
+                      <span>Rejected Customers</span>
+                      <h3 class="font-medium m-b-0">{{this.stats.rejects}}</h3>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div> -->
+</div>

@@ -1,0 +1,43 @@
+<div class="card">
+  <div class="card-body">
+      
+      <div class="d-md-flex align-items-center">
+          <div>
+              <h4 class="card-title">Top Enrolled Branches</h4>
+              <h5 class="card-subtitle">Overview of Top Branches With Enrolled Customers</h5>
+          </div>
+      </div>
+      
+  </div>
+  <div class="table-responsive">
+      <table class="table v-middle">
+          <thead>
+              <tr class="bg-light">
+                  <th class="border-top-0">Branch</th>
+                  <th class="border-top-0">Country</th>
+                  <th class="border-top-0">Waived Customers</th>
+                  <th class="border-top-0">Enrolled Customers</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let stat of stats">
+                  <td>
+                      <div class="d-flex align-items-center">
+                          <div class="m-r-10">
+                              <a class="btn btn-circle btn-info text-white">{{ stat.initials}}</a>
+                          </div>
+                          <div class="">
+                              <h4 class="m-b-0 font-16">{{ stat.branchName }}</h4>
+                          </div>
+                      </div>
+                  </td>
+                  <td>{{ stat.country }}</td>
+                  <td>{{ stat.waivedCustomers}}</td>
+                  <td>
+                      <h5 class="m-b-0">{{ stat.enrolledCustomers }}</h5>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+  </div>
+</div>
