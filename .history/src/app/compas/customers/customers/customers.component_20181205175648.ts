@@ -14,7 +14,7 @@ import * as SockJS from 'sockjs-client';
 
 @Component({
   selector: 'app-customers',
-  templateUrl: './customers.component.html',
+  templateUrl: './staff.component.html',
   styleUrls: ['./customers.component.css'],
   changeDetection: ChangeDetectionStrategy.Default
 })

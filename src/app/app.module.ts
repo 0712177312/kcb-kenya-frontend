@@ -54,6 +54,7 @@ import { ChannelComponent } from './compas/configs/channel/channel.component';
 import { TableComponent } from './compas/components/table/table.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { CustomersComponent } from './compas/customers/customers/customers.component';
+import { StaffComponent } from './compas/customers/staff/staff.component';
 import { IdentifyCustomerComponent } from './compas/customers/identify-customer/identify-customer.component';
 import { WaiveComponent } from './compas/configs/waive/waive.component';
 import { WaivedCustomersComponent } from './compas/configs/waived-customers/waived-customers.component';
@@ -111,6 +112,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     EnrolledCustomersComponent,
     StatsComponent,
     CustomersComponent,
+    StaffComponent,
     VerifyUsersComponent,
     ConfirmDialogComponent,
     BlockElementComponent,

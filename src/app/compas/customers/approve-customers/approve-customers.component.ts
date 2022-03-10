@@ -118,7 +118,7 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
     // the specific branch of the logged in user
     this.branch = this.otc.branch;
     this.groupid = this.otc.group;
-    console.log('this.branch at ngOnInit() of approve-customers.component.ts ' + this.branch);
+    console.log('this.branch at ngOnInit() of approve-staff.component.ts ' + this.branch);
     this.gtCustomers();
     this.getUserAssignedRights();
     this.settings =  {

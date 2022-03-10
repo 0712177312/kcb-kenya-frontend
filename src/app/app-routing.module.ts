@@ -31,6 +31,7 @@ import {ConvertStaffToCustomerComponent} from './compas/customers/convert-staff-
 import {DetachCustomerComponent} from './compas/customers/detach-customer/detach-customer.component';
 import {DetachStaffComponent} from './compas/configs/detach-staff/detach-staff.component';
 import {EnrolledStaffComponent} from './compas/reports/enrolled-staff/enrolled-staff.component';
+import {StaffComponent} from './compas/customers/staff/staff.component';
 
 export const Approutes: Routes = [
 
@@ -64,6 +65,12 @@ export const Approutes: Routes = [
             {
                 path: 'customers/customers',
                 component: CustomersComponent,
+                canActivate: [ServiceGuard]
+            },
+
+            {
+                path: 'staff/staff',
+                component: StaffComponent,
                 canActivate: [ServiceGuard]
             },
             {
