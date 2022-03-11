@@ -112,7 +112,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
       this.locl = data;
       if (this.locl.status === true) {
 
-        return this.toastr.warning('teller with specified details is already exist', ' Warning!', { timeOut: 3000 });
+        return this.toastr.warning('staff with specified details is already exist', ' Warning!', { timeOut: 3000 });
       } else {
         this.tellerCoBankingInq(tell);
       }
@@ -130,17 +130,17 @@ export class VerifyCustomerDetailsComponent implements OnInit {
         this.account_number = ' ';
         this.initTellerProfile(this.tellerInq);
 
-        return this.toastr.success('Teller id is valid, can proceed to enroll', ' Success!');
+        return this.toastr.success('Staff id is valid, can proceed to enroll', ' Success!');
       } else if (this.tellerInq.requestStatus === true && this.tellerInq.payload.cif === '') {
         // valid staff returned but they do not have a cif number attached
         return this.toastr.warning('cif number is invalid', ' Warning!');
       } else {
 
-        return this.toastr.warning('Specified teller id was not found or invalid , kindly verify to proceed .', 'Warning!');
+        return this.toastr.warning('Specified staff id was not found or invalid , kindly verify to proceed .', 'Warning!');
       }
     }, error => {
 
-      return this.toastr.error('Error in inquiring teller data.', 'Error!', { timeOut: 4000 });
+      return this.toastr.error('Error in inquiring staff data.', 'Error!', { timeOut: 4000 });
     });
   }
 
@@ -154,9 +154,9 @@ export class VerifyCustomerDetailsComponent implements OnInit {
         this.tellerdata = {};
         this.tellerForm.reset();
         this.tellerInq = {};
-        return this.toastr.success('teller details updated successfully.', 'Success!', { timeOut: 4000 });
+        return this.toastr.success('Staff details updated successfully.', 'Success!', { timeOut: 4000 });
       } else {
-        return this.toastr.warning('Failed to update teller details.', 'Warning!', { timeOut: 4000 });
+        return this.toastr.warning('Failed to update staff details.', 'Warning!', { timeOut: 4000 });
       }
     }, error => {
       return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
@@ -276,8 +276,8 @@ export class VerifyCustomerDetailsComponent implements OnInit {
         this.isProfile = null;
         this.account_number = '';
         this.tellerProfile = {};
-        this.log(this.rightId, 'verified enroll status of customer/teller id' + prof.customerId);
-        return this.toastr.success(this.response.respMessage, 'Succes!', { timeOut: 4000 });
+        this.log(this.rightId, 'verified enroll status of customer/staff id' + prof.customerId);
+        return this.toastr.success(this.response.respMessage, 'Success!', { timeOut: 4000 });
       } else {
         this.log(this.rightId, 'failed to enroll customer');
         return this.toastr.warning(this.response.respMessage, 'Warning!', { timeOut: 4000 });
@@ -315,11 +315,11 @@ export class VerifyCustomerDetailsComponent implements OnInit {
       this.response = response;
       if (this.response.status === true) {
         if (teller.id === 0) {
-          this.log(this.rightId, 'added teller ' + this.customer.customerName);
+          this.log(this.rightId, 'added Staff ' + this.customer.customerName);
         } else {
           this.log(this.rightId, 'updated teller details  ' + this.customer.id);
         }
-        return this.toastr.success('Teller details saved successfuly. Awaiting authorization', ' Success!');
+        return this.toastr.success('Staff details saved successfuly. Awaiting authorization', ' Success!');
       } else {
         this.log(this.rightId, this.response.respMessage);
         return this.toastr.warning(this.response.respMessage, 'Warning!');
@@ -353,8 +353,8 @@ export class VerifyCustomerDetailsComponent implements OnInit {
         this.isProfile = null;
         this.account_number = '';
         this.tellerProfile = {};
-        this.log(this.rightId, 'removed enroll status of customer/teller id' + prof.customerId);
-        return this.toastr.success(this.response.respMessage, 'Succes!', { timeOut: 4000 });
+        this.log(this.rightId, 'removed enroll status of customer/Staff id' + prof.customerId);
+        return this.toastr.success(this.response.respMessage, 'Success!', { timeOut: 4000 });
       } else {
         this.log(this.rightId, 'failed to remove customer' + prof.customerId);
         this.toastr.warning(this.response.respMessage, 'Warning!', { timeOut: 4000 });
@@ -466,4 +466,5 @@ export let settings = {
 
   }
 
-}
+};
+

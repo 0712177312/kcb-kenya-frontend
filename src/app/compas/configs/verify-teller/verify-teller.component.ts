@@ -135,7 +135,7 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
           filter: false
         },
         tellerName: {
-          title: 'Teller Name',
+          title: 'Staff Name',
           filter: true
         },
         enrolledOn: {
@@ -614,7 +614,7 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
       this.blockUI.stop();
     }, error => {
       this.blockUI.stop();
-      return this.toastr.error('Error in inquiring Teller data.', 'Error!', { timeOut: 1500 });
+      return this.toastr.error('Error in inquiring Staff data.', 'Error!', { timeOut: 1500 });
     });
   }
 

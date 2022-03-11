@@ -71,7 +71,7 @@ export class DetachStaffComponent implements OnInit, OnDestroy {
           filter: false
         },
         tellerName: {
-          title: 'Teller Name',
+          title: 'Staff Name',
           filter: true
         },
         customerId: {

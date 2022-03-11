@@ -235,13 +235,13 @@ export class DeleteCustomerComponent implements OnInit {
           return this.toastr.success('Teller removed successfully', ' Success!');
         } else {
           this.log(this.rightId, "attempted to remove staff details of staff with customerId: " + tellerDetails.customerId + " from abis");
-          return this.toastr.error('Teller not removed successfully', ' Error!', { timeOut: 4000 });
+          return this.toastr.error('Staff not removed successfully', ' Error!', { timeOut: 4000 });
         }
       }, error => {
-        return this.toastr.error('Error while attempting to remove the teller details', 'Error!', { timeOut: 4000 });
+        return this.toastr.error('Error while attempting to remove the staff details', 'Error!', { timeOut: 4000 });
       });
     }, error => {
-      return this.toastr.error('Error while attempting to remove the teller.', 'Error!', { timeOut: 4000 });
+      return this.toastr.error('Error while attempting to remove the staff.', 'Error!', { timeOut: 4000 });
     });
   }
 
@@ -261,7 +261,7 @@ export class DeleteCustomerComponent implements OnInit {
           this.locl.customer.customerId = customer;
           this.initCustomerProfile();
         }
-        return this.toastr.warning('Customer id is was not found', ' Warning!');
+        return this.toastr.warning('Customer id was not found', ' Warning!');
       }
     }, error => {
       return this.toastr.error('Error while searching for the customer to delete', 'Error!', { timeOut: 4000 });
@@ -276,7 +276,7 @@ export class DeleteCustomerComponent implements OnInit {
       this.locl = data;
       if (this.locl.status === true) {
         this.initTellerProfile();
-        return this.toastr.success('Teller id is valid', ' Success!');
+        return this.toastr.success('Staff id is valid', ' Success!');
       } else {
         //continue to the delete page only if id does not start with 'KE'
         if (!teller.startsWith('KE')) {
@@ -287,7 +287,7 @@ export class DeleteCustomerComponent implements OnInit {
           this.locl.teller.customerId = teller;
           this.initTellerProfile();
         }
-        return this.toastr.warning('Teller id is was not found', ' Warning!');
+        return this.toastr.warning('Staff id was not found', ' Warning!');
       }
     }, error => {
       return this.toastr.error('Error while searching for the teller to delete', 'Error!', { timeOut: 4000 });

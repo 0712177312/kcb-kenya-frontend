@@ -68,13 +68,13 @@
         <hr>
           <form class="form form-material" [formGroup]="tellerForm">
               <div class="form-group row">
-                  <label for="tellerName" class="col-2 col-form-label">Teller Name  <span class="error">*</span></label>
+                  <label for="tellerName" class="col-2 col-form-label">Staff Name  <span class="error">*</span></label>
                   <div class="col-md-10">
                     <input type="text" class="form-control" formControlName="tellerName" placeholder="Full Name" [attr.disabled]="isDisabled? true : null"/>
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="tellerEmail" class="col-2 col-form-label">Teller Email  <span class="error">*</span></label>
+                  <label for="tellerEmail" class="col-2 col-form-label">Staff Email  <span class="error">*</span></label>
                   <div class="col-md-10">
                     <input type="text" class="form-control" id="tellerEmail" formControlName="tellerEmail" placeholder="Customer ID Number" [attr.disabled]="isDisabled? true : null" />
                   </div>
