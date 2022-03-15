@@ -257,9 +257,16 @@ export class DeleteCustomerComponent implements OnInit {
       } else {
         if (!customer.startsWith('ID')) {
           //continue to the delete page only if id does not start with 'ID'
-          this.locl.customer = {};
-          this.locl.customer.customerId = customer;
-          this.initCustomerProfile();
+
+          if (!isNaN(customer)) {
+            this.locl.customer = {};
+            this.locl.customer.customerId = customer;
+            this.initCustomerProfile();
+          } else {
+            return this.toastr.warning('Customer id must be a number.', ' Warning!');
+          }
+        } else {
+          return this.toastr.warning('Customer id cannot start with ID', ' Warning!');
         }
         return this.toastr.warning('Customer id was not found', ' Warning!');
       }

@@ -85,6 +85,9 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
     source: LocalDataSource;
     disabled: boolean;
     name: string;
+
+    verificationType = 'GRE';
+
     private stompClient = null;
     constructor(private apiService: BioService,
         private modalService: NgbModal, private logs: LogsService, private sockService: WebSocketServiceService,
