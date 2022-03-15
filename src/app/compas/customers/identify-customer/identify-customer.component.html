@@ -1,91 +1,308 @@
-<div class="row">
-  <div class="col-lg-12 col-xlg-12 col-md-12">
-      <div class="card">        
-          <div class="row" *ngIf="!indentify">
-              <div class="col-sm-12">
-               <div class="form-group">
-                <div class="widget-content">
-                  <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="form-group col-lg-12 col-sm-12">
-                      <div class="col-sm-4 col-md-4">
-                        <div class="rowc" style="min-height: 320px;">
-                          <img src="assets/images/enroll/enroll.png" class="imgFade" />
-                          <img id="T5" src="assets/images/enroll/T5.png" class="fl-L0 imgFade" data-next="fl-L1" />
-                          <img id="L6" src="assets/images/enroll/L6.png" class="fl-L1 imgFade" data-next="fl-L2" />
-                          <img id="L7" src="assets/images/enroll/L7.png" class="fl-L2 imgFade" data-next="fl-L3" />
-                          <img id="L8" src="assets/images/enroll/L8.png" class="fl-L3 imgFade" data-next="fl-L4" />
-                          <img id="L9" src="assets/images/enroll/L9.png" class="fl-L4 imgFade" data-next="fl-R0" />
-                          <img id="T0" src="assets/images/enroll/T0.png" class="fl-R0 imgFade" data-next="fl-R1" />
-                          <img id="R1" src="assets/images/enroll/R1.png" class="fl-R1 imgFade" data-next="fl-R2" />
-                          <img id="R2" src="assets/images/enroll/R2.png" class="fl-R2 imgFade" data-next="fl-R3" />
-                          <img id="R3" src="assets/images/enroll/R3.png" class="fl-R3 imgFade" data-next="fl-R4" />
-                          <img id="R4" src="assets/images/enroll/R4.png" class="fl-R4 imgFade" data-next="x" />
-                       </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-12 col-md-12 col-sm-12 fing">
-                    <div class="form-group col-lg-6 col-md-6 col-sm-6">
-                      <div class="col-lg-12 col-md-12 col-sm-12">
-                        <div class="row">
-                          <table class="table" style="height: 20%;" rowspan="2" colspan="2">
-                            <tbody>
-                              <tr>
-                                <td class="cp-L4 imgCol1" data-href='4|L' data-img='L4' data-pos='5' data-info='Left Little' capture>
-                                     <button id="left" [ngClass]="{'btn-cursor': btnClass}"  (click)="sendName('left')" class="captureFingerPrint"> <!--" -->
-                                        <img id="left"  class="slap" height="150" width="150" src="assets/images/enroll/no_image_left.png">
-                                        <h6 class="muted">LEFT HAND</h6>
-                                    </button>                                      
-                                </td>
-                                <td class="cp-L3 imgCol1" data-href='3|L' data-img='L3' data-pos='4' data-info='Left Ring' capture>
-                                    <button id="thumbs" [ngClass]="{'btn-cursor': btnClass}" (click)="sendName('thumbs')" class="captureFingerPrint">
-                                      <img id="thumbs" class="thumbs" src="assets/images/enroll/no_image_thumb.png">
-                                      <h6 class="muted">THUMBS</h6>
-                                    </button> 
-                                </td>
-                                <td class="cp-L3 imgCol1" data-href='3|L' data-img='L3' data-pos='4' data-info='Left Ring' capture>
-                                    <button id="right" [ngClass]="{'btn-cursor': btnClass}" (click)="sendName('right')"   class="captureFingerPrint"> <!---->
-                                       <img id="right" class="slap" src="assets/images/enroll/no_image_right.png">
-                                       <h6 class="muted">RIGHT HAND</h6>
-                                    </button>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-lg-12 fing-btns">
-                      <button type="button" class="btn btn-success" (click)="identifyCustomerDetails()">Identify Customer</button>
-                      <button type="button" class="btn btn-primary" (click)="sendName('stop')">Stop Device</button>
-                      <button type="button" class="btn btn-warning" (click)="resetDevice()">Reset-Device</button>
-                      <button type="button" class="btn btn-danger" (click)="cancelEnr()">Cancel</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row" *ngIf="indentify">
+<!--<div class="row">-->
+<!--    <div class="col-lg-12 col-xlg-12 col-md-12">-->
+<!--        <div class="card">-->
+<!--            <div *ngIf="!indentify" class="row">-->
+<!--                <div class="col-sm-12">-->
+<!--                    <div class="form-group">-->
+<!--                        <div class="widget-content">-->
+<!--                            <div class="col-lg-12 col-md-12 col-sm-12">-->
+<!--                                <div class="form-group col-lg-12 col-sm-12">-->
+<!--                                    <div class="col-sm-4 col-md-4">-->
+<!--                                        <div class="rowc" style="min-height: 320px;">-->
+<!--                                            <img class="imgFade" src="assets/images/enroll/enroll.png"/>-->
+<!--                                            <img class="fl-L0 imgFade" data-next="fl-L1" id="T5"-->
+<!--                                                 src="assets/images/enroll/T5.png"/>-->
+<!--                                            <img class="fl-L1 imgFade" data-next="fl-L2" id="L6"-->
+<!--                                                 src="assets/images/enroll/L6.png"/>-->
+<!--                                            <img class="fl-L2 imgFade" data-next="fl-L3" id="L7"-->
+<!--                                                 src="assets/images/enroll/L7.png"/>-->
+<!--                                            <img class="fl-L3 imgFade" data-next="fl-L4" id="L8"-->
+<!--                                                 src="assets/images/enroll/L8.png"/>-->
+<!--                                            <img class="fl-L4 imgFade" data-next="fl-R0" id="L9"-->
+<!--                                                 src="assets/images/enroll/L9.png"/>-->
+<!--                                            <img class="fl-R0 imgFade" data-next="fl-R1" id="T0"-->
+<!--                                                 src="assets/images/enroll/T0.png"/>-->
+<!--                                            <img class="fl-R1 imgFade" data-next="fl-R2" id="R1"-->
+<!--                                                 src="assets/images/enroll/R1.png"/>-->
+<!--                                            <img class="fl-R2 imgFade" data-next="fl-R3" id="R2"-->
+<!--                                                 src="assets/images/enroll/R2.png"/>-->
+<!--                                            <img class="fl-R3 imgFade" data-next="fl-R4" id="R3"-->
+<!--                                                 src="assets/images/enroll/R3.png"/>-->
+<!--                                            <img class="fl-R4 imgFade" data-next="x" id="R4"-->
+<!--                                                 src="assets/images/enroll/R4.png"/>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-lg-12 col-md-12 col-sm-12 fing">-->
+<!--                                    <div class="form-group col-lg-6 col-md-6 col-sm-6">-->
+<!--                                        <div class="col-lg-12 col-md-12 col-sm-12">-->
+<!--                                            <div class="row">-->
+<!--                                                <table class="table" colspan="2" rowspan="2" style="height: 20%;">-->
+<!--                                                    <tbody>-->
+<!--                                                    <tr>-->
+<!--                                                        <td capture class="cp-L4 imgCol1" data-href='4|L'-->
+<!--                                                            data-img='L4' data-info='Left Little' data-pos='5'>-->
+<!--                                                            <button (click)="sendName('left')" [ngClass]="{'btn-cursor': btnClass}"-->
+<!--                                                                    class="captureFingerPrint"-->
+<!--                                                                    id="left"> &lt;!&ndash;" &ndash;&gt;-->
+<!--                                                                <img class="slap" height="150" id="left" src="assets/images/enroll/no_image_left.png"-->
+<!--                                                                     width="150">-->
+<!--                                                                <h6 class="muted">LEFT HAND</h6>-->
+<!--                                                            </button>-->
+<!--                                                        </td>-->
+<!--                                                        <td capture class="cp-L3 imgCol1" data-href='3|L'-->
+<!--                                                            data-img='L3' data-info='Left Ring' data-pos='4'>-->
+<!--                                                            <button (click)="sendName('thumbs')" [ngClass]="{'btn-cursor': btnClass}"-->
+<!--                                                                    class="captureFingerPrint"-->
+<!--                                                                    id="thumbs">-->
+<!--                                                                <img class="thumbs" id="thumbs"-->
+<!--                                                                     src="assets/images/enroll/no_image_thumb.png">-->
+<!--                                                                <h6 class="muted">THUMBS</h6>-->
+<!--                                                            </button>-->
+<!--                                                        </td>-->
+<!--                                                        <td capture class="cp-L3 imgCol1" data-href='3|L'-->
+<!--                                                            data-img='L3' data-info='Left Ring' data-pos='4'>-->
+<!--                                                            <button (click)="sendName('right')" [ngClass]="{'btn-cursor': btnClass}"-->
+<!--                                                                    class="captureFingerPrint"-->
+<!--                                                                    id="right"> &lt;!&ndash;&ndash;&gt;-->
+<!--                                                                <img class="slap" id="right"-->
+<!--                                                                     src="assets/images/enroll/no_image_right.png">-->
+<!--                                                                <h6 class="muted">RIGHT HAND</h6>-->
+<!--                                                            </button>-->
+<!--                                                        </td>-->
+<!--                                                    </tr>-->
+<!--                                                    </tbody>-->
+<!--                                                </table>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-lg-12 fing-btns">-->
+<!--                                        <button (click)="identifyCustomerDetails()" class="btn btn-success"-->
+<!--                                                type="button">Identify Customer-->
+<!--                                        </button>-->
+<!--                                        <button (click)="sendName('stop')" class="btn btn-primary" type="button">Stop-->
+<!--                                            Device-->
+<!--                                        </button>-->
+<!--                                        <button (click)="resetDevice()" class="btn btn-warning" type="button">-->
+<!--                                            Reset-Device-->
+<!--                                        </button>-->
+<!--                                        <button (click)="cancelEnr()" class="btn btn-danger" type="button">Cancel-->
+<!--                                        </button>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div *ngIf="indentify" class="row">-->
 
-          <div class="col-12">
-        
-            <div class="card">
-        
-              <div class="card-body">
-        
-                <h4 class="card-title">Matched FingerPrints</h4>
-                <hr>
-                <div id="cust-table" class="table table-bordered table-sm m-b-0 table-responsive smart-table ">
-                  <ng2-smart-table [settings]="settings" [source]="customers" class=""          
-                   (create)="initInquiry($event)"></ng2-smart-table>
-                </div>
-                <!-- <app-table></app-table> -->
-                <div class="col-lg-12 fing-btns">
-                  <button type="button" class="btn btn-primary" (click)="cancelEnr()">Cancel</button>
-                </div>
-              </div>
-            </div>
-          </div>
+<!--                <div class="col-12">-->
+
+<!--                    <div class="card">-->
+
+<!--                        <div class="card-body">-->
+
+<!--                            <h4 class="card-title">Matched FingerPrints</h4>-->
+<!--                            <hr>-->
+<!--                            <div class="table table-bordered table-sm m-b-0 table-responsive smart-table "-->
+<!--                                 id="cust-table">-->
+<!--                                <ng2-smart-table [settings]="settings" [source]="customers" class=""  (create)="initInquiry($event)"-->
+<!--                                                          ></ng2-smart-table>-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash; <app-table></app-table> &ndash;&gt;-->
+<!--                            <div class="col-lg-12 fing-btns">-->
+<!--                                <button (click)="cancelEnr()" class="btn btn-primary" type="button">Cancel</button>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+
+<div class="row">
+    <div class="col-lg-12 col-xlg-12 col-md-12">
+        <div class="card">
+            <ngb-tabset #t="ngbTabset" class="custom-pills" type="pills">
+
+                <ngb-tab id="tab2" title="Verification Device">
+                    <ng-template ngbTabContent>
+                        <div class="card-body">
+                            <h4 class="card-title">Verification Device</h4>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12">
+                                    <div class="form-group row">
+                                        <div class="col-sm-9 col-md-9 col-md-9">
+                                            <div class="custom-control custom-radio custom-control-inline m-t-5">
+                                                <input [(ngModel)]="verificationType"
+                                                       [ngModelOptions]="{standalone: true}"
+                                                       class="custom-control-input"
+                                                       id="customControlValidation2"
+                                                       name="verificationType" required
+                                                       type="radio" value="SEC">
+                                                <label class="custom-control-label"
+                                                       for="customControlValidation2">Secugen</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input [(ngModel)]="verificationType"
+                                                       [ngModelOptions]="{standalone: true}"
+                                                       class="custom-control-input"
+                                                       id="customControlValidation3"
+                                                       name="verificationType" required
+                                                       type="radio" value="GRE">
+                                                <label class="custom-control-label"
+                                                       for="customControlValidation3">Green bit</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="col-lg-12" style="text-align: left; padding-left: 16.7%">
+                                    <button (click)="t.select('tab3')" class="btn btn-success cust-btn"
+                                            type="submit">
+                                        Capture Print
+                                    </button>
+                                    <button (click)="cancel()" class="btn btn-danger" type="button">Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab id="tab3" title="Identify">
+                    <ng-template ngbTabContent>
+                        <div class="card-body"> <!--[hidden]="bioDetails"-->
+                            <h4 class="card-title">Verify</h4>
+                            <hr>
+                            <div *ngIf="true" class="row">
+                                <div class="col-md-6 col-sm-offset-3 custom-row">
+                                    <form class="form-horizontal" id="loginform">
+                                        <div class="input-group mb-3">
+                                            <div class="verify">
+                                                <a class="shortcuts shortcut" href="javascript:;">
+                                                    <img height="200px" id="finger"
+                                                         src="assets/images/fingerprint.png"
+                                                         style="margin-left: 75%;">
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="col-lg-12">
+                                                <button (click)="secugenVerify()"
+                                                        class="btn btn-success cust-btn"
+                                                        type="submit">
+                                                    Verify Customer
+                                                </button>
+                                                <button (click)="cancel()" class="btn btn-danger" type="button">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div *ngIf="verificationType === 'GRE'" class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12">
+                                    <div class="form-group">
+                                        <div class="widget-content">
+                                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                                <div class="form-group col-lg-12 col-sm-12">
+                                                    <div class="col-sm-4 col-md-4">
+                                                        <div class="rowc" style="min-height: 320px;">
+                                                            <img class="imgFade" src="assets/images/enroll/enroll.png"/>
+                                                            <img class="fl-L0 imgFade" data-next="fl-L1" id="T5"
+                                                                 src="assets/images/enroll/T5.png"/>
+                                                            <img class="fl-L1 imgFade" data-next="fl-L2" id="L6"
+                                                                 src="assets/images/enroll/L6.png"/>
+                                                            <img class="fl-L2 imgFade" data-next="fl-L3" id="L7"
+                                                                 src="assets/images/enroll/L7.png"/>
+                                                            <img class="fl-L3 imgFade" data-next="fl-L4" id="L8"
+                                                                 src="assets/images/enroll/L8.png"/>
+                                                            <img class="fl-L4 imgFade" data-next="fl-R0" id="L9"
+                                                                 src="assets/images/enroll/L9.png"/>
+                                                            <img class="fl-R0 imgFade" data-next="fl-R1" id="T0"
+                                                                 src="assets/images/enroll/T0.png"/>
+                                                            <img class="fl-R1 imgFade" data-next="fl-R2" id="R1"
+                                                                 src="assets/images/enroll/R1.png"/>
+                                                            <img class="fl-R2 imgFade" data-next="fl-R3" id="R2"
+                                                                 src="assets/images/enroll/R2.png"/>
+                                                            <img class="fl-R3 imgFade" data-next="fl-R4" id="R3"
+                                                                 src="assets/images/enroll/R3.png"/>
+                                                            <img class="fl-R4 imgFade" data-next="x" id="R4"
+                                                                 src="assets/images/enroll/R4.png"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 fing">
+                                                    <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12">
+                                                            <div class="row">
+                                                                <table class="table" colspan="2" rowspan="2" style="height: 20%;">
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <td capture class="cp-L4 imgCol1" data-href='4|L'
+                                                                            data-img='L4' data-info='Left Little' data-pos='5'>
+                                                                            <button (click)="sendName('left')" [ngClass]="{'btn-cursor': btnClass}"
+                                                                                    class="captureFingerPrint"
+                                                                                    id="left"> <!--" -->
+                                                                                <img class="slap" height="150" id="left" src="assets/images/enroll/no_image_left.png"
+                                                                                     width="150">
+                                                                                <h6 class="muted">LEFT HAND</h6>
+                                                                            </button>
+                                                                        </td>
+                                                                        <td capture class="cp-L3 imgCol1" data-href='3|L'
+                                                                            data-img='L3' data-info='Left Ring' data-pos='4'>
+                                                                            <button (click)="sendName('thumbs')" [ngClass]="{'btn-cursor': btnClass}"
+                                                                                    class="captureFingerPrint"
+                                                                                    id="thumbs">
+                                                                                <img class="thumbs" id="thumbs"
+                                                                                     src="assets/images/enroll/no_image_thumb.png">
+                                                                                <h6 class="muted">THUMBS</h6>
+                                                                            </button>
+                                                                        </td>
+                                                                        <td capture class="cp-L3 imgCol1" data-href='3|L'
+                                                                            data-img='L3' data-info='Left Ring' data-pos='4'>
+                                                                            <button (click)="sendName('right')" [ngClass]="{'btn-cursor': btnClass}"
+                                                                                    class="captureFingerPrint"
+                                                                                    id="right"> <!---->
+                                                                                <img class="slap" id="right"
+                                                                                     src="assets/images/enroll/no_image_right.png">
+                                                                                <h6 class="muted">RIGHT HAND</h6>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 fing-btns">
+                                                        <button (click)="identifyCustomerDetails()" class="btn btn-success"
+                                                                type="button">Identify Customer
+                                                        </button>
+                                                        <button (click)="sendName('stop')" class="btn btn-primary" type="button">Stop
+                                                            Device
+                                                        </button>
+                                                        <button (click)="resetDevice()" class="btn btn-warning" type="button">
+                                                            Reset-Device
+                                                        </button>
+                                                        <button (click)="cancelEnr()" class="btn btn-danger" type="button">Cancel
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+            </ngb-tabset>
         </div>
+    </div>
 </div>
