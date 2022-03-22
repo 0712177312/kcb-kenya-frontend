@@ -112,7 +112,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
       this.locl = data;
       if (this.locl.status === true) {
 
-        return this.toastr.warning('staff with specified details is already exist', ' Warning!', { timeOut: 3000 });
+        return this.toastr.warning('staff with specified details already exists', ' Warning!', { timeOut: 3000 });
       } else {
         this.tellerCoBankingInq(tell);
       }

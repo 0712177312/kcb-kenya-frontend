@@ -455,7 +455,7 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
                     //   }
                 } else {
                     this.blockUI.stop();
-                    this.toastr.warning('Customer with specifed fingerprints was not found or not yet enrolled', 'Warning!');
+                    this.toastr.warning('Customer with specified fingerprints was not found or not yet enrolled', 'Warning!');
                 }
             }, error => {
                 this.blockUI.stop();
@@ -463,7 +463,7 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
             });
         } else {
             this.blockUI.stop();
-            return this.toastr.error('Capture atleast one finger print.', 'Error!', { timeOut: 1500 });
+            return this.toastr.error('Capture at least one finger print.', 'Error!', { timeOut: 1500 });
         }
     }
 
@@ -563,6 +563,67 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
     }
 
 
+
+    // Additional function for Secugen verify
+    secugenIdentify() {
+            this.apiService.capturePrint().subscribe((data: Array<object>) => {
+                this.bio = data;
+                const profilePrint: any = {};
+                if (this.bio.ErrorCode === 0) {
+
+                    if (this.bio !== null && this.bio.BMPBase64.length > 0) {
+                        this.document.getElementById('finger').src =
+                            'data:image/bmp;base64,' + this.bio.BMPBase64;
+                        profilePrint.singlePrint = {
+                            position: 0,
+                            fingerPrint: this.bio.BMPBase64
+                        };
+                        this.fingerPrints.push(profilePrint.singlePrint);
+
+                        this.afisIdentifyUser(profilePrint);
+                    }
+                } else {
+                    return this.toastr.warning('failed to Capture finger print, please retry', 'Warning!', { timeOut: 3000 });
+                }
+            });
+    }
+
+    afisIdentifyUser(cust) {
+        if (this.fingerPrints.length > 0) {
+            this.apiService.afisIdentify(cust).subscribe((response) => {
+                this.response = response;
+                if (this.response.status === true && this.response.candidates.length > 0) {
+                    this.profiles.push(this.response.candidates);
+                    console.log('uploaded afis##', this.response);
+                    console.log('applicants', this.profiles);
+                    const cu: any = {};
+                    for (let k = 0; k < this.response.candidates.length; k++) {
+                        this.matchedCustomers.push({ 'customerId': this.response.candidates[k].applicant.externalId });
+                        console.log('cu%%% cu', cu);
+                    }
+                    this.matchedCustomers.push(cu);
+                    console.log('cu%%% got', this.matchedCustomers);
+                    this.getMatchedCustomers(this.matchedCustomers);
+
+                    // return this.identifyCustomer(cu);
+                    //   } else {
+                    //     this.toastr.warning('no applicant with specified fingerprints found ', 'Warning!');
+                    //   }
+                } else {
+                    this.blockUI.stop();
+                    this.toastr.warning('Customer with specified fingerprints was not found or not yet enrolled', 'Warning!');
+                }
+            }, error => {
+                this.blockUI.stop();
+                return this.toastr.error('Error identifying data.', 'Error!', { timeOut: 1500 });
+            });
+        } else {
+            this.blockUI.stop();
+            return this.toastr.error('Capture at least one finger print.', 'Error!', { timeOut: 1500 });
+        }
+    }
+
+
 }
 export let settings = {
     mode: 'external',
@@ -618,4 +679,5 @@ export let settings = {
         return '';
 
     }
+
 };

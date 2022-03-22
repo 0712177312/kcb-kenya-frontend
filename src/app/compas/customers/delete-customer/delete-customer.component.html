@@ -129,17 +129,23 @@
                     </div>
                   </div>
                   <div>
-                    <div class="col-lg-12" style="text-align: left; padding-left: 16.7%">
-                      <div [ngSwitch]="tellerRemoveFunctionToLoad">
-                        <button *ngSwitchCase="'deleteTeller'" type="submit" class="btn btn-success cust-btn" (click)="deleteTellerDetails()">
-                          DELETE</button>
-                        <button *ngSwitchCase="'deleteTellerNotOnDb'" type="submit" class="btn btn-success cust-btn" (click)="deleteTellerDetailsNotOnDb()">
-                          DELETE</button>
-                      </div>
-                      <div>
-                        <button type="button" class="btn btn-warning" (click)="cancel()">Cancel</button>
+
+
+
+                    <div class="card-body">
+                      <div class="form-group m-b-0 text-right">
+                        <ng-container [ngSwitch]="tellerRemoveFunctionToLoad">
+                          <button *ngSwitchCase="'deleteTeller'" type="submit" class="btn btn-success cust-btn" (click)="deleteTellerDetails()">
+                            DELETE</button>
+                          <button *ngSwitchCase="'deleteTellerNotOnDb'" type="submit" class="btn btn-success cust-btn" (click)="deleteTellerDetailsNotOnDb()">
+                            DELETE</button>
+                        </ng-container>
+                        <ng-container>
+                          <button type="button" class="btn btn-warning" (click)="cancel()">Cancel</button>
+                        </ng-container>
                       </div>
                     </div>
+
                   </div>
                 </form>
               </div>
@@ -250,14 +256,16 @@
                     </div>
                   </div>
                   <div>
-                    <div class="col-lg-12" style="text-align: left; padding-left: 16.7%">
-                      <div [ngSwitch]="customerRemoveFunctionToLoad">
-                        <button *ngSwitchCase="'deleteCustomer'" type="submit" class="btn btn-success cust-btn" (click)="deleteCustomerDetails()">
-                          DELETE</button>
-                        <button *ngSwitchCase="'deleteCustomerNotOnDb'" type="submit" class="btn btn-success cust-btn" (click)="deleteCustomerDetailsNotOnDb()">
-                          DELETE</button>
+                    <div class="card-body">
+                      <div class="form-group m-b-0 text-right">
+                        <ng-container [ngSwitch]="customerRemoveFunctionToLoad">
+                          <button *ngSwitchCase="'deleteCustomer'" type="submit" class="btn btn-success cust-btn" (click)="deleteCustomerDetails()">
+                            DELETE</button>
+                          <button *ngSwitchCase="'deleteCustomerNotOnDb'" type="submit" class="btn btn-success cust-btn" (click)="deleteCustomerDetailsNotOnDb()">
+                            DELETE</button>
+                        </ng-container>
+                        <button type="button" class="btn btn-warning" (click)="cancel()">Cancel</button>
                       </div>
-                      <button type="button" class="btn btn-warning" (click)="cancel()">Cancel</button>
                     </div>
                   </div>
                 </form>

@@ -622,7 +622,7 @@ export class StaffComponent implements OnInit, OnDestroy {
     this.editMode = true;
     this.isVerified = false;
     this.isNew = true;
-    this.profType = '1';
+    this.profType = '2';
     // this.inquiryForm = this.fb.group({
     //     profType: new FormControl('1', [Validators.required]),
     //     staffId: new FormControl('', [])
