@@ -95,35 +95,56 @@
 <!--                    </div>-->
 <!--                </div>-->
 <!--            </div>-->
-            <div *ngIf="indentify" class="row">
+<!--            <div *ngIf="indentify" class="row">-->
 
-                <div class="col-12">
+<!--                <div class="col-12">-->
 
-                    <div class="card">
+<!--                    <div class="card">-->
 
-                        <div class="card-body">
+<!--                        <div class="card-body">-->
 
-                            <h4 class="card-title">Matched FingerPrints</h4>
-                            <hr>
-                            <div class="table table-bordered table-sm m-b-0 table-responsive smart-table "
-                                 id="cust-table">
-                                <ng2-smart-table [settings]="settings" [source]="customers" class=""  (create)="initInquiry($event)"
-                                                          ></ng2-smart-table>
-                            </div>
-                            <!-- <app-table></app-table> -->
-                            <div class="col-lg-12 fing-btns">
-                                <button (click)="cancelEnr()" class="btn btn-primary" type="button">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<!--                            <h4 class="card-title">Matched FingerPrints</h4>-->
+<!--                            <hr>-->
+<!--                            <div class="table table-bordered table-sm m-b-0 table-responsive smart-table "-->
+<!--                                 id="cust-table">-->
+<!--                                <ng2-smart-table [settings]="settings" [source]="customers" class=""  (create)="initInquiry($event)"-->
+<!--                                                          ></ng2-smart-table>-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash; <app-table></app-table> &ndash;&gt;-->
+<!--                            <div class="col-lg-12 fing-btns">-->
+<!--                                <button (click)="cancelEnr()" class="btn btn-primary" type="button">Cancel</button>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
 <!--        </div>-->
 <!--    </div>-->
 <!--</div>-->
 
 
-<div class="row">
+<div class="row" *ngIf="indentify">
+    <div class="col-lg-12 col-xlg-12 col-md-12">
+        <div class="card">
+            <div class="card-body">
+
+                <h4 class="card-title">Matched FingerPrints</h4>
+                <hr>
+                <div class="table table-bordered table-sm m-b-0 table-responsive smart-table "
+                     id="cust-table">
+                    <ng2-smart-table [settings]="settings" [source]="customers" class=""  (create)="initInquiry($event)"
+                                              ></ng2-smart-table>
+                </div>
+                <!-- <app-table></app-table> -->
+                <div class="col-lg-12 fing-btns">
+                    <button (click)="cancelEnr()" class="btn btn-primary" type="button">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" *ngIf="!indentify">
     <div class="col-lg-12 col-xlg-12 col-md-12">
         <div class="card">
             <ngb-tabset #t="ngbTabset" class="custom-pills" type="pills">

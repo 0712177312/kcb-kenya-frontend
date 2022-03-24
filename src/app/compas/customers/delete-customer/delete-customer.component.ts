@@ -261,84 +261,82 @@ export class DeleteCustomerComponent implements OnInit {
 
     customerEnquire(customer) {
 
+        const custom = {
+            'mnemonic': customer
+        };
+
         if (!customer.startsWith('ID')) {
             if (isNaN(customer)) {
                 return this.toastr.warning('Customer id must be a number.', ' Warning!');
             } else {
-                console.log('Customer id is in the right format.');
+                this.custSvc.obtainCustomerDetails(custom).subscribe(data => {
+
+                    console.log('here is the data');
+                    console.log(data);
+                    console.log('here is the data');
+
+                    this.locl = data;
+                    if (this.locl.status === true) {
+                        this.initCustomerProfile();
+                        return this.toastr.success('Customer id is valid', ' Success!');
+                    } else {
+                        return this.toastr.warning('Customer id not found on local database', ' Success!');
+                        // if (!customer.startsWith('ID')) {
+                        //     //continue to the delete page only if id does not start with 'ID'
+                        //
+                        //     if (!isNaN(customer)) {
+                        //         this.locl.customer = {};
+                        //         this.locl.customer.customerId = customer;
+                        //         this.initCustomerProfile();
+                        //     } else {
+                        //         return this.toastr.warning('Customer id must be a number.', ' Warning!');
+                        //     }
+                        // } else {
+                        //     return this.toastr.warning('Customer id cannot start with ID', ' Warning!');
+                        // }
+                    }
+                }, error => {
+                    return this.toastr.error('Error while searching for the customer to delete', 'Error!', {timeOut: 4000});
+                });
             }
         } else {
             return this.toastr.warning('Customer id cannot start with ID', ' Warning!');
         }
-
-
-        const custom = {
-            'mnemonic': customer
-        };
-        this.custSvc.obtainCustomerDetails(custom).subscribe(data => {
-
-          console.log('here is the data');
-          console.log(data);
-          console.log('here is the data');
-
-            this.locl = data;
-            if (this.locl.status === true) {
-                this.initCustomerProfile();
-                return this.toastr.success('Customer id is valid', ' Success!');
-            } else {
-                return this.toastr.warning('Customer id not found on local database', ' Success!');
-                // if (!customer.startsWith('ID')) {
-                //     //continue to the delete page only if id does not start with 'ID'
-                //
-                //     if (!isNaN(customer)) {
-                //         this.locl.customer = {};
-                //         this.locl.customer.customerId = customer;
-                //         this.initCustomerProfile();
-                //     } else {
-                //         return this.toastr.warning('Customer id must be a number.', ' Warning!');
-                //     }
-                // } else {
-                //     return this.toastr.warning('Customer id cannot start with ID', ' Warning!');
-                // }
-            }
-        }, error => {
-            return this.toastr.error('Error while searching for the customer to delete', 'Error!', {timeOut: 4000});
-        });
     }
 
     tellerEnquire(teller) {
-        if (!teller.startsWith('KE')) {
-            return this.toastr.warning('Staff must start with KE', ' Warning!');
-        } else {
-            console.log('Staff id is in the right format');
-        }
 
         const tellr = {
             'tellerId': teller
         };
-        this.tellerSvc.obtainTellerDetails(tellr).subscribe(data => {
-            this.locl = data;
-            if (this.locl.status === true) {
-                this.initTellerProfile();
-                return this.toastr.success('Staff id is valid', ' Success!');
-            } else {
-                return this.toastr.warning('Staff id was not found', ' Warning!');
-                // continue to the delete page only if id does not start with 'KE'
-                // if (teller.startsWith('KE')) {
-                //     this.locl = null;
-                //     this.locl = {};
-                //     this.locl.teller = {};
-                //     console.log(this.locl);
-                //     this.locl.teller.customerId = teller;
-                //     this.initTellerProfile();
-                // } else {
-                //     return this.toastr.warning('Staff must start with KE', ' Warning!');
-                // }
 
-            }
-        }, error => {
-            return this.toastr.error('Error while searching for the teller to delete', 'Error!', {timeOut: 4000});
-        });
+        if (!teller.startsWith('KE')) {
+            return this.toastr.warning('Staff must start with KE', ' Warning!');
+        } else {
+            this.tellerSvc.obtainTellerDetails(tellr).subscribe(data => {
+                this.locl = data;
+                if (this.locl.status === true) {
+                    this.initTellerProfile();
+                    return this.toastr.success('Staff id is valid', ' Success!');
+                } else {
+                    return this.toastr.warning('Staff id was not found', ' Warning!');
+                    // continue to the delete page only if id does not start with 'KE'
+                    // if (teller.startsWith('KE')) {
+                    //     this.locl = null;
+                    //     this.locl = {};
+                    //     this.locl.teller = {};
+                    //     console.log(this.locl);
+                    //     this.locl.teller.customerId = teller;
+                    //     this.initTellerProfile();
+                    // } else {
+                    //     return this.toastr.warning('Staff must start with KE', ' Warning!');
+                    // }
+
+                }
+            }, error => {
+                return this.toastr.error('Error while searching for the teller to delete', 'Error!', {timeOut: 4000});
+            });
+        }
     }
 
     cancel() {
