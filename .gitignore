@@ -44,5 +44,6 @@ testem.log
 /e2e/*.map
 
 # System Files
-.DS_Store
+.DS_Stores
 Thumbs.db
+node_modules/*

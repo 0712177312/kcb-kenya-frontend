@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = require("@angular-devkit/core");
 const fs_1 = require("fs");
 const command_1 = require("../models/command");
 const config_1 = require("../utilities/config");
-const core_1 = require("@angular-devkit/core");
 const SilentError = require('silent-error');
 const validCliPaths = new Map([
     ['cli.warnings.versionMismatch', 'boolean'],
@@ -125,7 +125,20 @@ function normalizeValue(value, path) {
         }
         throw new Error(`Invalid value type; expected a ${cliOptionType}.`);
     }
-    return core_1.parseJson(value, core_1.JsonParseMode.Loose);
+    if (typeof value === 'string') {
+        try {
+            return core_1.parseJson(value, core_1.JsonParseMode.Loose);
+        }
+        catch (e) {
+            if (e instanceof core_1.InvalidJsonCharacterException && !value.startsWith('{')) {
+                return value;
+            }
+            else {
+                throw e;
+            }
+        }
+    }
+    return value;
 }
 class ConfigCommand extends command_1.Command {
     constructor() {
