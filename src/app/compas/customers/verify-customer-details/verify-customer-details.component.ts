@@ -76,6 +76,12 @@ export class VerifyCustomerDetailsComponent implements OnInit {
     });
   }
 
+  validateStaffId(event: any) {
+    let regExpr = new RegExp(/^[A-Z|a-z|0-9]+$/);
+    let result = regExpr.test(event.key);
+    return result;
+  }
+
 
 
   initInquiry() {
@@ -98,27 +104,37 @@ export class VerifyCustomerDetailsComponent implements OnInit {
   }
 
   tellerInquiry(teller) {
-    const tell = {
-      'userName': this.getConfigs().authUsr,
-      'passWord': this.getConfigs().authPs,
-      'object': {
-        'id': teller,
-      }
-    };
-    const tellr = {
-      'tellerId': teller
-    };
-    this.tellerSvc.checkTellerExists(tellr).subscribe(data => {
-      this.locl = data;
-      if (this.locl.status === true) {
 
-        return this.toastr.warning('staff with specified details already exists', ' Warning!', { timeOut: 3000 });
-      } else {
-        this.tellerCoBankingInq(tell);
-      }
-    }, error => {
-      return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
-    });
+    let idPattern = new RegExp(/^KE[0-9]{1,15}$/);
+    let result = idPattern.test(teller);
+
+    if (result) {
+      const tell = {
+        'userName': this.getConfigs().authUsr,
+        'passWord': this.getConfigs().authPs,
+        'object': {
+          'id': teller,
+        }
+      };
+      const tellr = {
+        'tellerId': teller
+      };
+      this.tellerSvc.checkTellerExists(tellr).subscribe(data => {
+        this.locl = data;
+        if (this.locl.status === true) {
+
+          return this.toastr.warning('staff with specified details already exists', ' Warning!', { timeOut: 3000 });
+        } else {
+          this.tellerCoBankingInq(tell);
+        }
+      }, error => {
+        return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
+      });
+    } else {
+      console.log('invalid id');
+      return this.toastr.error('Staff ID should match patter KE1234', 'Error!', { timeOut: 4000 });
+    }
+
   }
   tellerCoBankingInq(teller) {
     // this.tellerSvc.getTllrDetails().subscribe (data => {

@@ -25,6 +25,7 @@ export class ConvertStaffToCustomerComponent implements OnInit {
   response: any = null;
   otc: any = {};
   rightId: any;
+  staffId: any;
 
   constructor(private tellerSvc: TellerService, private apiService: BioService,
     private fb: FormBuilder, private custSvc: CustomerService,
@@ -37,7 +38,22 @@ export class ConvertStaffToCustomerComponent implements OnInit {
   }
 
   getStaff(teller) {
-    this.getTeller(teller);
+    let idPattern = new RegExp(/^KE[0-9]{1,15}$/);
+    let result = idPattern.test(teller);
+
+    if (result) {
+      this.getTeller(teller);
+    } else {
+      console.log('not a valid id');
+      return this.toastr.warning("Staff Id Should be in format KE1234")
+    }
+
+  }
+
+  validateStaffId(event: any) {
+    let regExpr = new RegExp(/^[A-Z|a-z|0-9]+$/);
+    let result = regExpr.test(event.key);
+    return result;
   }
 
   getTeller(teller) {
@@ -90,7 +106,7 @@ export class ConvertStaffToCustomerComponent implements OnInit {
       "verified": this.tellerResponse.teller.verified,
       "verifiedBy": this.tellerResponse.teller.verifiedBy,
       "verifiedOn": this.tellerResponse.teller.approvedOn,
-       //the mnemonic number of the customer will be the teller id of the person who was staff
+      //the mnemonic number of the customer will be the teller id of the person who was staff
       "mnemonic": this.tellerResponse.teller.tellerId,
       "waived": "N",
       "branchCode": this.tellerResponse.teller.deptCode
