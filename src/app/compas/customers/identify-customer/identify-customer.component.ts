@@ -87,6 +87,20 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
     name: string;
 
     verificationType = 'GRE';
+    selectedFinger = null
+
+    availableFingers = [
+        { id: 0, name: 'RIGHT THUMB' },
+        { id: 1, name: 'RIGHT INDEX' },
+        { id: 2, name: 'RIGHT MIDDLE' },
+        { id: 3, name: 'RIGHT RING' },
+        { id: 4, name: 'RIGHT LITTLE' },
+        { id: 5, name: 'LEFT THUMB' },
+        { id: 6, name: 'LEFT INDEX' },
+        { id: 7, name: 'LEFT MIDDLE' },
+        { id: 8, name: 'LEFT RING' },
+        { id: 9, name: 'LEFT LITTLE' }
+    ]
 
     private stompClient = null;
     constructor(private apiService: BioService,
@@ -566,26 +580,30 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
 
     // Additional function for Secugen verify
     secugenIdentify() {
-            this.apiService.capturePrint().subscribe((data: Array<object>) => {
-                this.bio = data;
-                const profilePrint: any = {};
-                if (this.bio.ErrorCode === 0) {
+        console.log("secugenIdentify called");
+        this.apiService.capturePrint().subscribe((data: Array<object>) => {
+            console.log("Identify Called")
+            console.log(data);
+            this.bio = data;
+            const profilePrint: any = {};
+            if (this.bio.ErrorCode === 0) {
 
-                    if (this.bio !== null && this.bio.BMPBase64.length > 0) {
-                        this.document.getElementById('finger').src =
-                            'data:image/bmp;base64,' + this.bio.BMPBase64;
-                        profilePrint.singlePrint = {
-                            position: 0,
-                            fingerPrint: this.bio.BMPBase64
-                        };
-                        this.fingerPrints.push(profilePrint.singlePrint);
+                if (this.bio !== null && this.bio.BMPBase64.length > 0) {
+                    this.document.getElementById('finger').src =
+                        'data:image/bmp;base64,' + this.bio.BMPBase64;
+                    profilePrint.singlePrint = {
+                        position: this.selectedFinger,
+                        fingerPrint: this.bio.BMPBase64,
+                        quality: this.bio.ImageQuality,
+                    };
+                    this.fingerPrints.push(profilePrint.singlePrint);
 
-                        this.afisIdentifyUser(profilePrint);
-                    }
-                } else {
-                    return this.toastr.warning('failed to Capture finger print, please retry', 'Warning!', { timeOut: 3000 });
+                    this.afisIdentifyUser(profilePrint);
                 }
-            });
+            } else {
+                return this.toastr.warning('failed to Capture finger print, please retry', 'Warning!', { timeOut: 3000 });
+            }
+        });
     }
 
     afisIdentifyUser(cust) {

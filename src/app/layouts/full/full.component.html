@@ -1,23 +1,26 @@
 <!-- ============================================================== -->
 <!-- Main wrapper - style you can find in pages.scss -->
 <!-- ============================================================== -->
-<div id="main-wrapper" [ngClass]="{'show-sidebar': showMobileMenu}" [dir]="options.dir" [attr.data-theme]="options.theme"
-    [attr.data-layout]="options.layout" [attr.data-sidebartype]="options.sidebartype" [attr.data-sidebar-position]="options.sidebarpos"
-    [attr.data-header-position]="options.headerpos" [attr.data-boxed-layout]="options.boxed">
+<div id="main-wrapper" [ngClass]="{'show-sidebar': showMobileMenu}" [dir]="options.dir"
+    [attr.data-theme]="options.theme" [attr.data-layout]="options.layout" [attr.data-sidebartype]="options.sidebartype"
+    [attr.data-sidebar-position]="options.sidebarpos" [attr.data-header-position]="options.headerpos"
+    [attr.data-boxed-layout]="options.boxed">
     <!-- ============================================================== -->
     <!-- Topbar header - style you can find in topbar.scss -->
     <!-- ============================================================== -->
     <header class="topbar" [attr.data-navbarbg]="options.navbarbg">
-        <nav class="navbar top-navbar navbar-expand-md" [ngClass]="(options.navbarbg=='skin6')?'navbar-light':'navbar-dark'">
+        <nav class="navbar top-navbar navbar-expand-md"
+            [ngClass]="(options.navbarbg=='skin6')?'navbar-light':'navbar-dark'">
             <div class="navbar-header" [ngClass]="(expandLogo)?'expand-logo':''" [attr.data-logobg]="options.logobg">
                 <!-- This is for the sidebar toggle which is visible on mobile only -->
-                <a (click)="showMobileMenu = !showMobileMenu" class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
+                <a (click)="showMobileMenu = !showMobileMenu"
+                    class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
                     <i [ngClass]="(showMobileMenu)?'ti-close':'ti-menu'"></i>
                 </a>
                 <!-- ============================================================== -->
                 <!-- Logo -->
                 <!-- ============================================================== -->
-                <a class="navbar-brand" href="/compas">
+                <a class="navbar-brand" href="/#/dashboard">
                     <!-- Logo icon -->
                     <b class="logo-icon">
                         <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
@@ -41,14 +44,17 @@
                 <!-- ============================================================== -->
                 <!-- Toggle which is visible on mobile only -->
                 <!-- ============================================================== -->
-                <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
+                <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)"
+                    (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
                     <i class="ti-more"></i>
                 </a>
             </div>
             <!-- ============================================================== -->
             <!-- End Logo -->
             <!-- ============================================================== -->
-            <div class="navbar-collapse collapse" id="navbarSupportedContent" [attr.data-navbarbg]="options.navbarbg" [ngbCollapse]="!isCollapsed">
+            <div class="navbar-collapse collapse" id="navbarSupportedContent" [attr.data-navbarbg]="options.navbarbg"
+                [ngbCollapse]="!isCollapsed">
                 <app-navigation (toggleSidebar)="toggleSidebarType()" class="w-100"></app-navigation>
             </div>
         </nav>
@@ -89,7 +95,7 @@
         <!-- footer -->
         <!-- ============================================================== -->
         <footer class="footer text-center">
-          Powered By
+            Powered By
             <a href="http://compulynx.com" target="_blank">CompuLynx LTD</a>.
         </footer>
         <!-- ============================================================== -->
