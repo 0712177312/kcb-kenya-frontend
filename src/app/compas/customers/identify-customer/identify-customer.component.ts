@@ -591,14 +591,14 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
                 if (this.bio !== null && this.bio.BMPBase64.length > 0) {
                     this.document.getElementById('finger').src =
                         'data:image/bmp;base64,' + this.bio.BMPBase64;
-                    profilePrint.singlePrint = {
+                    let singlePrint = {
                         position: this.selectedFinger,
                         fingerPrint: this.bio.BMPBase64,
                         quality: this.bio.ImageQuality,
                     };
-                    this.fingerPrints.push(profilePrint.singlePrint);
+                    this.fingerPrints.push(singlePrint);
 
-                    this.afisIdentifyUser(profilePrint);
+                    this.afisIdentifyUser(this.fingerPrints);
                 }
             } else {
                 return this.toastr.warning('failed to Capture finger print, please retry', 'Warning!', { timeOut: 3000 });
