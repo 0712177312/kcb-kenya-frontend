@@ -598,7 +598,9 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
                     };
                     this.fingerPrints.push(singlePrint);
 
-                    this.afisIdentifyUser(this.fingerPrints);
+                    this.afisIdentifyUser({
+                        fingerPrints: this.fingerPrints
+                    });
                 }
             } else {
                 return this.toastr.warning('failed to Capture finger print, please retry', 'Warning!', { timeOut: 3000 });
