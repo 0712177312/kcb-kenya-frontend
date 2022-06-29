@@ -1,9 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
-:host /deep/ tr,th {
-    background-color: aqua;
-    font-style: italic;
-    text-align:right;
-    border: 3px solid black;
-    width: 100%;
-    height: 50px;
-    }
+
+:host /deep/ tr,
+th {
+  background-color: aqua;
+  font-style: italic;
+  text-align: right;
+  border: 3px solid black;
+  width: 100%;
+  height: 50px;
+}

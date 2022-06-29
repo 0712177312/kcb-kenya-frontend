@@ -75,14 +75,14 @@ import { AppInfoCardComponent } from './compas/dashboardcomponents/app-info-card
 import { VerifyTellerComponent } from './compas/configs/verify-teller/verify-teller.component';
 import { VerifyCustomerDetailsComponent } from './compas/customers/verify-customer-details/verify-customer-details.component';
 import { BlockUiTemplateComponent } from './block-ui-temp.component';
-import {BlockUIHttpModule} from "ng-block-ui/http";
+import { BlockUIHttpModule } from "ng-block-ui/http";
 import { DeleteCustomerComponent } from './compas/customers/delete-customer/delete-customer.component';
 import { ConvertStaffToCustomerComponent } from './compas/customers/convert-staff-to-customer/convert-staff-to-customer.component';
 
 // import { stompConfig } from './compas/services/web-socket-config';
 
-import {ProgressBarModalComponent} from './progressbar-modal.component';
-import {NgIdleKeepaliveModule} from '@ng-idle/keepalive';
+import { ProgressBarModalComponent } from './progressbar-modal.component';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { DataTablesModule } from 'angular-datatables';
 import { DetachCustomerComponent } from './compas/customers/detach-customer/detach-customer.component';
 import { DetachStaffComponent } from './compas/configs/detach-staff/detach-staff.component';
@@ -171,7 +171,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     Ng2SmartTableModule,
     ToastrModule.forRoot(),
     NgIdleKeepaliveModule.forRoot(),
-    DataTablesModule 
+    DataTablesModule
   ],
   entryComponents: [ConfirmDialogComponent, BlockUiTemplateComponent, ProgressBarModalComponent],
   providers: [
@@ -190,4 +190,4 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

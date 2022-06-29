@@ -16,7 +16,7 @@
   <br>
 </div>
 
-DEMO: https://scttcper.github.io/ngx-toastr/
+DEMO: https://ngx-toastr.netlify.com/
 
 ## Features
 
@@ -28,6 +28,15 @@ DEMO: https://scttcper.github.io/ngx-toastr/
 - Animations using Angular's
   [Web Animations API](https://angular.io/docs/ts/latest/guide/animations.html)
 - Output toasts to an optional target directive
+
+## Dependencies
+Latest version available for each version of Angular
+
+| ngx-toastr   | Angular |
+| ------------ | ------- |
+| 6.4.1-beta.0 | 4.x     |
+| 8.10.2       | 5.x     |
+| 10.0.4       | 8.x 7.x 6.x |
 
 ## Install
 
@@ -55,7 +64,7 @@ Don't want to use `@angular/animations`? See
 
 ```scss
 // regular style toast
-@import '~ngx-toastr/toastr.css';
+@import '~ngx-toastr/toastr';
 
 // bootstrap style toast
 // or import a bootstrap 4 alert styled design (SASS ONLY)
@@ -133,7 +142,7 @@ Passed to `ToastrService.success/error/warning/info/show()`
 | enableHtml        | boolean                        | false             | Allow html in message                                                                                                                     |
 | progressBar       | boolean                        | false             | Show progress bar                                                                                                                         |
 | progressAnimation | `'decreasing' \| 'increasing'` | 'decreasing'      | Changes the animation of the progress bar.                                                                                                |
-| toastClass        | string                         | 'toast'           | Class on toast                                                                                                                            |
+| toastClass        | string                         | 'ngx-toastr'      | Class on toast                                                                                                                            |
 | positionClass     | string                         | 'toast-top-right' | Class on toast container                                                                                                                  |
 | titleClass        | string                         | 'toast-title'     | Class inside toast on title                                                                                                               |
 | messageClass      | string                         | 'toast-message'   | Class inside toast on message                                                                                                             |
@@ -157,14 +166,15 @@ All [individual options](#individual-options) can be overridden in the global
 options to affect all toasts. In addition, global options include the following
 options:
 
-| Option                  | Type    | Default                            | Description                                                       |
-| ----------------------- | ------- | ---------------------------------- | ----------------------------------------------------------------- |
-| maxOpened               | number  | 0                                  | Max toasts opened. Toasts will be queued. 0 is unlimited          |
-| autoDismiss             | boolean | false                              | Dismiss current toast when max is reached                         |
-| iconClasses             | object  | [see below](#iconclasses-defaults) | Classes used on toastr service methods                            |
-| newestOnTop             | boolean | true                               | New toast placement                                               |
-| preventDuplicates       | boolean | false                              | Block duplicate messages                                          |
-| resetTimeoutOnDuplicate | boolean | false                              | Reset toast timeout on duplicate (preventDuplicates must be true) |
+| Option                  | Type    | Default                            | Description                                                                                                      |
+| ----------------------- | ------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| maxOpened               | number  | 0                                  | Max toasts opened. Toasts will be queued. 0 is unlimited                                                         |
+| autoDismiss             | boolean | false                              | Dismiss current toast when max is reached                                                                        |
+| iconClasses             | object  | [see below](#iconclasses-defaults) | Classes used on toastr service methods                                                                           |
+| newestOnTop             | boolean | true                               | New toast placement                                                                                              |
+| preventDuplicates       | boolean | false                               | Block duplicate messages                                                                                         |
+| countDuplicates         | boolean | false                              | Displays a duplicates counter (preventDuplicates must be true). Toast must have a title and duplicate message    |
+| resetTimeoutOnDuplicate | boolean | false                              | Reset toast timeout on duplicate (preventDuplicates must be true)                                                |
 
 ##### iconClasses defaults
 
@@ -193,8 +203,6 @@ imports: [
 ```
 
 ### Toastr Service methods return:
-
-Toastr Service will return undefined if prevent duplicates is enabled
 
 ```typescript
 export interface ActiveToast {
@@ -308,10 +316,7 @@ import {
     // ...
 
     // BrowserAnimationsModule no longer required
-    ToastNoAnimationModule,
-    ToastrModule.forRoot({
-      toastComponent: ToastNoAnimation
-    })
+    ToastNoAnimationModule.forRoot(),
   ]
   // ...
 })
@@ -359,6 +364,20 @@ ngOnInit() {
     https://github.com/scttcper/ngx-toastr/issues/179
 4.  How can I translate messages See:
     https://github.com/scttcper/ngx-toastr/issues/201
+5. How to handle toastr click/tap action?
+
+```ts
+showToaster() {
+  this.toastr.success('Hello world!', 'Toastr fun!')
+    .onTap
+    .pipe(take(1))
+    .subscribe(() => this.toasterClickedHandler());
+}
+
+toasterClickedHandler() {
+  console.log('Toastr clicked');
+}
+```
 
 ## Previous Works
 

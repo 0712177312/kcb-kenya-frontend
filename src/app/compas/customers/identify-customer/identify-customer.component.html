@@ -227,9 +227,10 @@
                                                 <button (click)="secugenIdentify()" class="btn btn-success cust-btn"
                                                     type="submit"
                                                     [disabled]="selectedFinger==null || selectedFinger==undefined">
-                                                    Identify Customer
+                                                    Identify
                                                 </button>
-                                                <button (click)="cancel()" class="btn btn-danger" type="button">
+                                                <button (click)="cancel();  t.select('tab2')" class="btn btn-danger"
+                                                    type="button">
                                                     Cancel
                                                 </button>
                                             </div>
@@ -326,7 +327,7 @@
                                                     </div>
                                                     <div class="col-lg-12 fing-btns">
                                                         <button (click)="identifyCustomerDetails()"
-                                                            class="btn btn-success" type="button">Identify Customer
+                                                            class="btn btn-success" type="button">Identify
                                                         </button>
                                                         <button (click)="sendName('stop')" class="btn btn-primary"
                                                             type="button">Stop
