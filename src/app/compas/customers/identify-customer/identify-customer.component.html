@@ -194,48 +194,46 @@
                             <!--[hidden]="bioDetails"-->
                             <h4 class="card-title">Verify</h4>
                             <hr>
-                            <div class="col-sm-6">
-                                <div class="form-group row">
-                                    <label class="control-label text-right col-sm-5 labels">Select Fingerprint</label>
-                                    <div class="col-md-7">
-                                        <ng-select [items]="availableFingers" bindLabel="name" bindValue="id"
-                                            [(ngModel)]="selectedFinger">
-                                        </ng-select>
+
+                            <div *ngIf="verificationType === 'SEC'">
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label class="control-label text-right col-sm-5 labels">Select
+                                            Fingerprint</label>
+                                        <div class="col-md-7">
+                                            <ng-select [items]="availableFingers" bindLabel="name" bindValue="id"
+                                                [(ngModel)]="selectedFinger">
+                                            </ng-select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- <label for="fingerSelect">Select Fingerprint</label>
-                            <select id="fingerSelect" (change)="selectFinger($event.target.value)">
-                                <option selected>Select Finger</option>
-                                <option *ngFor="let finger of availableFingers" [value]="finger.id">
-                                    {{finger.name}}
-                                </option>
-                            </select> -->
-                            <div *ngIf="verificationType === 'SEC'" class="row">
-                                <div class="col-md-6 col-sm-offset-3 custom-row">
-                                    <form class="form-horizontal" id="loginform">
-                                        <div class="input-group mb-3">
-                                            <div class="verify">
-                                                <a class="shortcuts shortcut" href="javascript:;">
-                                                    <img height="200px" id="finger" src="assets/images/fingerprint.png"
-                                                        style="margin-left: 75%;">
-                                                </a>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-offset-3 custom-row">
+                                        <form class="form-horizontal" id="loginform">
+                                            <div class="input-group mb-3">
+                                                <div class="verify">
+                                                    <a class="shortcuts shortcut" href="javascript:;">
+                                                        <img height="200px" id="finger"
+                                                            src="assets/images/fingerprint.png"
+                                                            style="margin-left: 75%;">
+                                                    </a>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div>
-                                            <div class="col-lg-12">
-                                                <button (click)="secugenIdentify()" class="btn btn-success cust-btn"
-                                                    type="submit"
-                                                    [disabled]="selectedFinger==null || selectedFinger==undefined">
-                                                    Identify
-                                                </button>
-                                                <button (click)="cancel();  t.select('tab2')" class="btn btn-danger"
-                                                    type="button">
-                                                    Cancel
-                                                </button>
+                                            <div>
+                                                <div class="col-lg-12">
+                                                    <button (click)="secugenIdentify()" class="btn btn-success cust-btn"
+                                                        type="submit"
+                                                        [disabled]="selectedFinger==null || selectedFinger==undefined">
+                                                        Identify
+                                                    </button>
+                                                    <button (click)="cancel();  t.select('tab2')" class="btn btn-danger"
+                                                        type="button">
+                                                        Cancel
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </form>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                             <div *ngIf="verificationType === 'GRE'" class="row">
