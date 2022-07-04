@@ -1,479 +1,556 @@
 <block-ui>
   <div class="row" *ngIf="!editMode">
 
-  <div class="col-12">
+    <div class="col-12">
 
-    <div class="card">
+      <div class="card">
 
-      <div class="card-body">
+        <div class="card-body">
 
-        <h4 class="card-title">Enroll Staff</h4>
-        <hr>
-        <div id="cust-table" class="table table-bordered table-sm m-b-0 table-responsive smart-table ">
-          <ng2-smart-table [settings]="settings" [source]="customers" class=""          
-           (create)="initInquery($event)" (edit)="initEditcustomer($event)"></ng2-smart-table>
+          <h4 class="card-title">Enroll Staff</h4>
+          <hr>
+          <div id="cust-table" class="table table-bordered table-sm m-b-0 table-responsive smart-table ">
+            <ng2-smart-table [settings]="settings" [source]="customers" class="" (create)="initInquery($event)"
+              (edit)="initEditcustomer($event)"></ng2-smart-table>
+          </div>
+          <!-- <app-table></app-table> -->
         </div>
-        <!-- <app-table></app-table> -->
       </div>
     </div>
   </div>
-</div>
-<div *ngIf="editMode">
-<div class="row" *ngIf="!isVerified">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header bg-info">
-                    <h4 class="card-title text-white">Staff Inquiry</h4>
-                  </div>
-                <div class="card-body">
-                    <form class="form-horizontal">
-                      <div class="card-body">
-                          <div class="form-group row">
-<!--                              <div class="col-sm-3">-->
-<!--                                  <div class="b-label">-->
-<!--                                      <label for="inputEmail3" class="control-label col-form-label">Profile Type</label>-->
-<!--                                  </div>-->
-<!--                              </div>-->
-                              <div class="col-sm-9">
-<!--                                  <h5>Enter Staff ID to Inquire Staff</h5>-->
-                                  <input type="text" value="2" class="custom-control-input" id="customControlValidation2" [(ngModel)]="profType" name="profType" required [ngModelOptions]="{standalone: true}" hidden>
-
-<!--                                  <div class="custom-control custom-radio custom-control-inline m-t-5">-->
-<!--                                      <input type="radio" value="2" class="custom-control-input" id="customControlValidation2" [(ngModel)]="profType" name="profType" required [ngModelOptions]="{standalone: true}" hidden>-->
-<!--                                      <label class="custom-control-label" for="customControlValidation2">Customer</label>-->
-<!--                                  </div>-->
-<!--                                  <div class="custom-control custom-radio custom-control-inline">-->
-<!--                                      <input type="radio" value="2" class="custom-control-input" id="customControlValidation3"  [(ngModel)]="profType" name="profType" required [ngModelOptions]="{standalone: true}">-->
-<!--                                      <label class="custom-control-label" for="customControlValidation3">Staff</label>-->
-<!--                                  </div>-->
-                              </div>
-                          </div>
-                          <div class="form-group row" *ngIf="profType == '2'">
-                              <div class="col-sm-3">
-                                  <div class="b-label">
-                                      <label for="staff" class="control-label col-form-label">Staff Id</label>
-                                  </div>
-                              </div>
-                              <div class="col-sm-9">
-                                  <input type="text" class="form-control" id="inputEmail3" [(ngModel)]="account_number" placeholder="Staff Id" [ngModelOptions]="{standalone: true}">
-                              </div>
-                          </div>
-                          <div class="form-group row" *ngIf="profType == '1'">
-                              <div class="col-sm-3">
-                                  <div class="b-label">
-                                      <label for="customer" class="control-label col-form-label">Customer Id</label>
-                                  </div>
-                              </div>
-                              <div class="col-sm-9">
-                                  <input type="text" class="form-control" autocomplete="off" id="inputEmail3" [(ngModel)]="account_number" placeholder="Customer Id" [ngModelOptions]="{standalone: true}">
-                              </div>
-                          </div>
-                      </div>
-                      <hr>
-                      <div class="card-body">
-                          <div class="form-group m-b-0 text-right">
-                              <button type="submit" class="btn btn-success cust-bt waves-effect waves-light" (click)="getCustomer(account_number)">NEXT</button>
-                              <button type="button" class="btn btn-danger waves-effect waves-light" (click)="cancelEnr()">CANCEL</button>
-                          </div>
-                      </div>
-                  </form>
-                </div>
+  <div *ngIf="editMode">
+    <div class="row" *ngIf="!isVerified">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header bg-info">
+            <h4 class="card-title text-white">Staff Inquiry</h4>
           </div>
-     </div>
-</div>
-<div class="row" *ngIf="isVerified">
+          <div class="card-body">
+            <form class="form-horizontal">
+              <div class="card-body">
+                <div class="form-group row">
+                  <!--                              <div class="col-sm-3">-->
+                  <!--                                  <div class="b-label">-->
+                  <!--                                      <label for="inputEmail3" class="control-label col-form-label">Profile Type</label>-->
+                  <!--                                  </div>-->
+                  <!--                              </div>-->
+                  <div class="col-sm-9">
+                    <!--                                  <h5>Enter Staff ID to Inquire Staff</h5>-->
+                    <input type="text" value="2" class="custom-control-input" id="customControlValidation2"
+                      [(ngModel)]="profType" name="profType" required [ngModelOptions]="{standalone: true}" hidden>
+
+                    <!--                                  <div class="custom-control custom-radio custom-control-inline m-t-5">-->
+                    <!--                                      <input type="radio" value="2" class="custom-control-input" id="customControlValidation2" [(ngModel)]="profType" name="profType" required [ngModelOptions]="{standalone: true}" hidden>-->
+                    <!--                                      <label class="custom-control-label" for="customControlValidation2">Customer</label>-->
+                    <!--                                  </div>-->
+                    <!--                                  <div class="custom-control custom-radio custom-control-inline">-->
+                    <!--                                      <input type="radio" value="2" class="custom-control-input" id="customControlValidation3"  [(ngModel)]="profType" name="profType" required [ngModelOptions]="{standalone: true}">-->
+                    <!--                                      <label class="custom-control-label" for="customControlValidation3">Staff</label>-->
+                    <!--                                  </div>-->
+                  </div>
+                </div>
+                <div class="form-group row" *ngIf="profType == '2'">
+                  <div class="col-sm-3">
+                    <div class="b-label">
+                      <label for="staff" class="control-label col-form-label">Staff Id</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" id="inputEmail3" [(ngModel)]="account_number"
+                      placeholder="Staff Id" [ngModelOptions]="{standalone: true}" (keypress)="validateStaffId($event)">
+                  </div>
+                </div>
+                <div class="form-group row" *ngIf="profType == '1'">
+                  <div class="col-sm-3">
+                    <div class="b-label">
+                      <label for="customer" class="control-label col-form-label">Customer Id</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" autocomplete="off" id="inputEmail3"
+                      [(ngModel)]="account_number" placeholder="Customer Id" [ngModelOptions]="{standalone: true}">
+                  </div>
+                </div>
+              </div>
+              <hr>
+              <div class="card-body">
+                <div class="form-group m-b-0 text-right">
+                  <button type="submit" class="btn btn-success cust-bt waves-effect waves-light"
+                    (click)="getCustomer(account_number)">NEXT</button>
+                  <button type="button" class="btn btn-danger waves-effect waves-light"
+                    (click)="cancelEnr()">CANCEL</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="isVerified">
       <div class="col-lg-12 col-xlg-12 col-md-12" *ngIf="!profForm">
-          <div class="card">
-              <ngb-tabset type="pills" class="custom-pills" #t="ngbTabset" (tabChange)="validateCustomer($event)" [destroyOnHide]="false">
-                  <ngb-tab title="Customer Details" id="tab1">
-                      <ng-template ngbTabContent>
-                        <div class="card-body" [hidden]="profDetails">
-                          <h4 class="card-title">Enroll Staff</h4>
-                          <hr>
-                            <form class="form form-material" [formGroup]="tellerForm">
-                                <div class="form-group row">
-                                    <label for="tellerName" class="col-2 col-form-label">Staff Name  <span class="error">*</span></label>
-                                    <div class="col-md-10">
-                                      <input type="text" class="form-control" formControlName="tellerName" placeholder="Full Name" [attr.disabled]="isDisabled? true : null"/>
-                                      <div *ngIf="submited && (tellerForm.controls['tellerName'].invalid || tellerForm.controls['tellerName'].dirty || tellerForm.controls['tellerName'].touched)"
-                                        class="error">
-                                        <div *ngIf="c.tellerName.errors?.required">FullName is required</div>
-                                        <div *ngIf="c.tellerName.errors?.minlength">Full Name must be a more than 6 characters</div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="form-group row">
-                                    <label for="tellerEmail" class="col-2 col-form-label">Staff Email  <span class="error">*</span></label>
-                                    <div class="col-md-10">
-                                      <input type="text" class="form-control" id="tellerEmail" formControlName="tellerEmail" placeholder="Staff Email" [attr.disabled]="isDisabled? true : null" />
-                                      <div *ngIf="submited && (tellerForm.controls['tellerEmail'].invalid || tellerForm.controls['tellerEmail'].dirty || tellerForm.controls['tellerEmail'].touched)"
-                                        class="error">
-                                        <div *ngIf="c.tellerEmail.errors?.required">Staff Email is required</div>
-                                        <div *ngIf="c.tellerEmail.errors?.maxlength">Staff Email is should not exceed 20 characters</div>
-                                        <div *ngIf="c.tellerEmail.errors?.minlength">Staff Email must be a more than 5 characters</div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="row">
-                                      <div class="col-md-12">
-                                      <div class="form-group row">
-                                          <label for="branchCode" class="control-label text-left col-md-2">Department  <span class="error">*</span></label>
-                                          <div class="col-md-10">
-                                            <!-- <ng-select [items]="activeBranches"
+        <div class="card">
+          <ngb-tabset type="pills" class="custom-pills" #t="ngbTabset" (tabChange)="validateCustomer($event)"
+            [destroyOnHide]="false">
+            <ngb-tab title="Staff Details" id="tab1">
+              <ng-template ngbTabContent>
+                <div class="card-body" [hidden]="profDetails">
+                  <h4 class="card-title">Enroll Staff</h4>
+                  <hr>
+                  <form class="form form-material" [formGroup]="tellerForm">
+                    <div class="form-group row">
+                      <label for="tellerName" class="col-2 col-form-label">Staff Name <span
+                          class="error">*</span></label>
+                      <div class="col-md-10">
+                        <input type="text" class="form-control" formControlName="tellerName" placeholder="Full Name"
+                          [attr.disabled]="isDisabled? true : null" />
+                        <div
+                          *ngIf="submited && (tellerForm.controls['tellerName'].invalid || tellerForm.controls['tellerName'].dirty || tellerForm.controls['tellerName'].touched)"
+                          class="error">
+                          <div *ngIf="c.tellerName.errors?.required">FullName is required</div>
+                          <div *ngIf="c.tellerName.errors?.minlength">Full Name must be a more than 6 characters</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="tellerEmail" class="col-2 col-form-label">Staff Email <span
+                          class="error">*</span></label>
+                      <div class="col-md-10">
+                        <input type="text" class="form-control" id="tellerEmail" formControlName="tellerEmail"
+                          placeholder="Staff Email" [attr.disabled]="isDisabled? true : null" />
+                        <div
+                          *ngIf="submited && (tellerForm.controls['tellerEmail'].invalid || tellerForm.controls['tellerEmail'].dirty || tellerForm.controls['tellerEmail'].touched)"
+                          class="error">
+                          <div *ngIf="c.tellerEmail.errors?.required">Staff Email is required</div>
+                          <div *ngIf="c.tellerEmail.errors?.maxlength">Staff Email is should not exceed 20 characters
+                          </div>
+                          <div *ngIf="c.tellerEmail.errors?.minlength">Staff Email must be a more than 5 characters
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group row">
+                          <label for="branchCode" class="control-label text-left col-md-2">Department <span
+                              class="error">*</span></label>
+                          <div class="col-md-10">
+                            <!-- <ng-select [items]="activeBranches"
                                                       bindLabel="branchName"
                                                       bindValue="branchCode"
                                                       formControlName="departmentCode" id="departmentCode">
                                             </ng-select> -->
-                                            <select [attr.disabled]="isDisabled? true : null" class="form-control custom-select" data-placeholder="branch group"
-                                            tabindex="1" formControlName="departmentCode">
-                                               <option *ngFor="let branch of activeBranches" [value]="branch.branchCode"> {{branch.branchName}}
-                                               </option>
-                                            </select>
-                                            <div *ngIf="submited && (tellerForm.controls['departmentCode'].invalid || tellerForm.controls['departmentCode'].dirty || tellerForm.controls['departmentCode'].touched)" class="error">
-                                              <div *ngIf="c.departmentCode.errors?.required">Branch is required</div>
-                                             </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                              <div>
-                                <div class="col-lg-12" style="text-align: left; padding-left: 16.7%">
-                                  <button *ngIf="isNew" type="submit" class="btn btn-success cust-btn" (click)="t.select('tab2')">
-                                      Finger Prints Config</button>
-                                  <button type="button" class="btn btn-warning" (click)="cancel()">Cancel</button>
-                                </div>
-                              </div>
-                            </form>
+                            <select [attr.disabled]="isDisabled? true : null" class="form-control custom-select"
+                              data-placeholder="branch group" tabindex="1" formControlName="departmentCode">
+                              <option *ngFor="let branch of activeBranches" [value]="branch.branchCode">
+                                {{branch.branchName}}
+                              </option>
+                            </select>
+                            <div
+                              *ngIf="submited && (tellerForm.controls['departmentCode'].invalid || tellerForm.controls['departmentCode'].dirty || tellerForm.controls['departmentCode'].touched)"
+                              class="error">
+                              <div *ngIf="c.departmentCode.errors?.required">Branch is required</div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      </ng-template>
-                  </ngb-tab>
-                  <ngb-tab title="Missing Finger Prints" id="tab2" *ngIf="isNew">
-                    <ng-template ngbTabContent>
-                      <div class="card-body" [hidden]="profDetails">
-                        <h4 class="card-title">Missing Finger Prints</h4>
-                        <hr>
-                        <form class="form form-material" [formGroup]="missingFp">
-                            <div class="form-group row">
-                              <label for="customerName" class="col-2 col-form-label">Missing Fingers</label>
-                              <div class="col-md-10">
-                                <ng-multiselect-dropdown
-                                [placeholder]="'Select Missing Finger'"
-                                [data]="dropdownList"
-                                formControlName="missingFingers"
-                                [settings]="dropdownSettings"
-                                (onSelect)="onItemSelect($event)"
-                                (onDeSelect)="onItemUnselect($event)"
-                                >
-                              </ng-multiselect-dropdown>
-                              </div>
-                            </div>      
-                            <div>
-                              <div class="col-lg-12" style="text-align: left; padding-left: 16.7%">
-                                <button *ngIf="isNew" type="submit" class="btn btn-success cust-btn" (click)="t.select('tab3')">
-                                  Capture Finger Prints</button>
-                                <button type="button" class="btn btn-warning" (click)="cancel()">Cancel</button>
+                    </div>
+                    <div>
+                      <div class="col-lg-12" style="text-align: left; padding-left: 16.7%">
+                        <button *ngIf="isNew" type="submit" class="btn btn-success cust-btn" (click)="t.select('tab2')">
+                          Finger Prints Config</button>
+                        <button type="button" class="btn btn-warning" (click)="cancel()">Cancel</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Missing Finger Prints" id="tab2" *ngIf="isNew">
+              <ng-template ngbTabContent>
+                <div class="card-body" [hidden]="profDetails">
+                  <h4 class="card-title">Missing Finger Prints</h4>
+                  <hr>
+                  <form class="form form-material" [formGroup]="missingFp">
+                    <div class="form-group row">
+                      <label for="customerName" class="col-2 col-form-label">Missing Fingers</label>
+                      <div class="col-md-10">
+                        <ng-multiselect-dropdown [placeholder]="'Select Missing Finger'" [data]="dropdownList"
+                          formControlName="missingFingers" [settings]="dropdownSettings"
+                          (onSelect)="onItemSelect($event)" (onDeSelect)="onItemUnselect($event)">
+                        </ng-multiselect-dropdown>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="col-lg-12" style="text-align: left; padding-left: 16.7%">
+                        <button *ngIf="isNew" type="submit" class="btn btn-success cust-btn" (click)="t.select('tab3')">
+                          Capture Finger Prints</button>
+                        <button type="button" class="btn btn-warning" (click)="cancel()">Cancel</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Capture Finger Prints" id="tab3" *ngIf="isNew">
+              <ng-template ngbTabContent>
+                <div class="card-body">
+                  <!--[hidden]="bioDetails"-->
+                  <h4 class="card-title">Capture Finger Prints</h4>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <div class="widget-content">
+                          <div class="col-lg-12 col-md-12 col-6-12">
+                            <div class="form-group">
+                              <div class="col-sm-4 col-md-4">
+                                <div class="rowc" style="min-height: 320px;">
+                                  <img src="assets/images/enroll/enroll.png" class="imgFade" />
+                                  <img id="T5" src="assets/images/enroll/T5.png" class="fl-L0 imgFade"
+                                    data-next="fl-L1" />
+                                  <img id="L6" src="assets/images/enroll/L6.png" class="fl-L1 imgFade"
+                                    data-next="fl-L2" />
+                                  <img id="L7" src="assets/images/enroll/L7.png" class="fl-L2 imgFade"
+                                    data-next="fl-L3" />
+                                  <img id="L8" src="assets/images/enroll/L8.png" class="fl-L3 imgFade"
+                                    data-next="fl-L4" />
+                                  <img id="L9" src="assets/images/enroll/L9.png" class="fl-L4 imgFade"
+                                    data-next="fl-R0" />
+                                  <img id="T0" src="assets/images/enroll/T0.png" class="fl-R0 imgFade"
+                                    data-next="fl-R1" />
+                                  <img id="R1" src="assets/images/enroll/R1.png" class="fl-R1 imgFade"
+                                    data-next="fl-R2" />
+                                  <img id="R2" src="assets/images/enroll/R2.png" class="fl-R2 imgFade"
+                                    data-next="fl-R3" />
+                                  <img id="R3" src="assets/images/enroll/R3.png" class="fl-R3 imgFade"
+                                    data-next="fl-R4" />
+                                  <img id="R4" src="assets/images/enroll/R4.png" class="fl-R4 imgFade" data-next="x" />
+                                </div>
                               </div>
                             </div>
-                          </form>
-                    </div>
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab title="Capture Finger Prints" id="tab3" *ngIf="isNew">
-                      <ng-template ngbTabContent>
-                        <div class="card-body"> <!--[hidden]="bioDetails"-->
-                          <h4 class="card-title">Capture Finger Prints</h4>
-                          <hr>
-                        <div class="row">
-                            <div class="col-sm-12">
-                             <div class="form-group">
-                              <div class="widget-content">
-                                <div class="col-lg-12 col-md-12 col-6-12">
-                                  <div class="form-group">
-                                    <div class="col-sm-4 col-md-4">
-                                    <div class="rowc" style="min-height: 320px;">
-                                      <img src="assets/images/enroll/enroll.png" class="imgFade" />
-                                      <img id="T5" src="assets/images/enroll/T5.png" class="fl-L0 imgFade" data-next="fl-L1" />
-                                      <img id="L6" src="assets/images/enroll/L6.png" class="fl-L1 imgFade" data-next="fl-L2" />
-                                      <img id="L7" src="assets/images/enroll/L7.png" class="fl-L2 imgFade" data-next="fl-L3" />
-                                      <img id="L8" src="assets/images/enroll/L8.png" class="fl-L3 imgFade" data-next="fl-L4" />
-                                      <img id="L9" src="assets/images/enroll/L9.png" class="fl-L4 imgFade" data-next="fl-R0" />
-                                      <img id="T0" src="assets/images/enroll/T0.png" class="fl-R0 imgFade" data-next="fl-R1" />
-                                      <img id="R1" src="assets/images/enroll/R1.png" class="fl-R1 imgFade" data-next="fl-R2" />
-                                      <img id="R2" src="assets/images/enroll/R2.png" class="fl-R2 imgFade" data-next="fl-R3" />
-                                      <img id="R3" src="assets/images/enroll/R3.png" class="fl-R3 imgFade" data-next="fl-R4" />
-                                      <img id="R4" src="assets/images/enroll/R4.png" class="fl-R4 imgFade" data-next="x" />
-                                    </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 fing">
+                              <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                  <div class="row">
+                                    <table class="table" style="height: 20%;" rowspan="2" colspan="2">
+                                      <tbody>
+                                        <tr>
+                                          <td class="cp-L4 imgCol1" data-href='4|L' data-img='L4' data-pos='5'
+                                            data-info='Left Little' capture>
+                                            <button id="left" [ngClass]="{'btn-cursor': btnClass}"
+                                              (click)="getFingerPrint('left')" class="captureFingerPrint">
+                                              <!--" -->
+                                              <img id="left" class="slap" height="150" width="150"
+                                                src="assets/images/enroll/no_image_left.png">
+                                              <h6 class="muted">LEFT HAND</h6>
+                                            </button>
+                                          </td>
+                                          <td class="cp-L3 imgCol1" data-href='3|L' data-img='L3' data-pos='4'
+                                            data-info='Left Ring' capture>
+                                            <button id="thumbs" [ngClass]="{'btn-cursor': btnClass}"
+                                              (click)="getFingerPrint('thumbs')" class="captureFingerPrint">
+                                              <img id="thumbs" class="thumbs"
+                                                src="assets/images/enroll/no_image_thumb.png">
+                                              <h6 class="muted">THUMBS</h6>
+                                            </button>
+                                          </td>
+                                          <td class="cp-L3 imgCol1" data-href='3|L' data-img='L3' data-pos='4'
+                                            data-info='Left Ring' capture>
+                                            <button id="right" [ngClass]="{'btn-cursor': btnClass}"
+                                              (click)="getFingerPrint('right')" class="captureFingerPrint">
+                                              <!---->
+                                              <img id="right" class="slap"
+                                                src="assets/images/enroll/no_image_right.png">
+                                              <h6 class="muted">RIGHT HAND</h6>
+                                            </button>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
                                   </div>
                                 </div>
-                                <div class="col-lg-12 col-md-12 col-sm-12 fing">
-                                  <div class="form-group col-lg-6 col-md-6 col-sm-6">
-                                    <div class="col-lg-12 col-md-12 col-sm-12">
-                                      <div class="row">
-                                        <table class="table" style="height: 20%;" rowspan="2" colspan="2">
-                                          <tbody>
-                                            <tr>
-                                              <td class="cp-L4 imgCol1" data-href='4|L' data-img='L4' data-pos='5' data-info='Left Little' capture>
-                                                   <button id="left" [ngClass]="{'btn-cursor': btnClass}"  (click)="getFingerPrint('left')" class="captureFingerPrint"> <!--" -->
-                                                      <img id="left"  class="slap" height="150" width="150" src="assets/images/enroll/no_image_left.png">
-                                                      <h6 class="muted">LEFT HAND</h6>
-                                                  </button>                                      
-                                              </td>
-                                              <td class="cp-L3 imgCol1" data-href='3|L' data-img='L3' data-pos='4' data-info='Left Ring' capture>
-                                                  <button id="thumbs" [ngClass]="{'btn-cursor': btnClass}" (click)="getFingerPrint('thumbs')" class="captureFingerPrint">
-                                                    <img id="thumbs" class="thumbs" src="assets/images/enroll/no_image_thumb.png">
-                                                    <h6 class="muted">THUMBS</h6>
-                                                  </button> 
-                                              </td>
-                                              <td class="cp-L3 imgCol1" data-href='3|L' data-img='L3' data-pos='4' data-info='Left Ring' capture>
-                                                  <button id="right" [ngClass]="{'btn-cursor': btnClass}" (click)="getFingerPrint('right')"   class="captureFingerPrint"> <!---->
-                                                     <img id="right" class="slap" src="assets/images/enroll/no_image_right.png">
-                                                     <h6 class="muted">RIGHT HAND</h6>
-                                                  </button>
-                                              </td>
-                                            </tr>
-                                          </tbody>
-                                        </table>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-lg-12 fing-btns">
-                                    <button type="button" class="btn btn-success" (click)="enrollTellerDetails()">Save</button>
-                                    <button type="button" class="btn btn-primary" (click)="getFingerPrint('stop')">Stop Device</button>
-                                    <button type="button" class="btn btn-warning" (click)="resetDevice()">Clear Captured Prints</button>                                      
-                                    <button type="button" class="btn btn-danger" (click)="cancelEnr()">Cancel</button>
-                                  </div>
-                                </div>
+                              </div>
+                              <div class="col-lg-12 fing-btns">
+                                <button type="button" class="btn btn-success"
+                                  (click)="enrollTellerDetails()">Save</button>
+                                <button type="button" class="btn btn-primary" (click)="getFingerPrint('stop')">Stop
+                                  Device</button>
+                                <button type="button" class="btn btn-warning" (click)="resetDevice()">Clear Captured
+                                  Prints</button>
+                                <button type="button" class="btn btn-danger" (click)="cancelEnr()">Cancel</button>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                      </div>
-                      </ng-template>
-                  </ngb-tab>
-              </ngb-tabset>
-          </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+          </ngb-tabset>
+        </div>
       </div>
       <div class="col-lg-12 col-xlg-12 col-md-12" *ngIf="profForm">
-            <div class="card">
-                <ngb-tabset type="pills" class="custom-pills" #t="ngbTabset" (tabChange)="validateCustomer($event)" [destroyOnHide]="false">
-                    <ngb-tab title="Customer Details" id="tab1">
-                        <ng-template ngbTabContent>
-                          <div class="card-body" [hidden]="profDetails">
-                            <h4 class="card-title">Enroll Profile</h4>
-                            <hr>
-                              <form class="form form-material" [formGroup]="form">
-                                <div class="form-group row">
-                                  <label for="customerName" class="col-2 col-form-label">Full Name  <span class="error">*</span></label>
-                                  <div class="col-md-10">
-                                    <input type="text" class="form-control" formControlName="customerName" placeholder="Full Name" [attr.disabled]="isDisabled? true : null"/>
-                                    <div *ngIf="submited && (form.controls['customerName'].invalid || form.controls['customerName'].dirty || form.controls['customerName'].touched)"
-                                      class="error">
-                                      <div *ngIf="f.customerName.errors?.required">FullName is required</div>
-                                      <div *ngIf="f.customerName.errors?.minlength">Full Name must be a more than 6 characters</div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="form-group row">
-                                  <label for="example-password-input" class="col-2 col-form-label">Gender  <span class="error">*</span></label>
-                                  <div class="col-10">
-                                    <div class="form-check">
-                                      <div class="custom-control custom-radio">
-                                        <input type="radio" value="MALE" formControlName="gender" class="custom-control-input" id="customControlValidation2" [attr.disabled]="isDisabled? true : null">
-                                        <label class="custom-control-label" for="customControlValidation2">Male</label>
-                                      </div>
-                                    </div>
-                                    <div class="form-check">
-                                      <div class="custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" value="FEMALE" formControlName="gender" id="customControlValidation3" [attr.disabled]="isDisabled? true : null">
-                                        <label class="custom-control-label" for="customControlValidation3">Female</label>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="form-group row">
-                                  <label for="customerIdNumber" class="col-2 col-form-label">ID Number  <span class="error">*</span></label>
-                                  <div class="col-md-10">
-                                    <input type="text" class="form-control" id="customerIdNumber" formControlName="customerIdNumber" placeholder="Customer ID Number" [attr.disabled]="isDisabled? true : null"/>
-                                    <div *ngIf="submited && (form.controls['customerIdNumber'].invalid || form.controls['customerIdNumber'].dirty || form.controls['customerIdNumber'].touched)"
-                                      class="error">
-                                      <div *ngIf="f.customerIdNumber.errors?.required">ID Number is required</div>
-                                      <div *ngIf="f.customerIdNumber.errors?.maxlength">ID Number is should not exceed 20 characters</div>
-                                      <div *ngIf="f.customerIdNumber.errors?.minlength">ID Number must be a more than 5 characters</div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="form-group row">
-                                  <label for="phoneNumber" class="col-2 col-form-label">Phone Number  <span class="error">*</span></label>
-                                  <div class="col-md-10">
-                                    <input type="text" class="form-control" formControlName="phoneNumber" placeholder="Telephone Number.." [attr.disabled]="isDisabled? true : null" />
-                                    <div *ngIf="submited && (form.controls['phoneNumber'].invalid || form.controls['phoneNumber'].dirty || form.controls['phoneNumber'].touched)"
-                                      class="error">
-                                      <div *ngIf="f.phoneNumber.errors?.required">Phone Number is required</div>
-                                    </div>
-                                  </div>
-                                </div>
+        <div class="card">
+          <ngb-tabset type="pills" class="custom-pills" #t="ngbTabset" (tabChange)="validateCustomer($event)"
+            [destroyOnHide]="false">
+            <ngb-tab title="Customer Details" id="tab1">
+              <ng-template ngbTabContent>
+                <div class="card-body" [hidden]="profDetails">
+                  <h4 class="card-title">Enroll Profile</h4>
+                  <hr>
+                  <form class="form form-material" [formGroup]="form">
+                    <div class="form-group row">
+                      <label for="customerName" class="col-2 col-form-label">Full Name <span
+                          class="error">*</span></label>
+                      <div class="col-md-10">
+                        <input type="text" class="form-control" formControlName="customerName" placeholder="Full Name"
+                          [attr.disabled]="isDisabled? true : null" />
+                        <div
+                          *ngIf="submited && (form.controls['customerName'].invalid || form.controls['customerName'].dirty || form.controls['customerName'].touched)"
+                          class="error">
+                          <div *ngIf="f.customerName.errors?.required">FullName is required</div>
+                          <div *ngIf="f.customerName.errors?.minlength">Full Name must be a more than 6 characters</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="example-password-input" class="col-2 col-form-label">Gender <span
+                          class="error">*</span></label>
+                      <div class="col-10">
+                        <div class="form-check">
+                          <div class="custom-control custom-radio">
+                            <input type="radio" value="MALE" formControlName="gender" class="custom-control-input"
+                              id="customControlValidation2" [attr.disabled]="isDisabled? true : null">
+                            <label class="custom-control-label" for="customControlValidation2">Male</label>
+                          </div>
+                        </div>
+                        <div class="form-check">
+                          <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" value="FEMALE" formControlName="gender"
+                              id="customControlValidation3" [attr.disabled]="isDisabled? true : null">
+                            <label class="custom-control-label" for="customControlValidation3">Female</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="customerIdNumber" class="col-2 col-form-label">ID Number <span
+                          class="error">*</span></label>
+                      <div class="col-md-10">
+                        <input type="text" class="form-control" id="customerIdNumber" formControlName="customerIdNumber"
+                          placeholder="Customer ID Number" [attr.disabled]="isDisabled? true : null" />
+                        <div
+                          *ngIf="submited && (form.controls['customerIdNumber'].invalid || form.controls['customerIdNumber'].dirty || form.controls['customerIdNumber'].touched)"
+                          class="error">
+                          <div *ngIf="f.customerIdNumber.errors?.required">ID Number is required</div>
+                          <div *ngIf="f.customerIdNumber.errors?.maxlength">ID Number is should not exceed 20 characters
+                          </div>
+                          <div *ngIf="f.customerIdNumber.errors?.minlength">ID Number must be a more than 5 characters
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="phoneNumber" class="col-2 col-form-label">Phone Number <span
+                          class="error">*</span></label>
+                      <div class="col-md-10">
+                        <input type="text" class="form-control" formControlName="phoneNumber"
+                          placeholder="Telephone Number.." [attr.disabled]="isDisabled? true : null" />
+                        <div
+                          *ngIf="submited && (form.controls['phoneNumber'].invalid || form.controls['phoneNumber'].dirty || form.controls['phoneNumber'].touched)"
+                          class="error">
+                          <div *ngIf="f.phoneNumber.errors?.required">Phone Number is required</div>
+                        </div>
+                      </div>
+                    </div>
 
-                                <div class="form-group row">
-                                  <label for="email" class="col-2 col-form-label">Email  <span class="error">*</span></label>
-                                  <div class="col-md-10">
-                                    <input type="text" class="form-control" formControlName="email" placeholder="Email.." [attr.disabled]="isDisabled? true : null" />
-                                    <div *ngIf="submited && (form.controls['email'].invalid || form.controls['email'].dirty || form.controls['email'].touched)"
-                                      class="error">
-                                      <div *ngIf="f.email.errors?.required">Email is required</div>
-                                    </div>
-                                  </div>
-                                </div>
+                    <div class="form-group row">
+                      <label for="email" class="col-2 col-form-label">Email <span class="error">*</span></label>
+                      <div class="col-md-10">
+                        <input type="text" class="form-control" formControlName="email" placeholder="Email.."
+                          [attr.disabled]="isDisabled? true : null" />
+                        <div
+                          *ngIf="submited && (form.controls['email'].invalid || form.controls['email'].dirty || form.controls['email'].touched)"
+                          class="error">
+                          <div *ngIf="f.email.errors?.required">Email is required</div>
+                        </div>
+                      </div>
+                    </div>
 
-                               <div class="row">
-                                    <div class="col-md-12">
-                                    <div class="form-group row">
-                                        <label for="branchCode" class="control-label text-left col-md-2">Branch  <span class="error">*</span></label>
-                                        <div class="col-md-10">
-                                              <!-- <ng-select [items]="activeBranches"
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group row">
+                          <label for="branchCode" class="control-label text-left col-md-2">Branch <span
+                              class="error">*</span></label>
+                          <div class="col-md-10">
+                            <!-- <ng-select [items]="activeBranches"
                                               [readonly]
                                                         bindLabel="branchName"
                                                         bindValue="branchCode"
                                                         formControlName="branchCode" id="branchCode">
                                               </ng-select> -->
-                                              <select [attr.disabled]="isDisabled? true : null" class="form-control custom-select" data-placeholder="branch group"
-                                               tabindex="1" formControlName="branchCode">
-                                                  <option *ngFor="let branch of activeBranches" [value]="branch.branchCode"> {{branch.branchName}}
-                                                  </option>
-                                               </select>
-                                          <div *ngIf="submited && (form.controls['branchCode'].invalid || form.controls['branchCode'].dirty || form.controls['branchCode'].touched)" class="error">
-                                            <div *ngIf="f.branchCode.errors?.required">Branch is required</div>
-                                           </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div> 
-                                <!-- <div class="form-group row">
+                            <select [attr.disabled]="isDisabled? true : null" class="form-control custom-select"
+                              data-placeholder="branch group" tabindex="1" formControlName="branchCode">
+                              <option *ngFor="let branch of activeBranches" [value]="branch.branchCode">
+                                {{branch.branchName}}
+                              </option>
+                            </select>
+                            <div
+                              *ngIf="submited && (form.controls['branchCode'].invalid || form.controls['branchCode'].dirty || form.controls['branchCode'].touched)"
+                              class="error">
+                              <div *ngIf="f.branchCode.errors?.required">Branch is required</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <div class="form-group row">
                                   <label for="active" class="col-2 col-form-label">Active</label>
                                   <div class="custom-control chk-active custom-checkbox mr-sm-2 m-b-15">
                                     <input type="checkbox" formControlName="active" class="custom-control-input" id="active" value="check">
                                     <label class="custom-control-label" for="active"></label>
                                   </div>
                                 </div> -->
-                                <div>
-                                  <div class="col-lg-12" style="text-align: left; padding-left: 16.7%">
-                                    <button *ngIf="isNew" type="submit" class="btn btn-success cust-btn" (click)="t.select('tab2')">
-                                        Finger Prints Config</button>
-                                    <button type="button" class="btn btn-warning" (click)="cancel()">Cancel</button>
-                                  </div>
-                                </div>
-                              </form>
-                        </div>
-                        </ng-template>
-                    </ngb-tab>
-                    <ngb-tab title="Missing Finger Prints" id="tab2" *ngIf="isNew">
-                      <ng-template ngbTabContent>
-                        <div class="card-body" [hidden]="profDetails">
-                          <h4 class="card-title">Missing Finger Prints</h4>
-                          <hr>
-                          <form class="form form-material" [formGroup]="missingFp">
-                              <div class="form-group row">
-                                <label for="customerName" class="col-2 col-form-label">Missing Fingers</label>
-                                <div class="col-md-10">
-                                  <ng-multiselect-dropdown
-                                  [placeholder]="'Select Missing Finger'"
-                                  [data]="dropdownList"
-                                  formControlName="missingFingers"
-                                  [settings]="dropdownSettings"
-                                  (onSelect)="onItemSelect($event)"
-                                  (onDeSelect)="onItemUnselect($event)"
-                                  >
-                                </ng-multiselect-dropdown>
-                                </div>
-                              </div>      
-                              <div>
-                                <div class="col-lg-12" style="text-align: left; padding-left: 16.7%">
-                                  <button *ngIf="isNew" type="submit" class="btn btn-success cust-btn" (click)="t.select('tab3')">
-                                    Capture Finger Prints</button>
-                                  <button type="button" class="btn btn-warning" (click)="cancel()">Cancel</button>
+                    <div>
+                      <div class="col-lg-12" style="text-align: left; padding-left: 16.7%">
+                        <button *ngIf="isNew" type="submit" class="btn btn-success cust-btn" (click)="t.select('tab2')">
+                          Finger Prints Config</button>
+                        <button type="button" class="btn btn-warning" (click)="cancel()">Cancel</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Missing Finger Prints" id="tab2" *ngIf="isNew">
+              <ng-template ngbTabContent>
+                <div class="card-body" [hidden]="profDetails">
+                  <h4 class="card-title">Missing Finger Prints</h4>
+                  <hr>
+                  <form class="form form-material" [formGroup]="missingFp">
+                    <div class="form-group row">
+                      <label for="customerName" class="col-2 col-form-label">Missing Fingers</label>
+                      <div class="col-md-10">
+                        <ng-multiselect-dropdown [placeholder]="'Select Missing Finger'" [data]="dropdownList"
+                          formControlName="missingFingers" [settings]="dropdownSettings"
+                          (onSelect)="onItemSelect($event)" (onDeSelect)="onItemUnselect($event)">
+                        </ng-multiselect-dropdown>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="col-lg-12" style="text-align: left; padding-left: 16.7%">
+                        <button *ngIf="isNew" type="submit" class="btn btn-success cust-btn" (click)="t.select('tab3')">
+                          Capture Finger Prints</button>
+                        <button type="button" class="btn btn-warning" (click)="cancel()">Cancel</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Capture Finger Prints" id="tab3" *ngIf="isNew">
+              <ng-template ngbTabContent>
+                <div class="card-body">
+                  <!--[hidden]="bioDetails"-->
+                  <h4 class="card-title">Capture Finger Prints</h4>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <div class="widget-content">
+                          <div class="col-lg-12 col-md-12 col-6-12">
+                            <div class="form-group">
+                              <div class="col-sm-4 col-md-4">
+                                <div class="rowc" style="min-height: 320px;">
+                                  <img src="assets/images/enroll/enroll.png" class="imgFade" />
+                                  <img id="T5" src="assets/images/enroll/T5.png" class="fl-L0 imgFade"
+                                    data-next="fl-L1" />
+                                  <img id="L6" src="assets/images/enroll/L6.png" class="fl-L1 imgFade"
+                                    data-next="fl-L2" />
+                                  <img id="L7" src="assets/images/enroll/L7.png" class="fl-L2 imgFade"
+                                    data-next="fl-L3" />
+                                  <img id="L8" src="assets/images/enroll/L8.png" class="fl-L3 imgFade"
+                                    data-next="fl-L4" />
+                                  <img id="L9" src="assets/images/enroll/L9.png" class="fl-L4 imgFade"
+                                    data-next="fl-R0" />
+                                  <img id="T0" src="assets/images/enroll/T0.png" class="fl-R0 imgFade"
+                                    data-next="fl-R1" />
+                                  <img id="R1" src="assets/images/enroll/R1.png" class="fl-R1 imgFade"
+                                    data-next="fl-R2" />
+                                  <img id="R2" src="assets/images/enroll/R2.png" class="fl-R2 imgFade"
+                                    data-next="fl-R3" />
+                                  <img id="R3" src="assets/images/enroll/R3.png" class="fl-R3 imgFade"
+                                    data-next="fl-R4" />
+                                  <img id="R4" src="assets/images/enroll/R4.png" class="fl-R4 imgFade" data-next="x" />
                                 </div>
                               </div>
-                            </form>
-                      </div>
-                      </ng-template>
-                  </ngb-tab>
-                  <ngb-tab title="Capture Finger Prints" id="tab3" *ngIf="isNew">
-                        <ng-template ngbTabContent>
-                          <div class="card-body"> <!--[hidden]="bioDetails"-->
-                            <h4 class="card-title">Capture Finger Prints</h4>
-                            <hr>
-                          <div class="row">
-                              <div class="col-sm-12">
-                               <div class="form-group">
-                                <div class="widget-content">
-                                  <div class="col-lg-12 col-md-12 col-6-12">
-                                    <div class="form-group">
-                                      <div class="col-sm-4 col-md-4">
-                                      <div class="rowc" style="min-height: 320px;">
-                                        <img src="assets/images/enroll/enroll.png" class="imgFade" />
-                                        <img id="T5" src="assets/images/enroll/T5.png" class="fl-L0 imgFade" data-next="fl-L1" />
-                                        <img id="L6" src="assets/images/enroll/L6.png" class="fl-L1 imgFade" data-next="fl-L2" />
-                                        <img id="L7" src="assets/images/enroll/L7.png" class="fl-L2 imgFade" data-next="fl-L3" />
-                                        <img id="L8" src="assets/images/enroll/L8.png" class="fl-L3 imgFade" data-next="fl-L4" />
-                                        <img id="L9" src="assets/images/enroll/L9.png" class="fl-L4 imgFade" data-next="fl-R0" />
-                                        <img id="T0" src="assets/images/enroll/T0.png" class="fl-R0 imgFade" data-next="fl-R1" />
-                                        <img id="R1" src="assets/images/enroll/R1.png" class="fl-R1 imgFade" data-next="fl-R2" />
-                                        <img id="R2" src="assets/images/enroll/R2.png" class="fl-R2 imgFade" data-next="fl-R3" />
-                                        <img id="R3" src="assets/images/enroll/R3.png" class="fl-R3 imgFade" data-next="fl-R4" />
-                                        <img id="R4" src="assets/images/enroll/R4.png" class="fl-R4 imgFade" data-next="x" />
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-lg-12 col-md-12 col-sm-12 fing">
-                                    <div class="form-group col-lg-6 col-md-6 col-sm-6">
-                                      <div class="col-lg-12 col-md-12 col-sm-12">
-                                        <div class="row">
-                                          <table class="table" style="height: 20%;" rowspan="2" colspan="2">
-                                            <tbody>
-                                              <tr>
-                                                <td class="cp-L4 imgCol1" data-href='4|L' data-img='L4' data-pos='5' data-info='Left Little' capture>
-                                                     <button id="left" [ngClass]="{'btn-cursor': btnClass}"  (click)="getFingerPrint('left')" class="captureFingerPrint"> <!--" -->
-                                                        <img id="left"  class="slap" height="150" width="150" src="assets/images/enroll/no_image_left.png">
-                                                        <h6 class="muted">LEFT HAND</h6>
-                                                    </button>                                      
-                                                </td>
-                                                <td class="cp-L3 imgCol1" data-href='3|L' data-img='L3' data-pos='4' data-info='Left Ring' capture>
-                                                    <button id="thumbs" [ngClass]="{'btn-cursor': btnClass}" (click)="getFingerPrint('thumbs')" class="captureFingerPrint">
-                                                      <img id="thumbs" class="thumbs" src="assets/images/enroll/no_image_thumb.png">
-                                                      <h6 class="muted">THUMBS</h6>
-                                                    </button> 
-                                                </td>
-                                                <td class="cp-L3 imgCol1" data-href='3|L' data-img='L3' data-pos='4' data-info='Left Ring' capture>
-                                                    <button id="right" [ngClass]="{'btn-cursor': btnClass}" (click)="getFingerPrint('right')"   class="captureFingerPrint"> <!---->
-                                                       <img id="right" class="slap" src="assets/images/enroll/no_image_right.png">
-                                                       <h6 class="muted">RIGHT HAND</h6>
-                                                    </button>
-                                                </td>
-                                              </tr>
-                                            </tbody>
-                                          </table>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="col-lg-12 fing-btns">
-                                      <button type="button" class="btn btn-success" (click)="enrollCustomerDetails()">Save</button>
-                                      <button type="button" class="btn btn-primary" (click)="getFingerPrint('stop')">Stop Device</button>
-                                      <button type="button" class="btn btn-warning" (click)="resetDevice()">Clear Captured Prints</button>                                      
-                                      <button type="button" class="btn btn-danger" (click)="cancelEnr()">Cancel</button>
-                                    </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 fing">
+                              <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                  <div class="row">
+                                    <table class="table" style="height: 20%;" rowspan="2" colspan="2">
+                                      <tbody>
+                                        <tr>
+                                          <td class="cp-L4 imgCol1" data-href='4|L' data-img='L4' data-pos='5'
+                                            data-info='Left Little' capture>
+                                            <button id="left" [ngClass]="{'btn-cursor': btnClass}"
+                                              (click)="getFingerPrint('left')" class="captureFingerPrint">
+                                              <!--" -->
+                                              <img id="left" class="slap" height="150" width="150"
+                                                src="assets/images/enroll/no_image_left.png">
+                                              <h6 class="muted">LEFT HAND</h6>
+                                            </button>
+                                          </td>
+                                          <td class="cp-L3 imgCol1" data-href='3|L' data-img='L3' data-pos='4'
+                                            data-info='Left Ring' capture>
+                                            <button id="thumbs" [ngClass]="{'btn-cursor': btnClass}"
+                                              (click)="getFingerPrint('thumbs')" class="captureFingerPrint">
+                                              <img id="thumbs" class="thumbs"
+                                                src="assets/images/enroll/no_image_thumb.png">
+                                              <h6 class="muted">THUMBS</h6>
+                                            </button>
+                                          </td>
+                                          <td class="cp-L3 imgCol1" data-href='3|L' data-img='L3' data-pos='4'
+                                            data-info='Left Ring' capture>
+                                            <button id="right" [ngClass]="{'btn-cursor': btnClass}"
+                                              (click)="getFingerPrint('right')" class="captureFingerPrint">
+                                              <!---->
+                                              <img id="right" class="slap"
+                                                src="assets/images/enroll/no_image_right.png">
+                                              <h6 class="muted">RIGHT HAND</h6>
+                                            </button>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
                                   </div>
                                 </div>
+                              </div>
+                              <div class="col-lg-12 fing-btns">
+                                <button type="button" class="btn btn-success"
+                                  (click)="enrollCustomerDetails()">Save</button>
+                                <button type="button" class="btn btn-primary" (click)="getFingerPrint('stop')">Stop
+                                  Device</button>
+                                <button type="button" class="btn btn-warning" (click)="resetDevice()">Clear Captured
+                                  Prints</button>
+                                <button type="button" class="btn btn-danger" (click)="cancelEnr()">Cancel</button>
                               </div>
                             </div>
                           </div>
                         </div>
-                        </div>
-                        </ng-template>
-                    </ngb-tab>
-                </ngb-tabset>
-            </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+          </ngb-tabset>
         </div>
-        <!-- Column -->
       </div>
+      <!-- Column -->
     </div>
+  </div>
 </block-ui>

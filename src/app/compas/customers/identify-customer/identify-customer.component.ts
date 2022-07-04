@@ -592,7 +592,7 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
                     this.document.getElementById('finger').src =
                         'data:image/bmp;base64,' + this.bio.BMPBase64;
                     let singlePrint = {
-                        position: this.selectedFinger,
+                        position: -1,
                         fingerPrint: this.bio.BMPBase64,
                         quality: this.bio.ImageQuality,
                     };
