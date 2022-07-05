@@ -141,7 +141,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
     this.tellerSvc.getTellerDetails(teller).subscribe(data => {
 
       this.tellerInq = data;
-      if (this.tellerInq.requestStatus === true && this.tellerInq.payload.cif !== '') {
+      if (this.tellerInq.requestStatus === true && (this.tellerInq.payload.cif !== '' || this.tellerInq.payload.cif !== null)) {
         this.isVerified = true;
         this.account_number = ' ';
         this.initTellerProfile(this.tellerInq);

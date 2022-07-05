@@ -945,7 +945,7 @@ export class StaffComponent implements OnInit, OnDestroy {
             console.log(this.tellerInq);
             console.log('Result from inquiring teller');
 
-            if (this.tellerInq.requestStatus === true && this.tellerInq.payload.cif !== '') {
+            if (this.tellerInq.requestStatus === true && (this.tellerInq.payload.cif !== '' || this.tellerInq.payload.cif !== null)) {
                 this.account_number = ' ';
                 this.initTellerProfile();
                 return this.toastr.success('Staff id is valid, can proceed to enroll', ' Success!');

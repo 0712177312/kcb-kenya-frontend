@@ -196,7 +196,7 @@
                             <hr>
 
                             <div *ngIf="verificationType === 'SEC'">
-                                <div class="col-sm-6">
+                                <!-- <div class="col-sm-6">
                                     <div class="form-group row">
                                         <label class="control-label text-right col-sm-5 labels">Select
                                             Fingerprint</label>
@@ -206,7 +206,7 @@
                                             </ng-select>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="row">
                                     <div class="col-md-6 col-sm-offset-3 custom-row">
                                         <form class="form-horizontal" id="loginform">
@@ -222,8 +222,7 @@
                                             <div>
                                                 <div class="col-lg-12">
                                                     <button (click)="secugenIdentify()" class="btn btn-success cust-btn"
-                                                        type="submit"
-                                                        [disabled]="selectedFinger==null || selectedFinger==undefined">
+                                                        type="submit">
                                                         Identify
                                                     </button>
                                                     <button (click)="cancel();  t.select('tab2')" class="btn btn-danger"
