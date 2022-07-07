@@ -857,21 +857,15 @@ export class StaffComponent implements OnInit, OnDestroy {
 
         if (!teller.startsWith('KE')) {
             return this.toastr.error('Staff id must start with KE.', 'Error!', { timeOut: 4000 });
+        } else if (teller.length <= 2) {
+            return this.toastr.error('Enter a valid staff ID', 'Error!', { timeOut: 4000 });
         }
 
         this.blockUI.start('Inquiring staff details...');
-        const tell = {
-            'userName': this.getConfigs().authUsr,
-            'passWord': this.getConfigs().authPs,
-            'object': {
-                'id': teller,
-            }
-        };
+
         const tellr = {
             'tellerId': teller
         };
-
-
 
         this.tellerSvc.checkTellerExists(tellr).subscribe(data => {
             this.locl = data;
@@ -879,6 +873,13 @@ export class StaffComponent implements OnInit, OnDestroy {
                 this.blockUI.stop();
                 return this.toastr.warning('Staff with specified account id number is already enrolled', ' Warning!', { timeOut: 3000 });
             } else {
+                const tell = {
+                    'userName': this.getConfigs().authUsr,
+                    'passWord': this.getConfigs().authPs,
+                    'object': {
+                        'id': teller,
+                    }
+                };
                 this.tellerCoBankingInq(tell);
                 this.blockUI.stop();
             }
@@ -924,7 +925,10 @@ export class StaffComponent implements OnInit, OnDestroy {
             // this is a teller: must start with KE.
             if (!cust.startsWith('KE')) {
                 return this.toastr.warning('Staff id must start with KE', ' Warning!', { timeOut: 4000 });
-            } else {
+            } else if (cust.length <= 2) {
+                return this.toastr.warning('Enter a valid staff ID', ' Warning!', { timeOut: 4000 });
+            }
+            else {
                 this.tellerInquiry(cust);
             }
         } else {
@@ -937,26 +941,50 @@ export class StaffComponent implements OnInit, OnDestroy {
     tellerCoBankingInq(teller) {
         // this.tellerSvc.getTllrDetails().subscribe (data => {
         this.blockUI.start('Searching for Staff...');
-        this.tellerSvc.getTellerDetails(teller).subscribe(data => {
+        this.tellerSvc.getTellerDetails(teller).subscribe((data: any) => {
             this.blockUI.stop();
-            this.tellerInq = data;
 
-            console.log('Result from inquiring teller');
-            console.log(this.tellerInq);
-            console.log('Result from inquiring teller');
+            if (data.payload !== null) {
 
-            if (this.tellerInq.requestStatus === true && (this.tellerInq.payload.cif !== '' || this.tellerInq.payload.cif !== null)) {
-                this.account_number = ' ';
-                this.initTellerProfile();
-                return this.toastr.success('Staff id is valid, can proceed to enroll', ' Success!');
+                if (data.message === 'Success' && data.requestStatus === true) {
+                    this.tellerInq = data;
 
-            } else if (this.tellerInq.requestStatus === true && this.tellerInq.payload.cif === '') {
-                // valid customer returned but they do not have a cif number attached
-                return this.toastr.warning('CIF number is invalid', ' Warning!');
+                    if (this.tellerInq.payload.cif !== null && this.tellerInq.payload.cif !== '') {
+                        this.account_number = ' ';
+                        this.initTellerProfile();
+                        return this.toastr.success('Staff id is valid, can proceed to enroll', ' Success!');
+                    } else if (this.tellerInq.payload.cif === '') {
+                        // valid customer returned but they do not have a cif number attached
+                        return this.toastr.warning('CIF number is invalid', ' Warning!');
+                    } else {
+                        return this.toastr.warning('Specified staff id was not found or invalid , kindly verify to proceed .', 'Warning!');
+                    }
+
+                    // console.log('Result from inquiring teller');
+                    // console.log(this.tellerInq);
+                    // console.log('Result from inquiring teller');
+
+                    // if (this.tellerInq.requestStatus === true && (this.tellerInq.payload.cif !== '' || this.tellerInq.payload.cif !== null)) {
+                    //     this.account_number = ' ';
+                    //     this.initTellerProfile();
+                    //     return this.toastr.success('Staff id is valid, can proceed to enroll', ' Success!');
+
+                    // } else if (this.tellerInq.requestStatus === true && this.tellerInq.payload.cif === '') {
+                    //     // valid customer returned but they do not have a cif number attached
+                    //     return this.toastr.warning('CIF number is invalid', ' Warning!');
+                    // } else {
+
+                    //     return this.toastr.warning('Specified staff id was not found or invalid , kindly verify to proceed .', 'Warning!');
+                    // }
+                } else {
+                    return this.toastr.error('Error in inquiring Staff data.', 'Error!', { timeOut: 4000 });
+                }
             } else {
-
                 return this.toastr.warning('Specified staff id was not found or invalid , kindly verify to proceed .', 'Warning!');
             }
+
+
+
         }, error => {
             this.blockUI.stop();
             return this.toastr.error('Error in inquiring staff data.', 'Error!', { timeOut: 4000 });
