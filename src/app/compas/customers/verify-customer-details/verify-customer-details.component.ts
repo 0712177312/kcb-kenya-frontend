@@ -132,7 +132,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
       });
     } else {
       console.log('invalid id');
-      return this.toastr.error('Staff ID should match patter KE1234', 'Error!', { timeOut: 4000 });
+      return this.toastr.error('Staff ID should match pattern KE1234', 'Error!', { timeOut: 4000 });
     }
 
   }

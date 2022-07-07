@@ -74,7 +74,7 @@
             <div class="form-group row">
               <label for="tellerName" class="col-2 col-form-label">Staff Name <span class="error">*</span></label>
               <div class="col-md-10">
-                <input type="text" class="form-control" formControlName="tellerName" placeholder="Full Name"
+                <input type="text" class="form-control" formControlName="tellerName"
                   [attr.disabled]="isDisabled? true : null" />
               </div>
             </div>
@@ -82,7 +82,7 @@
               <label for="tellerEmail" class="col-2 col-form-label">Staff Email <span class="error">*</span></label>
               <div class="col-md-10">
                 <input type="text" class="form-control" id="tellerEmail" formControlName="tellerEmail"
-                  placeholder="Customer ID Number" [attr.disabled]="isDisabled? true : null" />
+                  [attr.disabled]="isDisabled? true : null" />
               </div>
             </div>
             <div class="row">

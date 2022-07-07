@@ -855,38 +855,48 @@ export class StaffComponent implements OnInit, OnDestroy {
 
     tellerInquiry(teller) {
 
-        if (!teller.startsWith('KE')) {
-            return this.toastr.error('Staff id must start with KE.', 'Error!', { timeOut: 4000 });
-        } else if (teller.length <= 2) {
-            return this.toastr.error('Enter a valid staff ID', 'Error!', { timeOut: 4000 });
+        // if (!teller.startsWith('KE')) {
+        //     return this.toastr.error('Staff id must start with KE.', 'Error!', { timeOut: 4000 });
+        // } else if (teller.length <= 2) {
+        //     return this.toastr.error('Enter a valid staff ID', 'Error!', { timeOut: 4000 });
+        // }
+
+        let idPattern = new RegExp(/^KE[0-9]{1,15}$/);
+        let result = idPattern.test(teller);
+
+        if (result) {
+
+            this.blockUI.start('Inquiring staff details...');
+
+            const tellr = {
+                'tellerId': teller
+            };
+
+            this.tellerSvc.checkTellerExists(tellr).subscribe(data => {
+                this.locl = data;
+                if (this.locl.status === true) {
+                    this.blockUI.stop();
+                    return this.toastr.warning('Staff with specified account id number is already enrolled', ' Warning!', { timeOut: 3000 });
+                } else {
+                    const tell = {
+                        'userName': this.getConfigs().authUsr,
+                        'passWord': this.getConfigs().authPs,
+                        'object': {
+                            'id': teller,
+                        }
+                    };
+                    this.tellerCoBankingInq(tell);
+                    this.blockUI.stop();
+                }
+            }, error => {
+                this.blockUI.stop();
+                return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
+            });
+        } else {
+            console.log('invalid id');
+            return this.toastr.error('Staff ID should match pattern KE1234', 'Error!', { timeOut: 4000 });
         }
 
-        this.blockUI.start('Inquiring staff details...');
-
-        const tellr = {
-            'tellerId': teller
-        };
-
-        this.tellerSvc.checkTellerExists(tellr).subscribe(data => {
-            this.locl = data;
-            if (this.locl.status === true) {
-                this.blockUI.stop();
-                return this.toastr.warning('Staff with specified account id number is already enrolled', ' Warning!', { timeOut: 3000 });
-            } else {
-                const tell = {
-                    'userName': this.getConfigs().authUsr,
-                    'passWord': this.getConfigs().authPs,
-                    'object': {
-                        'id': teller,
-                    }
-                };
-                this.tellerCoBankingInq(tell);
-                this.blockUI.stop();
-            }
-        }, error => {
-            this.blockUI.stop();
-            return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
-        });
     }
 
     customerInfInquiry(customer) {
