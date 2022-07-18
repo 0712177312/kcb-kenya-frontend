@@ -492,7 +492,7 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
         this.btnsCaptured = [];
         this.btnClass = false;
         this.disconnect();
-        // this.router.navigate(['./']);
+        this.router.navigate(['./']);
     }
 
     resetDevice() {
