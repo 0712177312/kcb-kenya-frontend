@@ -580,6 +580,8 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
 
     // Additional function for Secugen verify
     secugenIdentify() {
+        // ensure fingerprints is empty
+        this.fingerPrints = [];
         console.log("secugenIdentify called");
         this.apiService.capturePrint().subscribe((data: Array<object>) => {
             console.log("Identify Called")
