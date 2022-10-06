@@ -11,9 +11,11 @@ public class ServerConfig {
 	private String sessionTimeout;
 	private String sessionIdle;
 	private String jwt;
+	private String customerInqEndpoint;
+	private String staffInqEndpoint;
 	
 	public ServerConfig(String t24, String cobanking, String abis, String greenbit, String secugen, String authPs, String authUsr,
-	String sessionTimeout, String sessionIdle, String jwt) {
+	String sessionTimeout, String sessionIdle, String jwt,String customerInqEndpoint,String staffInqEndpoint) {
 		super();
 		this.t24 = t24;
 		this.cobanking = cobanking;
@@ -25,6 +27,8 @@ public class ServerConfig {
 		this.sessionTimeout = sessionTimeout;
 		this.sessionIdle = sessionIdle;
 		this.jwt = jwt;
+		this.customerInqEndpoint=customerInqEndpoint;
+		this.staffInqEndpoint=staffInqEndpoint;
 	}
 	public String getGreenbit() {
 		return greenbit;
@@ -87,4 +91,18 @@ public class ServerConfig {
 
 	public String getJwt() { return jwt; }
 	public void setJwt(String jwt) { this.jwt = jwt; }
+	
+	public String getCustomerInqEndpoint() {
+		return customerInqEndpoint;
+	}
+	public void setCustomerInqEndpoint(String customerInqEndpoint) {
+		this.customerInqEndpoint = customerInqEndpoint;
+	}
+	public String getStaffInqEndpoint() {
+		return staffInqEndpoint;
+	}
+	public void setStaffInqEndpoint(String staffInqEndpoint) {
+		this.staffInqEndpoint = staffInqEndpoint;
+	}
+	
 }

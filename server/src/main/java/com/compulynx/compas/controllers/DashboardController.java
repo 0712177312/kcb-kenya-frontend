@@ -76,6 +76,8 @@ public class DashboardController {
         System.out.println(env.getProperty("sessionIdle"));
         System.out.println(env.getProperty("jwt"));
         System.out.println(env.getProperty("secugen"));
+        System.out.println(env.getProperty("customerInqEndpoint"));
+        System.out.println(env.getProperty("staffInqEndpoint"));
 
         try {
 
@@ -90,8 +92,10 @@ public class DashboardController {
             String sessionTimeout = env.getProperty("sessionTimeout");
             String sessionIdle = env.getProperty("sessionIdle");
             String jwt = env.getProperty("jwt");
+            String customerInqEndpoint = env.getProperty("customerInqEndpoint");
+            String staffInqEndpoint = env.getProperty("staffInqEndpoint");
 
-            ServerConfig resp = new ServerConfig(t24se, cobanking, abis, greenbit, secugen, authPass, authName, sessionTimeout, sessionIdle, jwt);
+            ServerConfig resp = new ServerConfig(t24se, cobanking, abis, greenbit, secugen, authPass, authName, sessionTimeout, sessionIdle, jwt,customerInqEndpoint,staffInqEndpoint);
 
             System.out.println("Here is the response");
             System.out.println(resp);
