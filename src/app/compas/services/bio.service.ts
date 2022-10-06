@@ -78,7 +78,7 @@ export class BioService {
     return this.http.post(`${this.getConfigs().abis}/identify`, applicant, this.globalService.getTokenHeader());
   }
 
-  afisRemove(applicant){
+  afisRemove(applicant) {
     return this.http.post(`${this.getConfigs().abis}/delete`, applicant, this.globalService.getTokenHeader());
   }
 
@@ -87,7 +87,7 @@ export class BioService {
   }
 
   getCustomerByAccountNo(customer) {
-    return this.http.post(`${this.getConfigs().cobanking}/search`, customer);
+    return this.http.post(this.getConfigs().customerInqEndpoint, customer);
   }
 
   getCustomerDetails() {
