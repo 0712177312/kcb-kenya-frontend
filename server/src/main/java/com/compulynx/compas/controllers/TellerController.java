@@ -1,12 +1,26 @@
 package com.compulynx.compas.controllers;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import com.compulynx.compas.mail.EmailSender;
 import com.compulynx.compas.models.extras.TellersToApproveDetach;
+import com.compulynx.compas.models.t24Models.Staff;
+import com.compulynx.compas.models.t24Models.StaffDetails;
+import com.compulynx.compas.models.t24Models.StaffReqObject;
 import com.compulynx.compas.services.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +50,11 @@ import com.compulynx.compas.services.UserGroupService;
 @RequestMapping(value = Api.REST + "/tellers")
 public class TellerController {
 	private static final Logger log = LoggerFactory.getLogger(TellerController.class);
+	
+	private static HttpsURLConnection httpsURLConnection;
+	private static BufferedReader reader;
+	private static String line="";
+	
 	@Autowired
 	private Environment env;
 	@Autowired
@@ -52,6 +71,73 @@ public class TellerController {
 
 	@Autowired
 	private EmailSender emailSender;
+	
+	@PostMapping("/staff_inquiry")
+	public ResponseEntity<?> getStaff(@RequestBody Staff staf) {	
+		try {
+			
+			if(staf.getId() == "" || staf.getId() == null) {
+				GlobalResponse resp = new GlobalResponse("404", "error processing request: staffid is missing", false, GlobalResponse.APIV);
+				return new ResponseEntity<>(resp, HttpStatus.OK);
+			}		
+			
+			String staffInqEndpoint = env.getProperty("staffInqEndpoint");
+			
+			CommonFunctions.disableSslVerification();
+			StringBuffer getStaffDetailsBuffer = new StringBuffer();
+			URL staffDetailsUrl = new URL(staffInqEndpoint);				
+			httpsURLConnection = (HttpsURLConnection)staffDetailsUrl.openConnection();
+			CommonFunctions.configHttpsUrlConnection( httpsURLConnection);
+			httpsURLConnection.addRequestProperty("Content-Type", "application/json");          
+	      
+	        OutputStream getCustDetsOs = httpsURLConnection.getOutputStream();
+	        OutputStreamWriter getCustDetsOsw = new OutputStreamWriter(getCustDetsOs, "UTF-8");  
+	        
+	        Staff staff = new Staff();
+	        staff.setId(staf.getId());
+	        StaffReqObject staffReqObj = new StaffReqObject(env.getProperty("cobankingAuthName"),env.getProperty("cobankingAuthPass"),staff);
+	        
+	        String getStaffDetReqString = CommonFunctions.convertPojoToJson(staffReqObj);
+	        if(getStaffDetReqString != null) {
+	        	getCustDetsOsw.write(getStaffDetReqString);						
+	        	getCustDetsOsw.flush();
+	        	getCustDetsOsw.close();  
+	        } 
+	        			       
+			int status = httpsURLConnection.getResponseCode();
+			
+			if(status == 200) {
+				reader = new BufferedReader(new InputStreamReader(httpsURLConnection.getInputStream()));						
+				while((line = reader.readLine()) != null) {
+					getStaffDetailsBuffer.append(line);
+				}
+				reader.close();
+				httpsURLConnection.disconnect();
+				
+				ObjectMapper mapper = new ObjectMapper();
+				StaffDetails staffDetails = mapper.readValue(getStaffDetailsBuffer.toString(), StaffDetails.class);	
+									
+				
+				return new ResponseEntity<>(staffDetails, HttpStatus.OK); 
+			}else {
+				GlobalResponse resp = new GlobalResponse("404", "T24 did not returna a valid response", false, GlobalResponse.APIV);
+				return new ResponseEntity<>(resp, HttpStatus.OK);
+			}
+	
+			
+	
+		}catch(MalformedURLException e) {
+			System.out.println("Exception "+e.getMessage());
+			e.printStackTrace();
+		}catch(IOException ev) {
+			System.out.println("Exception "+ev.getMessage());
+			ev.printStackTrace();			
+		}catch (Exception exception) {
+			System.out.println("Exception "+exception.getMessage());
+			exception.printStackTrace();			
+		}
+		return null;
+	}
 
 	@GetMapping(value = "/gtTellers")
 	public ResponseEntity<?> getTellers() {

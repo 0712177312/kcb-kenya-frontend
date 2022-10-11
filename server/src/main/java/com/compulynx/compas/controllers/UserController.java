@@ -215,9 +215,10 @@ public class UserController {
                         false, "201", Api.API_VERSION), HttpStatus.OK);
             } else if (userpro != null) {
                 System.out.println("email" + user.getEmail());
+                
                 return new ResponseEntity<>(new UserResponse(userpro, "successfully authenticated!",
                         true, "000", Api.API_VERSION), HttpStatus.OK);
-            } else {
+            } else { 
                 return new ResponseEntity<>(new UserResponse("invalid user credentials",
                         false, "409", Api.API_VERSION), HttpStatus.OK);
             }

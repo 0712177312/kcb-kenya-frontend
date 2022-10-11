@@ -1,13 +1,26 @@
 package com.compulynx.compas.controllers;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import com.compulynx.compas.mail.EmailSender;
 import com.compulynx.compas.models.extras.*;
+import com.compulynx.compas.models.t24Models.CustomerDetails;
+import com.compulynx.compas.models.t24Models.CustomerReqObject;
 import com.compulynx.compas.services.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +45,10 @@ import com.compulynx.compas.services.UserGroupService;
 @RequestMapping(value = Api.REST)
 public class CustomerController {
 	private static final Logger log = LoggerFactory.getLogger(TellerController.class);
+	
+	private static HttpsURLConnection httpsURLConnection;
+	private static BufferedReader reader;
+	private static String line="";
 
 	@Autowired
 	private Environment env;
@@ -50,6 +67,69 @@ public class CustomerController {
 
 	@Autowired
 	private EmailSender emailSender;
+	
+	@PostMapping("customer_inquiry")
+	public ResponseEntity<?> getCustomerFromT24(@RequestBody Customer customer) {
+
+		try {		
+			if(customer.getMnemonic() =="" || customer.getMnemonic() == null) {
+				GlobalResponse resp = new GlobalResponse("404", "error processing request: staffid is missing", false, GlobalResponse.APIV);
+				return new ResponseEntity<>(resp, HttpStatus.OK);
+			}
+			
+			String customerInqEndpoint = env.getProperty("customerInqEndpoint");
+				
+			CommonFunctions.disableSslVerification();
+			StringBuffer getCustomerDetailsBuffer = new StringBuffer();
+			URL customerDetailsUrl = new URL(customerInqEndpoint);				
+			httpsURLConnection = (HttpsURLConnection)customerDetailsUrl.openConnection();
+			CommonFunctions.configHttpsUrlConnection(httpsURLConnection);
+			httpsURLConnection.addRequestProperty("Content-Type", "application/json");          
+	      
+	        OutputStream getCustDetsOs = httpsURLConnection.getOutputStream();
+	        OutputStreamWriter getCustDetsOsw = new OutputStreamWriter(getCustDetsOs, "UTF-8");  
+	        
+	        com.compulynx.compas.models.t24Models.Customer cust = new com.compulynx.compas.models.t24Models.Customer();
+	        cust.setMnemonic(customer.getMnemonic());
+	        CustomerReqObject custReqObj = new CustomerReqObject(env.getProperty("cobankingAuthName"),env.getProperty("cobankingAuthPass"),cust);
+	        
+	        String getCustDetReqString = CommonFunctions.convertPojoToJson(custReqObj);
+	        if(getCustDetReqString != null) {
+	        	getCustDetsOsw.write(getCustDetReqString);						
+	        	getCustDetsOsw.flush();
+	        	getCustDetsOsw.close();  
+	        } 
+	        			       
+			int status = httpsURLConnection.getResponseCode();
+			
+			if(status == 200) {
+				reader = new BufferedReader(new InputStreamReader(httpsURLConnection.getInputStream()));						
+				while((line = reader.readLine()) != null) {
+					getCustomerDetailsBuffer.append(line);
+				}
+				reader.close();
+				httpsURLConnection.disconnect();
+				
+				ObjectMapper mapper = new ObjectMapper();
+				CustomerDetails custDetails = mapper.readValue(getCustomerDetailsBuffer.toString(), CustomerDetails.class);	
+				return new ResponseEntity<>(custDetails, HttpStatus.OK); 
+			}else {
+				GlobalResponse resp = new GlobalResponse("404", "T24 did not returna a valid response", false, GlobalResponse.APIV);
+				return new ResponseEntity<>(resp, HttpStatus.OK);
+			}
+	
+	
+	
+		}catch(MalformedURLException e) {
+			e.printStackTrace();
+		}catch(IOException ev) {
+			ev.printStackTrace();			
+		}catch (Exception exception) {
+			exception.printStackTrace();			
+		}
+
+		return null; 
+	}	
 
 	@GetMapping(value = "/gtCustomers")
 	public ResponseEntity<?> getCustomers() {
