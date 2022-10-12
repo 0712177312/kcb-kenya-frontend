@@ -878,12 +878,16 @@ export class StaffComponent implements OnInit, OnDestroy {
                     this.blockUI.stop();
                     return this.toastr.warning('Staff with specified account id number is already enrolled', ' Warning!', { timeOut: 3000 });
                 } else {
+                    // const tell = {
+                    //     'userName': this.getConfigs().authUsr,
+                    //     'passWord': this.getConfigs().authPs,
+                    //     'object': {
+                    //         'id': teller,
+                    //     }
+                    // };
+
                     const tell = {
-                        'userName': this.getConfigs().authUsr,
-                        'passWord': this.getConfigs().authPs,
-                        'object': {
-                            'id': teller,
-                        }
+                        'id': teller
                     };
                     this.tellerCoBankingInq(tell);
                     this.blockUI.stop();
@@ -904,13 +908,17 @@ export class StaffComponent implements OnInit, OnDestroy {
         const custom = {
             'mnemonic': customer
         };
+        // const custo = {
+        //     'userName': this.getConfigs().authUsr,
+        //     'passWord': this.getConfigs().authPs,
+        //     'object': {
+        //         'mnemonic': customer
+        //     }
+        // };
         const custo = {
-            'userName': this.getConfigs().authUsr,
-            'passWord': this.getConfigs().authPs,
-            'object': {
-                'mnemonic': customer
-            }
+            'mnemonic': customer
         };
+
         this.custSvc.findByAccountNumber(custom).subscribe(data => {
             this.locl = data;
             if (this.locl.status === true) {

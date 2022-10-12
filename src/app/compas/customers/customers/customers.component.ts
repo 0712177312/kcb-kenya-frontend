@@ -1,16 +1,16 @@
-import {WebSocketServiceService} from './../../services/web-socket-service.service';
-import {RegionService} from './../../services/region.service';
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {LocalDataSource} from 'ng2-smart-table';
-import {ToastrService} from 'ngx-toastr';
-import {CustomerService} from '../../services/customer.service';
-import {NgbTabChangeEvent} from '@ng-bootstrap/ng-bootstrap';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {BioService} from '../../services/bio.service';
-import {DOCUMENT} from '@angular/common';
-import {BlockUI, NgBlockUI} from 'ng-block-ui';
-import {LogsService} from '../../services/logs.service';
-import {TellerService} from '../../services/teller.service';
+import { WebSocketServiceService } from './../../services/web-socket-service.service';
+import { RegionService } from './../../services/region.service';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { LocalDataSource } from 'ng2-smart-table';
+import { ToastrService } from 'ngx-toastr';
+import { CustomerService } from '../../services/customer.service';
+import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { BioService } from '../../services/bio.service';
+import { DOCUMENT } from '@angular/common';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { LogsService } from '../../services/logs.service';
+import { TellerService } from '../../services/teller.service';
 
 @Component({
     selector: 'app-customers',
@@ -113,9 +113,9 @@ export class CustomersComponent implements OnInit, OnDestroy {
     private stompClient = null;
 
     constructor(private tellerSvc: TellerService, private apiService: BioService,
-                private fb: FormBuilder, private sockService: WebSocketServiceService,
-                private custSvc: CustomerService, @Inject(DOCUMENT) private document: any,
-                private toastr: ToastrService, private regionService: RegionService, private logs: LogsService) {
+        private fb: FormBuilder, private sockService: WebSocketServiceService,
+        private custSvc: CustomerService, @Inject(DOCUMENT) private document: any,
+        private toastr: ToastrService, private regionService: RegionService, private logs: LogsService) {
 
     }
 
@@ -136,18 +136,18 @@ export class CustomersComponent implements OnInit, OnDestroy {
         this.rightId = this.otc.rightId;
 
         this.companiesNames.forEach((c, i) => {
-            this.companies.push({id: i, name: c});
+            this.companies.push({ id: i, name: c });
             this.dropdownList = [
-                {item_id: 0, item_text: 'RIGHT THUMB'},
-                {item_id: 1, item_text: 'RIGHT INDEX'},
-                {item_id: 2, item_text: 'RIGHT MIDDLE'},
-                {item_id: 3, item_text: 'RIGHT RING'},
-                {item_id: 4, item_text: 'RIGHT LITTLE'},
-                {item_id: 5, item_text: 'LEFT THUMB'},
-                {item_id: 6, item_text: 'LEFT INDEX'},
-                {item_id: 7, item_text: 'LEFT MIDDLE'},
-                {item_id: 8, item_text: 'LEFT RING'},
-                {item_id: 9, item_text: 'LEFT LITTLE'}
+                { item_id: 0, item_text: 'RIGHT THUMB' },
+                { item_id: 1, item_text: 'RIGHT INDEX' },
+                { item_id: 2, item_text: 'RIGHT MIDDLE' },
+                { item_id: 3, item_text: 'RIGHT RING' },
+                { item_id: 4, item_text: 'RIGHT LITTLE' },
+                { item_id: 5, item_text: 'LEFT THUMB' },
+                { item_id: 6, item_text: 'LEFT INDEX' },
+                { item_id: 7, item_text: 'LEFT MIDDLE' },
+                { item_id: 8, item_text: 'LEFT RING' },
+                { item_id: 9, item_text: 'LEFT LITTLE' }
             ];
             this.dropdownSettings = {
                 singleSelection: false,
@@ -243,7 +243,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
     }
 
     addTag(name) {
-        return {name: name, tag: true};
+        return { name: name, tag: true };
     }
 
     onItemSelect(item: any) {
@@ -259,17 +259,17 @@ export class CustomersComponent implements OnInit, OnDestroy {
             this.fings.push(fings);
 
 
-            this.enrolledFPrints.push({position: item.item_id, quality: 0, fingerPrint: 'missing'});
+            this.enrolledFPrints.push({ position: item.item_id, quality: 0, fingerPrint: 'missing' });
 
 
         } else if (rght.includes(item.item_id)) {
             this.rightMissing.push(item.item_id);
-            this.enrolledFPrints.push({position: item.item_id, quality: 0, fingerPrint: 'missing'});
+            this.enrolledFPrints.push({ position: item.item_id, quality: 0, fingerPrint: 'missing' });
 
 
         } else if (thumbs.includes(item.item_id)) {
             this.thumbsMissing.push(item.item_id);
-            this.enrolledFPrints.push({position: item.item_id, quality: 0, fingerPrint: 'missing'});
+            this.enrolledFPrints.push({ position: item.item_id, quality: 0, fingerPrint: 'missing' });
 
 
         }
@@ -311,7 +311,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
         return new Promise((resolve) => {
             this.loading = true;
             setTimeout(() => {
-                resolve({id: 5, name: name, valid: true});
+                resolve({ id: 5, name: name, valid: true });
                 this.loading = false;
             }, 1000);
         });
@@ -343,7 +343,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
         this.logs.log(log).subscribe((data) => {
 
         }, error => {
-            return this.toastr.error('Error logging.', 'Error!', {timeOut: 4000});
+            return this.toastr.error('Error logging.', 'Error!', { timeOut: 4000 });
         });
     }
 
@@ -379,7 +379,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
 
     initInquery() {
         if (this.canAddUserProfile === false) {
-            return this.toastr.warning('You are not allowed to add a user', 'Warning!', {timeOut: 3000});
+            return this.toastr.warning('You are not allowed to add a user', 'Warning!', { timeOut: 3000 });
         }
         this.account_number = '';
         this.profType = '';
@@ -468,7 +468,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
 
         if (this.thumbsMissing.length === 2) {
             $event.preventDefault();
-            this.toastr.warning('empty thumbs', 'Alert!', {timeOut: 4000});
+            this.toastr.warning('empty thumbs', 'Alert!', { timeOut: 4000 });
         } else {
 
         }
@@ -512,7 +512,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
             createdBy: new FormControl($event.data.createdBy),
             gender: new FormControl($event.data.gender, [Validators.required]),
             customerIdNumber: new FormControl($event.data.idNumber, [Validators.required,
-                Validators.minLength(1), Validators.maxLength(15)]),
+            Validators.minLength(1), Validators.maxLength(15)]),
             phoneNumber: new FormControl($event.data.phoneNumber, [Validators.required]),
             email: new FormControl($event.data.email, [Validators.required]),
             country: new FormControl($event.data.country),
@@ -543,7 +543,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
 
         }, error => {
 
-            return this.toastr.error('Error loading Customer data.', 'Error!', {timeOut: 4000});
+            return this.toastr.error('Error loading Customer data.', 'Error!', { timeOut: 4000 });
         });
     }
 
@@ -616,7 +616,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
         }, error => {
             this.log(this.rightId, 'error updating country details');
             this.removeTeller(teller);
-            return this.toastr.error('Error in updating Customer data.', 'Error!', {timeOut: 4000});
+            return this.toastr.error('Error in updating Customer data.', 'Error!', { timeOut: 4000 });
         });
     }
 
@@ -669,7 +669,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
         }, error => {
             this.log(this.rightId, 'Error updating customer details');
             this.removeCustomer(this.customer);
-            return this.toastr.error('Error in updating Customer data.', 'Error!', {timeOut: 4000});
+            return this.toastr.error('Error in updating Customer data.', 'Error!', { timeOut: 4000 });
         });
     }
 
@@ -699,18 +699,18 @@ export class CustomersComponent implements OnInit, OnDestroy {
         if (this.enrolledFPrints.length > 10) {
             return this.toastr.warning('It appears you have captured more than the required 10 finger prints, '
                 + ' kindly reset device to continue!', 'Warning',
-                {timeOut: 4000});
+                { timeOut: 4000 });
         }
         //Capture Atleast one finger print
         if (this.enrolledFPrints.length < 1) {
             this.log(this.rightId, 'Trying to enroll less than one fingerprint for CIF ' + this.customer.customerId);
-            return this.toastr.error('Kindly ensure you have captured atleast one fingerprint to continue.', 'Error!', {timeOut: 4000});
+            return this.toastr.error('Kindly ensure you have captured atleast one fingerprint to continue.', 'Error!', { timeOut: 4000 });
         }
         //No missing fingers
         if (missingCount === 0 && this.enrolledFPrints.length < 10) {
             this.log(this.rightId, 'Enrolled less than 10 FP for CIF ' + this.customer.customerId +
                 ' missing FPs: ' + missingCount + '. Enrolled FP(s): ' + this.enrolledFPrints.length);
-            return this.toastr.error('Kindly ensure you have captured all the fingerprints to continue .', 'Error!', {timeOut: 4000});
+            return this.toastr.error('Kindly ensure you have captured all the fingerprints to continue .', 'Error!', { timeOut: 4000 });
         }
 
         this.apiService.afisEnroll(this.customer).subscribe((response) => {
@@ -723,12 +723,12 @@ export class CustomersComponent implements OnInit, OnDestroy {
             } else {
                 this.log(this.rightId, 'Failed to enroll: ' + this.customer.customerName + ' CIF: ' + this.customer.customerId +
                     ' missing FPs: ' + missingCount + ' Failed FP(s): ' + this.enrolledFPrints.length);
-                this.toastr.warning(this.response.message + ' customer id ' + this.response.customerId + '', 'Warning!', {timeOut: 4000});
+                this.toastr.warning(this.response.message + ' customer id ' + this.response.customerId + '', 'Warning!', { timeOut: 4000 });
             }
         }, error => {
             this.log(this.rightId, 'Failed to enroll ' + this.customer.customerName + ' CIF: ' + this.customer.customerId +
                 ' missing FPs: ' + missingCount + ' Failed FP(s) ' + this.enrolledFPrints.length);
-            return this.toastr.error('Error updating data.', 'Error!', {timeOut: 4000});
+            return this.toastr.error('Error updating data.', 'Error!', { timeOut: 4000 });
         });
         // }
     }
@@ -741,19 +741,19 @@ export class CustomersComponent implements OnInit, OnDestroy {
         if (this.enrolledFPrints.length > 10) {
             return this.toastr.warning('It appears you have captured more than the required 10 finger prints, '
                 + ' kindly reset device to continue!', 'Warning',
-                {timeOut: 4000});
+                { timeOut: 4000 });
         }
 
         //Capture Atleast one finger print
         if (this.enrolledFPrints.length < 1) {
             this.log(this.rightId, 'Trying to enroll less than one fingerprint for Staff: ' + this.teller.tellerSignOnName);
-            return this.toastr.error('Kindly ensure you have captured atleast one fingerprint to continue.', 'Error!', {timeOut: 4000});
+            return this.toastr.error('Kindly ensure you have captured atleast one fingerprint to continue.', 'Error!', { timeOut: 4000 });
         }
         //No missing fingers
         if (missingCount === 0 && this.enrolledFPrints.length < 10) {
             this.log(this.rightId, 'Enrolling less than 10 FP for staff: ' + this.teller.tellerSignOnName +
                 ' missing FPs: ' + missingCount + ' Enrolling FP(s) :' + this.enrolledFPrints.length);
-            return this.toastr.error('Kindly ensure you have captured all the fingerprints to continue .', 'Error!', {timeOut: 4000});
+            return this.toastr.error('Kindly ensure you have captured all the fingerprints to continue .', 'Error!', { timeOut: 4000 });
         }
 
         // this.teller.fingerPrints = this.enrolledFPrints;
@@ -773,13 +773,13 @@ export class CustomersComponent implements OnInit, OnDestroy {
                 this.log(this.rightId, 'Failed to enroll staff: ' + this.teller.tellerName + ' CIF: ' + this.teller.customerId +
                     ' missing FP(s):' + missingCount + 'Enrolled FP(s):' + this.enrolledFPrints.length);
 
-                this.toastr.warning(this.response.message + ' teller id ' + this.response.customerId + '', 'Warning!', {timeOut: 4000});
+                this.toastr.warning(this.response.message + ' teller id ' + this.response.customerId + '', 'Warning!', { timeOut: 4000 });
             }
         }, error => {
             this.log(this.rightId, 'Failed to enroll staff: ' + this.teller.tellerName + ' CIF: ' + this.teller.customerId +
                 ' missing FP(s) ' + missingCount + 'Failed FP(s)' + this.enrolledFPrints.length);
 
-            return this.toastr.error('Error updating data.', 'Error!', {timeOut: 4000});
+            return this.toastr.error('Error updating data.', 'Error!', { timeOut: 4000 });
         });
     }
 
@@ -831,7 +831,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
             (<HTMLInputElement>document.getElementById('right')).disabled = false;
         }
 
-        return this.toastr.success('Device was reset successfully .. .', 'Success!', {timeOut: 3000});
+        return this.toastr.success('Device was reset successfully .. .', 'Success!', { timeOut: 3000 });
     }
 
     gtActivebranches() {
@@ -839,18 +839,22 @@ export class CustomersComponent implements OnInit, OnDestroy {
             this.response = data;
             this.activeBranches = this.response.collection;
         }, error => {
-            return this.toastr.error('Error in loading branch data.', 'Error!', {timeOut: 4000});
+            return this.toastr.error('Error in loading branch data.', 'Error!', { timeOut: 4000 });
         });
     }
 
     tellerInquiry(teller) {
         this.blockUI.start('Inquiring staff details...');
+        // const tell = {
+        //     'userName': this.getConfigs().authUsr,
+        //     'passWord': this.getConfigs().authPs,
+        //     'object': {
+        //         'id': teller,
+        //     }
+        // };
+
         const tell = {
-            'userName': this.getConfigs().authUsr,
-            'passWord': this.getConfigs().authPs,
-            'object': {
-                'id': teller,
-            }
+            'id': teller
         };
         const tellr = {
             'tellerId': teller
@@ -860,14 +864,14 @@ export class CustomersComponent implements OnInit, OnDestroy {
             this.locl = data;
             if (this.locl.status === true) {
                 this.blockUI.stop();
-                return this.toastr.warning('Customer with specified account id number is already enrolled', ' Warning!', {timeOut: 3000});
+                return this.toastr.warning('Customer with specified account id number is already enrolled', ' Warning!', { timeOut: 3000 });
             } else {
                 this.tellerCoBankingInq(tell);
                 this.blockUI.stop();
             }
         }, error => {
             this.blockUI.stop();
-            return this.toastr.error('Error in inquiring Customer data.', 'Error!', {timeOut: 4000});
+            return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
         });
     }
 
@@ -876,12 +880,16 @@ export class CustomersComponent implements OnInit, OnDestroy {
         const custom = {
             'mnemonic': customer
         };
+        // const custo = {
+        //     'userName': this.getConfigs().authUsr,
+        //     'passWord': this.getConfigs().authPs,
+        //     'object': {
+        //         'mnemonic': customer
+        //     }
+        // };
+
         const custo = {
-            'userName': this.getConfigs().authUsr,
-            'passWord': this.getConfigs().authPs,
-            'object': {
-                'mnemonic': customer
-            }
+            'mnemonic': customer
         };
 
         if (!customer.startsWith('ID')) {
@@ -893,14 +901,14 @@ export class CustomersComponent implements OnInit, OnDestroy {
                     if (this.locl.status === true) {
                         this.blockUI.stop();
                         // tslint:disable-next-line:max-line-length
-                        return this.toastr.warning('Customer with specified account id number is already enrolled', ' Warning!', {timeOut: 3000});
+                        return this.toastr.warning('Customer with specified account id number is already enrolled', ' Warning!', { timeOut: 3000 });
                     } else {
                         this.coBankingInq(custo);
                         this.blockUI.stop();
                     }
                 }, error => {
                     this.blockUI.stop();
-                    return this.toastr.error('Error in inquiring Customer data.', 'Error!', {timeOut: 4000});
+                    return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
                 });
             }
         } else {
@@ -910,7 +918,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
 
     getCustomer(cust) {
         if (cust === '') {
-            return this.toastr.warning('Kindly provide valid customer/staff id to continue', ' Warning!', {timeOut: 4000});
+            return this.toastr.warning('Kindly provide valid customer/staff id to continue', ' Warning!', { timeOut: 4000 });
         }
 
         if (this.profType === '2') {
@@ -941,7 +949,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
             }
         }, error => {
             this.blockUI.stop();
-            return this.toastr.error('Error in inquiring staff data.', 'Error!', {timeOut: 4000});
+            return this.toastr.error('Error in inquiring staff data.', 'Error!', { timeOut: 4000 });
         });
     }
 
@@ -958,7 +966,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
             console.log(this.custInquiry);
             console.log('Result from inquiring customer');
 
-            
+
             if (this.custInquiry.requestStatus === true && this.custInquiry.cif !== '') {
                 this.initProfile();
                 return this.toastr.success('Customer Account Number is valid, can proceed to enroll', ' Success!');
@@ -971,7 +979,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
             }
         }, error => {
             this.blockUI.stop();
-            return this.toastr.error('Error in inquiring Customer data.', 'Error!', {timeOut: 4000});
+            return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
         });
     }
 
@@ -982,12 +990,12 @@ export class CustomersComponent implements OnInit, OnDestroy {
         if (this.profType === '2') {
             if (this.tellerForm.invalid) {
                 $event.preventDefault();
-                this.toastr.warning('Kindly ensure all form fields are valid as highlighted!', 'Alert!', {timeOut: 4000});
+                this.toastr.warning('Kindly ensure all form fields are valid as highlighted!', 'Alert!', { timeOut: 4000 });
             }
         } else if (this.profType === '1') {
             if (this.form.invalid) {
                 $event.preventDefault();
-                this.toastr.warning('Kindly ensure all form fields are valid as highlighted!', 'Alert!', {timeOut: 4000});
+                this.toastr.warning('Kindly ensure all form fields are valid as highlighted!', 'Alert!', { timeOut: 4000 });
             }
 
 
@@ -995,7 +1003,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
 
         } else if (this.thumbsMissing.length === 2 && this.rightMissing.length === 4 && this.leftMissing.length === 4) {
             $event.preventDefault();
-            this.toastr.warning('No finger prints to enroll, you mentioned all fingerprints are missing!', 'Alert!', {timeOut: 4000});
+            this.toastr.warning('No finger prints to enroll, you mentioned all fingerprints are missing!', 'Alert!', { timeOut: 4000 });
         }
     }
 
@@ -1040,14 +1048,14 @@ export class CustomersComponent implements OnInit, OnDestroy {
 
         let count: any = 0;
         if (fin === 'left' && this.leftMissing.length === 4) {
-            return this.toastr.warning('No Left hand prints to capture, already specified all are missing ', 'Alert!', {timeOut: 4000});
+            return this.toastr.warning('No Left hand prints to capture, already specified all are missing ', 'Alert!', { timeOut: 4000 });
         }
 
         if (fin === 'thumbs' && this.thumbsMissing.length === 2) {
-            return this.toastr.warning('No thumbs to capture , you already specified all are missing', 'Alert!', {timeOut: 4000});
+            return this.toastr.warning('No thumbs to capture , you already specified all are missing', 'Alert!', { timeOut: 4000 });
         }
         if (fin === 'right' && this.rightMissing.length === 4) {
-            return this.toastr.warning('No right hand prints to capture, already specified all are missing', 'Alert!', {timeOut: 4000});
+            return this.toastr.warning('No right hand prints to capture, already specified all are missing', 'Alert!', { timeOut: 4000 });
         }
         if (this.leftMissing.length > 0 || this.rightMissing.length > 0 || this.thumbsMissing.length > 0) {
             this.missingStatus = true;
@@ -1103,7 +1111,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
                 }
             } else {
                 this.btnClass = false;
-                return this.toastr.warning(this.hands.responseMessage, 'Alert!', {timeOut: 4000});
+                return this.toastr.warning(this.hands.responseMessage, 'Alert!', { timeOut: 4000 });
             }
         }, error => {
 
@@ -1194,8 +1202,8 @@ export class CustomersComponent implements OnInit, OnDestroy {
                     Number(print.position) === i);
                 if (fo.length > 0) {
                     fo.forEach((fpr) => {
-                        this.enrolledFPrints.push({position: item, quality: fpr.quality, fingerPrint: fpr.fingerprint});
-                        this.capturedRPrints.push({position: item, quality: fpr.quality, fingerPrint: fpr.fingerprint});
+                        this.enrolledFPrints.push({ position: item, quality: fpr.quality, fingerPrint: fpr.fingerprint });
+                        this.capturedRPrints.push({ position: item, quality: fpr.quality, fingerPrint: fpr.fingerprint });
                     });
                 }
             });
