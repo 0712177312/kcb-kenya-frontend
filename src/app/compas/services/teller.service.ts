@@ -27,7 +27,7 @@ export class TellerService {
   }
 
   getTellerDetails(teller) {
-    return this.http.post(this.getConfigs().staffInqEndpoint, teller);
+    return this.http.post(`${this.API_URL.url}/tellers/staff_inquiry`, teller);
   }
   addTeller(teller) {
     return this.http.post(`${this.API_URL.url}/tellers/upTellerDetails`, teller, this.globalService.getTokenHeader());

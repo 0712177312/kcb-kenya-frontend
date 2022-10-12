@@ -87,7 +87,7 @@ export class BioService {
   }
 
   getCustomerByAccountNo(customer) {
-    return this.http.post(this.getConfigs().customerInqEndpoint, customer);
+    return this.http.post(`${this.API_URL.url}/customer_inquiry`, customer);
   }
 
   getCustomerDetails() {
