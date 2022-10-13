@@ -964,7 +964,7 @@ export class StaffComponent implements OnInit, OnDestroy {
 
             if (data.payload !== null) {
 
-                if (data.message === 'Success' && data.requestStatus === true) {
+                if (data.payload.cif !== null) {
                     this.tellerInq = data;
 
                     if (this.tellerInq.payload.cif !== null && this.tellerInq.payload.cif !== '') {
@@ -1016,10 +1016,10 @@ export class StaffComponent implements OnInit, OnDestroy {
         this.apiService.getCustomerByAccountNo(customer).subscribe(data => {
             this.blockUI.stop();
             this.custInquiry = data;
-            if (this.custInquiry.requestStatus === true && this.custInquiry.cif !== '') {
+            if (this.custInquiry.payload !== null && this.custInquiry.payload.cif !== '') {
                 this.initProfile();
                 return this.toastr.success('Customer Account Number is valid, can proceed to enroll', ' Success!');
-            } else if (this.custInquiry.requestStatus === true && this.custInquiry.cif === '') {
+            } else if (this.custInquiry.payload !== null && this.custInquiry.payload.cif === '') {
                 // valid customer returned but they do not have a cif number attached
                 return this.toastr.warning('Customer id is valid but account does not have a valid cif number', 'Warning!');
             } else {

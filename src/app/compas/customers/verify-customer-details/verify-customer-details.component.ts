@@ -139,9 +139,8 @@ export class VerifyCustomerDetailsComponent implements OnInit {
   tellerCoBankingInq(teller) {
     // this.tellerSvc.getTllrDetails().subscribe (data => {
     this.tellerSvc.getTellerDetails(teller).subscribe((data: any) => {
-
       if (data.payload !== null) {
-        if (data.message === 'Success' && data.requestStatus === true) {
+        if (data.payload.cif !== null) {
           this.tellerInq = data;
 
           if (this.tellerInq.payload.cif !== null && this.tellerInq.payload.cif !== '') {
