@@ -139,7 +139,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
   tellerCoBankingInq(teller) {
     // this.tellerSvc.getTllrDetails().subscribe (data => {
     this.tellerSvc.getTellerDetails(teller).subscribe((data: any) => {
-      if (data.payload !== null) {
+      if (data.payload) {
         if (data.payload.cif !== null) {
           this.tellerInq = data;
 
@@ -161,7 +161,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
         }
 
       } else {
-        return this.toastr.warning('Specified staff id was not found or invalid , kindly verify to proceed .', 'Warning!');
+        return this.toastr.warning(data.respMessage || 'Specified staff id was not found or invalid , kindly verify to proceed .', 'Warning!');
       }
       // this.tellerInq = data;
       // if (this.tellerInq.requestStatus === true && (this.tellerInq.payload.cif !== '' || this.tellerInq.payload.cif !== null)) {

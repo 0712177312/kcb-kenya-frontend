@@ -964,20 +964,19 @@ export class CustomersComponent implements OnInit, OnDestroy {
             this.custInquiry = data;
 
 
-            console.log('Result from inquiring customer');
-            console.log(this.custInquiry);
-            console.log('Result from inquiring customer');
+            // console.log('Result from inquiring customer');
+            // console.log(this.custInquiry);
+            // console.log('Result from inquiring customer');
 
-
-            if (this.custInquiry.payload !== null && this.custInquiry.payload.cif !== '') {
+            if (this.custInquiry.payload && this.custInquiry.payload.cif !== '') {
                 this.initProfile();
                 return this.toastr.success('Customer Account Number is valid, can proceed to enroll', ' Success!');
-            } else if (this.custInquiry.payload !== null && this.custInquiry.payload.cif === '') {
+            } else if (this.custInquiry.payload && this.custInquiry.payload.cif === '') {
                 // valid customer returned but they do not have a cif number attached
                 return this.toastr.warning('Customer id is valid but account does not have a valid cif number', 'Warning!');
             } else {
 
-                return this.toastr.warning('Specified customer id was not found or invalid , kindly verify to proceed .', 'Warning!');
+                return this.toastr.warning(this.custInquiry.respMessage || 'Specified customer id was not found or invalid , kindly verify to proceed .', 'Warning!');
             }
         }, error => {
             this.blockUI.stop();

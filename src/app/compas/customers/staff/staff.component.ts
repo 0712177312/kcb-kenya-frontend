@@ -962,7 +962,9 @@ export class StaffComponent implements OnInit, OnDestroy {
         this.tellerSvc.getTellerDetails(teller).subscribe((data: any) => {
             this.blockUI.stop();
 
-            if (data.payload !== null) {
+            // console.log("teller data", data);
+
+            if (data.payload) {
 
                 if (data.payload.cif !== null) {
                     this.tellerInq = data;
@@ -998,7 +1000,7 @@ export class StaffComponent implements OnInit, OnDestroy {
                     return this.toastr.error('Error in inquiring Staff data.', 'Error!', { timeOut: 4000 });
                 }
             } else {
-                return this.toastr.warning('Specified staff id was not found or invalid , kindly verify to proceed .', 'Warning!');
+                return this.toastr.warning(data.respMessage || 'Error getting staff with specified ID', 'Warning!');
             }
 
 
