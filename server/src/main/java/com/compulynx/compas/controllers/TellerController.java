@@ -74,69 +74,12 @@ public class TellerController {
 	
 	@PostMapping("/staff_inquiry")
 	public ResponseEntity<?> getStaff(@RequestBody Staff staf) {	
-		try {
-			
-			if(staf.getId() == "" || staf.getId() == null) {
-				GlobalResponse resp = new GlobalResponse("404", "error processing request: staffid is missing", false, GlobalResponse.APIV);
-				return new ResponseEntity<>(resp, HttpStatus.OK);
-			}		
-			
-			String staffInqEndpoint = env.getProperty("staffInqEndpoint");
-			
-			CommonFunctions.disableSslVerification();
-			StringBuffer getStaffDetailsBuffer = new StringBuffer();
-			URL staffDetailsUrl = new URL(staffInqEndpoint);				
-			httpsURLConnection = (HttpsURLConnection)staffDetailsUrl.openConnection();
-			CommonFunctions.configHttpsUrlConnection( httpsURLConnection);
-			httpsURLConnection.addRequestProperty("Content-Type", "application/json");          
-	      
-	        OutputStream getCustDetsOs = httpsURLConnection.getOutputStream();
-	        OutputStreamWriter getCustDetsOsw = new OutputStreamWriter(getCustDetsOs, "UTF-8");  
-	        
-	        Staff staff = new Staff();
-	        staff.setId(staf.getId());
-	        StaffReqObject staffReqObj = new StaffReqObject(env.getProperty("cobankingAuthName"),env.getProperty("cobankingAuthPass"),staff);
-	        
-	        String getStaffDetReqString = CommonFunctions.convertPojoToJson(staffReqObj);
-	        if(getStaffDetReqString != null) {
-	        	getCustDetsOsw.write(getStaffDetReqString);						
-	        	getCustDetsOsw.flush();
-	        	getCustDetsOsw.close();  
-	        } 
-	        			       
-			int status = httpsURLConnection.getResponseCode();
-			
-			if(status == 200) {
-				reader = new BufferedReader(new InputStreamReader(httpsURLConnection.getInputStream()));						
-				while((line = reader.readLine()) != null) {
-					getStaffDetailsBuffer.append(line);
-				}
-				reader.close();
-				httpsURLConnection.disconnect();
-				
-				ObjectMapper mapper = new ObjectMapper();
-				StaffDetails staffDetails = mapper.readValue(getStaffDetailsBuffer.toString(), StaffDetails.class);	
-									
-				
-				return new ResponseEntity<>(staffDetails, HttpStatus.OK); 
-			}else {
-				GlobalResponse resp = new GlobalResponse("404", "T24 did not returna a valid response", false, GlobalResponse.APIV);
-				return new ResponseEntity<>(resp, HttpStatus.OK);
-			}
-	
-			
-	
-		}catch(MalformedURLException e) {
-			System.out.println("Exception "+e.getMessage());
-			e.printStackTrace();
-		}catch(IOException ev) {
-			System.out.println("Exception "+ev.getMessage());
-			ev.printStackTrace();			
-		}catch (Exception exception) {
-			System.out.println("Exception "+exception.getMessage());
-			exception.printStackTrace();			
-		}
-		return null;
+		if(staf.getId() == "" || staf.getId() == null) {
+			GlobalResponse resp = new GlobalResponse("404", "error processing request: staffid is missing", false, GlobalResponse.APIV);
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		}	
+		
+		return tellerService.t24StaffInquiry(staf);
 	}
 
 	@GetMapping(value = "/gtTellers")
@@ -330,20 +273,19 @@ public class TellerController {
 	@PostMapping(value = "/approveTeller")
 	public ResponseEntity<?> approveCustomer(@RequestBody Teller teller) {
         try {
-//            String t24Url = env.getProperty("tserver") + teller.getCustomerId() + "/true";
 
             String t24Url = env.getProperty("tserver");
             String customerId = teller.getCustomerId();
             log.info("update url for " + t24Url);
 
-//            String response = HttpRestProccesor.postJson(t24Url, customerId);
-            String response = HttpRestProccesor.postApproveUser(t24Url, customerId);
+            GlobalResponse response = customerSvc.updateCustomerAndStaff(t24Url, customerId,"TRUE");            
 
-            log.info("T24 response response " + response);
-            if(response.equals("failed")){
-                return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "HpptRestProcessor Failed", false, "no teller found"),
+            log.info("T24 response response " + response.getRespMessage());
+            if(response.getRespCode() != "200"){
+                return new ResponseEntity<>(new GlobalResponse(response.getRespCode(), response.getRespMessage(), false,GlobalResponse.APIV),
                         HttpStatus.OK);
             }
+
         } catch (Exception e) {
             log.error("upTellerDetails", e);
             return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "HpptRestProcessor Exception", false, "no teller found"),

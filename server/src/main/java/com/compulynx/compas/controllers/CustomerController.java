@@ -18,6 +18,7 @@ import com.compulynx.compas.mail.EmailSender;
 import com.compulynx.compas.models.extras.*;
 import com.compulynx.compas.models.t24Models.CustomerDetails;
 import com.compulynx.compas.models.t24Models.CustomerReqObject;
+import com.compulynx.compas.models.t24Models.CustomerStaffUpdateRes;
 import com.compulynx.compas.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -71,64 +72,13 @@ public class CustomerController {
 	@PostMapping("customer_inquiry")
 	public ResponseEntity<?> getCustomerFromT24(@RequestBody Customer customer) {
 
-		try {		
-			if(customer.getMnemonic() =="" || customer.getMnemonic() == null) {
-				GlobalResponse resp = new GlobalResponse("404", "error processing request: staffid is missing", false, GlobalResponse.APIV);
-				return new ResponseEntity<>(resp, HttpStatus.OK);
-			}
-			
-			String customerInqEndpoint = env.getProperty("customerInqEndpoint");
-				
-			CommonFunctions.disableSslVerification();
-			StringBuffer getCustomerDetailsBuffer = new StringBuffer();
-			URL customerDetailsUrl = new URL(customerInqEndpoint);				
-			httpsURLConnection = (HttpsURLConnection)customerDetailsUrl.openConnection();
-			CommonFunctions.configHttpsUrlConnection(httpsURLConnection);
-			httpsURLConnection.addRequestProperty("Content-Type", "application/json");          
-	      
-	        OutputStream getCustDetsOs = httpsURLConnection.getOutputStream();
-	        OutputStreamWriter getCustDetsOsw = new OutputStreamWriter(getCustDetsOs, "UTF-8");  
-	        
-	        com.compulynx.compas.models.t24Models.Customer cust = new com.compulynx.compas.models.t24Models.Customer();
-	        cust.setMnemonic(customer.getMnemonic());
-	        CustomerReqObject custReqObj = new CustomerReqObject(env.getProperty("cobankingAuthName"),env.getProperty("cobankingAuthPass"),cust);
-	        
-	        String getCustDetReqString = CommonFunctions.convertPojoToJson(custReqObj);
-	        if(getCustDetReqString != null) {
-	        	getCustDetsOsw.write(getCustDetReqString);						
-	        	getCustDetsOsw.flush();
-	        	getCustDetsOsw.close();  
-	        } 
-	        			       
-			int status = httpsURLConnection.getResponseCode();
-			
-			if(status == 200) {
-				reader = new BufferedReader(new InputStreamReader(httpsURLConnection.getInputStream()));						
-				while((line = reader.readLine()) != null) {
-					getCustomerDetailsBuffer.append(line);
-				}
-				reader.close();
-				httpsURLConnection.disconnect();
-				
-				ObjectMapper mapper = new ObjectMapper();
-				CustomerDetails custDetails = mapper.readValue(getCustomerDetailsBuffer.toString(), CustomerDetails.class);	
-				return new ResponseEntity<>(custDetails, HttpStatus.OK); 
-			}else {
-				GlobalResponse resp = new GlobalResponse("404", "T24 did not returna a valid response", false, GlobalResponse.APIV);
-				return new ResponseEntity<>(resp, HttpStatus.OK);
-			}
-	
-	
-	
-		}catch(MalformedURLException e) {
-			e.printStackTrace();
-		}catch(IOException ev) {
-			ev.printStackTrace();			
-		}catch (Exception exception) {
-			exception.printStackTrace();			
+		if(customer.getMnemonic() =="" || customer.getMnemonic() == null) {
+			GlobalResponse resp = new GlobalResponse("404", "error processing request: staffid is missing", false, GlobalResponse.APIV);
+			return new ResponseEntity<>(resp, HttpStatus.OK);
 		}
-
-		return null; 
+		
+		return customerService.t24CustomerInquiry(customer);
+			
 	}	
 
 	@GetMapping(value = "/gtCustomers")
@@ -269,6 +219,10 @@ public class CustomerController {
 
 	@PostMapping(value = "/approveCustomer")
 	public ResponseEntity<?> approveCustomer(@RequestBody Customer customer) {
+		
+		
+		log.info("/approveCustomer!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		
         try {
 //            String t24Url = env.getProperty("tserver") + customer.getCustomerId() + "/true";
             String t24Url = env.getProperty("tserver");
@@ -277,18 +231,17 @@ public class CustomerController {
             log.info("update url for " + t24Url);
 
 			System.out.println("update url for " + t24Url);
+			
+			GlobalResponse response = customerService.updateCustomerAndStaff(t24Url, customerId,"TRUE");            
 
-//            String response = HttpRestProccesor.postJson(t24Url, customerId);
-            String response = HttpRestProccesor.postApproveUser(t24Url, customerId);
-
-            log.info("T24 response response " + response);
-            if(response.equals("failed")){
-                return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "HpptRestProcessor Failed", false, "no customers found"),
+            log.info("T24 response response " + response.getRespMessage());
+            if(response.getRespCode() != "200"){
+                return new ResponseEntity<>(new GlobalResponse(response.getRespCode(), response.getRespMessage(), false,GlobalResponse.APIV),
                         HttpStatus.OK);
             }
         } catch (Exception e) {
             log.error("Error in proccesing ", e);
-            return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "HpptRestProcessor Exception", false, "no customers found"),
+            return new ResponseEntity<>(new GlobalResponse("500", "HpptRestProcessor Exception", false, GlobalResponse.APIV),
                     HttpStatus.OK);
         }
 

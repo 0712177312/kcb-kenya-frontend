@@ -20,6 +20,12 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import com.compulynx.compas.controllers.CommonFunctions;
+import com.compulynx.compas.customs.responses.GlobalResponse;
+import com.compulynx.compas.models.t24Models.CustomerDetails;
+import com.compulynx.compas.models.t24Models.CustomerReqObject;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
@@ -31,9 +37,20 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 
 public class HttpRestProccesor {
+	private static HttpsURLConnection httpsURLConnection;
+	private static BufferedReader reader;
+	private static String line="";
+
+	@Autowired
+	private Environment env;
+	
     public HttpRestProccesor() {
     }
 
@@ -87,15 +104,18 @@ public class HttpRestProccesor {
         }
         return result;
     }
-
-    public static String postApproveUser(String url, String customID) {
+    
+    
+ /*   public static String postApproveUser(String url, String customID,String updateStatus) {
+    	log.info("postApproveUser!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-            disableSslVerification();
+            //disableSslVerification();
+        	CommonFunctions.disableSslVerification();
 
             HttpPost httpPost = new HttpPost(url);
             httpPost.setHeader("Content-type", "application/json");
-
+/
             String json = "{\n    " +
                     "\"userName\": \"I0w8NjGOG/SIY2GgkiSU0w==\",\n    " +
                     "\"passWord\": \"p6wS7JpG9FCD8Ic+tntr9Q==\",\n    " +
@@ -107,6 +127,14 @@ public class HttpRestProccesor {
                     "\n" +
                     "}\n" +
                     "}\n";
+            *
+            
+            T24UpdateReqObject object = new T24UpdateReqObject("I0w8NjGOG/SIY2GgkiSU0w==",
+            		"p6wS7JpG9FCD8Ic+tntr9Q==",new T24UpdateParams(customID,updateStatus));
+	            
+	        String json = new Gson().toJson(object);
+	        
+	        log.info("postApproveUser json string !!!!!!!!!!!!!!!!!!!!!!!!!!!!"+json);
 
 
             System.out.println("calling the T24 url endpoint: " + url);
@@ -123,29 +151,34 @@ public class HttpRestProccesor {
             // Create a custom response handler
             ResponseHandler<String> responseHandler = response -> {
                 int status = response.getStatusLine().getStatusCode();
+                log.info("postApproveUser status!!!!!!!!!!!!!!!!!!!!!!!!!!!!  "+status);
                 if (status >= 200 && status < 300) {
                     HttpEntity entity = response.getEntity();
 
                     return entity != null ? EntityUtils.toString(entity) : null;
                 } else {
+                	log.info("postApproveUser Unexpected response status!!!!!!!!!!!!!!!!!!!!!!!!!!!!  "+status);
                     throw new ClientProtocolException("Unexpected response status: " + status);
                 }
             };
             String responseBody = httpclient.execute(httpPost, responseHandler);
+            log.info("postApproveUser responseBody!!!!!!!!!!!!!!!!!!!!!!!!!!!!  "+responseBody);
 
             ResponseBody resBody = new Gson().fromJson(responseBody, ResponseBody.class);
+            log.info("postApproveUser responseBody!!!!!!!!!!!!!!!!!!!!!!!!!!!!  "+responseBody);
 
             if (resBody != null) {
-                if (resBody.message != null){
-                    log.info("T24 response for---- " + customID + "----> " + resBody.message);
-                    return resBody.message;
+            	log.info("postApproveUser responseBody payload status !!!!!!!!!!!!!!!!!!!!!!!!!!!!  "+resBody.getPayload().getStatus());
+                if (resBody.getPayload().getStatus() != null){
+                    log.info("T24 response for---- " + customID + "----> " + resBody.getPayload().getStatus());
+                    return resBody.getPayload().getStatus();
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return "failed";
-    }
+    }*/
 
     public static void disableSslVerification()
             throws KeyManagementException {
@@ -266,10 +299,79 @@ public class HttpRestProccesor {
         }
     }
 }
+class T24UpdateReqObject{
+	String userName;
+	String passWord;
+	T24UpdateParams object;	
+	
+	public T24UpdateReqObject(String username,String password, T24UpdateParams params) {
+		this.userName=username;
+		this.passWord = username;
+		this.object = params;
+		
+	}
 
-class ResponseBody {
-    public String message;
-    public String payload;
-    public Boolean requestStatus;
+	public String getUserName() {
+		return userName;
+	}
+
+	public String getPassWord() {
+		return passWord;
+	}
+
+	public T24UpdateParams getObject() {
+		return object;
+	}
 
 }
+class T24UpdateParams{
+	String mnemonic;
+	String status;
+	
+	public T24UpdateParams(String mnemonic,String status) {
+		this.mnemonic = mnemonic;
+		this.status=status;
+	}
+
+	public String getMnemonic() {
+		return mnemonic;
+	}
+	public String getStatus() {
+		return status;
+	}
+
+	
+}
+/*
+@JsonInclude(JsonInclude.Include.NON_NULL)
+class ResponseBody {
+	String errorCode;
+	String errorMessage;
+    Payload payload;
+
+    public ResponseBody() {}
+
+    public Payload getPayload() {
+        return payload;
+    }
+
+	public String getErrorCode() {
+		return errorCode;
+	}
+
+
+	public String getErrorMessage() {
+		return errorMessage;
+	}   
+}
+
+class Payload{
+
+    String status;
+
+    public Payload(){}
+
+    public String getStatus() {
+        return status;
+    }
+}*/

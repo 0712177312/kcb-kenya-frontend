@@ -1,19 +1,46 @@
 package com.compulynx.compas.services;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import com.compulynx.compas.models.extras.TellersToApproveDetach;
+import com.compulynx.compas.models.t24Models.Staff;
+import com.compulynx.compas.models.t24Models.StaffDetails;
+import com.compulynx.compas.models.t24Models.StaffReqObject;
+
+import org.jfree.util.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.compulynx.compas.controllers.CommonFunctions;
+import com.compulynx.compas.customs.responses.GlobalResponse;
 import com.compulynx.compas.models.Teller;
 import com.compulynx.compas.models.extras.TellerToApprove;
 import com.compulynx.compas.repositories.TellerRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class TellerService {
+	
+	private static HttpsURLConnection httpsURLConnection;
+	private static BufferedReader reader;
+	private static String line="";
 
+	@Autowired
+	private Environment env;
+	
 	@Autowired
 	private TellerRepository tellerRepository;
 
@@ -122,5 +149,71 @@ public class TellerService {
     public List<Teller> getEnrolledStaffByBranch(Date fromDate, Date toDate, String enrolledType, String branchCode) {
         return tellerRepository.getEnrolledStaffByBranch(fromDate, toDate, enrolledType, branchCode);
     }
+
+	public ResponseEntity<?> t24StaffInquiry(Staff staf) {
+		try {
+			String staffInqEndpoint = env.getProperty("staffInqEndpoint");
+			
+			CommonFunctions.disableSslVerification();
+			StringBuffer getStaffDetailsBuffer = new StringBuffer();
+			URL staffDetailsUrl = new URL(staffInqEndpoint);				
+			httpsURLConnection = (HttpsURLConnection)staffDetailsUrl.openConnection();
+			CommonFunctions.configHttpsUrlConnection( httpsURLConnection);
+			httpsURLConnection.addRequestProperty("Content-Type", "application/json");          
+	      
+	        OutputStream getCustDetsOs = httpsURLConnection.getOutputStream();
+	        OutputStreamWriter getCustDetsOsw = new OutputStreamWriter(getCustDetsOs, "UTF-8");  
+	        
+	        Staff staff = new Staff();
+	        staff.setId(staf.getId());
+	        StaffReqObject staffReqObj = new StaffReqObject(env.getProperty("cobankingAuthName"),env.getProperty("cobankingAuthPass"),staff);
+	        
+	        String getStaffDetReqString = CommonFunctions.convertPojoToJson(staffReqObj);
+	        if(getStaffDetReqString != null) {
+	        	getCustDetsOsw.write(getStaffDetReqString);						
+	        	getCustDetsOsw.flush();
+	        	getCustDetsOsw.close();  
+	        } 
+	        			       
+			int status = httpsURLConnection.getResponseCode();
+			
+			if(status == 200) {
+				reader = new BufferedReader(new InputStreamReader(httpsURLConnection.getInputStream()));						
+				while((line = reader.readLine()) != null) {
+					getStaffDetailsBuffer.append(line);
+				}
+				reader.close();
+				httpsURLConnection.disconnect();
+				
+				ObjectMapper mapper = new ObjectMapper();
+				StaffDetails staffDetails = mapper.readValue(getStaffDetailsBuffer.toString(), StaffDetails.class);	
+									
+				
+				return new ResponseEntity<>(staffDetails, HttpStatus.OK); 
+			}else {
+				GlobalResponse resp = new GlobalResponse("404", "Staff not found!", false, GlobalResponse.APIV);
+				return new ResponseEntity<>(resp, HttpStatus.OK);
+			}	
+
+	}catch(MalformedURLException e) {
+		System.out.println("Exception "+e.getMessage());
+		
+		Log.error(e.getMessage());
+		GlobalResponse resp = new GlobalResponse("404", "T24 endpoint is unreachable", false, GlobalResponse.APIV);
+		return new ResponseEntity<>(resp, HttpStatus.OK);
+	}catch(IOException ev) {
+		System.out.println("IOException "+ev.getMessage());
+		Log.error(ev.getMessage());
+	
+		GlobalResponse resp = new GlobalResponse("404", "T24 endpoint is unreachable", false, GlobalResponse.APIV);
+		return new ResponseEntity<>(resp, HttpStatus.OK);
+	}catch (Exception exception) {
+		System.out.println("Exception "+exception.getMessage());	
+		Log.error(exception.getMessage());
+		GlobalResponse resp = new GlobalResponse("404", "T24 endpoint is unreachable", false, GlobalResponse.APIV);
+		return new ResponseEntity<>(resp, HttpStatus.OK);
+	}
+		
+	}
 
 }

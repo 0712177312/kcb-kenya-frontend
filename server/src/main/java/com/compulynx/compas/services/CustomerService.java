@@ -1,20 +1,53 @@
 package com.compulynx.compas.services;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import com.compulynx.compas.models.extras.CustomersToApproveDetach;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.compulynx.compas.controllers.CommonFunctions;
+import com.compulynx.compas.customs.HttpRestProccesor;
+import com.compulynx.compas.customs.responses.GlobalResponse;
 import com.compulynx.compas.models.Customer;
 import com.compulynx.compas.models.Teller;
 import com.compulynx.compas.models.extras.CustomersToApprove;
 import com.compulynx.compas.models.extras.MatchingTeller;
+import com.compulynx.compas.models.t24Models.CustomerDetails;
+import com.compulynx.compas.models.t24Models.CustomerReqObject;
+import com.compulynx.compas.models.t24Models.CustomerStaffUpdateRes;
 import com.compulynx.compas.repositories.CustomerRepository;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 @Service
 public class CustomerService {
+	
+	 private static final Logger log = LoggerFactory.getLogger(CustomerService.class);
+	
+	private static HttpsURLConnection httpsURLConnection;
+	private static BufferedReader reader;
+	private static String line="";
+
+	@Autowired
+	private Environment env;
 
 	@Autowired
 	private CustomerRepository customerRepository;
@@ -162,5 +195,205 @@ public class CustomerService {
 	public int customerUnDelete(int createdBy, String customerId) {
 		return customerRepository.customerUnDelete(createdBy, customerId);
 	}
+	public GlobalResponse updateCustomerAndStaff(String url, String customerID,String updateStatus) {
+    	log.info("updateCustomerAndStaff!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    	
+    	try {		
+			if(url =="" || customerID == null) {
+				GlobalResponse resp = new GlobalResponse("404", "error processing request: customerid is missing", false, GlobalResponse.APIV);
+				return resp;
+			}				
+			CommonFunctions.disableSslVerification();
+			log.info("updateCustomerAndStaff  disabled SSL !!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			StringBuffer customerAndStaffBuffer = new StringBuffer();
+			URL custAndStaffUrl = new URL(url);				
+			httpsURLConnection = (HttpsURLConnection)custAndStaffUrl.openConnection();
+			log.info("updateCustomerAndStaff: CON OPENNED !!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			
+			CommonFunctions.configHttpsUrlConnection(httpsURLConnection);
+			httpsURLConnection.addRequestProperty("Content-Type", "application/json");          
+	      
+	        OutputStream getCustAndStaffOs = httpsURLConnection.getOutputStream();
+	        log.info("updateCustomerAndStaff OUTPUT STRING RETURNED !!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+	        
+	        OutputStreamWriter getCustAndStaffOsw = new OutputStreamWriter(getCustAndStaffOs, "UTF-8");  
+	       // env.getProperty("cobankingAuthName"),env.getProperty("cobankingAuthPass")
+	        //"I0w8NjGOG/SIY2GgkiSU0w==","p6wS7JpG9FCD8Ic+tntr9Q=="
+	        
+	        T24UpdateReqObject object = new T24UpdateReqObject(env.getProperty("cobankingAuthName"),env.getProperty("cobankingAuthPass"),new T24UpdateParams(customerID,updateStatus));
+	        
+	        String json = new Gson().toJson(object);
+	        
+	        log.info("updateCustomerAndStaff  JSON OBJECT TO CALL!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+	        if(json != null) {
+	        	getCustAndStaffOsw.write(json);						
+	        	getCustAndStaffOsw.flush();
+	        	getCustAndStaffOsw.close();  
+	        } 
+	        			       
+	        log.info("updateCustomerAndStaff  BEFORE RESPONSE CODE!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			int status = httpsURLConnection.getResponseCode();
+			
+			log.info("updateCustomerAndStaff RESPONSE CODE !!!!!!!!!!!!!!!!!!!!!!!!!!!! "+status);
+			
+			if(status == 200) {
+				reader = new BufferedReader(new InputStreamReader(httpsURLConnection.getInputStream()));						
+				while((line = reader.readLine()) != null) {
+					customerAndStaffBuffer.append(line);
+				}
+				reader.close();
+				httpsURLConnection.disconnect();
+				
+				ObjectMapper mapper = new ObjectMapper();
+				CustomerStaffUpdateRes resBody = mapper.readValue(customerAndStaffBuffer.toString(), CustomerStaffUpdateRes.class);	
+				log.info("updateCustomerAndStaff AFTER GETTING RESBODY !!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				log.info("updateCustomerAndStaff RES BODY STATUS!!!!!!!!!!!!!!!!!!!!!!!!!!!! "+resBody.getPayload().getStatus());				
+				
+				if(resBody.getErrorCode() != null && resBody.getErrorCode() != "") {
+					GlobalResponse resp = new GlobalResponse(resBody.getErrorCode(), resBody.getErrorMessage(), false, GlobalResponse.APIV);
+					 return resp; 
+				}
+				GlobalResponse resp = new GlobalResponse("200",resBody.getPayload().getStatus(), false, GlobalResponse.APIV);
+				 return resp; 
+					
+			}else {
+				GlobalResponse resp = new GlobalResponse("500", "T24 did not return a valid response!", false, GlobalResponse.APIV);
+				return resp;
+			}	
+	
+		}catch(MalformedURLException e) {
+			e.printStackTrace();
+			GlobalResponse resp = new GlobalResponse("500", "T24 endpoints not reachable", false, GlobalResponse.APIV);
+			return resp;
+			
+		}catch(IOException ev) {
+			ev.printStackTrace();
+			GlobalResponse resp = new GlobalResponse("500", "T24 endpoints not reachable", false, GlobalResponse.APIV);
+			return resp;
+		}catch (Exception exception) {
+			exception.printStackTrace();
+			GlobalResponse resp = new GlobalResponse("500", "T24 endpoints not reachable", false, GlobalResponse.APIV);
+			return resp;
+		} 	
+    }
 
+	public ResponseEntity<?> t24CustomerInquiry(Customer customer) {	
+		try {
+		
+			String customerInqEndpoint = env.getProperty("customerInqEndpoint");
+			
+			CommonFunctions.disableSslVerification();
+			StringBuffer getCustomerDetailsBuffer = new StringBuffer();
+			URL customerDetailsUrl = new URL(customerInqEndpoint);				
+			httpsURLConnection = (HttpsURLConnection)customerDetailsUrl.openConnection();
+			CommonFunctions.configHttpsUrlConnection(httpsURLConnection);
+			httpsURLConnection.addRequestProperty("Content-Type", "application/json");          
+	      
+	        OutputStream getCustDetsOs = httpsURLConnection.getOutputStream();
+	        OutputStreamWriter getCustDetsOsw = new OutputStreamWriter(getCustDetsOs, "UTF-8");  
+	        
+	        com.compulynx.compas.models.t24Models.Customer cust = new com.compulynx.compas.models.t24Models.Customer();
+	        cust.setMnemonic(customer.getMnemonic());
+	        CustomerReqObject custReqObj = new CustomerReqObject(env.getProperty("cobankingAuthName"),env.getProperty("cobankingAuthPass"),cust);
+	        
+	        String getCustDetReqString = CommonFunctions.convertPojoToJson(custReqObj);
+	        if(getCustDetReqString != null) {
+	        	getCustDetsOsw.write(getCustDetReqString);						
+	        	getCustDetsOsw.flush();
+	        	getCustDetsOsw.close();  
+	        } 
+	        			       
+			int status = httpsURLConnection.getResponseCode();
+			
+			if(status == 200) {
+				reader = new BufferedReader(new InputStreamReader(httpsURLConnection.getInputStream()));						
+				while((line = reader.readLine()) != null) {
+					getCustomerDetailsBuffer.append(line);
+				}
+				reader.close();
+				httpsURLConnection.disconnect();
+				
+				ObjectMapper mapper = new ObjectMapper();
+				CustomerDetails custDetails = mapper.readValue(getCustomerDetailsBuffer.toString(), CustomerDetails.class);	
+				return new ResponseEntity<>(custDetails, HttpStatus.OK); 
+			}else {
+				GlobalResponse resp = new GlobalResponse("404", "Customer not found!", false, GlobalResponse.APIV);
+				return new ResponseEntity<>(resp, HttpStatus.OK);
+			}
+
+	}catch(MalformedURLException e) {
+		e.printStackTrace();
+	}catch(IOException ev) {
+		ev.printStackTrace();
+		GlobalResponse resp = new GlobalResponse("404", "T24 endpoint is unreachable", false, GlobalResponse.APIV);
+		return new ResponseEntity<>(resp, HttpStatus.OK);
+	}catch (Exception exception) {
+		exception.printStackTrace();			
+	}
+
+	return null; 
+		
+	}
+
+
+}
+/*
+@JsonInclude(JsonInclude.Include.NON_NULL)
+class ResponseBody {
+	
+}
+
+class Payload{
+
+    String status;
+
+    public Payload(){}
+
+    public String getStatus() {
+        return status;
+    }
+}
+*/
+class T24UpdateReqObject{
+	String userName;
+	String passWord;
+	T24UpdateParams object;	
+	
+	public T24UpdateReqObject(String username,String password, T24UpdateParams params) {
+		this.userName=username;
+		this.passWord = username;
+		this.object = params;
+		
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public String getPassWord() {
+		return passWord;
+	}
+
+	public T24UpdateParams getObject() {
+		return object;
+	}
+
+}
+class T24UpdateParams{
+	String mnemonic;
+	String status;
+	
+	public T24UpdateParams(String mnemonic,String status) {
+		this.mnemonic = mnemonic;
+		this.status=status;
+	}
+
+	public String getMnemonic() {
+		return mnemonic;
+	}
+	public String getStatus() {
+		return status;
+	}
+
+	
 }
