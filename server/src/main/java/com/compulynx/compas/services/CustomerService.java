@@ -32,6 +32,8 @@ import com.compulynx.compas.models.extras.MatchingTeller;
 import com.compulynx.compas.models.t24Models.CustomerDetails;
 import com.compulynx.compas.models.t24Models.CustomerReqObject;
 import com.compulynx.compas.models.t24Models.CustomerStaffUpdateRes;
+import com.compulynx.compas.models.t24Models.T24UpdateParams;
+import com.compulynx.compas.models.t24Models.T24UpdateReqObject;
 import com.compulynx.compas.repositories.CustomerRepository;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -196,7 +198,7 @@ public class CustomerService {
 		return customerRepository.customerUnDelete(createdBy, customerId);
 	}
 	public GlobalResponse updateCustomerAndStaff(String url, String customerID,String updateStatus) {
-    	log.info("updateCustomerAndStaff!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    	log.info("updateCustomerAndStaff called!");
     	
     	try {		
 			if(url =="" || customerID == null) {
@@ -204,17 +206,17 @@ public class CustomerService {
 				return resp;
 			}				
 			CommonFunctions.disableSslVerification();
-			log.info("updateCustomerAndStaff  disabled SSL !!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			log.info("updateCustomerAndStaff  disabled SSL!");
 			StringBuffer customerAndStaffBuffer = new StringBuffer();
 			URL custAndStaffUrl = new URL(url);				
 			httpsURLConnection = (HttpsURLConnection)custAndStaffUrl.openConnection();
-			log.info("updateCustomerAndStaff: CON OPENNED !!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			log.info("updateCustomerAndStaff: CONN OPENNED !");
 			
 			CommonFunctions.configHttpsUrlConnection(httpsURLConnection);
 			httpsURLConnection.addRequestProperty("Content-Type", "application/json");          
 	      
 	        OutputStream getCustAndStaffOs = httpsURLConnection.getOutputStream();
-	        log.info("updateCustomerAndStaff OUTPUT STRING RETURNED !!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+	        log.info("updateCustomerAndStaff OUTPUT STRING RETURNED ");
 	        
 	        OutputStreamWriter getCustAndStaffOsw = new OutputStreamWriter(getCustAndStaffOs, "UTF-8");  
 	       // env.getProperty("cobankingAuthName"),env.getProperty("cobankingAuthPass")
@@ -224,17 +226,15 @@ public class CustomerService {
 	        
 	        String json = new Gson().toJson(object);
 	        
-	        log.info("updateCustomerAndStaff  JSON OBJECT TO CALL!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	        if(json != null) {
 	        	getCustAndStaffOsw.write(json);						
 	        	getCustAndStaffOsw.flush();
 	        	getCustAndStaffOsw.close();  
 	        } 
 	        			       
-	        log.info("updateCustomerAndStaff  BEFORE RESPONSE CODE!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 			int status = httpsURLConnection.getResponseCode();
 			
-			log.info("updateCustomerAndStaff RESPONSE CODE !!!!!!!!!!!!!!!!!!!!!!!!!!!! "+status);
+			log.info("updateCustomerAndStaff - RESPONSE CODE: "+status);
 			
 			if(status == 200) {
 				reader = new BufferedReader(new InputStreamReader(httpsURLConnection.getInputStream()));						
@@ -246,8 +246,6 @@ public class CustomerService {
 				
 				ObjectMapper mapper = new ObjectMapper();
 				CustomerStaffUpdateRes resBody = mapper.readValue(customerAndStaffBuffer.toString(), CustomerStaffUpdateRes.class);	
-				log.info("updateCustomerAndStaff AFTER GETTING RESBODY !!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-				log.info("updateCustomerAndStaff RES BODY STATUS!!!!!!!!!!!!!!!!!!!!!!!!!!!! "+resBody.getPayload().getStatus());				
 				
 				if(resBody.getErrorCode() != null && resBody.getErrorCode() != "") {
 					GlobalResponse resp = new GlobalResponse(resBody.getErrorCode(), resBody.getErrorMessage(), false, GlobalResponse.APIV);
@@ -278,6 +276,7 @@ public class CustomerService {
     }
 
 	public ResponseEntity<?> t24CustomerInquiry(Customer customer) {	
+		log.error("t24CustomerInquiry!");
 		try {
 		
 			String customerInqEndpoint = env.getProperty("customerInqEndpoint");
@@ -315,85 +314,29 @@ public class CustomerService {
 				
 				ObjectMapper mapper = new ObjectMapper();
 				CustomerDetails custDetails = mapper.readValue(getCustomerDetailsBuffer.toString(), CustomerDetails.class);	
+				log.error("Customer inquiry successfull!");
 				return new ResponseEntity<>(custDetails, HttpStatus.OK); 
 			}else {
+				log.error("Customer not found!");
 				GlobalResponse resp = new GlobalResponse("404", "Customer not found!", false, GlobalResponse.APIV);
-				return new ResponseEntity<>(resp, HttpStatus.OK);
+				return new ResponseEntity<>(resp, HttpStatus.NOT_FOUND);
 			}
 
 	}catch(MalformedURLException e) {
-		e.printStackTrace();
+		log.error("MalformedURLException: ", e.getMessage());
+		GlobalResponse resp = new GlobalResponse("500", "T24 endpoint is unreachable", false, GlobalResponse.APIV);
+		return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
 	}catch(IOException ev) {
-		ev.printStackTrace();
-		GlobalResponse resp = new GlobalResponse("404", "T24 endpoint is unreachable", false, GlobalResponse.APIV);
-		return new ResponseEntity<>(resp, HttpStatus.OK);
+		log.error("IOException: ", ev.getMessage());
+		GlobalResponse resp = new GlobalResponse("500", "T24 endpoint is unreachable", false, GlobalResponse.APIV);
+		return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
 	}catch (Exception exception) {
-		exception.printStackTrace();			
+		log.error("Exception: ", exception.getMessage());
+		GlobalResponse resp = new GlobalResponse("500", "T24 endpoint is unreachable", false, GlobalResponse.APIV);
+		return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-
-	return null; 
 		
 	}
 
-
-}
-/*
-@JsonInclude(JsonInclude.Include.NON_NULL)
-class ResponseBody {
-	
 }
 
-class Payload{
-
-    String status;
-
-    public Payload(){}
-
-    public String getStatus() {
-        return status;
-    }
-}
-*/
-class T24UpdateReqObject{
-	String userName;
-	String passWord;
-	T24UpdateParams object;	
-	
-	public T24UpdateReqObject(String username,String password, T24UpdateParams params) {
-		this.userName=username;
-		this.passWord = username;
-		this.object = params;
-		
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public String getPassWord() {
-		return passWord;
-	}
-
-	public T24UpdateParams getObject() {
-		return object;
-	}
-
-}
-class T24UpdateParams{
-	String mnemonic;
-	String status;
-	
-	public T24UpdateParams(String mnemonic,String status) {
-		this.mnemonic = mnemonic;
-		this.status=status;
-	}
-
-	public String getMnemonic() {
-		return mnemonic;
-	}
-	public String getStatus() {
-		return status;
-	}
-
-	
-}

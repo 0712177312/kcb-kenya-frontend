@@ -192,7 +192,7 @@ public class TellerService {
 				return new ResponseEntity<>(staffDetails, HttpStatus.OK); 
 			}else {
 				GlobalResponse resp = new GlobalResponse("404", "Staff not found!", false, GlobalResponse.APIV);
-				return new ResponseEntity<>(resp, HttpStatus.OK);
+				return new ResponseEntity<>(resp, HttpStatus.NOT_FOUND);
 			}	
 
 	}catch(MalformedURLException e) {
@@ -200,18 +200,18 @@ public class TellerService {
 		
 		Log.error(e.getMessage());
 		GlobalResponse resp = new GlobalResponse("404", "T24 endpoint is unreachable", false, GlobalResponse.APIV);
-		return new ResponseEntity<>(resp, HttpStatus.OK);
+		return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
 	}catch(IOException ev) {
 		System.out.println("IOException "+ev.getMessage());
 		Log.error(ev.getMessage());
 	
 		GlobalResponse resp = new GlobalResponse("404", "T24 endpoint is unreachable", false, GlobalResponse.APIV);
-		return new ResponseEntity<>(resp, HttpStatus.OK);
+		return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
 	}catch (Exception exception) {
 		System.out.println("Exception "+exception.getMessage());	
 		Log.error(exception.getMessage());
 		GlobalResponse resp = new GlobalResponse("404", "T24 endpoint is unreachable", false, GlobalResponse.APIV);
-		return new ResponseEntity<>(resp, HttpStatus.OK);
+		return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 		
 	}

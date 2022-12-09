@@ -237,12 +237,12 @@ public class CustomerController {
             log.info("T24 response response " + response.getRespMessage());
             if(response.getRespCode() != "200"){
                 return new ResponseEntity<>(new GlobalResponse(response.getRespCode(), response.getRespMessage(), false,GlobalResponse.APIV),
-                        HttpStatus.OK);
+                        HttpStatus.BAD_REQUEST);
             }
         } catch (Exception e) {
             log.error("Error in proccesing ", e);
             return new ResponseEntity<>(new GlobalResponse("500", "HpptRestProcessor Exception", false, GlobalResponse.APIV),
-                    HttpStatus.OK);
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
 		try {
@@ -284,7 +284,7 @@ public class CustomerController {
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
-			return new ResponseEntity<>(resp, HttpStatus.OK);
+			return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
