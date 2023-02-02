@@ -415,7 +415,7 @@ export class StaffComponent implements OnInit, OnDestroy {
             tellerEmail: new FormControl(this.tellerInq.payload.contactEmail, []),
             tellerName: new FormControl(this.tellerInq.payload.userName, []),
             tellerSignOnName: new FormControl(this.tellerInq.payload.signOnName, [Validators.required]),
-            departmentCode: new FormControl(this.tellerInq.payload.departmentCode, [Validators.required]),
+            departmentCode: new FormControl(this.tellerInq.payload.departmentCode),
             companyCode: new FormControl(this.tellerInq.payload.companyCode),
             customerId: new FormControl(this.tellerInq.payload.cif, [Validators.required]),
             verified: 'N',

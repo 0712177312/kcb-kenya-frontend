@@ -115,9 +115,9 @@
                               formControlName="branch"
                               (ngModelChange)="getTellers($event)">
                           </ng-select>
-                          <div *ngIf="submited && (form.controls['branch'].invalid || form.controls['branch'].dirty || form.controls['branch'].touched)" class="error">
+                          <!-- <div *ngIf="submited && (form.controls['branch'].invalid || form.controls['branch'].dirty || form.controls['branch'].touched)" class="error">
                             <div *ngIf="f.group.errors?.required">Branch is required</div>
-                           </div>
+                           </div> -->
                       </div>
                     </div>
                    </div>

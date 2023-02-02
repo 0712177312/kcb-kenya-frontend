@@ -145,11 +145,6 @@
                                 {{branch.branchName}}
                               </option>
                             </select>
-                            <div
-                              *ngIf="submited && (tellerForm.controls['departmentCode'].invalid || tellerForm.controls['departmentCode'].dirty || tellerForm.controls['departmentCode'].touched)"
-                              class="error">
-                              <div *ngIf="c.departmentCode.errors?.required">Branch is required</div>
-                            </div>
                           </div>
                         </div>
                       </div>
@@ -396,11 +391,11 @@
                                 {{branch.branchName}}
                               </option>
                             </select>
-                            <div
+                            <!-- <div
                               *ngIf="submited && (form.controls['branchCode'].invalid || form.controls['branchCode'].dirty || form.controls['branchCode'].touched)"
                               class="error">
                               <div *ngIf="f.branchCode.errors?.required">Branch is required</div>
-                            </div>
+                            </div> -->
                           </div>
                         </div>
                       </div>
