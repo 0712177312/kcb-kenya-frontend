@@ -573,21 +573,25 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
         this.editMode = false;
         this.gtCustomers();
 
-        return this.toastr.success('Profile details upddated successfuly.', ' Success!');
+        return this.toastr.success('Profile details updated successfully.', ' Success!');
       } else {
-        if(this.response.respMessage === 'HpptRestProcessor Failed'){
-          this.log(this.rightId, 'attempted to approve the enrollment of customer with customerId ' + this.customer.customerId + ' .HpptRestProcessor Failed');
-          this.blockUI.stop();
-          return this.toastr.warning('Error while connecting to t24', 'Warning!');
-        }else if(this.response.respMessage === 'HpptRestProcessor Exception'){
-          this.log(this.rightId, 'attempted to approve the enrollment of customer with customerId ' + this.customer.customerId + ' .HpptRestProcessor Exception');
-          this.blockUI.stop();
-          return this.toastr.warning('Exception while connecting to t24', 'Warning!');
-        }else{
-          this.log(this.rightId, 'attempted to approve the enrollment of customer with customerId ' + this.customer.customerId);
-          this.blockUI.stop();
-          return this.toastr.warning('There was problem approving customer details .', 'Warning!');
-        }
+        this.log(this.rightId, 'attempted to approve the enrollment of customer with customerId ' + this.customer.customerId + 'Failed: ' + this.response.respMessage);
+        this.blockUI.stop();
+        return this.toastr.warning( this.response.respMessage, 'Warning!');
+
+        // if(this.response.respMessage === 'HpptRestProcessor Failed'){
+        //   this.log(this.rightId, 'attempted to approve the enrollment of customer with customerId ' + this.customer.customerId + ' .HpptRestProcessor Failed');
+        //   this.blockUI.stop();
+        //   return this.toastr.warning('Error while connecting to t24', 'Warning!');
+        // }else if(this.response.respMessage === 'HpptRestProcessor Exception'){
+        //   this.log(this.rightId, 'attempted to approve the enrollment of customer with customerId ' + this.customer.customerId + ' .HpptRestProcessor Exception');
+        //   this.blockUI.stop();
+        //   return this.toastr.warning('Exception while connecting to t24', 'Warning!');
+        // }else{
+        //   this.log(this.rightId, 'attempted to approve the enrollment of customer with customerId ' + this.customer.customerId);
+        //   this.blockUI.stop();
+        //   return this.toastr.warning('There was problem approving customer details .', 'Warning!');
+        // }
       }
     }, error => {
       this.log(this.rightId, 'attempted to approve the enrollment of customer with customerId ' + this.customer.customerId + ' but it failed due to an error');
@@ -603,7 +607,7 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
       const customer = {
         'customerId': this.customer.customerId,
         'fingerPrints': this.fingerPrints
-      };
+      }; 
       // console.log('customer to authorize..', customer);
       //Ensure finger prints are captured
       if (this.fingerPrints.length > 0) {
