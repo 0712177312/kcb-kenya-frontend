@@ -205,16 +205,18 @@ public class UserController {
     @PostMapping(value = "/sysusers/print/auth")
     public ResponseEntity<?> printAuthUser(@RequestBody User user) throws Exception {
         try {
+        	System.out.println("/sysusers/print/auth looooooooooooooooooooging");
             User userpro = userService.findByUsername(user.getUsername());
             System.out.println(userpro);
             if (userpro == null) {
+            	System.out.println("/sysusers/print/auth repo is nuuuuuuuuuuuuuuuuuuuuuuuuuuuull");
                 return new ResponseEntity<>(new UserResponse("failed to add user",
                         false, "409", Api.API_VERSION), HttpStatus.OK);
             } else if (!userpro.getApproved().equalsIgnoreCase("V") || userpro.isStatus() == false) {
                 return new ResponseEntity<>(new UserResponse("user specified is neither verified or active, kindly ensure you verified and active ",
                         false, "201", Api.API_VERSION), HttpStatus.OK);
-            } else if (userpro != null) {
-                System.out.println("email" + user.getEmail());
+            } else if (userpro != null) { 
+                System.out.println("/sysusers/print/auth +++++++++++++++++++++++++++++ " + user.toString());
                 
                 return new ResponseEntity<>(new UserResponse(userpro, "successfully authenticated!",
                         true, "000", Api.API_VERSION), HttpStatus.OK);

@@ -288,7 +288,7 @@ public class TellerController {
 
         } catch (Exception e) {
             log.error("upTellerDetails", e);
-            return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "HpptRestProcessor Exception", false, "no teller found"),
+            return new ResponseEntity<>(new GlobalResponse("500", "HpptRestProcessor Exception", false, GlobalResponse.APIV),
                     HttpStatus.OK);
         }
 
@@ -312,15 +312,15 @@ public class TellerController {
 					log.info("Email to staff scheduled to be sent to " + teller.getTellerName());
 				}
 
-				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true,
-						"teller  " + teller.getCustomerId() + " verified successfully"), HttpStatus.OK);
+				return new ResponseEntity<>(new GlobalResponse( "000",
+						"teller  " + teller.getCustomerId() + " verified successfully",true,GlobalResponse.APIV), HttpStatus.OK);
 
 			} else {
-				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "201", false, "no teller found"),
+				return new ResponseEntity<>(new GlobalResponse("404", "no teller found", false,GlobalResponse.APIV),
 						HttpStatus.OK);
 			}
 		} catch (Exception e) {
-			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
+			GlobalResponse resp = new GlobalResponse("500", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
 			return new ResponseEntity<>(resp, HttpStatus.OK);
 		}

@@ -76,7 +76,6 @@ public class CustomerController {
 			GlobalResponse resp = new GlobalResponse("404", "error processing request: staffid is missing", false, GlobalResponse.APIV);
 			return new ResponseEntity<>(resp, HttpStatus.OK);
 		}
-		
 		return customerService.t24CustomerInquiry(customer);
 			
 	}	
@@ -221,7 +220,7 @@ public class CustomerController {
 	public ResponseEntity<?> approveCustomer(@RequestBody Customer customer) {
 		
 		
-		log.info("/approveCustomer!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		log.info("/approveCustomer called");
 		
         try {
 //            String t24Url = env.getProperty("tserver") + customer.getCustomerId() + "/true";
@@ -234,8 +233,11 @@ public class CustomerController {
 			
 			GlobalResponse response = customerService.updateCustomerAndStaff(t24Url, customerId,"TRUE");            
 
-            log.info("T24 response response " + response.getRespMessage());
-            if(response.getRespCode() != "200"){
+			log.info("T24  response code " + response.getRespCode());
+            log.info("T24  response message" + response.getRespMessage());
+            
+            if(!response.getRespCode().equalsIgnoreCase("200")){
+            	log.info("T24 with status 400 " + response.getRespMessage());
                 return new ResponseEntity<>(new GlobalResponse(response.getRespCode(), response.getRespMessage(), false,GlobalResponse.APIV),
                         HttpStatus.BAD_REQUEST);
             }
@@ -244,11 +246,14 @@ public class CustomerController {
             return new ResponseEntity<>(new GlobalResponse("500", "HpptRestProcessor Exception", false, GlobalResponse.APIV),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        log.info("T24 success response ");
 
 		try {
 			int cust = customerService.approveCustomer(customer.getCreatedBy(), customer.getCustomerId());
+			log.info("Compass for customer approval ");
 
 			if (cust > 0) {
+				log.info("Compas customer found! ");
 				// send email after approving the customer
 				String recipient = customer.getEmail();
 				if(recipient == null) {
@@ -274,15 +279,15 @@ public class CustomerController {
                 String getResponse = HttpRestProccesor.sendGetRequest(smsUrl, "sms", customerName, phoneNumber, smsApiUsername, smsApiPassword);
 				log.info("SMS Get Request Response is: "+  getResponse);
 
-				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true,
-						"customer  " + customer.getCustomerId() + " verified successfully"), HttpStatus.OK);
+				return new ResponseEntity<>(new GlobalResponse("000",
+						"customer  " + customer.getCustomerId() + " verified successfully",true,GlobalResponse.APIV), HttpStatus.OK);
 
 			}
-			return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "201", false, "no customers found"),
-					HttpStatus.OK);
+			return new ResponseEntity<>(new GlobalResponse("404", "no customers found", false,GlobalResponse.APIV),
+					HttpStatus.NOT_FOUND);
 
 		} catch (Exception e) {
-			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
+			GlobalResponse resp = new GlobalResponse("500", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
 			return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
 		}

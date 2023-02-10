@@ -237,6 +237,7 @@ public class CustomerService {
 			log.info("updateCustomerAndStaff - RESPONSE CODE: "+status);
 			
 			if(status == 200) {
+				System.out.println("200: updateCustomerAndStaff!!!!!!!!!!!!!!!!!!!!!!!!!");
 				reader = new BufferedReader(new InputStreamReader(httpsURLConnection.getInputStream()));						
 				while((line = reader.readLine()) != null) {
 					customerAndStaffBuffer.append(line);
@@ -246,15 +247,20 @@ public class CustomerService {
 				
 				ObjectMapper mapper = new ObjectMapper();
 				CustomerStaffUpdateRes resBody = mapper.readValue(customerAndStaffBuffer.toString(), CustomerStaffUpdateRes.class);	
-				
+				System.out.println("customerAndStaffBuffer :::::::::::::::::::::::"+resBody.toString());
 				if(resBody.getErrorCode() != null && resBody.getErrorCode() != "") {
+					System.out.println("IF THERE'S AN ERROR :::::::::::::::");
 					GlobalResponse resp = new GlobalResponse(resBody.getErrorCode(), resBody.getErrorMessage(), false, GlobalResponse.APIV);
 					 return resp; 
 				}
+				System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! "+resBody.getPayload().toString());
+				//(String respCode, String respMessage, boolean status, String version)
 				GlobalResponse resp = new GlobalResponse("200",resBody.getPayload().getStatus(), false, GlobalResponse.APIV);
-				 return resp; 
+				System.out.println("SUCCESS:::::::::::::::::::::::"+resp.getRespCode() +" RESP MESSAGE:::::"+resp.getRespMessage());
+				 return resp;
 					
 			}else {
+				System.out.println("DID NOT RETURN 200::::::::::::::::::::::::::::::::::::");
 				GlobalResponse resp = new GlobalResponse("500", "T24 did not return a valid response!", false, GlobalResponse.APIV);
 				return resp;
 			}	
