@@ -425,6 +425,11 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
             this.cust = response;
             if (this.cust.status === true) {
                 console.log('customes', this.cust);
+
+                if(this.cust.collection.length<1){
+                    return this.toastr.error('Customer is Detached.', 'Error!', { timeOut: 1500 });
+                }
+
                 // this.source = this.cust;
                 this.indentify = true;
                 this.customers = this.cust.collection;
