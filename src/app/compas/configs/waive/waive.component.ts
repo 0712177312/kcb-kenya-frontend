@@ -73,7 +73,7 @@ export class WaiveComponent implements OnInit {
     this.configService.waiveCustomer(cust).subscribe(data => {
      this.response = data;
      this.blockUI.stop();
-     if  (this.response.status === true) {
+     if  (this.response.status === true) { 
          console.log('customer', this.customer);
          this.editMode = false;
          this.customer = {};
