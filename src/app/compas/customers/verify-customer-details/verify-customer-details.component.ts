@@ -118,12 +118,15 @@ export class VerifyCustomerDetailsComponent implements OnInit {
 
           return this.toastr.warning('staff with specified details already exists', ' Warning!', { timeOut: 3000 });
         } else {
+          // const tell = {
+          //   'userName': this.getConfigs().authUsr,
+          //   'passWord': this.getConfigs().authPs,
+          //   'object': {
+          //     'id': teller,
+          //   }
+          // };
           const tell = {
-            'userName': this.getConfigs().authUsr,
-            'passWord': this.getConfigs().authPs,
-            'object': {
-              'id': teller,
-            }
+            'id': teller,
           };
           this.tellerCoBankingInq(tell);
         }
