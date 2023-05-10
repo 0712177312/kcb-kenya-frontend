@@ -28,7 +28,8 @@ class StaffPayload{
 	private String departmentCode;
 	private String companyCode;
 	private String cif;
-	
+	private String staffId;
+
 	StaffPayload(){}
 	
 	public String getId() {
@@ -90,6 +91,12 @@ class StaffPayload{
 	}
 	public void setCif(String cif) {
 		this.cif = cif;
+	}
+	public String getStaffId() {
+		return staffId;
+	}
+	public void setStaffId(String staffId) {
+		this.staffId = staffId;
 	}
 	
 	

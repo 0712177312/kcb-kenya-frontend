@@ -9,4 +9,10 @@ public class CustStaffUpdateSuccessPayload {
         return status;
     }
 
+    @Override
+    public String toString() {
+        return "CustStaffUpdateSuccessPayload{" +
+                "status='" + status + '\'' +
+                '}';
+    }
 }

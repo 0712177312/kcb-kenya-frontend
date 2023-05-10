@@ -22,7 +22,15 @@ public class CustomerStaffUpdateRes {
 
 	public String getErrorMessage() {
 		return errorMessage;
-	}   
+	}
 
+	@Override
+	public String toString() {
+		return "CustomerStaffUpdateRes{" +
+				"errorCode='" + errorCode + '\'' +
+				", errorMessage='" + errorMessage + '\'' +
+				", payload=" + payload +
+				'}';
+	}
 }
 
