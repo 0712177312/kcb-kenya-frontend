@@ -9,14 +9,18 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import com.compulynx.compas.customs.responses.GeneralResponse;
 import com.compulynx.compas.models.extras.TellersToApproveDetach;
 import com.compulynx.compas.models.t24Models.Staff;
 import com.compulynx.compas.models.t24Models.StaffDetails;
 import com.compulynx.compas.models.t24Models.StaffReqObject;
 
+import com.compulynx.compas.security.AESsecure;
+import com.google.gson.Gson;
 import org.jfree.util.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -49,9 +53,12 @@ public class TellerService {
 		return tellerRepository.checkTeller(tellerId);
 	}
 
-	public Teller upTellerDetails(Teller teller) {
-		// TODO Auto-generated method stub
-		return tellerRepository.save(teller);
+	public GeneralResponse upTellerDetails(Teller teller) {
+		Optional<Teller> optionalTeller = tellerRepository.findByCustomerId(teller.getCustomerId());
+		if(optionalTeller.isPresent())
+			return new GeneralResponse("201","Record already exist!");
+		tellerRepository.save(teller);
+		return new GeneralResponse("200","Record updated successfully!");
 	}
 
 	public List<Teller> getTellers() {
@@ -186,10 +193,10 @@ public class TellerService {
 				httpsURLConnection.disconnect();
 				
 				ObjectMapper mapper = new ObjectMapper();
-				StaffDetails staffDetails = mapper.readValue(getStaffDetailsBuffer.toString(), StaffDetails.class);	
-									
-				
-				return new ResponseEntity<>(staffDetails, HttpStatus.OK); 
+				StaffDetails staffDetails = mapper.readValue(getStaffDetailsBuffer.toString(), StaffDetails.class);
+
+				String response = AESsecure.encrypt(new Gson().toJson(staffDetails));
+				return new ResponseEntity<>(response, HttpStatus.OK);
 			}else {
 				GlobalResponse resp = new GlobalResponse("404", "Staff not found!", false, GlobalResponse.APIV);
 				return new ResponseEntity<>(resp, HttpStatus.NOT_FOUND);
@@ -199,7 +206,7 @@ public class TellerService {
 		System.out.println("Exception "+e.getMessage());
 		
 		Log.error(e.getMessage());
-		GlobalResponse resp = new GlobalResponse("404", "T24 endpoint is unreachable", false, GlobalResponse.APIV);
+		GlobalResponse resp = new GlobalResponse("500", "T24 endpoint is unreachable", false, GlobalResponse.APIV);
 		return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
 	}catch(IOException ev) {
 		System.out.println("IOException "+ev.getMessage());

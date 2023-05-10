@@ -15,11 +15,13 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.compulynx.compas.configs.ResourceConfig;
+import org.springframework.session.config.annotation.web.http.EnableSpringHttpSession;
 
 @SpringBootApplication(exclude = SpringDataWebAutoConfiguration.class)
 @EnableJpaRepositories
 @EnableAutoConfiguration(exclude = {FlywayAutoConfiguration.class, RepositoryRestMvcAutoConfiguration.class})
 @EnableAspectJAutoProxy(proxyTargetClass=true)
+@EnableSpringHttpSession
 public class CompasApplication extends SpringBootServletInitializer {
 	
 	@Override

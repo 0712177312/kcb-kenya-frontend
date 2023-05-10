@@ -5,6 +5,8 @@ import java.security.KeyManagementException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -84,6 +86,13 @@ public class CommonFunctions {
         } 
         return getAuthJsonStr;
 	}
+
+    public static Date getOneDayPlusDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DATE, +1);
+        return calendar.getTime();
+    }
 
 
 }

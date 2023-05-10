@@ -2,6 +2,7 @@ package com.compulynx.compas.repositories;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import com.compulynx.compas.models.extras.CustomersToApproveDetach;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -165,4 +166,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	@Query(nativeQuery = true, value = "update customer set verified='N', created_by=?1, created_at=systimestamp WHERE customerId=?2")
 	int customerUnDelete(int createdBy, String customerId);
 
+	Optional<Customer> findByCustomerId(String customerId);
 }

@@ -1,6 +1,7 @@
 package com.compulynx.compas.controllers;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.compulynx.compas.models.UserGroup;
 import com.compulynx.compas.security.AESsecure;
@@ -18,6 +19,9 @@ import com.compulynx.compas.models.User;
 import com.compulynx.compas.models.extras.UsersToVerify;
 import com.compulynx.compas.security.AES;
 import com.compulynx.compas.services.UserService;
+
+import javax.servlet.http.HttpSession;
+
 
 @RestController
 @RequestMapping(value = Api.REST)
@@ -119,7 +123,7 @@ public class UserController {
             User username = userService.findByUsername(user.getUsername());
 
             if (username != null && user.getId() == 0) {
-                return new ResponseEntity<>(AESsecure.encrypt(gson.toJson(new UserResponse(user, "user with same username already exist",
+                return new ResponseEntity<>(AESsecure.encrypt(gson.toJson(new UserResponse(user,"", "user with same username already exist",
                         false, "201", Api.API_VERSION))), HttpStatus.OK);
             }
             System.out.println("username" + user.getPassword());
@@ -132,7 +136,7 @@ public class UserController {
             User usr = userService.addUser(user);
 
             if (usr == null) {
-                return new ResponseEntity<>(AESsecure.encrypt(gson.toJson(new UserResponse(user, "failed to add user",
+                return new ResponseEntity<>(AESsecure.encrypt(gson.toJson(new UserResponse(user,"", "failed to add user",
                         false, "201", Api.API_VERSION))), HttpStatus.OK);
             }
 //		try {
@@ -142,7 +146,7 @@ public class UserController {
 //			e.printStackTrace();
 //		}
 
-            return new ResponseEntity<>(AESsecure.encrypt(gson.toJson(new UserResponse(user, "user updated successfully",
+            return new ResponseEntity<>(AESsecure.encrypt(gson.toJson(new UserResponse(user,"", "user updated successfully",
                     true, "000", Api.API_VERSION))), HttpStatus.OK);
         } catch (Exception e) {
             GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
@@ -152,7 +156,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/sysusers/auth")
-    public ResponseEntity<?> authUser(@RequestBody User user) throws Exception {
+    public ResponseEntity<?> authUser(@RequestBody User user, HttpSession httpSession) throws Exception {
         String response = "";
         UserResponse userresponse;
         User userpro=null;
@@ -187,7 +191,12 @@ public class UserController {
             }
             else if (userpro != null && userpro.isStatus() != false) {
                 System.out.println("email" + user.getEmail());
-                userresponse = new UserResponse(userpro, "successfully authenticated!",
+                //CREATE UUID FOR GROUP REFERENCE
+                UUID uuid = UUID. randomUUID();
+                httpSession.setAttribute("test",userpro.getGroup());
+                System.out.println("<><><><><><><><><><><><><>UUID "+ uuid);
+
+                userresponse = new UserResponse(userpro,uuid.toString(),"successfully authenticated!",
                         true, "000", Api.API_VERSION);
             } else {
                 userresponse =new UserResponse("successfully authenticated!",
@@ -204,6 +213,7 @@ public class UserController {
     @SuppressWarnings("unused")
     @PostMapping(value = "/sysusers/print/auth")
     public ResponseEntity<?> printAuthUser(@RequestBody User user) throws Exception {
+        String responsePayload ="";
         try {
         	System.out.println("/sysusers/print/auth looooooooooooooooooooging");
             User userpro = userService.findByUsername(user.getUsername());
@@ -217,17 +227,19 @@ public class UserController {
                         false, "201", Api.API_VERSION), HttpStatus.OK);
             } else if (userpro != null) { 
                 System.out.println("/sysusers/print/auth +++++++++++++++++++++++++++++ " + user.toString());
-                
-                return new ResponseEntity<>(new UserResponse(userpro, "successfully authenticated!",
-                        true, "000", Api.API_VERSION), HttpStatus.OK);
-            } else { 
-                return new ResponseEntity<>(new UserResponse("invalid user credentials",
-                        false, "409", Api.API_VERSION), HttpStatus.OK);
+                UserResponse userResponse = new UserResponse(userpro,"", "successfully authenticated!", true, "000", Api.API_VERSION);
+                responsePayload = AESsecure.encrypt(gson.toJson(userResponse).toString());
+                return new ResponseEntity<>(responsePayload, HttpStatus.OK);
+            } else {
+                UserResponse userResponse = new UserResponse("invalid user credentials", false, "409", Api.API_VERSION);
+                responsePayload = AESsecure.encrypt(gson.toJson(userResponse).toString());
+                return new ResponseEntity<>(responsePayload, HttpStatus.OK);
             }
         } catch (Exception e) {
             GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
             e.printStackTrace();
-            return new ResponseEntity<>(resp, HttpStatus.OK);
+            responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+            return new ResponseEntity<>(responsePayload, HttpStatus.OK);
         }
     }
 

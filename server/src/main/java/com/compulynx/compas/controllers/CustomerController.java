@@ -71,13 +71,11 @@ public class CustomerController {
 	
 	@PostMapping("customer_inquiry")
 	public ResponseEntity<?> getCustomerFromT24(@RequestBody Customer customer) {
-
 		if(customer.getMnemonic() =="" || customer.getMnemonic() == null) {
 			GlobalResponse resp = new GlobalResponse("404", "error processing request: staffid is missing", false, GlobalResponse.APIV);
 			return new ResponseEntity<>(resp, HttpStatus.OK);
 		}
 		return customerService.t24CustomerInquiry(customer);
-			
 	}	
 
 	@GetMapping(value = "/gtCustomers")
@@ -410,21 +408,48 @@ public class CustomerController {
 
 	@PostMapping(value = "/approveCustomerWaive")
 	public ResponseEntity<?> approveCustomerWaive(@RequestBody Customer customer) {
-		try {
+
+		try{
+			log.info("Update T24 BIO Exemption ");
+			String t24Url = env.getProperty("tserver");
+
+			log.info("update url for " + t24Url);
 			System.out.println("gif" + customer.getCustomerId());
+
+
+			GlobalResponse response = customerService.updateCustomerAndStaff(t24Url, customer.getCustomerId(),"EXEMPTED");
+
+			log.info("T24 response response " + response.getRespMessage());
+			if(response.getRespCode() != "200"){
+				log.info("Update T24 BIO Exemption FAILED ");
+				log.info("T24 response Code: " + response.getRespCode());
+				return new ResponseEntity<>(new GlobalResponse(response.getRespCode(), response.getRespMessage(), false,GlobalResponse.APIV),
+						HttpStatus.OK);
+			}
+		}catch(Exception ex){
+			log.error("Update Customer Bio Exemption", ex.getMessage());
+			return new ResponseEntity<>(new GlobalResponse("500", "T24: HpptRestProcessor Exception", false, GlobalResponse.APIV),
+					HttpStatus.OK);
+		}
+
+		try {
+			log.info("Update COMPAS BIO Exemption Approval request");
 			int cust = customerService.approveCustomerWaive(customer.getWaived(), customer.getWaivedApprovedBy(),
 					customer.getCustomerId());
 			if (cust > 0) {
+				log.info("Update COMPAS BIO Exemption Approval successfull");
 				return new ResponseEntity<>(
-						new GlobalResponse("000", "customer details updated successfully", true, GlobalResponse.APIV),
+						new GlobalResponse("000", "COMPAS: customer details updated successfully", true, GlobalResponse.APIV),
 						HttpStatus.OK);
 			} else {
+				log.info("Update COMPAS BIO Exemption Approval failed");
 				return new ResponseEntity<>(
-						new GlobalResponse(GlobalResponse.APIV, "201", false, "failed to update customer details"),
+						new GlobalResponse("201","COMPAS: failed to update customer details", false, GlobalResponse.APIV),
 						HttpStatus.OK);
 			}
 		} catch (Exception e) {
-			GlobalResponse resp = new GlobalResponse("404", "error processing customer details request", false,
+			log.info("Update COMPAS BIO Exemption Approval server error!");
+			GlobalResponse resp = new GlobalResponse("404", " COMPAS: error processing customer details request", false,
 					GlobalResponse.APIV);
 			e.printStackTrace();
 			return new ResponseEntity<>(resp, HttpStatus.OK);
@@ -478,18 +503,22 @@ public class CustomerController {
 	public ResponseEntity<?> previewCustomers(
 			@RequestParam("FromDt") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
 			@RequestParam(value = "ToDt") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate,
-			@RequestParam(value = "enrolledType") String enrolledType, @RequestParam(value = "branchCode") String branchCode,
+			@RequestParam(value = "enrolledType") String enrolledType,
+			@RequestParam(value = "branchCode") String branchCode,
             @RequestParam(value = "groupid") String groupId) {
 		try {
+
+			Date toDatePlus1 = CommonFunctions.getOneDayPlusDate(toDate);
+			System.out.println("####"+toDatePlus1);
             List<Customer> customers;
             UserGroup userGroup = userGroupService.getRightCode(Long.valueOf(groupId));
             // the system administrators to be able to view all the reports
             if (userGroup.getGroupCode().equalsIgnoreCase("G003")
                     || userGroup.getGroupCode().equalsIgnoreCase("G004")) {
-                customers = customerService.gtEnrolledCustomers(fromDate, toDate, enrolledType);
+                customers = customerService.gtEnrolledCustomers(fromDate, toDatePlus1, enrolledType);
             }else{
                 // other system users to view reports based on their branches
-                customers = customerService.getEnrolledCustomersByBranch(fromDate, toDate, enrolledType, branchCode);
+                customers = customerService.getEnrolledCustomersByBranch(fromDate, toDatePlus1, enrolledType, branchCode);
             }
 			if (customers.size() > 0) {
 				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true, "customers found",
@@ -608,13 +637,13 @@ public class CustomerController {
 									HttpStatus.OK);
 						} else {
 							return new ResponseEntity<>(
-									new GlobalResponse("201", "Conversion of Staff to Customer not done successfully",
-											false, GlobalResponse.APIV),
+									new GlobalResponse("000", "Conversion of Staff to Customer done successfully",
+											true, GlobalResponse.APIV),
 									HttpStatus.OK);
 						}
 					} else {
 						return new ResponseEntity<>(
-								new GlobalResponse("201", "Teller not found", false, GlobalResponse.APIV),
+								new GlobalResponse("201", "Staff not found", false, GlobalResponse.APIV),
 								HttpStatus.OK);
 					}
 

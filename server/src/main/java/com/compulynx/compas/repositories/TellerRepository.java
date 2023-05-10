@@ -2,6 +2,7 @@ package com.compulynx.compas.repositories;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import com.compulynx.compas.models.extras.TellersToApproveDetach;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -111,4 +112,6 @@ public interface TellerRepository extends JpaRepository<Teller, Long>{
     @Query("select u from Teller u where u.createdOn BETWEEN :fromDate AND :toDate AND u.verified=:enrolledType AND u.deptCode=:branchCode")
     List<Teller> getEnrolledStaffByBranch(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate, @Param("enrolledType") String enrolledType,
                                           @Param("branchCode") String branchCode);
+
+	Optional<Teller> findByCustomerId(String customerId);
 }

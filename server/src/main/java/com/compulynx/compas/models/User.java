@@ -2,6 +2,7 @@ package com.compulynx.compas.models;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.*;
 
@@ -300,4 +301,15 @@ public class User extends BaseModel {
 	public void setRoles(Collection<RoleEntity> roles) {
 		this.roles = roles;
 	}
+
+	@Override
+	public String toString() {
+		return "User [email=" + email + ", firstName=" + firstName + ", fullName=" + fullName + ", password=" + password
+				+ ", phone=" + phone + ", surName=" + surName + ", username=" + username + ", otherNames=" + otherNames
+				+ ", group=" + group + ", createdBy=" + createdBy + ", status=" + status + ", approved=" + approved
+				+ ", approvedBy=" + approvedBy + ", approvedOn=" + approvedOn + ", country=" + country + ", branch="
+				+ branch + ", teller=" + teller + ", createdOn=" + createdOn + ", locked=" + locked + ", trials="
+				+ trials + ", roles=" + roles + "]";
+	}
+	
 }

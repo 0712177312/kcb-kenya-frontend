@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -65,7 +66,14 @@ public class CustomerService {
 	}
 
 	public Customer upCustomerDetails(Customer customer) {
-		// TODO Auto-generated method stub
+		Optional<Customer> byCustomerId = customerRepository.findByCustomerId(customer.getCustomerId());
+		if(byCustomerId.isPresent()){
+			log.info("Customer "+customer.getCustomerId() +" already exist!");
+			log.info("Updating customer details....");
+			customer.setId(byCustomerId.get().getId());
+			return customerRepository.save(customer);
+		}
+		log.info("Save customer details....");
 		return customerRepository.save(customer);
 	}
 
