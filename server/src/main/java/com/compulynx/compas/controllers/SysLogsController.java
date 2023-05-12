@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
+import com.compulynx.compas.security.AESsecure;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,9 @@ import javax.servlet.http.HttpServletRequest;
 public class SysLogsController {
     @Autowired
     private SysLogService sysLogService;
+    @Autowired
+    private AESsecure aeSsecure;
+    Gson gson = new Gson();
 
     @PostMapping(value = "/sysLog")
     public ResponseEntity<?> approveCustomerWaive(@RequestBody SysLogs log, HttpServletRequest request) {
@@ -50,21 +55,27 @@ public class SysLogsController {
 
     @GetMapping("/gtLogs")
     public ResponseEntity<?> getSysLogs() {
+        String responsePayload = "";
         try {
             List<RptSysLogs> userGroups = sysLogService.getSysLogs();
 
             if (userGroups.isEmpty()) {
-                return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "404",
+                GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "404",
                         false, "cannot find usergroups",
-                        new HashSet<>(userGroups)), HttpStatus.NOT_FOUND);
-            }
+                        new HashSet<>(userGroups));
+                responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
 
-            return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true, "usergroups",
-                    new HashSet<>(userGroups)), HttpStatus.OK);
+                return new ResponseEntity<>(responsePayload, HttpStatus.NOT_FOUND);
+            }
+            GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "000", true, "usergroups",
+                    new HashSet<>(userGroups));
+            responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+            return new ResponseEntity<>(responsePayload, HttpStatus.OK);
         } catch (Exception e) {
             GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
             e.printStackTrace();
-            return new ResponseEntity<>(resp, HttpStatus.OK);
+            responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+            return new ResponseEntity<>(responsePayload, HttpStatus.OK);
         }
     }
 
@@ -79,15 +90,20 @@ public class SysLogsController {
             @RequestParam(value = "userId")
                     Long userId
     ) {
+        String responsePayload = "";
         List<RptSysLogs> logs = sysLogService.gtSystemLogs(fromDate, toDate, userId);
         if (logs.size() > 0) {
-            return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000",
+            GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "000",
                     true, "logs found",
-                    new HashSet<>(logs)), HttpStatus.OK);
+                    new HashSet<>(logs));
+            responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+            return new ResponseEntity<>(responsePayload, HttpStatus.OK);
         }
-        return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000",
+        GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "000",
                 true, "logs found",
-                new HashSet<>(logs)), HttpStatus.OK);
+                new HashSet<>(logs));
+        responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+        return new ResponseEntity<>(responsePayload, HttpStatus.OK);
     }
 
     @GetMapping("/getSystemActivityForExporting")

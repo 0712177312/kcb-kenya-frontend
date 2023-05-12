@@ -34,6 +34,8 @@ public class DashboardController {
 
     @Autowired
     private BranchRepository branchRepository;
+    @Autowired
+    private AESsecure aeSsecure;
     Gson gson = new Gson();
 //	@Autowired
 //	private CountryRepository countryRepository;
@@ -43,6 +45,7 @@ public class DashboardController {
 
     @GetMapping("/dashboard/cardinfo")
     public ResponseEntity<?> cardInfo() {
+        String responsePayload = "";
         try {
             int customers = customerRepository.getCustomerCount();
             int branches = customerRepository.getEnrolledBranchesCount();
@@ -54,11 +57,13 @@ public class DashboardController {
             cin.setCustomers(customers);
             cin.setWaivedBranches(waivedBranches);
 
-            return new ResponseEntity<>(cin, HttpStatus.OK);
+            responsePayload = aeSsecure.encrypt(gson.toJson(cin).toString());
+            return new ResponseEntity<>(responsePayload, HttpStatus.OK);
         } catch (Exception e) {
             GlobalResponse resp = new GlobalResponse("404", "Server failure authenticating user", false, GlobalResponse.APIV);
             e.printStackTrace();
-            return new ResponseEntity<>(resp, HttpStatus.OK);
+            responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+            return new ResponseEntity<>(responsePayload, HttpStatus.OK);
         }
     }
 
@@ -101,34 +106,40 @@ public class DashboardController {
             System.out.println(resp);
 
 //            response = resp.toString();
-            response = AESsecure.encrypt(gson.toJson(resp).toString());
+            response = aeSsecure.encrypt(gson.toJson(resp).toString());
         } catch (Exception e) {
             GlobalResponse resp = new GlobalResponse("404", "Server failure authenticating user", false, GlobalResponse.APIV);
             e.printStackTrace();
             System.out.println("Here is the response");
             System.out.println(resp);
 //            response = resp.toString();
-            response = AESsecure.encrypt(gson.toJson(resp).toString());
+            response = aeSsecure.encrypt(gson.toJson(resp).toString());
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/dashboard/topbranches")
     public ResponseEntity<?> topBranches() {
+        String responsePayload = "";
         try {
             List<TopFiveBranches> customers = customerRepository.getTopFiveBranches();
             if (customers.size() > 0) {
-                return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000",
+                GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "000",
                         true, "customers found",
-                        new HashSet<>(customers)), HttpStatus.OK);
+                        new HashSet<>(customers));
+                responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+                return new ResponseEntity<>(responsePayload, HttpStatus.OK);
             }
-            return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "201",
+            GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "201",
                     false, "no customers found",
-                    new HashSet<>(customers)), HttpStatus.OK);
+                    new HashSet<>(customers));
+            responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+            return new ResponseEntity<>(responsePayload, HttpStatus.OK);
         } catch (Exception e) {
             GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
             e.printStackTrace();
-            return new ResponseEntity<>(resp, HttpStatus.OK);
+            responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+            return new ResponseEntity<>(responsePayload, HttpStatus.OK);
         }
     }
 //	@GetMapping("/dashboard/stats")
