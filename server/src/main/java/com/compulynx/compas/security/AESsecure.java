@@ -1,5 +1,7 @@
 package com.compulynx.compas.security;
 
+import org.springframework.stereotype.Component;
+
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -10,20 +12,20 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 
+@Component
 public class AESsecure {
 
-	private static SecretKeySpec secretKey;
-	private static byte[] key;
+	private SecretKeySpec secretKey;
+	private byte[] key;
 
-	public static void setKey() {
+	public void setKey() {
 		try {
 			secretKey = new SecretKeySpec("@compulynx#54321".getBytes("UTF-8"), "AES");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
-	public static String encrypt(String strToEncrypt) {
+	public String encrypt(String strToEncrypt) {
 		try {
 			setKey();
 			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
@@ -35,7 +37,7 @@ public class AESsecure {
 		return null;
 	}
 
-	public static String decrypt(String strToDecrypt) {
+	public String decrypt(String strToDecrypt) {
 		try {
 			setKey();
 			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
@@ -47,7 +49,7 @@ public class AESsecure {
 		return null;
 	}
 
-	public static String HmacHash(String content, String key, String encodingMAC) {
+	public String HmacHash(String content, String key, String encodingMAC) {
 		// Sample HmacSHA512,HmacSHA256
 		Mac enctype = null;
 		String result = null;
@@ -65,7 +67,7 @@ public class AESsecure {
 		return result;
 	}
 
-	public static String convertToHex(byte[] raw) {
+	public String convertToHex(byte[] raw) {
 		int substring = 1;
 		int length = 16;
 		int size = 200;
@@ -77,7 +79,7 @@ public class AESsecure {
 		return stringBuilder.toString();
 	}
 
-	public static String generateSecretKey() {
+	public String generateSecretKey() {
 		final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		StringBuilder builder = new StringBuilder();
 		int count = 20;
@@ -90,7 +92,7 @@ public class AESsecure {
 		return builder.toString();
 	}
 
-	public static String generateEncryptionKey() {
+	public String generateEncryptionKey() {
 		final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		StringBuilder builder = new StringBuilder();
 		int count = 16;
