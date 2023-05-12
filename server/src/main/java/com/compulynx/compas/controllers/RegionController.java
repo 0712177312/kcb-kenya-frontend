@@ -27,11 +27,16 @@ public class RegionController {
 	@Autowired
 	private RegionService regionService;
 
+	@Autowired
+	private AESsecure aeSsecure;
+
 	Gson gson = new Gson();
 	
 	@GetMapping("/gtCountries")
 	public ResponseEntity<?> getCountries () {
-		String responsePayload = "";
+
+		String responsePayload="";
+
 		try {
 		List<Country> countries = regionService.getCountries();
 		
@@ -39,18 +44,24 @@ public class RegionController {
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"201",
 					false, "countries found",
 					new HashSet<>(countries));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 			return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 		}
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"000",
 					true, "countries found",
 					new HashSet<>(countries));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 			e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
@@ -65,43 +76,51 @@ public class RegionController {
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"201",
 					false, "countries found",
 					new HashSet<>(countries));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
 			return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 		}
-
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"000",
 					true, "countries found",
 					new HashSet<>(countries));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 			e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
 	@GetMapping("/gtActiveCountryBranches")
 	public ResponseEntity<?> getActiveCountryBranches (
 			@RequestParam(value="ctry") String country) {
-		String responsePayload = "";
+
+		String responsePayload="";
+
 		try {
 		List<Branch> branches = regionService.getActiveCountryBranches(country);
 		   if(branches.size() < 0) {
 			   GlobalResponse globalResponse = new GlobalResponse("201",
 					   "no branches found",false,GlobalResponse.APIV,new HashSet<>(branches));
-			   responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			   responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
 			  return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 		}
-
 			GlobalResponse globalResponse = new GlobalResponse("000",
 					"branches found",true,GlobalResponse.APIV,new HashSet<>(branches));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 		} catch (Exception e) {
 			 GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 			   e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			       return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
@@ -136,20 +155,23 @@ public class RegionController {
 		try {
 		 List<Branch> branches = regionService.getBranches();
 		   if(branches.size() < 0) {
-			  GlobalResponse globalResponse = new GlobalResponse("201",
+
+			   GlobalResponse globalResponse = new GlobalResponse("201",
 					   "no branches found",false,GlobalResponse.APIV,new HashSet<>(branches));
-			   responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+			   responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
 			  return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 		}
-
 			GlobalResponse globalResponse = new GlobalResponse("000",
 					"branches found",true,GlobalResponse.APIV,new HashSet<>(branches));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 		} catch (Exception e) {
 			 GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 			   e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			       return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
@@ -157,24 +179,29 @@ public class RegionController {
 	@GetMapping("/gtActiveBranches")
 	public ResponseEntity<?> getActiveBranches()
 	{
-		String responsePayload ="";
+
+		String responsePayload = "";
+
 		try {
 		 List<Branch> branches = regionService.getActiveBranches();
 		   if(branches.size() < 0) {
 			   GlobalResponse globalResponse = new GlobalResponse("201",
 					   "no branches found",false,GlobalResponse.APIV,new HashSet<>(branches));
-			   responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			   responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
 			  return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 		}
-
-			GlobalResponse globalResponse= new GlobalResponse("000",
+			GlobalResponse globalResponse = new GlobalResponse("000",
 					"branches found",true,GlobalResponse.APIV,new HashSet<>(branches));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 		} catch (Exception e) {
 			 GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 			   e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			       return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
@@ -206,23 +233,31 @@ public class RegionController {
 
     @GetMapping(value="/getBranchesToWaive")
     public ResponseEntity<?> getBranchToWaive( ) {
-		String responsePayload ="";
+
+		String responsePayload="";
+
 		try {
 			 List<Branch> branches = regionService.getBranchesToWaive();
 			   if(branches.size() < 0) {
 				   GlobalResponse globalResponse = new GlobalResponse("201",
 						   "no branches found",false,GlobalResponse.APIV,new HashSet<>(branches));
-				   responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+				   responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 				  return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 			}
 			GlobalResponse globalResponse = new GlobalResponse("000",
 					"branches found",true,GlobalResponse.APIV,new HashSet<>(branches));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 			return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 			} catch (Exception e) {
 				 GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 				   e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 				       return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 			}
     }
@@ -266,25 +301,29 @@ public class RegionController {
     
     @GetMapping(value ="/gtWaivedBranches")
     public ResponseEntity<?> getWaivedBranches() {
-		String responsePayload = "";
+
+		String responsePayload="";
       try {
     	List<Branch> brans = regionService.getWaivedBranches();
     	if(brans.size() > 0) {
-			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"000",
+			GlobalResponse globalResponse =new GlobalResponse(GlobalResponse.APIV,"000",
 					true, "waived branches found",
 					new HashSet<>(brans));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
     		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
     	}
-		  GlobalResponse globalResponse  = new GlobalResponse(GlobalResponse.APIV,"201",
+		  GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"201",
 				  false, "no waived branches found",
 				  new HashSet<>(brans));
-		  responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+		  responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 	  	} catch (Exception e) {
 		    GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 	     	e.printStackTrace();
-		  responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+		  responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 	    	return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 	    }
     }
@@ -310,7 +349,9 @@ public class RegionController {
 
     @GetMapping(value="/gtCountriesToWaive")
 	public ResponseEntity<?> getCountriesToWaive () {
-		String responsePayload ="";
+
+		String responsePayload="";
+
 		try {
 		List<Country> countries = regionService.getCountriesToWaive();
 		
@@ -318,19 +359,22 @@ public class RegionController {
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"201",
 					false, "countries found",
 					new HashSet<>(countries));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
 			return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 		}
-
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"000",
 					true, "countries found",
 					new HashSet<>(countries));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 			e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
@@ -393,25 +437,33 @@ public class RegionController {
     
     @GetMapping(value ="/gtWaivedCountries")
     public ResponseEntity<?> getWaivedCountries() {
-		String responsePayload = "";
+
+		String responsePayload="";
+
       try {
     	List<Country> brans = regionService.getWaivedCountries();
     	if(brans.size() > 0) {
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"000",
 					true, "waived branches found",
 					new HashSet<>(brans));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
     		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
     	}
 		  GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"201",
 				  false, "no waived branches found",
 				  new HashSet<>(brans));
-		  responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+		  responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 	  	} catch (Exception e) {
 		    GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 	     	e.printStackTrace();
-		  responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+		  responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 	    	return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 	    }
     }
@@ -428,34 +480,41 @@ public class RegionController {
 				GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"000",
 						true, "waived branches found",
 						new HashSet<>(brans));
-				responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+				responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
         		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
         	}
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"201",
 					false, "no branches found",
 					new HashSet<>(brans));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
     		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
     	}else {
     		List<Branch> brans = regionService.getBranchesPrev(status);
     		if ( brans.size() > 0) {
-				GlobalResponse globalResponse =new GlobalResponse(GlobalResponse.APIV,"000",
+
+				GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"000",
 						true, "waived branches found",
 						new HashSet<>(brans));
-				responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+				responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
         		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
         	}
-
-			GlobalResponse globalResponse =new GlobalResponse(GlobalResponse.APIV,"201",
+			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"201",
 					false, "no waived branches found",
 					new HashSet<>(brans));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
     		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
     	}
 	  	} catch (Exception e) {
 		    GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 	     	e.printStackTrace();
-		  responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+		  responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 	    	return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 	    }
     }

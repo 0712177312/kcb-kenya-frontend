@@ -72,14 +72,18 @@ public class CustomerController {
 	@Autowired
 	private EmailSender emailSender;
 
+	@Autowired
+	private AESsecure aeSsecure;
 	Gson gson = new Gson();
 	
-	@PostMapping("/customer_inquiry")
+	@PostMapping("customer_inquiry")
 	public ResponseEntity<?> getCustomerFromT24(@RequestBody Customer customer) {
-		String responsePayload = "";
+
+		String responsePayload="";
 		if(customer.getMnemonic() =="" || customer.getMnemonic() == null) {
 			GlobalResponse resp = new GlobalResponse("404", "error processing request: staffid is missing", false, GlobalResponse.APIV);
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 		return customerService.t24CustomerInquiry(customer);
@@ -93,24 +97,32 @@ public class CustomerController {
 			if (customers.size() > 0) {
 				GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "000", true, "customers found",
 						new HashSet<>(customers));
-				responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+				responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 				return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 			}
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "201", false, "no customers found",
 					new HashSet<>(customers));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
 
 	@PostMapping(value = "/getMatchedCustomers")
 	public ResponseEntity<?> identifyCustomers(@RequestBody List<Customer> customers) {
-		String responsePayload = "";
+
+		String responsePayload="";
+
 		try {
 			List<Customer> custs = new ArrayList<>();
 			for (Customer cus : customers) {
@@ -135,39 +147,44 @@ public class CustomerController {
 
 			if (customers.size() > 0) {
 				GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "000", true, "customers found", new HashSet<>(custs));
-				responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+				responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
 				return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 			}
-
-			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "201", false, "no customers found", new HashSet<>(custs));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
-			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
+			GlobalResponse globalResponse =new GlobalResponse(GlobalResponse.APIV, "201", false, "no customers found", new HashSet<>(custs));
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+			return new ResponseEntity<>(responsePayload
+					, HttpStatus.OK);
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
 
 	@PostMapping(value = "/identifyCustomer")
 	public ResponseEntity<?> identifyCustomer(@RequestBody Customer customer) {
-		String responsePayload ="";
+
+		String responsePayload="";
+
 		try {
 			Customer cust = customerService.identifyCustomer(customer.getCustomerId());
 			if (!(cust.equals(null))) {
 				CustomerResponse customerResponse = new CustomerResponse("000", "customer", true, GlobalResponse.APIV, cust);
 
-				responsePayload = AESsecure.encrypt(gson.toJson(customerResponse).toString());
-				return new ResponseEntity<>(responsePayload,HttpStatus.OK);
+				responsePayload = aeSsecure.encrypt(gson.toJson(customerResponse).toString());
+				return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 			}
 			CustomerResponse customerResponse = new CustomerResponse("201", "customer not found", false, GlobalResponse.APIV, cust);
-			responsePayload = AESsecure.encrypt(gson.toJson(customerResponse).toString());
-			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
+			responsePayload = aeSsecure.encrypt(gson.toJson(customerResponse).toString());
+			return new ResponseEntity<>(responsePayload
+					, HttpStatus.OK);
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
@@ -193,22 +210,29 @@ public class CustomerController {
 
 	@PostMapping(value = "/obtainCustomerDetails")
 	public ResponseEntity<?> obtainCustomerDetails(@RequestBody Customer customer) {
-		String responsePayload = "";
+
+		String responsePayload="";
+
 		try {
 			Customer cust = customerService.checkCustomer(customer.getMnemonic(), customer.getMnemonic());
 			if (cust != null) {
 				CustomerResponse customerResponse = new CustomerResponse("000", "customer found", true, GlobalResponse.APIV, cust);
-				responsePayload = AESsecure.encrypt(gson.toJson(customerResponse).toString());
-				return new ResponseEntity<>(responsePayload, HttpStatus.OK);
+
+				responsePayload = aeSsecure.encrypt(gson.toJson(customerResponse).toString());
+				return new ResponseEntity<>(responsePayload
+						, HttpStatus.OK);
 			} else {
 				CustomerResponse customerResponse = new CustomerResponse("201", "customer not found", false, GlobalResponse.APIV, cust);
-				responsePayload = AESsecure.encrypt(gson.toJson(customerResponse).toString());
+				responsePayload = aeSsecure.encrypt(gson.toJson(customerResponse).toString());
 				return new ResponseEntity<>(responsePayload, HttpStatus.OK);
+
 			}
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
@@ -240,7 +264,7 @@ public class CustomerController {
 	@PostMapping(value = "/approveCustomer")
 	public ResponseEntity<?> approveCustomer(@RequestBody Customer customer) {
 		
-		
+		String responsePayload="";
 		log.info("/approveCustomer called");
 		
         try {
@@ -259,12 +283,16 @@ public class CustomerController {
             
             if(!response.getRespCode().equalsIgnoreCase("200")){
             	log.info("T24 with status 400 " + response.getRespMessage());
-                return new ResponseEntity<>(new GlobalResponse(response.getRespCode(), response.getRespMessage(), false,GlobalResponse.APIV),
+				GlobalResponse globalResponse = new GlobalResponse(response.getRespCode(), response.getRespMessage(), false,GlobalResponse.APIV);
+				responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+                return new ResponseEntity<>(responsePayload,
                         HttpStatus.BAD_REQUEST);
             }
         } catch (Exception e) {
             log.error("Error in proccesing ", e);
-            return new ResponseEntity<>(new GlobalResponse("500", "HpptRestProcessor Exception", false, GlobalResponse.APIV),
+			GlobalResponse globalResponse = new GlobalResponse("500", "HpptRestProcessor Exception", false, GlobalResponse.APIV);
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+            return new ResponseEntity<>(responsePayload,
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
         log.info("T24 success response ");
@@ -300,23 +328,30 @@ public class CustomerController {
                 String getResponse = HttpRestProccesor.sendGetRequest(smsUrl, "sms", customerName, phoneNumber, smsApiUsername, smsApiPassword);
 				log.info("SMS Get Request Response is: "+  getResponse);
 
-				return new ResponseEntity<>(new GlobalResponse("000",
-						"customer  " + customer.getCustomerId() + " verified successfully",true,GlobalResponse.APIV), HttpStatus.OK);
+				GlobalResponse globalResponse = new GlobalResponse("000",
+						"customer  " + customer.getCustomerId() + " verified successfully",true,GlobalResponse.APIV);
+				responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+				return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 
 			}
-			return new ResponseEntity<>(new GlobalResponse("404", "no customers found", false,GlobalResponse.APIV),
+			GlobalResponse globalResponse = new GlobalResponse("404", "no customers found", false,GlobalResponse.APIV);
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+			return new ResponseEntity<>(responsePayload,
 					HttpStatus.NOT_FOUND);
 
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("500", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
-			return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+			return new ResponseEntity<>(responsePayload, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@PostMapping(value = "/customersToApprove")
 	public ResponseEntity<?> getCustomersToApprove(@RequestBody Customer customer) {
-		String responsePayload = "";
+
+		String responsePayload="";
+
 		try {
 			System.out.println("Branch Code: " + customer.getBranchCode());
 			System.out.println("Right ID: " + customer.getVerifiedBy());
@@ -333,49 +368,64 @@ public class CustomerController {
 			if (customers.size() > 0) {
 				GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "000", false,
 						"customers to verify found", new HashSet<>(customers));
-				responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+				responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 				return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 			} else {
 				GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "201", false,
 						"no customers to verify found", new HashSet<>(customers));
-				responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+				responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 				return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 			}
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
-
 	@GetMapping(value = "/customersToApproveDetach")
 	public ResponseEntity<?> getCustomersToApproveDetach() {
-		String responsePayload = "";
+
+		String responsePayload="";
+
 		try {
 			List<CustomersToApproveDetach> customers = customerService.getCustomersToApproveDetach();
 			if (customers.size() > 0) {
 				GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "000", true,
 						"customers to approve detach found", new HashSet<>(customers));
-				responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+				responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 				return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 			} else {
 				GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "201", false,
 						"no customers to approve detach found", new HashSet<>(customers));
-				responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+				responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 				return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 			}
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
 
 	@PostMapping(value = "/gtCustomerToWaive")
 	public ResponseEntity<?> getCustomerToWaive(@RequestBody Customer customerId) {
-		String responsePayload = "";
+
+		String responsePayload="";
+
 		try {
 			Customer cust = customerService.checkCustomer(customerId.getCustomerId(), customerId.getCustomerId());
 			System.out.println("customer###" + cust.getVerified());
@@ -383,53 +433,68 @@ public class CustomerController {
 				CustomerResponse customerResponse = new CustomerResponse("201",
 						"customer with specified id is not yet VERIFIED, " + " kindly verify to proceed!", true,
 						GlobalResponse.APIV, cust);
-				responsePayload = AESsecure.encrypt(gson.toJson(customerResponse).toString());
+
+				responsePayload = aeSsecure.encrypt(gson.toJson(customerResponse).toString());
+
 				return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 			}
 			if (cust.getWaived().equalsIgnoreCase("W")) {
 				CustomerResponse customerResponse = new CustomerResponse("201", "customer with specified id is already waived",
 						false, GlobalResponse.APIV, cust);
-				responsePayload = AESsecure.encrypt(gson.toJson(customerResponse).toString());
+
+				responsePayload = aeSsecure.encrypt(gson.toJson(customerResponse).toString());
+
 				return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 			}
 			if (cust.getWaived().equalsIgnoreCase("A")) {
 				CustomerResponse customerResponse = new CustomerResponse("201",
 						"customer with specified id is already waived and approved", false, GlobalResponse.APIV, cust);
-				responsePayload = AESsecure.encrypt(gson.toJson(customerResponse).toString());
-				return new ResponseEntity<>(responsePayload,
-						HttpStatus.OK);
+
+				responsePayload = aeSsecure.encrypt(gson.toJson(customerResponse).toString());
+				return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 			}
 			CustomerResponse customerResponse = new CustomerResponse("201", "customer not found", false, GlobalResponse.APIV, cust);
-			responsePayload = AESsecure.encrypt(gson.toJson(customerResponse).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(customerResponse).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404", "customer with specified id not found", false,
 					GlobalResponse.APIV);
 			e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
 
 	@GetMapping(value = "/gtWaivedCustomers")
 	public ResponseEntity<?> getWaivedCustomers() {
-		String responsePayload = "";
+
+		String responsePayload="";
+
 		try {
 			List<Customer> customers = customerService.getWaiveCustomers();
 			if (customers.size() > 0) {
 				GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "000", true, "customers found",
 						new HashSet<>(customers));
-				responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+				responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 				return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 			}
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "201", false, "no customers found",
 					new HashSet<>(customers));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
@@ -556,7 +621,9 @@ public class CustomerController {
 			@RequestParam(value = "enrolledType") String enrolledType,
 			@RequestParam(value = "branchCode") String branchCode,
             @RequestParam(value = "groupid") String groupId) {
-		String responsePayload = "";
+
+		String responsePayload="";
+
 		try {
 
 			Date toDatePlus1 = CommonFunctions.getOneDayPlusDate(toDate);
@@ -574,44 +641,56 @@ public class CustomerController {
 			if (customers.size() > 0) {
 				GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "000", true, "customers found",
 						new HashSet<>(customers));
-				responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+				responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
 				return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 			}
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "000", true, "customers found", new HashSet<>(customers));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
-			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+			return new ResponseEntity<>(globalResponse, HttpStatus.OK);
+
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404", "error processing customer details request", false,
 					GlobalResponse.APIV);
 			e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
 
 	@PostMapping(value = "/deleteCustomer")
 	public ResponseEntity<?> deleteCustomer(@RequestBody Customer customer) {
+		String responsePayload="";
 		try {
 			int cust = customerService.deleteCustomer(customer.getDeletedBy(), customer.getCustomerId());
 
 			if (cust > 0) {
-				return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "000", true,
-						"customer  " + customer.getCustomerId() + " deleted successfully"), HttpStatus.OK);
+				GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "000", true,
+						"customer  " + customer.getCustomerId() + " deleted successfully");
+				responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+				return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 
 			}
-			return new ResponseEntity<>(new GlobalResponse(GlobalResponse.APIV, "201", false, "no customers found"),
+			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "201", false, "no customers found");
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+			return new ResponseEntity<>(responsePayload,
 					HttpStatus.OK);
 
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
-			return new ResponseEntity<>(resp, HttpStatus.OK);
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
 
 	@PostMapping(value = "/approveRemoveCustomer")
 	public ResponseEntity<?> approveRemoveCustomer(@RequestBody Customer customer) {
-		String responsePayload ="";
+
+		String responsePayload="";
+
 		try {
 			String t24Url = env.getProperty("tserver") + customer.getCustomerId() + "/false";
 			String customerId = customer.getCustomerId();
@@ -633,45 +712,55 @@ public class CustomerController {
 			if (cust > 0) {
 				GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "000", true,
 						"removal of customer  " + customer.getCustomerId() + " approved successfully");
-				responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
-				return new ResponseEntity<>(responsePayload, HttpStatus.OK);
+
+				responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+				return new ResponseEntity<>(responsePayload,
+						HttpStatus.OK);
 
 			}
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "201", false, "no customers found");
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
-			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+			return new ResponseEntity<>(responsePayload,
+					HttpStatus.OK);
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
 
 	@PostMapping(value = "/rejectRemoveCustomer")
 	public ResponseEntity<?> rejectRemoveCustomer(@RequestBody Customer customer) {
-		String responsePayload = "";
+
+		String responsePayload="";
+
 		try {
 			int cust = customerService.rejectRemoveCustomer(customer.getCustomerId());
 
 			if (cust > 0) {
 				GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "000", true,
 						"removal of customer  " + customer.getCustomerId() + " rejected successfully");
-				responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
-				return new ResponseEntity<>(responsePayload, HttpStatus.OK);
+
+				responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+				return new ResponseEntity<>(responsePayload
+						, HttpStatus.OK);
 
 			}
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "201", false, "no customers found");
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
-			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+			return new ResponseEntity<>(responsePayload,
+					HttpStatus.OK);
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
 			e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
-
 	@PostMapping(value = "convertStaffToCustomer")
 	public ResponseEntity<?> convertStaffToCustomer(@RequestBody Customer customerRequestBody) {
 		try {

@@ -22,53 +22,68 @@ public class ChannelController {
 	
 	@Autowired
 	private ChannelService channelService;
+
+	@Autowired
+	private AESsecure aeSsecure;
+
 	Gson gson = new Gson();
+	
 	@GetMapping(value = "/gtchannels")
 	public ResponseEntity<?> GetChannels() {
-		String responsePayload = "";
+		String responsePayload="";
 		try {
 		List<ChannelRep> channels = channelService.getChannels();
 		if(channels.size() <= 0) {
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"201",
 					false, "no channels found",
 					new HashSet<>(channels));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 			return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 		}
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"000",
 					true, "channels found",
 					new HashSet<>(channels));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
     	} catch (Exception e) {
 		    GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 	     	e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 	    	return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 	    }
 	}
-	
 	@GetMapping(value = "/gtChannelstoWaive")
 	public ResponseEntity<?> GetChannelsToWaive() {
-		String responsePayload = "";
+
+		String responsePayload="";
+
 		try {
 		List<Channel> channels = channelService.getChannelsToWaive();
 		if(channels.size() <= 0) {
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"201",
 					false, "no channels found",
 					new HashSet<>(channels));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 			return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 		}
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"000",
 					true, "channels found",
 					new HashSet<>(channels));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
     	} catch (Exception e) {
 		    GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 	     	e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 	    	return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 	    }
 	}
@@ -93,25 +108,31 @@ public class ChannelController {
 	
 	@GetMapping(value = "/gtWaivedchannels")
 	public ResponseEntity<?> GetWaivedChannels() {
-		String responsePayload = "";
+
+		String responsePayload="";
 		try {
 		List<Channel> channels = channelService.getWaivedChannles();
 		if(channels.size() <= 0) {
-			GlobalResponse  globalResponse = new GlobalResponse(GlobalResponse.APIV,"201",
+			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"201",
 					false, "no channels found",
 					new HashSet<>(channels));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 			return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 		}
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"000",
 					true, "channels found",
 					new HashSet<>(channels));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
     	} catch (Exception e) {
 		    GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 	     	e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 	    	return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 	    }
 	}

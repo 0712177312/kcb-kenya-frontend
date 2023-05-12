@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.compulynx.compas.security.AESsecure;
-import com.compulynx.compas.security.TokenAuthenticationService;
+
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -32,6 +32,8 @@ public class DashboardController {
 
     @Autowired
     private BranchRepository branchRepository;
+    @Autowired
+    private AESsecure aeSsecure;
     Gson gson = new Gson();
 //	@Autowired
 //	private CountryRepository countryRepository;
@@ -53,12 +55,16 @@ public class DashboardController {
             cin.setCustomers(customers);
             cin.setWaivedBranches(waivedBranches);
 
-            responsePayload = AESsecure.encrypt(gson.toJson(cin).toString());
+
+            responsePayload = aeSsecure.encrypt(gson.toJson(cin).toString());
+
             return new ResponseEntity<>(responsePayload, HttpStatus.OK);
         } catch (Exception e) {
             GlobalResponse resp = new GlobalResponse("404", "Server failure authenticating user", false, GlobalResponse.APIV);
             e.printStackTrace();
-            responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+            responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
             return new ResponseEntity<>(responsePayload, HttpStatus.OK);
         }
     }
@@ -104,14 +110,14 @@ public class DashboardController {
             System.out.println(resp);
 
 //            response = resp.toString();
-            response = AESsecure.encrypt(gson.toJson(resp).toString());
+            response = aeSsecure.encrypt(gson.toJson(resp).toString());
         } catch (Exception e) {
             GlobalResponse resp = new GlobalResponse("404", "Server failure authenticating user", false, GlobalResponse.APIV);
             e.printStackTrace();
             System.out.println("Here is the response");
             System.out.println(resp);
 //            response = resp.toString();
-            response = AESsecure.encrypt(gson.toJson(resp).toString());
+            response = aeSsecure.encrypt(gson.toJson(resp).toString());
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -125,18 +131,24 @@ public class DashboardController {
                 GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "000",
                         true, "customers found",
                         new HashSet<>(customers));
-                responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+                responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
                 return new ResponseEntity<>(responsePayload, HttpStatus.OK);
             }
             GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV, "201",
                     false, "no customers found",
                     new HashSet<>(customers));
-            responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+            responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
             return new ResponseEntity<>(responsePayload, HttpStatus.OK);
         } catch (Exception e) {
             GlobalResponse resp = new GlobalResponse("404", "error processing request", false, GlobalResponse.APIV);
             e.printStackTrace();
-            responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+            responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
             return new ResponseEntity<>(responsePayload, HttpStatus.OK);
         }
     }

@@ -55,6 +55,9 @@ public class CustomerService {
 
 	@Autowired
 	private CustomerRepository customerRepository;
+	@Autowired
+	private AESsecure aeSsecure;
+	Gson gson = new Gson();
 
 	public List<Customer> getCustomers() {
 		// TODO Auto-generated method stub
@@ -292,7 +295,9 @@ public class CustomerService {
 
 	public ResponseEntity<?> t24CustomerInquiry(Customer customer) {	
 		log.error("t24CustomerInquiry!");
-		String responsePayload ="";
+
+		String responsePayload="";
+
 		try {
 		
 			String customerInqEndpoint = env.getProperty("customerInqEndpoint");
@@ -331,29 +336,39 @@ public class CustomerService {
 				ObjectMapper mapper = new ObjectMapper();
 				CustomerDetails custDetails = mapper.readValue(getCustomerDetailsBuffer.toString(), CustomerDetails.class);	
 				log.error("Customer inquiry successfull!");
-				responsePayload = AESsecure.encrypt(new Gson().toJson(custDetails).toString());
+
+				responsePayload = aeSsecure.encrypt(gson.toJson(custDetails).toString());
+
 				return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 			}else {
 				log.error("Customer not found!");
 				GlobalResponse resp = new GlobalResponse("404", "Customer not found!", false, GlobalResponse.APIV);
-				responsePayload = AESsecure.encrypt(new Gson().toJson(resp).toString());
+
+				responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 				return new ResponseEntity<>(responsePayload, HttpStatus.NOT_FOUND);
 			}
 
 	}catch(MalformedURLException e) {
 		log.error("MalformedURLException: ", e.getMessage());
 		GlobalResponse resp = new GlobalResponse("500", "T24 endpoint is unreachable", false, GlobalResponse.APIV);
-			responsePayload = AESsecure.encrypt(new Gson().toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 		return new ResponseEntity<>(responsePayload, HttpStatus.INTERNAL_SERVER_ERROR);
 	}catch(IOException ev) {
 		log.error("IOException: ", ev.getMessage());
 		GlobalResponse resp = new GlobalResponse("500", "T24 endpoint is unreachable", false, GlobalResponse.APIV);
-			responsePayload = AESsecure.encrypt(new Gson().toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 		return new ResponseEntity<>(responsePayload, HttpStatus.INTERNAL_SERVER_ERROR);
 	}catch (Exception exception) {
 		log.error("Exception: ", exception.getMessage());
 		GlobalResponse resp = new GlobalResponse("500", "T24 endpoint is unreachable", false, GlobalResponse.APIV);
-			responsePayload = AESsecure.encrypt(new Gson().toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 		return new ResponseEntity<>(responsePayload, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 		

@@ -23,19 +23,25 @@ public class RightsMasterController {
 	@Autowired
 	private RightsMasterService masterService;
 
+	@Autowired
+	private AESsecure aeSsecure;
+
 	Gson gson = new Gson();
 	
 	@GetMapping(value="/rightsmenulist")
 	public ResponseEntity<?> getRights() {
-		String responsePayload = "";
+
+		String responsePayload="";
 		try {
 		List<RightMaster> rights = masterService.getRights();
 		
 		if(rights.isEmpty()) {
-			GlobalResponse globalResponse =new GlobalResponse(GlobalResponse.APIV,"404",
+
+			GlobalResponse  globalResponse = new GlobalResponse(GlobalResponse.APIV,"404",
 					false, "no rights found",
 					new HashSet<>(rights));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 			
 			
@@ -43,14 +49,18 @@ public class RightsMasterController {
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"000",
 					false, "no rights found",
 					new HashSet<>(rights));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 		return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 //		return new ResponseEntity<>(new CustomResponse(CustomResponse.APIV,
 //				200, true, "rights found",new HashSet<>(rights)),HttpStatus.OK);
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 			e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}

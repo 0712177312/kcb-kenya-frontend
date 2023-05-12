@@ -21,7 +21,6 @@ import org.springframework.session.config.annotation.web.http.EnableSpringHttpSe
 @EnableJpaRepositories
 @EnableAutoConfiguration(exclude = {FlywayAutoConfiguration.class, RepositoryRestMvcAutoConfiguration.class})
 @EnableAspectJAutoProxy(proxyTargetClass=true)
-@EnableSpringHttpSession
 public class CompasApplication extends SpringBootServletInitializer {
 	
 	@Override

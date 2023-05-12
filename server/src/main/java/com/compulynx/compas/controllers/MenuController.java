@@ -21,29 +21,40 @@ import com.compulynx.compas.services.MenuService;
 public class MenuController {
 	@Autowired
 	private MenuService headerService;
+
+	@Autowired
+	private AESsecure aeSsecure;
 	Gson gson = new Gson();
+	
 	@GetMapping("/menulist")
 	public ResponseEntity<?> getHeaderMenus() {
-		String responsePayload = "";
+		String responsePayload="";
+
 		try {
 		Collection<MenuHeaderMaster> menus = headerService.getMenuHeaders();
 		
 		if(menus.isEmpty()) {
-			GlobalResponse globalResponse =new GlobalResponse(GlobalResponse.APIV,"404",
+
+			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"404",
 					false, "no menu list  found",
 					new HashSet<>(menus));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.NOT_FOUND);
 		}
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"000",
 					true, "menus found",
 					new HashSet<>(menus));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
     	  } catch (Exception e) {
 		        GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 	          e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 	       return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 	    }
 	}
@@ -51,7 +62,9 @@ public class MenuController {
 	@GetMapping("/menulist/group")
 	public ResponseEntity<?> getGroupMenus(
 			@RequestParam(value="groupId") Long groupId) {
-		String responsePayload = "";
+
+		String responsePayload="";
+
 	 try {
 		List<MenuHeaderMaster> menus =headerService.getGroupMenus(groupId);
 		
@@ -59,19 +72,22 @@ public class MenuController {
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"404",
 					false, "no rights found",
 					new HashSet<>(menus));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
 			 return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		  }
-
 		 GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"000",
 				 true, "rights found",
 				 new HashSet<>(menus));
-		 responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+		 responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
     	} catch (Exception e) {
 		    GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 	     	e.printStackTrace();
-		 responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+		 responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 	    	return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 	    }
 	}

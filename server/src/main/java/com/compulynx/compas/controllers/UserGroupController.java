@@ -28,11 +28,16 @@ public class UserGroupController {
 	@Autowired
 	private UserGroupService userGroupService;
 
+	@Autowired
+	private AESsecure aeSsecure;
+
 	Gson gson = new Gson();
 	
 	@GetMapping("/usergroups")
 	public ResponseEntity<?> getUserGroups() {
-		String responsePayload ="";
+
+		String responsePayload = "";
+
 		try {
 		List<UserGroup> userGroups =userGroupService.userGroups();
 		
@@ -40,25 +45,32 @@ public class UserGroupController {
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"404",
 					false, "cannot find usergroups",
 					new HashSet<>(userGroups));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
 
 			return new ResponseEntity<>(responsePayload,HttpStatus.NOT_FOUND );
 		}
 
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"000", true, "usergroups",
 					new HashSet<>(userGroups));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 			e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
 	@GetMapping("/usergroups/gtRights")
 	public ResponseEntity<?> getUserGroupRights() {
-		String responsePayload ="";
+
+		String responsePayload = "";
+
 		try {
 		List<UserGroupRights> userGroups =userGroupService.getUserGroupRights();
 		
@@ -66,18 +78,22 @@ public class UserGroupController {
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"404",
 					false, "cannot find usergroups",
 					new HashSet<>(userGroups));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
 			return new ResponseEntity<>(responsePayload,HttpStatus.NOT_FOUND );
 		}
 
-			GlobalResponse  globalResponse = new GlobalResponse(GlobalResponse.APIV,"000", true, "usergroups",
+			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"000", true, "usergroups",
 					new HashSet<>(userGroups));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 			e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
@@ -92,7 +108,9 @@ public class UserGroupController {
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"404",
 					false, "cannot find usergroups",
 					new HashSet<>(rts));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 			return new ResponseEntity<>(responsePayload,HttpStatus.NOT_FOUND );
 		}
 		for (UserGroup group: groups) {
@@ -108,20 +126,25 @@ public class UserGroupController {
 		}
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"000", true, "usergroups",
 					new HashSet<>(rts));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 		return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 			e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
 
 	@GetMapping("/usergroups/getUserGroupUsingGroupId")
-	public ResponseEntity<?> getUserGroupUsingGroupId(@RequestParam(value="groupId") Long groupId, HttpSession session) {
 
-		String responsePayload;
+	public ResponseEntity<?> getUserGroupUsingGroupId(@RequestParam(value="groupId") Long groupId) {
+		String responsePayload = "";
+
 		try {
 
 			UserGroup group = userGroupService.getRightCode(groupId);
@@ -130,7 +153,7 @@ public class UserGroupController {
 				GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"404",
 						false, "cannot find usergroup",
 						new HashSet<>(rts));
-				responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+				responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
 				return new ResponseEntity<>(responsePayload,HttpStatus.NOT_FOUND );
 			}
 			UserGroupImpl obj = new UserGroupImpl();
@@ -146,12 +169,15 @@ public class UserGroupController {
 
 			GlobalResponse globalResponse = new GlobalResponse(GlobalResponse.APIV,"000", true, "usergroup",
 					new HashSet<>(rts));
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+
 			return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 			e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 	}
@@ -159,22 +185,25 @@ public class UserGroupController {
 	@GetMapping("/usergroups/usergroup")
 	public ResponseEntity<?> userGroup(
 			@RequestParam(value="id") Long id) {
-		String responsePayload = "";
+
+		String responsePayload ="";
+
 		try {
 			Optional<UserGroup> group = userGroupService.getUserGroup(id);
 			if(group ==null) {
 				GlobalResponse globalResponse = new GlobalResponse("404","does not exist",false,GlobalResponse.APIV,group);
-				responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
+
+				responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
 				return new ResponseEntity<>(responsePayload,HttpStatus.OK);
 			}
-
 			GlobalResponse globalResponse = new GlobalResponse("000","does not exist",true,GlobalResponse.APIV,group);
-			responsePayload = AESsecure.encrypt(gson.toJson(globalResponse).toString());
-			return new ResponseEntity<>(responsePayload,HttpStatus.OK);
+			responsePayload = aeSsecure.encrypt(gson.toJson(globalResponse).toString());
+			return new ResponseEntity<>(globalResponse,HttpStatus.OK);
 		} catch (Exception e) {
 			GlobalResponse resp = new GlobalResponse("404","error processing request",false,GlobalResponse.APIV);
 			e.printStackTrace();
-			responsePayload = AESsecure.encrypt(gson.toJson(resp).toString());
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+
 			return new ResponseEntity<>(responsePayload, HttpStatus.OK);
 		}
 		

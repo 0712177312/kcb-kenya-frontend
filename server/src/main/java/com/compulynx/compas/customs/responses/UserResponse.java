@@ -9,8 +9,6 @@ import com.compulynx.compas.models.extras.UsersToVerify;
 public class UserResponse {
 	
    private User model;
-   //THIS IS FOR GROUP REFERENCE: TO ENABLE INDIRECT OBJECT REFERENCE
-	private String groupRef;
    private List<User> collection;
    private List<UsersToVerify> toverify;
    private String respMessage;
@@ -18,10 +16,9 @@ public class UserResponse {
    private String responseCode;
    private String version;
    
-   public UserResponse(User model,String groupRef, String respMessage, boolean status, String responseCode,String version) {
+   public UserResponse(User model, String respMessage, boolean status, String responseCode,String version) {
 		super();
 		this.model = model;
-		this.groupRef = groupRef;
 		this.respMessage = respMessage;
 		this.status = status;
 		this.responseCode = responseCode;

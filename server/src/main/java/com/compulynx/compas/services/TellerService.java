@@ -47,6 +47,9 @@ public class TellerService {
 	
 	@Autowired
 	private TellerRepository tellerRepository;
+	@Autowired
+	private AESsecure aeSsecure;
+	Gson gson = new Gson();
 
 	public Teller checkTeller(String tellerId) {
 		// TODO Auto-generated method stub
@@ -158,6 +161,7 @@ public class TellerService {
     }
 
 	public ResponseEntity<?> t24StaffInquiry(Staff staf) {
+		String responsePayload ="";
 		try {
 			String staffInqEndpoint = env.getProperty("staffInqEndpoint");
 			
@@ -195,30 +199,38 @@ public class TellerService {
 				ObjectMapper mapper = new ObjectMapper();
 				StaffDetails staffDetails = mapper.readValue(getStaffDetailsBuffer.toString(), StaffDetails.class);
 
-				String response = AESsecure.encrypt(new Gson().toJson(staffDetails));
-				return new ResponseEntity<>(response, HttpStatus.OK);
+
+				responsePayload = aeSsecure.encrypt(gson.toJson(staffDetails).toString());
+				return new ResponseEntity<>(responsePayload, HttpStatus.OK);
+
 			}else {
 				GlobalResponse resp = new GlobalResponse("404", "Staff not found!", false, GlobalResponse.APIV);
-				return new ResponseEntity<>(resp, HttpStatus.NOT_FOUND);
+				responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+				return new ResponseEntity<>(responsePayload, HttpStatus.NOT_FOUND);
 			}	
 
 	}catch(MalformedURLException e) {
 		System.out.println("Exception "+e.getMessage());
 		
 		Log.error(e.getMessage());
-		GlobalResponse resp = new GlobalResponse("500", "T24 endpoint is unreachable", false, GlobalResponse.APIV);
-		return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
+
+		GlobalResponse resp = new GlobalResponse("404", "T24 endpoint is unreachable", false, GlobalResponse.APIV);
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+		return new ResponseEntity<>(responsePayload, HttpStatus.INTERNAL_SERVER_ERROR);
+
 	}catch(IOException ev) {
 		System.out.println("IOException "+ev.getMessage());
 		Log.error(ev.getMessage());
 	
 		GlobalResponse resp = new GlobalResponse("404", "T24 endpoint is unreachable", false, GlobalResponse.APIV);
-		return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+		return new ResponseEntity<>(responsePayload, HttpStatus.INTERNAL_SERVER_ERROR);
 	}catch (Exception exception) {
 		System.out.println("Exception "+exception.getMessage());	
 		Log.error(exception.getMessage());
 		GlobalResponse resp = new GlobalResponse("404", "T24 endpoint is unreachable", false, GlobalResponse.APIV);
-		return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
+			responsePayload = aeSsecure.encrypt(gson.toJson(resp).toString());
+		return new ResponseEntity<>(responsePayload, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 		
 	}
