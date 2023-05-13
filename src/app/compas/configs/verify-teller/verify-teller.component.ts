@@ -614,7 +614,7 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
       this.blockUI.stop();
     }, error => {
       this.blockUI.stop();
-      return this.toastr.error('Error in inquiring Staff data.', 'Error!', { timeOut: 1500 });
+      return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 1500 });
     });
   }
 
@@ -685,7 +685,7 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
           }
         }, error => {
           this.blockUI.stop();
-          return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 1500 });
+          return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 1500 });
         });
       } else {
         this.blockUI.stop();

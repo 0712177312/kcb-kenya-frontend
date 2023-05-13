@@ -871,7 +871,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
             }
         }, error => {
             this.blockUI.stop();
-            return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
+            return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
         });
     }
 
@@ -908,7 +908,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
                     }
                 }, error => {
                     this.blockUI.stop();
-                    return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
+                    return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
                 });
             }
         } else {
@@ -951,7 +951,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
             }
         }, error => {
             this.blockUI.stop();
-            return this.toastr.error('Error in inquiring staff data.', 'Error!', { timeOut: 4000 });
+            return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
         });
     }
 
@@ -980,7 +980,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
             }
         }, error => {
             this.blockUI.stop();
-            return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
+            return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
         });
     }
 

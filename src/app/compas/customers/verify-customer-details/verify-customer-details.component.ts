@@ -131,7 +131,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
           this.tellerCoBankingInq(tell);
         }
       }, error => {
-        return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
+        return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
       });
     } else {
       console.log('invalid id');
@@ -160,7 +160,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
 
 
         } else {
-          return this.toastr.error('Error in inquiring Staff data.', 'Error!', { timeOut: 4000 });
+          return this.toastr.error('CIF Number is Null', 'Error!', { timeOut: 4000 });
         }
 
       } else {
@@ -182,7 +182,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
       // }
     }, error => {
 
-      return this.toastr.error('Error in inquiring staff data.', 'Error!', { timeOut: 4000 });
+      return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
     });
   }
 
@@ -201,7 +201,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
         return this.toastr.warning('Failed to update staff details.', 'Warning!', { timeOut: 4000 });
       }
     }, error => {
-      return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
+      return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
     });
   }
   getConfigs() {
@@ -271,7 +271,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
       this.response = data;
       this.activeBranches = this.response.collection;
     }, error => {
-      return this.toastr.error('Error in loading branch data.', 'Error!', { timeOut: 4000 });
+      return this.toastr.error('Failed to contact ABIS Client', 'Error!', { timeOut: 4000 });
     });
   }
 
@@ -291,7 +291,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
         return this.toastr.warning('No customer with specified number found to verify', ' Warning!', { timeOut: 3000 });
       }
     }, error => {
-      return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
+      return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
     });
   }
 
@@ -325,7 +325,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
         return this.toastr.warning(this.response.respMessage, 'Warning!', { timeOut: 4000 });
       }
     }, error => {
-      return this.toastr.error('Error in updating Customer data.', 'Error!', { timeOut: 4000 });
+      return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
     });
   }
 
@@ -348,7 +348,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
         this.tellerCoBankingInq(tell);
       }
     }, error => {
-      return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
+      return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
     });
   }
 
@@ -368,7 +368,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
       }
     }, error => {
       this.log(this.rightId, 'error updating country details');
-      return this.toastr.error('Error in updating Customer data.', 'Error!', { timeOut: 4000 });
+      return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
     });
   }
 
@@ -402,7 +402,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
         this.toastr.warning(this.response.respMessage, 'Warning!', { timeOut: 4000 });
       }
     }, error => {
-      return this.toastr.error('Error in updating Customer data.', 'Error!', { timeOut: 4000 });
+      return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
     });
   }
 

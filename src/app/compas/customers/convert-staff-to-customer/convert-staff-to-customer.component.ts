@@ -74,7 +74,7 @@ export class ConvertStaffToCustomerComponent implements OnInit {
         return this.toastr.warning('Staff with the specific id was not found or not approved', ' Warning!');
       }
     }, error => {
-      return this.toastr.error('Error while searching for the staff details', 'Error!', { timeOut: 4000 });
+      return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
     });
 
 
@@ -122,7 +122,7 @@ export class ConvertStaffToCustomerComponent implements OnInit {
         return this.toastr.error('Conversion of staff to customer not performed successfully', 'Error!', { timeOut: 4000 });
       }
     }, error => {
-      return this.toastr.error('Error while attempting to convert staff to customer', 'Error!', { timeOut: 4000 });
+      return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
     })
   }
 

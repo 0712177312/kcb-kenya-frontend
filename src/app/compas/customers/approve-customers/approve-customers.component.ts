@@ -335,7 +335,7 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
       }
     }, error => {
 
-      return this.toastr.error('Error in loading data.', 'Error!', { timeOut: 3000 });
+      return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 3000 });
     });
   }
 
@@ -550,7 +550,7 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
 
     }, error => {
 
-      return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 1500 });
+      return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 1500 });
     });
   }
 
@@ -623,7 +623,7 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
           }
         }, error => {
 
-          return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 1500 });
+          return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 1500 });
         });
       } else {
         return this.toastr.error('Capture atleast one finger print.', 'Error!', { timeOut: 1500 });

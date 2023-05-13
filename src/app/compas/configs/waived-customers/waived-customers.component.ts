@@ -155,7 +155,7 @@ gtCustomers() {
     this.blockUI.stop();
   }, error => {
     this.blockUI.stop();
-    return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
+    return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
  });
 }
 
@@ -192,7 +192,7 @@ gtCustomers() {
       }, error => {
         this.log(this.rightId, 'server error when approving customer waive ' + this.customer.customerId);
         this.blockUI.stop();
-        return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
+        return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
      });
   }
 
@@ -223,7 +223,7 @@ gtCustomers() {
     }, error => {
       this.blockUI.stop();
       this.log(this.rightId, 'server error rejecting customer waive ' + this.customer.customerId);
-      return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
+      return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
    });
   }
 

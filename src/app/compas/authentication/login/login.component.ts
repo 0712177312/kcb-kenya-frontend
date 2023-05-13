@@ -190,7 +190,7 @@ export class LoginComponent implements OnInit {
       }, error => {
         this.log(0, 'server error ' + this.user.username);
         this.blockUI.stop();
-        return this.toastr.error('Error in loading data.', 'Error!', { timeOut: 1500 });
+        return this.toastr.error("Failed to contact ABIS Client", 'Error!', { timeOut: 1500 });
       });
     }
   }

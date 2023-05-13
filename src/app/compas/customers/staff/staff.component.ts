@@ -408,13 +408,14 @@ export class StaffComponent implements OnInit, OnDestroy {
 
         this.tellerForm = this.fb.group({
             id: new FormControl(0),
-            tellerId: new FormControl(this.tellerInq.payload.id, []),
+            tellerId: new FormControl(this.tellerInq.payload.staffId, []),
             tellerStatus: new FormControl(this.tellerInq.payload.loginStatus, []),
             deptCode: new FormControl(this.tellerInq.payload.deptCode),
             recordStatus: new FormControl(this.tellerInq.payload.recordStatus, []),
             tellerEmail: new FormControl(this.tellerInq.payload.contactEmail, []),
             tellerName: new FormControl(this.tellerInq.payload.userName, []),
             tellerSignOnName: new FormControl(this.tellerInq.payload.signOnName, [Validators.required]),
+            // same value as deptCode
             departmentCode: new FormControl(this.tellerInq.payload.departmentCode),
             companyCode: new FormControl(this.tellerInq.payload.companyCode),
             customerId: new FormControl(this.tellerInq.payload.cif, [Validators.required]),
@@ -894,7 +895,7 @@ export class StaffComponent implements OnInit, OnDestroy {
                 }
             }, error => {
                 this.blockUI.stop();
-                return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
+                return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
             });
         } else {
             console.log('invalid id');
@@ -930,7 +931,7 @@ export class StaffComponent implements OnInit, OnDestroy {
             }
         }, error => {
             this.blockUI.stop();
-            return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
+            return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
         });
     }
 
@@ -947,7 +948,7 @@ export class StaffComponent implements OnInit, OnDestroy {
                 return this.toastr.warning('Enter a valid staff ID', ' Warning!', { timeOut: 4000 });
             }
             else {
-                this.tellerInquiry(cust);
+                this.tellerInquiry(cust); 
             }
         } else {
             // this is a customer
@@ -979,25 +980,8 @@ export class StaffComponent implements OnInit, OnDestroy {
                     } else {
                         return this.toastr.warning('Specified staff id was not found or invalid , kindly verify to proceed .', 'Warning!');
                     }
-
-                    // console.log('Result from inquiring teller');
-                    // console.log(this.tellerInq);
-                    // console.log('Result from inquiring teller');
-
-                    // if (this.tellerInq.requestStatus === true && (this.tellerInq.payload.cif !== '' || this.tellerInq.payload.cif !== null)) {
-                    //     this.account_number = ' ';
-                    //     this.initTellerProfile();
-                    //     return this.toastr.success('Staff id is valid, can proceed to enroll', ' Success!');
-
-                    // } else if (this.tellerInq.requestStatus === true && this.tellerInq.payload.cif === '') {
-                    //     // valid customer returned but they do not have a cif number attached
-                    //     return this.toastr.warning('CIF number is invalid', ' Warning!');
-                    // } else {
-
-                    //     return this.toastr.warning('Specified staff id was not found or invalid , kindly verify to proceed .', 'Warning!');
-                    // }
                 } else {
-                    return this.toastr.error('Error in inquiring Staff data.', 'Error!', { timeOut: 4000 });
+                    return this.toastr.error('CIF Number is Null', 'Error!', { timeOut: 4000 });
                 }
             } else {
                 return this.toastr.warning(data.respMessage || 'Error getting staff with specified ID', 'Warning!');
@@ -1007,7 +991,7 @@ export class StaffComponent implements OnInit, OnDestroy {
 
         }, error => {
             this.blockUI.stop();
-            return this.toastr.error('Error in inquiring staff data.', 'Error!', { timeOut: 4000 });
+            return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
         });
     }
 
@@ -1030,7 +1014,7 @@ export class StaffComponent implements OnInit, OnDestroy {
             }
         }, error => {
             this.blockUI.stop();
-            return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 4000 });
+            return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
         });
     }
 

@@ -142,7 +142,7 @@ export class DetachStaffComponent implements OnInit, OnDestroy {
       this.tellers = data.collection;
     }, error => {
       this.blockUI.stop();
-      return this.toastr.error('Error in inquiring Staff data.', 'Error!', { timeOut: 1500 });
+      return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 1500 });
     });
   }
 

@@ -169,7 +169,7 @@ export class DetachCustomerComponent implements OnInit, OnDestroy {
     this.custSvc.getCustomersToApproveDetach().subscribe((data: any) => {
       this.customers = data.collection;
     }, error => {
-      return this.toastr.error('Error in inquiring Customer data.', 'Error!', { timeOut: 1500 });
+      return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 1500 });
     });
   }
 
