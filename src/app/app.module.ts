@@ -8,7 +8,7 @@ import {
 } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -87,6 +87,9 @@ import { DataTablesModule } from 'angular-datatables';
 import { DetachCustomerComponent } from './compas/customers/detach-customer/detach-customer.component';
 import { DetachStaffComponent } from './compas/configs/detach-staff/detach-staff.component';
 import { EnrolledStaffComponent } from './compas/reports/enrolled-staff/enrolled-staff.component';
+import {
+  EncryptionInterceptor
+} from './compas/interceptors/encryption.interceptor';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -182,6 +185,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: EncryptionInterceptor,
+      multi: true
     },
     ServiceGuard,
     MySharedService,

@@ -1,6 +1,7 @@
 import { Subject, Observable } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
 import * as CryptoJS from 'crypto-js';
+import { environment } from 'src/environments/environment';
 
 export class MySharedService {
   username: string;
@@ -14,7 +15,7 @@ export class MySharedService {
   userAssignedRights: any;
   // dataChange: Observable<any>;
 
-  encPassword = '@compulynx#54321';
+  encPassword = environment.encryptKey; 
 
   _userActionOccured: Subject<void> = new Subject();
   get userActionOccured(): Observable<void> { return this._userActionOccured.asObservable(); }
@@ -27,9 +28,6 @@ export class MySharedService {
 
   getConfigs() {
     const configs = JSON.parse(localStorage.getItem('bio.glob#$$#'));
-
-    console.log(configs);
-
     return configs;
   }
 
@@ -42,8 +40,7 @@ export class MySharedService {
     return headers;
   }
 
-  encrpytData(data) {
-    console.log('sending: ', data);
+  encryptData(data) {
     const akey2 = CryptoJS.enc.Utf8.parse(this.encPassword);
     const iv2 = CryptoJS.enc.Utf8.parse(this.encPassword);
     const encData = CryptoJS.AES.encrypt(JSON.stringify(data), akey2, {
@@ -66,9 +63,6 @@ export class MySharedService {
       padding: CryptoJS.pad.Pkcs7
     });
     const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
-
-    // console.log('decryptedData');
-    // console.log(decryptedData);
 
     return decryptedData;
   }

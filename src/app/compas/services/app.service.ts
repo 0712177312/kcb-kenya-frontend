@@ -15,6 +15,6 @@ export class AppService {
 
 
   getUserAssignedRights(groupId){
-    return this.http.get(`${this.API_URL.url}/usergroups/getUserGroupUsingGroupId?groupId=` + groupId,  this.globalService.getTokenHeader());
+   return this.http.get(`${this.API_URL.url}/usergroups/getUserGroupUsingGroupId?groupId=` + groupId,  this.globalService.getTokenHeader());
   }
 }

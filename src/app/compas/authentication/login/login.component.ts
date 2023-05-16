@@ -44,8 +44,15 @@ export class LoginComponent implements OnInit {
   loginform = true;
   recoverform = false;
   ngOnInit() {
-    console.log("Initialization:  " + localStorage.getItem('bio.glob#$$#'));
-    localStorage.getItem('bio.glob#$$#') ? this.doNothing() : this.getGlobals();
+    const localData = localStorage.getItem('bio.glob#$$#')
+
+    console.log("LocalData::", localData)
+
+    if(!localData){
+      this.getGlobals();
+    }
+    // console.log("Initialization:  " + localStorage.getItem('bio.glob#$$#'));
+    // localStorage.getItem('bio.glob#$$#') ? this.doNothing() : this.getGlobals();
   }
   showRecoverForm() {
     this.loginform = !this.loginform;
@@ -74,15 +81,16 @@ export class LoginComponent implements OnInit {
 
       this.authService.login(this.user).subscribe(res => {
         // this.blockUI.start('Authenticating user...');
-        //decrypt response
-        this.response = JSON.parse(this.globalService.decryptData(res));
+        this.response = JSON.parse(res);
         if (this.response.status === false) {
           this.log(0, 'failed to log in ' + this.user.username);
           this.blockUI.stop();
           return this.toastr.warning(this.response.respMessage, 'Alert!', { timeOut: 1500 });
         }
         if (this.response.status === true) {
+          console.log("Logged in successfully")
           this.appService.getUserAssignedRights(this.response.model.group).subscribe(resp => {
+            console.log("UserRIghts::",resp )
             this.userAssignedRights = resp;
             if (this.userAssignedRights.status === true) {
               this.log(this.response.model.id, 'logged in');
@@ -262,7 +270,7 @@ export class LoginComponent implements OnInit {
 
   getGlobals() {
     this.authService.getGlobals().subscribe(data => {
-      localStorage.setItem('bio.glob#$$#', this.globalService.decryptData(data));
+      localStorage.setItem('bio.glob#$$#', data);
     }, error => {
       return this.toastr.error('Error in loading configs.', 'Error!', { timeOut: 1500 });
     });
