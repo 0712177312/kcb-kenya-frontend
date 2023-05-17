@@ -141,7 +141,14 @@ export class LoginComponent implements OnInit {
               this.blockUI.stop();
               return this.toastr.warning(this.response.respMessage, 'User Assigned Rights not fetched!', { timeOut: 1500 });
             }
-          });
+          },
+          err=>{
+            console.log("Error:::", err)
+            console.log("sss",err.error)
+            const error = this.globalService.decryptData(err.error.text)
+            console.log("err",error)
+          }
+          );
         }
       }, error => {
         this.log(0, 'server error ' + this.user.username);
