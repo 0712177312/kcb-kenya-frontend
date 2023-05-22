@@ -31,9 +31,14 @@ export class MySharedService {
     return configs;
   }
 
+  getTokens(){
+    const tokens = JSON.parse(localStorage.getItem('auth'));
+    return tokens
+  }
+
   getTokenHeader() {
     const localheaders = new HttpHeaders({
-      'Authorization': this.getConfigs().jwt,
+      'Authorization': `Bearer ${this.getTokens().access_token}`,
       'Access-Control-Expose-Headers': 'Authorization'
     });
     const headers = { headers: localheaders };

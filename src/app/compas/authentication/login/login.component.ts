@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
 
     console.log("LocalData::", localData)
 
-    if(!localData){
+    if (!localData) {
       this.getGlobals();
     }
     // console.log("Initialization:  " + localStorage.getItem('bio.glob#$$#'));
@@ -90,7 +90,7 @@ export class LoginComponent implements OnInit {
         if (this.response.status === true) {
           console.log("Logged in successfully")
           this.appService.getUserAssignedRights(this.response.model.group).subscribe(resp => {
-            console.log("UserRIghts::",resp )
+            console.log("UserRIghts::", resp)
             this.userAssignedRights = resp;
             if (this.userAssignedRights.status === true) {
               this.log(this.response.model.id, 'logged in');
@@ -142,18 +142,113 @@ export class LoginComponent implements OnInit {
               return this.toastr.warning(this.response.respMessage, 'User Assigned Rights not fetched!', { timeOut: 1500 });
             }
           },
-          err=>{
-            console.log("Error:::", err)
-            console.log("sss",err.error)
-            const error = this.globalService.decryptData(err.error.text)
-            console.log("err",error)
-          }
+            err => {
+              console.log("Error:::", err)
+              console.log("sss", err.error)
+              const error = this.globalService.decryptData(err.error.text)
+              console.log("err", error)
+            }
           );
         }
       }, error => {
         this.log(0, 'server error ' + this.user.username);
         this.blockUI.stop();
         return this.toastr.error('Error in loading data.', 'Error!', { timeOut: 1500 });
+      });
+    }
+  }
+
+  loginV2() {
+    if (this.user.username === '') {
+      return this.toastr.warning('Please specify the user name', 'Alert!', { timeOut: 1500 });
+    } else if (this.user.password === '') {
+      return this.toastr.warning('Please specify the password', 'Alert!', { timeOut: 1500 });
+    } else {
+      this.authService.loginV2(this.user).subscribe(res => {
+        const authRes = JSON.parse(res);
+
+        if (authRes.access_token && authRes.access_token !== '') {
+          localStorage.setItem('auth', JSON.stringify(authRes))
+
+          // get user
+          this.appService.getUser().subscribe((user: any) => {
+            if (user.status) {
+              this.response = user;
+
+              this.appService.getUserAssignedRights(this.response.model.group).subscribe((userRights:any) => {
+                this.userAssignedRights =  JSON.parse(userRights);
+                if (this.userAssignedRights.status === true) {
+                  this.log(this.response.model.id, 'logged in');
+                  this.appService.getUserMenus(this.response.model.group).subscribe(resp => {
+                    this.menus = JSON.parse(resp);
+    
+                    if (this.menus.status === true) {
+                      this.storageObject.username = this.user.username;
+                      this.storageObject.rightId = this.response.model.id;
+                      this.storageObject.rights = this.menus.collection;
+                      this.storageObject.branch = this.response.model.branch;
+                      this.storageObject.group = this.response.model.group;
+                      this.storageObject.userAssignedRights = this.userAssignedRights.collection;
+    
+                      localStorage.setItem('otc', JSON.stringify(this.storageObject));
+                      this.globalService.setAuth(true);
+                      this.globalService.setRightId(this.user.id);
+                      this.globalService.setUsername(this.user.username);
+                      this.globalService.setRights(this.menus.collection);
+                      this.globalService.setBranch(this.response.model.branch);
+                      this.globalService.setGroup(this.response.model.group);
+                      this.globalService.setUserAssignedRights(this.userAssignedRights.collection);
+                      this.router.navigate(['/dashboard']);
+                      this.getGlobals();
+                    } else {
+                      this.storageObject.username = this.user.username;
+                      this.storageObject.rightId = this.user.id;
+                      this.storageObject.rights = this.menus.collection;
+                      this.storageObject.branch = this.user.branch;
+                      this.storageObject.group = this.response.model.group;
+                      this.storageObject.userAssignedRights = this.userAssignedRights.collection;
+    
+                      localStorage.setItem('otc', JSON.stringify(this.storageObject));
+                      this.globalService.setAuth(true);
+                      this.globalService.setRightId(this.user.id);
+                      this.globalService.setUsername(this.user.username);
+                      this.globalService.setRights(this.menus.collection);
+                      this.globalService.setBranch(this.response.model.branch);
+                      this.globalService.setGroup(this.response.model.group);
+                      this.globalService.setUserAssignedRights(this.userAssignedRights.collection);
+                      this.getGlobals();
+                      this.router.navigate(['/dashboard']);
+                      //  this.blockUI.stop();
+                      return this.toastr.warning(this.menus.respMessage, 'Alert!', { timeOut: 1500 });
+                    }
+                  }, error=>{
+                  //  console.log("Error::", this.globalService.decryptData(error.error.text))
+                    return this.toastr.warning('Error getting User Menus', 'Alert!', { timeOut: 1500 });
+                  });
+                } else {
+                  this.blockUI.stop();
+                  return this.toastr.warning(this.response.respMessage, 'User Assigned Rights not fetched!', { timeOut: 1500 });
+                }
+              }, error => {
+                console.log("Error!!:", error)
+                const ppp = this.globalService.decryptData(error.error)
+                console.log("err", ppp)
+                return this.toastr.warning('Error getting User Rights', 'Alert!', { timeOut: 1500 });
+              })
+
+            } else {
+              return this.toastr.warning('No User Found', 'Alert!', { timeOut: 1500 });
+            }
+
+          }, error => {
+            return this.toastr.warning('No User Details Found', 'Alert!', { timeOut: 1500 });
+          })
+        } else {
+          this.log(0, 'failed to log in ' + this.user.username);
+          this.blockUI.stop();
+          return this.toastr.warning(this.response.respMessage, 'Alert!', { timeOut: 1500 });
+        }
+
       });
     }
   }
@@ -279,6 +374,7 @@ export class LoginComponent implements OnInit {
     this.authService.getGlobals().subscribe(data => {
       localStorage.setItem('bio.glob#$$#', data);
     }, error => {
+      console.log("Error:", error)
       return this.toastr.error('Error in loading configs.', 'Error!', { timeOut: 1500 });
     });
   }

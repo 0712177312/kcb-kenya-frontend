@@ -65,33 +65,39 @@ export class EncryptionInterceptor implements HttpInterceptor {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        const url = req.url
+        const shouldEncrypt = this.shouldEncryptURL(url)
+        console.log(url + ":::" + shouldEncrypt)
         return from(this.encryptRequest(req)).pipe(
             //TODO: pass encrypted data when posting
             switchMap((encryptedReq: any) => next.handle(req)),
 
             switchMap((event) => {
-                if (event instanceof HttpResponse) {
-                    const decryptedData = this.decryptResponse(event)
+                if (this.shouldEncryptURL(url)) {
+                    console.log("SHOULD DECRYPT:", url)
+                    const decryptedData = this.decryptResponse(event as any)
                     return from(decryptedData)
-                } else if (event instanceof HttpErrorResponse){
-                    const decryptedError = this.decryptResponse(event as any)
-                    return from(decryptedError)
                 }
                 return of(event)
             })
-
         );
     }
 
     private shouldEncryptURL(url: string): boolean {
-        return this.encryptURLList.some(endpoint => {
-            if(endpoint.includes('?')){
-                const [baseURL, params] = endpoint.split('?')
-                const urlWithoutParams = url.split('?')[0]
-                return urlWithoutParams.includes(baseURL);
+        if (this.encryptURLList.includes(url)) {
+            return true
+        }
+
+        if (url.includes('?')) {
+            const [baseURL] = url.split('?')
+            console.log("BASEURL::", baseURL)
+
+            if (this.encryptURLList.includes(baseURL)) {
+                return true
             }
-            return url.includes(endpoint)
-        });
+            return false
+        }
+        return false
     }
 
     private async encryptRequest(req: HttpRequest<any>): Promise<HttpRequest<any>> {
@@ -111,12 +117,25 @@ export class EncryptionInterceptor implements HttpInterceptor {
     }
 
     private async decryptResponse(res: HttpResponse<any>): Promise<HttpResponse<any>> {
-        const url = res.url;
-        if (this.shouldEncryptURL(url) && res.body) {
+
+        if (res.body) {
             const decryptedBody = this.globalService.decryptData(res.body);
-            return res.clone({ body: decryptedBody });
+            if (this.isJSONString(decryptedBody)) {
+                return res.clone({ body: decryptedBody });
+            }
+            return res.clone({ body: JSON.parse(decryptedBody) });
         }
         return res;
+    }
+
+
+    private isJSONString(str) {
+        try {
+            JSON.parse(str)
+        } catch (e) {
+            return false
+        }
+        return true
     }
 }
 

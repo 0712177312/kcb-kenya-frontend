@@ -30,6 +30,12 @@ export class AuthService {
     return this.http.post(`${this.API_URL.url}/sysusers/auth`, user, {responseType: 'text', headers: this.globalService.getTokenHeader().headers});
   }
 
+  loginV2(user) {
+    return this.http.post(`${this.API_URL.url}/auth/manual_login`, user, {
+      responseType: 'text',
+    });
+  }
+
   printAuth(user) {
     return this.http.post(`${this.API_URL.url}/sysusers/print/auth`, user, this.globalService.getTokenHeader());
   }
