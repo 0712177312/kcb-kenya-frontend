@@ -88,11 +88,11 @@ export class AccessControlComponent implements OnInit, OnDestroy {
     getGroupsAndUserRights() {
         this.blockUI.start('Loading group data...');
         this.apiService.getUserGroupsAndRights().subscribe(data => {
-            this.groups = data;
+            this.groups = JSON.parse(data);
             console.log(this.groups);
             this.blockUI.stop();
             if (this.groups.status === true) {
-                this.userGroups = this.groups.collection;
+                this.userGroups = this.groups.rights;
                 this.source = new LocalDataSource(this.userGroups);
             } else {
                 return this.toastr.warning(this.groups.respMessage, 'Warning!', { timeOut: 4000 });
@@ -104,9 +104,9 @@ export class AccessControlComponent implements OnInit, OnDestroy {
     }
     initUserRights() {
         this.apiService.getUserGroupRights().subscribe(res => {
-            this.res = res;
+            this.res = JSON.parse(res);
             if (this.res.status === true) {
-                this.initRights = this.res.collection;
+                this.initRights = this.res.hashset;
             } else {
                 return this.toastr.warning('No rights to assign.', 'Warning!', { timeOut: 4000 });
             }
