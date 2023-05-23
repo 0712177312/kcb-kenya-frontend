@@ -20,15 +20,15 @@ export class AdministrationService {
   }
 
   getUserGroupsAndRights() {
-    return this.http.get(`${this.API_URL.url}/usergroups/gtUserGroups`, this.globalService.getTokenHeader());
+    return this.http.get(`${this.API_URL.url}/usergroups/gtUserGroups`, {responseType: 'text', headers: this.globalService.getTokenHeader().headers});
   }
 
   getUserGroups() {
-    return this.http.get(`${this.API_URL.url}/usergroups`, this.globalService.getTokenHeader());
+    return this.http.get(`${this.API_URL.url}/usergroups`, {responseType: 'text', headers: this.globalService.getTokenHeader().headers});
   }
 
   getUserTypes() {
-    return this.http.get(`${this.API_URL.url}/usergrouptypes`, this.globalService.getTokenHeader());
+    return this.http.get(`${this.API_URL.url}/usergrouptypes`, {responseType: 'text', headers: this.globalService.getTokenHeader().headers});
   }
 
   addUserGroup(userGroup) {
@@ -36,7 +36,7 @@ export class AdministrationService {
   }
 
   getAllUserMenus() {
-    return this.http.get(`${this.API_URL.url}/rightsmenulist`, this.globalService.getTokenHeader());
+    return this.http.get(`${this.API_URL.url}/rightsmenulist`, {responseType: 'text', headers: this.globalService.getTokenHeader().headers});
   }
 
   addUserProfile(userProfile) {
@@ -44,32 +44,32 @@ export class AdministrationService {
   }
 
   getUserGroupsByUserType(userTypeId) {
-    return this.http.get(`${this.API_URL.url}/user/gtGroupsByUserType/` + userTypeId, this.globalService.getTokenHeader());
+    return this.http.get(`${this.API_URL.url}/user/gtGroupsByUserType/` + userTypeId, {responseType: 'text', headers: this.globalService.getTokenHeader().headers});
   }
 
 
   getUserRightsByUserType(userTypeId) {
-    return this.http.get(`${this.API_URL.url}/userGroups/gtRights/` + userTypeId, this.globalService.getTokenHeader());
+    return this.http.get(`${this.API_URL.url}/userGroups/gtRights/` + userTypeId, {responseType: 'text', headers: this.globalService.getTokenHeader().headers});
   }
 
   getUsersToApprove() {
-    return this.http.get(`${this.API_URL.url}/users/toverify`, this.globalService.getTokenHeader());
+    return this.http.get(`${this.API_URL.url}/users/toverify`, {responseType: 'text', headers: this.globalService.getTokenHeader().headers});
   }
 
   approveUsers(users) {
-    return this.http.post(`${this.API_URL.url}/users/verifyusers`, users, this.globalService.getTokenHeader());
+    return this.http.post(`${this.API_URL.url}/users/verifyusers`, {responseType: 'text', headers: this.globalService.getTokenHeader().headers});
   }
 
   gtUsernames() {
-    return this.http.get(`${this.API_URL.url}/dashboard/stats`, this.globalService.getTokenHeader());
+    return this.http.get(`${this.API_URL.url}/dashboard/stats`, {responseType: 'text', headers: this.globalService.getTokenHeader().headers});
   }
 
   getUserMenus(group) {
-    return this.http.get(`${this.API_URL.url}/menulist/group?groupId=` + group, this.globalService.getTokenHeader());
+    return this.http.get(`${this.API_URL.url}/menulist/group?groupId=` + {responseType: 'text', headers: this.globalService.getTokenHeader().headers});
   }
 
   getUserGroupRights() {
-    return this.http.get(`${this.API_URL.url}/usergroups/gtRights`, this.globalService.getTokenHeader());
+    return this.http.get(`${this.API_URL.url}/usergroups/gtRights`, {responseType: 'text', headers: this.globalService.getTokenHeader().headers});
   }
 
   editUserProfile(userProfile){

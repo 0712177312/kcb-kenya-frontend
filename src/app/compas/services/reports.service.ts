@@ -14,31 +14,31 @@ export class ReportsService {
   constructor(private http: HttpClient, private globalService: MySharedService) { }
 
   getBranchesPrev(status) {
-    return  this.http.get(`${this.API_URL.url}/gtBranchesPrev?status=` + status, this.globalService.getTokenHeader());
+    return  this.http.get(`${this.API_URL.url}/gtBranchesPrev?status=` + status,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
 
   getCustomerPreview(fromDate, toDate, enrolledType, branchCode, groupId) {
-    return  this.http.get(`${this.API_URL.url}/previewCustomers?FromDt=${fromDate}&ToDt=${toDate}&enrolledType=${enrolledType}&branchCode=${branchCode}&groupid=${groupId}`, this.globalService.getTokenHeader());
+    return  this.http.get(`${this.API_URL.url}/previewCustomers?FromDt=${fromDate}&ToDt=${toDate}&enrolledType=${enrolledType}&branchCode=${branchCode}&groupid=${groupId}`,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
 
   getStaffPreview(fromDate, toDate, enrolledType, branchCode, groupId) {
-    return  this.http.get(`${this.API_URL.url}/tellers/previewStaff?FromDt=${fromDate}&ToDt=${toDate}&enrolledType=${enrolledType}&branchCode=${branchCode}&groupid=${groupId}`, this.globalService.getTokenHeader());
+    return  this.http.get(`${this.API_URL.url}/tellers/previewStaff?FromDt=${fromDate}&ToDt=${toDate}&enrolledType=${enrolledType}&branchCode=${branchCode}&groupid=${groupId}`,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
 
   getPdfCustomerReport(fromDt, toDt) {
-    return  this.http.get(`${this.EXP_API}reportType=BD&exportType=P&FromDt=${fromDt}&ToDt=${toDt}`, this.globalService.getTokenHeader());
+    return  this.http.get(`${this.EXP_API}reportType=BD&exportType=P&FromDt=${fromDt}&ToDt=${toDt}`,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
 
   getExcelCustomerReport(fromDt, toDt) {
-    return  this.http.get(`${this.EXP_API}reportType=BD&exportType=E&FromDt=${fromDt}&ToDt=${toDt}`, this.globalService.getTokenHeader());
+    return  this.http.get(`${this.EXP_API}reportType=BD&exportType=E&FromDt=${fromDt}&ToDt=${toDt}`,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
 
   getCsvCustomerReport(fromDt, toDt) {
-    return  this.http.get(`${this.EXP_API}reportType=BD&exportType=C&FromDt=${fromDt}&ToDt=${toDt}`, this.globalService.getTokenHeader());
+    return  this.http.get(`${this.EXP_API}reportType=BD&exportType=C&FromDt=${fromDt}&ToDt=${toDt}`,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
 
   getSystemLogs(fromDt, toDt, userId) {
-    return  this.http.get(`${this.API_URL.url}/getSystemActivity?FromDt=${ fromDt }&ToDt=${toDt}&userId=${userId}`, this.globalService.getTokenHeader());
+    return  this.http.get(`${this.API_URL.url}/getSystemActivity?FromDt=${ fromDt }&ToDt=${toDt}&userId=${userId}`,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
 
   getSystemLogsForExporting(fromDt, toDt, userId){

@@ -73,7 +73,7 @@ export class WaiveBranchComponent implements OnInit {
     gtActiveCountries() {
       this.regionService.getActiveCountries().subscribe(data => {
         this.response = data;
-        this.activeCountries = this.response.collection;
+        this.activeCountries = this.response.hashset;
         console.log('countries##', this.activeCountries);
       }, error => {
         this.blockUI.stop();

@@ -207,8 +207,9 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
 
     getTellers(branch) {
         this.tellerSvc.getBranchTellers(branch).subscribe(data => {
-            this.tellersResp = data;
-            this.tellers = this.tellersResp.collection;
+            console.log("Tellers", data)
+            this.tellersResp = JSON.parse(data);
+            this.tellers = this.tellersResp.hashset;
         }, error => {
             return this.toastr.error('Error fetching staff.', 'Error!', {timeOut: 4000});
         });
@@ -276,7 +277,6 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         this.apiService.getUserProfilesByBranchExcludingCurrentUser(this.branch, this.groupId, this.userId).subscribe(data => {
             this.blockUI.stop();
             this.response = JSON.parse(this.globalService.decryptData(data));
-            console.log('response: ', this.response);
             this.userProfiles = this.response.collection;
             this.source = new LocalDataSource(this.userProfiles);
         });
@@ -285,7 +285,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
     getUsernames(username?: string) {
         console.log('works', username);
         this.apiService.gtUsernames().subscribe(data => {
-            this.dashs = data;
+            this.dashs =JSON.parse(data);
             this.usernames = this.dashs.usrs;
             console.log('users', this.usernames);
             if (this.usernames.length > 0) {
@@ -306,8 +306,8 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
 
     getUserGroups() {
         this.apiService.getUserGroups().subscribe(data => {
-            this.groups = data;
-            this.userGroups = this.groups.collection;
+            this.groups = JSON.parse(data);
+            this.userGroups = this.groups.hashset;
         });
 
     }
@@ -361,16 +361,17 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
     }
 
     getActiveCountries() {
-        this.regionSvc.getActiveCountries().subscribe(data => {
-            this.countryResp = data;
+        this.regionSvc.getActiveCountries().subscribe((data:any) => {
+            this.countryResp = JSON.parse(data);
             if (this.countryResp.status === true) {
-                this.countries = this.countryResp.collection;
-                console.log('countries dts', this.countryResp.collection);
+                this.countries = this.countryResp.hashset;
+                console.log('countries dts', this.countryResp.hashset);
             } else {
                 console.log('not countries enrolled');
             }
             // this.tellerDet.details = this.tellerDet.model;
         }, error => {
+            console.log("Error", error)
             console.log('error getting countries details');
         });
     }
@@ -378,10 +379,11 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
     getActiveBranches(country) {
         console.log('country', country);
         this.regionSvc.getCountryBranches(country).subscribe(data => {
-            this.branchesResp = data;
+            // console.log("Data:::",data)
+            this.branchesResp = JSON.parse(data);
             if (this.branchesResp.status === true) {
-                this.branches = this.branchesResp.collection;
-                console.log('branches dts', this.branchesResp.collection);
+                this.branches = this.branchesResp.hashset;
+                console.log('branches dts', this.branchesResp.hashset);
             } else {
                 console.log('not branches enrolled');
             }
@@ -393,7 +395,8 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
 
     getTellerDetail(teller) {
         this.tellerSvc.getTellerDetail(teller).subscribe(data => {
-            this.tellerDet = data;
+            console.log("TelllerData:::",data)
+            this.tellerDet = JSON.parse(data);
             if (this.tellerDet.status === true) {
                 this.teller = this.tellerDet.teller;
                 console.log('teller dts', this.tellerDet.teller);

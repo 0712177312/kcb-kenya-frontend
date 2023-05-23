@@ -103,7 +103,7 @@ export class BioService {
   }
 
   getMatchedCustomers(customers) {
-    return this.http.post(`${this.API_URL.url}/getMatchedCustomers`, customers, this.globalService.getTokenHeader());
+    return this.http.post(`${this.API_URL.url}/getMatchedCustomers`, customers,   { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
 
   getFingerPrintImage(hand) {
