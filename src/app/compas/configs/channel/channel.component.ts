@@ -130,9 +130,9 @@ export class ChannelComponent implements OnInit {
     gtChannels() {
       this.blockUI.start('Loading data...');
       this.conSvc.gtChannels().subscribe(data => {
-        this.channels = data;
+        this.channels = JSON.parse(data);
         console.log('custs', this.channels);
-        this.channels = this.channels.collection;
+        this.channels = this.channels.hashset;
         console.log('channels##', this.channels);
         this.source = new LocalDataSource(this.channels);
         this.blockUI.stop();
@@ -168,7 +168,7 @@ export class ChannelComponent implements OnInit {
           console.log('country details', this.channelDetails);
           this.conSvc.upChannel(this.channelDetails).subscribe(res => {
               this.blockUI.stop();
-              this.response = res;
+              this.response = JSON.parse(res);
               if (this.response.status === false) {
                   this.toastr.warning(this.response.respMessage, 'Alert!', { timeOut: 1500 });
               }

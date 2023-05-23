@@ -127,9 +127,9 @@ export class CountryComponent implements OnInit {
   gtCountries() {
     this.blockUI.start('Loading data...');
     this.custSvc.gtCountries().subscribe(data => {
-      this.countries = data;
+      this.countries = JSON.parse(data);
       console.log('custs', this.countries);
-      this.countries = this.countries.collection;
+      this.countries = this.countries.hashset;
       console.log('countries##', this.countries);
       this.source = new LocalDataSource(this.countries);
       this.blockUI.stop();
@@ -178,7 +178,7 @@ log(userId, activity) {
         console.log('country details', this.countryDetails);
         this.regionService.upCountry(this.countryDetails).subscribe(res => {
             this.blockUI.stop();
-            this.response = res;
+            this.response = JSON.parse(res);
             if (this.response.status === false) {
                 this.log(this.rightId, 'failed to add country');
                 this.toastr.warning(this.response.respMessage, 'Alert!', { timeOut: 1500 });
