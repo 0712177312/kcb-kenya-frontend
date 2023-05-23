@@ -73,7 +73,8 @@ export class AppInfoCardComponent implements OnInit {
 
   getInfoCard() {
     this.dsvc.getInforCard().subscribe(data => {
-        this.dash = data;
+      console.log("Info Card", data)
+        this.dash = JSON.parse(data);
     }, error => {
       console.log('error');
     });

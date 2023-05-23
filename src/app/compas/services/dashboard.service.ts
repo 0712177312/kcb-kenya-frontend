@@ -13,15 +13,15 @@ export class DashboardService {
   constructor(private http: HttpClient, private globalService: MySharedService) { }
 
   getStats() {
-      return  this.http.get(`${this.API_URL.url}/dashboard/stats`, this.globalService.getTokenHeader());
+    return this.http.get(`${this.API_URL.url}/dashboard/stats`, { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
 
   getInforCard() {
-    return this.http.get(`${this.API_URL.url}/dashboard/cardinfo`, this.globalService.getTokenHeader());
+    return this.http.get(`${this.API_URL.url}/dashboard/cardinfo`, { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
 
   getBstats() {
-    return this.http.get(`${this.API_URL.url}/dashboard/topbranches`, this.globalService.getTokenHeader());
+    return this.http.get(`${this.API_URL.url}/dashboard/topbranches`, { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
 
 }

@@ -31,9 +31,9 @@ export class DashStatsComponent implements OnInit {
 
   getStats() {
     this.dashSvc.getBstats().subscribe(data => {
-          this.response = data;
+          this.response = JSON.parse(data);
           if (this.response.status === true) {
-              this.stats = this.response.collection;
+              this.stats = this.response.hashset;
           } else {
              return this.toastr.warning(this.response.respMessage, 'Alert!', { timeOut: 4000 });
           }
