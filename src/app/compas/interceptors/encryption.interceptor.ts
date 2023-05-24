@@ -10,7 +10,7 @@ import { UrlTree, DefaultUrlSerializer, Router } from '@angular/router';
 export class EncryptionInterceptor implements HttpInterceptor {
     private readonly encryptURLList: string[];
 
-    constructor(private globalService: MySharedService, private router:Router) {
+    constructor(private globalService: MySharedService, private router: Router) {
         const apiUrl = new Urls().url;
         this.encryptURLList = [
             "/tellers/staff_inquiry",
@@ -22,6 +22,7 @@ export class EncryptionInterceptor implements HttpInterceptor {
             "/tellers/tellersToApproveDetach",
             "/tellers/approveTeller",
             "/tellers/approveTeller",
+            "/tellers/obtainTellerDetails",
             "/sysusers/print/auth",
             "/sysusers/auth",
             "/usergroups/usergroup",
@@ -101,10 +102,10 @@ export class EncryptionInterceptor implements HttpInterceptor {
         return false
     }
 
-async encryptRequest(req: HttpRequest<any>): Promise<HttpRequest<any>> {
-    const url = req.url;
-    if (this.shouldEncryptURL(url)) {
-        if(req.method === 'GET' && url.includes('?')){
+    async encryptRequest(req: HttpRequest<any>): Promise<HttpRequest<any>> {
+        const url = req.url;
+
+        if (req.method === 'GET' && url.includes('?')) {
             const [baseURL, queryParams] = req.url.split('?');
             const encryptedParams = queryParams.split('&').map(param => {
                 const [key, value] = param.split('=');
@@ -112,15 +113,14 @@ async encryptRequest(req: HttpRequest<any>): Promise<HttpRequest<any>> {
             })
             const encryptedUrl = `${baseURL}?${encryptedParams.join('&')}`;
             return req.clone({ url: encryptedUrl });
-        
+
         } else if (req.method === 'POST' && req.body) {
             const encryptedBody = this.globalService.encryptData(req.body);
             return req.clone({ body: encryptedBody });
         }
 
+        return req;
     }
-    return req;
-}
 
 
     private async decryptResponse(res: HttpResponse<any>): Promise<HttpResponse<any>> {

@@ -135,7 +135,7 @@ export class DeleteCustomerComponent implements OnInit {
             'deletedBy': this.rightId
         };
         this.custSvc.removeCustomer(customerDetails).subscribe((response) => {
-            this.response = response;
+            this.response = JSON.parse(response);
             if (this.response.status === true) {
                 // tslint:disable-next-line:max-line-length
                 this.log(this.rightId, 'selected to remove customer with customerId: ' + customerDetails.customerId + ' .Awaiting authorization');
@@ -158,13 +158,13 @@ export class DeleteCustomerComponent implements OnInit {
             'deletedBy': this.rightId
         };
         this.custSvc.removeCustomer(customerDetails).subscribe((response) => {
-            this.response = response;
+            this.response = JSON.parse(response);
             if (this.response.status === true) {
                 this.log(this.rightId, 'removed the customer details of customer with customerId: ' + customerDetails.customerId + ' from the database');
             } else {
                 this.log(this.rightId, 'attempted to remove the customer details of customer with customerId: ' + customerDetails.customerId + ' from the database');
                 this.tellerSvc.removeTeller(customerDetails).subscribe((response) => {
-                    this.response = response;
+                    this.response = JSON.parse(response);
                     if (this.response.status === true) {
                         this.log(this.rightId, 'removed the details of staff with customerId: ' + customerDetails.customerId + ' from the database');
                     } else {
@@ -174,8 +174,8 @@ export class DeleteCustomerComponent implements OnInit {
                     return this.toastr.error('Error while attempting to remove the staff.', 'Error!', {timeOut: 4000});
                 });
             }
-            this.apiService.afisRemove(customerDetails).subscribe((response) => {
-                this.response = response;
+            this.apiService.afisRemove(customerDetails).subscribe((response:any) => {
+                this.response =JSON.parse(response);
                 if (this.response.status === true) {
                     this.log(this.rightId, 'removed the customer details of customer with customerId: ' + customerDetails.customerId + ' from abis');
                     this.isVerified = false;
@@ -200,7 +200,7 @@ export class DeleteCustomerComponent implements OnInit {
             'deletedBy': this.rightId
         };
         this.tellerSvc.removeTeller(tellerDetails).subscribe((response) => {
-            this.response = response;
+            this.response = JSON.parse(response);
             if (this.response.status === true) {
                 this.log(this.rightId, 'selected to remove teller with customerId: ' + tellerDetails.customerId + ' .Awaiting authorization');
                 this.isVerified = false;
@@ -222,13 +222,13 @@ export class DeleteCustomerComponent implements OnInit {
             'deletedBy': this.rightId
         };
         this.tellerSvc.removeTeller(tellerDetails).subscribe((response) => {
-            this.response = response;
+            this.response = JSON.parse(response);
             if (this.response.status === true) {
                 this.log(this.rightId, 'removed the staff details of staff with customerId: ' + tellerDetails.customerId + ' from the database');
             } else {
                 this.log(this.rightId, 'attempted to remove the staff details of staff with customerId: ' + tellerDetails.customerId + ' from the database');
                 this.custSvc.removeCustomer(tellerDetails).subscribe((response) => {
-                    this.response = response;
+                    this.response = JSON.parse(response);
                     if (this.response.status === true) {
                         this.log(this.rightId, 'removed the details of customer with customerId: ' + tellerDetails.customerId + ' from the database');
                     } else {
@@ -238,8 +238,8 @@ export class DeleteCustomerComponent implements OnInit {
                     return this.toastr.error('Error while attempting to remove the customer.', 'Error!', {timeOut: 4000});
                 });
             }
-            this.apiService.afisRemove(tellerDetails).subscribe((response) => {
-                this.response = response;
+            this.apiService.afisRemove(tellerDetails).subscribe((response:any) => {
+                this.response = JSON.parse(response);
                 if (this.response.status === true) {
                     // tslint:disable-next-line:max-line-length
                     this.log(this.rightId, 'removed the staff details of staff with customerId: ' + tellerDetails.customerId + ' from abis');
@@ -275,7 +275,7 @@ export class DeleteCustomerComponent implements OnInit {
                     console.log(data);
                     console.log('here is the data');
 
-                    this.locl = data;
+                    this.locl =JSON.parse(data);
                     if (this.locl.status === true) {
                         this.initCustomerProfile();
                         return this.toastr.success('Customer id is valid', ' Success!');
@@ -314,7 +314,7 @@ export class DeleteCustomerComponent implements OnInit {
             return this.toastr.warning('Staff must start with KE', ' Warning!');
         } else {
             this.tellerSvc.obtainTellerDetails(tellr).subscribe(data => {
-                this.locl = data;
+                this.locl = JSON.parse(data);
                 if (this.locl.status === true) {
                     this.initTellerProfile();
                     return this.toastr.success('Staff id is valid', ' Success!');
