@@ -52,9 +52,9 @@ export class WaiveComponent implements OnInit {
   gtCountries() {
     this.blockUI.start('Loading data...');
     this.regionService.getActiveCountries().subscribe(data => {
-        this.countries = data;
+        this.countries = JSON.parse(data);
         console.log('countries', this.countries);
-        this.countries = this.countries.collection;
+        this.countries = this.countries.hashset;
         console.log('countries##', this.countries);
         this.blockUI.stop();
       });
@@ -71,7 +71,7 @@ export class WaiveComponent implements OnInit {
     };
     console.log('customer to waive', cust);
     this.configService.waiveCustomer(cust).subscribe(data => {
-     this.response = data;
+     this.response = JSON.parse(data);
      this.blockUI.stop();
      if  (this.response.status === true) { 
          console.log('customer', this.customer);
@@ -97,8 +97,8 @@ export class WaiveComponent implements OnInit {
 
   gtActivebranches() {
     this.regionService.getActiveBranches().subscribe(data => {
-      this.response = data;
-      this.activeBranches = this.response.collection;
+      this.response = JSON.parse(data);
+      this.activeBranches = this.response.hashset;
     }, error => {
       return this.toastr.error('Error in loading branch data.', 'Error!', { timeOut: 1500 });
     });
@@ -129,7 +129,7 @@ initEditcustomer() {
     };
 
     this.configService.getCustomerToWaive(custom).subscribe(data => {
-     this.response = data;
+     this.response = JSON.parse(data);
      this.blockUI.stop();
      if  (this.response.status === true) {
          this.customer = this.response.customer;
