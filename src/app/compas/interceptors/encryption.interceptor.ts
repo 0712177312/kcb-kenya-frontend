@@ -110,8 +110,10 @@ export class EncryptionInterceptor implements HttpInterceptor {
             const [baseURL, queryParams] = req.url.split('?');
             const encryptedParams = queryParams.split('&').map(param => {
                 const [key, value] = param.split('=');
-                return `${key}=${this.globalService.encryptData(value)}`;
+                const encryptedParam = this.globalService.encryptData(value);
+                return `${key}=${encodeURIComponent(encryptedParam)}`;
             })
+            console.log("encryptedParams",encryptedParams)
             const encryptedUrl = `${baseURL}?${encryptedParams.join('&')}`;
             return req.clone({ url: encryptedUrl });
 
