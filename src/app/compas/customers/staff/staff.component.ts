@@ -561,9 +561,9 @@ export class StaffComponent implements OnInit, OnDestroy {
     gtCountries() {
 
         this.custSvc.gtCountries().subscribe(data => {
-            this.countries = data;
+            this.countries = JSON.parse(data);
 
-            this.countries = this.countries.collection;
+            this.countries = this.countries.hashset;
 
 
         });
@@ -571,7 +571,7 @@ export class StaffComponent implements OnInit, OnDestroy {
 
     gtBranches() {
         this.custSvc.gtBranches().subscribe(data => {
-            this.branches = data;
+            this.branches = JSON.parse(data);
         });
     }
 
@@ -598,7 +598,7 @@ export class StaffComponent implements OnInit, OnDestroy {
     storeTeller(teller) {
 
         this.tellerSvc.addTeller(teller).subscribe((response) => {
-            this.response = response;
+            this.response = JSON.parse(response);
             if (this.response.status === true) {
                 if (teller.id === 0) {
                     this.log(this.rightId, 'Added Staff >StaffID: ' + teller.tellerId + '>UserName: ' + teller.tellerSignOnName);
@@ -638,7 +638,8 @@ export class StaffComponent implements OnInit, OnDestroy {
             'customerId': teller.customerId
         };
         this.apiService.afisRemove(tellerDetails).subscribe((response: any) => {
-            if (response.status === true) {
+            const res = JSON.parse(response)
+            if (res.status === true) {
                 this.log(this.rightId, +'Detached prints for customerId: ' + tellerDetails.customerId + '.Enrolment Timeout');
             } else {
                 this.log(this.rightId, +'Failed to detach staff prints for customerId: ' + tellerDetails.customerId + '. Enrolment Timeout');
@@ -650,8 +651,8 @@ export class StaffComponent implements OnInit, OnDestroy {
 
     storeCustomer() {
 
-        this.apiService.addCustomer(this.customer).subscribe((response) => {
-            this.response = response;
+        this.apiService.addCustomer(this.customer).subscribe((response:any) => {
+            this.response = JSON.parse(response);
             if (this.response.status === true) {
                 if (this.customer.id === 0) {
                     this.log(this.rightId, 'Added Customer >CIF: ' + this.customer.customerId + ' Cust Name: ' + this.customer.customerName);
@@ -691,7 +692,8 @@ export class StaffComponent implements OnInit, OnDestroy {
             'customerId': customer.customerId
         };
         this.apiService.afisRemove(customerDetails).subscribe((response: any) => {
-            if (response.status === true) {
+            const res = JSON.parse(response)
+            if (res.status === true) {
 
                 this.log(this.rightId, +'Detached customer prints for customerId: ' + customerDetails.customerId + '.Enrollment Timeout');
             } else {
@@ -724,8 +726,8 @@ export class StaffComponent implements OnInit, OnDestroy {
             return this.toastr.error('Kindly ensure you have captured all the fingerprints to continue .', 'Error!', { timeOut: 4000 });
         }
 
-        this.apiService.afisEnroll(this.customer).subscribe((response) => {
-            this.response = response;
+        this.apiService.afisEnroll(this.customer).subscribe((response:any) => {
+            this.response = JSON.parse(response);
 
             if (this.response.status === true) {
                 this.log(this.rightId, 'Enrolled: ' + this.customer.customerName + ' CIF: ' + this.customer.customerId +
@@ -772,8 +774,8 @@ export class StaffComponent implements OnInit, OnDestroy {
             customerId: this.teller.customerId,
             fingerPrints: this.enrolledFPrints
         };
-        this.apiService.afisEnroll(tller).subscribe((response) => {
-            this.response = response;
+        this.apiService.afisEnroll(tller).subscribe((response:any) => {
+            this.response = JSON.parse(response);
 
             if (this.response.status === true) {
                 this.log(this.rightId, 'Enrolled staff: ' + this.teller.tellerName + ' CIF: ' + this.teller.customerId +
@@ -847,8 +849,8 @@ export class StaffComponent implements OnInit, OnDestroy {
 
     gtActivebranches() {
         this.regionService.getActiveBranches().subscribe(data => {
-            this.response = data;
-            this.activeBranches = this.response.collection;
+            this.response = JSON.parse(data);
+            this.activeBranches = this.response.hashset;
         }, error => {
             return this.toastr.error('Error in loading branch data.', 'Error!', { timeOut: 4000 });
         });
@@ -874,7 +876,7 @@ export class StaffComponent implements OnInit, OnDestroy {
             };
 
             this.tellerSvc.checkTellerExists(tellr).subscribe(data => {
-                this.locl = data;
+                this.locl = JSON.parse(data);
                 if (this.locl.status === true) {
                     this.blockUI.stop();
                     return this.toastr.warning('Staff with specified account id number is already enrolled', ' Warning!', { timeOut: 3000 });
@@ -921,7 +923,7 @@ export class StaffComponent implements OnInit, OnDestroy {
         };
 
         this.custSvc.findByAccountNumber(custom).subscribe(data => {
-            this.locl = data;
+            this.locl = JSON.parse(data);
             if (this.locl.status === true) {
                 this.blockUI.stop();
                 return this.toastr.warning('Staff with specified account id number is already enrolled', ' Warning!', { timeOut: 3000 });
@@ -960,10 +962,11 @@ export class StaffComponent implements OnInit, OnDestroy {
     tellerCoBankingInq(teller) {
         // this.tellerSvc.getTllrDetails().subscribe (data => {
         this.blockUI.start('Searching for Staff...');
-        this.tellerSvc.getTellerDetails(teller).subscribe((data: any) => {
+        this.tellerSvc.getTellerDetails(teller).subscribe((res: any) => {
             this.blockUI.stop();
 
-            // console.log("teller data", data);
+            console.log("teller data", res);
+            const data = JSON.parse(res)
 
             if (data.payload) {
 
@@ -990,6 +993,7 @@ export class StaffComponent implements OnInit, OnDestroy {
 
 
         }, error => {
+            console.log(error)
             this.blockUI.stop();
             return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
         });
@@ -999,9 +1003,9 @@ export class StaffComponent implements OnInit, OnDestroy {
         // this.blockUI.start('Inquiring customer details...');
         // this.apiService.getCustomerDetails().subscribe (data => {
         this.blockUI.start('Searching for the Customer...');
-        this.apiService.getCustomerByAccountNo(customer).subscribe(data => {
+        this.apiService.getCustomerByAccountNo(customer).subscribe((data:any) => {
             this.blockUI.stop();
-            this.custInquiry = data;
+            this.custInquiry = JSON.parse(data);
             if (this.custInquiry.payload !== null && this.custInquiry.payload.cif !== '') {
                 this.initProfile();
                 return this.toastr.success('Customer Account Number is valid, can proceed to enroll', ' Success!');
@@ -1132,8 +1136,8 @@ export class StaffComponent implements OnInit, OnDestroy {
         this.apiService.getFingerPrintImage({
             'name': fin, 'missingStatus': this.missingStatus,
             'missingCount': count, 'missing': this.missing, 'customerId': this.account_number
-        }).subscribe(data => {
-            this.hands = data;
+        }).subscribe((data:any) => {
+            this.hands =JSON.parse(data)
             if (this.hands.status === true) {
                 if (this.hands.hand === 'left') {
                     this.getLeftPrint(this.hands);
