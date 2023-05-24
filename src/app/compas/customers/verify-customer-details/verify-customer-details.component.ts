@@ -113,7 +113,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
         'tellerId': teller
       };
       this.tellerSvc.checkTellerExists(tellr).subscribe(data => {
-        this.locl = data;
+        this.locl = JSON.parse(data);
         if (this.locl.status === true) {
 
           return this.toastr.warning('staff with specified details already exists', ' Warning!', { timeOut: 3000 });
@@ -141,7 +141,8 @@ export class VerifyCustomerDetailsComponent implements OnInit {
   }
   tellerCoBankingInq(teller) {
     // this.tellerSvc.getTllrDetails().subscribe (data => {
-    this.tellerSvc.getTellerDetails(teller).subscribe((data: any) => {
+    this.tellerSvc.getTellerDetails(teller).subscribe((res: any) => {
+      const data = JSON.parse(res)
       if (data.payload) {
         if (data.payload.cif !== null) {
           this.tellerInq = data;
@@ -189,7 +190,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
   upgradeCustomerProfile() {
 
     this.tellerSvc.upgradeTellerProfile(this.tellerForm.value).subscribe(data => {
-      this.tellerdata = data;
+      this.tellerdata = JSON.parse(data);
       if (this.tellerdata.status) {
         this.isVerified = false;
         this.tellerProfile = {};
@@ -268,8 +269,8 @@ export class VerifyCustomerDetailsComponent implements OnInit {
   }
   gtActivebranches() {
     this.regionService.getActiveBranches().subscribe(data => {
-      this.response = data;
-      this.activeBranches = this.response.collection;
+      this.response = JSON.parse(data);
+      this.activeBranches = this.response.hashset;
     }, error => {
       return this.toastr.error('Failed to contact ABIS Client', 'Error!', { timeOut: 4000 });
     });
@@ -281,7 +282,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
     };
     this.custSvc.getCustomerToVerify(custom).subscribe(data => {
 
-      this.customer = data;
+      this.customer = JSON.parse(data);
       if (this.customer.status === true) {
         this.isVerify = true;
         this.isProfile = false;
@@ -310,7 +311,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
     }
     console.log(prof);
     this.custSvc.updateProfileDetails(prof).subscribe(data => {
-      this.response = data;
+      this.response = JSON.parse(data);
       if (this.response.status) {
         this.profType = '';
         this.customer = {};
@@ -341,7 +342,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
       'tellerId': teller
     };
     this.tellerSvc.checkTellerExists(tellr).subscribe(data => {
-      this.locl = data;
+      this.locl = JSON.parse(data);
       if (this.locl.status === true) {
         return this.toastr.warning('Customer with specified account id number is already enrolled', ' Warning!', { timeOut: 3000 });
       } else {
@@ -354,7 +355,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
 
   storeTeller(teller) {
     this.tellerSvc.addTeller(teller).subscribe((response) => {
-      this.response = response;
+      this.response = JSON.parse(response);
       if (this.response.status === true) {
         if (teller.id === 0) {
           this.log(this.rightId, 'added Staff ' + this.customer.customerName);
@@ -387,7 +388,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
     }
     console.log(prof);
     this.custSvc.removeProfileDetails(prof).subscribe(data => {
-      this.response = data;
+      this.response = JSON.parse(data);
       if (this.response.status) {
         this.profType = '';
         this.customer = {};
@@ -422,8 +423,8 @@ export class VerifyCustomerDetailsComponent implements OnInit {
     if (prof.createdBy === this.rightId) {
       return this.toastr.warning('User cannot verify profile they enrolled.', 'Warning!', { timeOut: 4000 });
     }
-    this.apiService.afisEnroll(prof).subscribe((response) => {
-      this.response = response;
+    this.apiService.afisEnroll(prof).subscribe((response:any) => {
+      this.response = JSON.parse(response);
       if (this.response.status) {
         this.verifyCustomerDetails();
       } else {

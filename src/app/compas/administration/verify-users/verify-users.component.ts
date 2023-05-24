@@ -50,7 +50,7 @@ export class VerifyUsersComponent implements OnInit {
     this.initApproval();
     this.users = [];
     this.apiSvc.getUsersToApprove().subscribe(data => {
-      this.response = data;
+      this.response = JSON.parse(data);
        this.arrs = this.response.toverify;
        console.log('users to approve', this.arrs);
       if (this.arrs.length > 0) {
@@ -93,8 +93,8 @@ export class VerifyUsersComponent implements OnInit {
       return  this.toastr.warning('Kindly select at least one user to approve', 'Alert!', { timeOut: 1500 });
      }
      this.blockUI.start('Approving data...');
-     this.apiSvc.approveUsers(this.apusers).subscribe(res => {
-       this.response = res;
+     this.apiSvc.approveUsers(this.apusers).subscribe((res:any) => {
+       this.response = JSON.parse(res);
       console.log(this.response);
        if (this.response.status === true) {
          for (let i of this.apusers) {

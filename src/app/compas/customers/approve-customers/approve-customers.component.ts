@@ -324,8 +324,8 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
   }
 
   afisVerifyUser($event) {
-    this.apiService.afisVer($event).subscribe(dat => {
-      this.response = dat;
+    this.apiService.afisVer($event).subscribe((dat:any) => {
+      this.response = JSON.parse(dat);
 
       if (this.response.status === true) {
         this.editMode = false;
@@ -510,8 +510,8 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
     this.apiService.getFingerPrintImage({
       'name': fin, 'missingStatus': this.missingStatus,
       'missingCount': count, 'missing': this.missing, 'customerId': this.account_number
-    }).subscribe(data => {
-      this.hands = data;
+    }).subscribe((data:any) => {
+      this.hands = JSON.parse(data);
       if (this.hands.status === true) {
         if (this.hands.hand === 'left') {
           this.getLeftPrint(this.hands);
@@ -543,9 +543,9 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
       'verifiedBy': this.groupid // manipulate to store group id verified_by due constraints on back end expected input
     }
     this.custSvc.getCustomersToAuthorize(customerDetails).subscribe(data => {
-      this.customers = data;
+      this.customers = JSON.parse(data);
       // console.log('custs', this.customers);
-      this.customers = this.customers.collection;
+      this.customers = this.customers.hashset;
       // console.log('customers##', this.customers);
 
     }, error => {
@@ -563,8 +563,8 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
       'phoneNumber': this.customer.phoneNumber
     };
     // console.log('timestamp', new Date());
-    this.apiService.appoveCustomer(cust).subscribe((response) => {
-      this.response = response;
+    this.apiService.appoveCustomer(cust).subscribe((response:any) => {
+      this.response = JSON.parse(response);
 
 
       if (this.response.status === true) {
@@ -611,8 +611,8 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
       // console.log('customer to authorize..', customer);
       //Ensure finger prints are captured
       if (this.fingerPrints.length > 0) {
-        this.biosvc.afisVerify(customer).subscribe(data => {
-          this.respo = data;
+        this.biosvc.afisVerify(customer).subscribe((data:any) => {
+          this.respo = JSON.parse(data);
           // console.log('repo', this.respo);
           if (this.respo.status === true) {
             this.editMode = false;
@@ -669,7 +669,7 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
     this.blockUI.start('Rejecting the Customer...');
     //remove user from database
     this.custSvc.rejectCustomerEnrollment(customerDetails).subscribe(data => {
-      this.respo = data;
+      this.respo = JSON.parse(data);
       if (this.respo.status === true) {
         this.log(this.rightId, 'rejected the customer ' + customerDetails.customerId);
         //remove from abis

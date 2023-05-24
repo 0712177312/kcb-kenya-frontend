@@ -167,7 +167,8 @@ export class DetachCustomerComponent implements OnInit, OnDestroy {
   gtCustomers() {
     this.blockUI.start('Loading Customer data...');
     this.custSvc.getCustomersToApproveDetach().subscribe((data: any) => {
-      this.customers = data.collection;
+      const res = JSON.parse(data)
+      this.customers = res.hashset;
     }, error => {
       return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 1500 });
     });
@@ -183,11 +184,11 @@ export class DetachCustomerComponent implements OnInit, OnDestroy {
     this.blockUI.start('Approving the Customer Detachment...');
     // update from compas and remove from abis
     this.custSvc.approveRemoveCustomer(customerDetails).subscribe((response) => {
-      this.response = response;
+      this.response = JSON.parse(response);
       this.log(this.rightId, "approved removal of customer details of customer with customerId: " + customerDetails.customerId + " from the database");
-      this.apiService.afisRemove(customerDetails).subscribe((response) => {
+      this.apiService.afisRemove(customerDetails).subscribe((response:any) => {
         this.blockUI.stop();
-        this.response = response;
+        this.response = JSON.parse(response);
         if (this.response.status === true) {
           this.log(this.rightId, "removed the customer details of customer with customerId: " + customerDetails.customerId + " from abis");
           this.isVerified = false;
@@ -217,7 +218,7 @@ export class DetachCustomerComponent implements OnInit, OnDestroy {
     }
     this.blockUI.start('Rejecting the Customer...');
     this.custSvc.rejectRemoveCustomer(customerDetails).subscribe(data => {
-      this.response = data;
+      this.response = JSON.parse(data);
       this.blockUI.stop();
       if (this.response.status === true) {
         this.editMode = false;

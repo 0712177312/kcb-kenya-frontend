@@ -139,7 +139,8 @@ export class DetachStaffComponent implements OnInit, OnDestroy {
     this.blockUI.start('Loading Staff data...');
     this.tellerSvc.getTellersToApproveDetach().subscribe((data: any) => {
       this.blockUI.stop();
-      this.tellers = data.collection;
+      const res = JSON.parse(data)
+      this.tellers = res.hashset;
     }, error => {
       this.blockUI.stop();
       return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 1500 });
@@ -156,11 +157,11 @@ export class DetachStaffComponent implements OnInit, OnDestroy {
     this.blockUI.start('Approving the Staff Detachment...');
     // update from compas and remove from abis
     this.tellerSvc.approveRemoveTeller(staffDetails).subscribe((response) => {
-      this.response = response;
+      this.response = JSON.parse(response);
       this.log(this.rightId, "approved removal of staff details of staff with customerId: " + staffDetails.customerId + " from the database");
-      this.apiService.afisRemove(staffDetails).subscribe((response) => {
+      this.apiService.afisRemove(staffDetails).subscribe((response:any) => {
         this.blockUI.stop();
-        this.response = response;
+        this.response = JSON.parse(response);
         if (this.response.status === true) {
           this.log(this.rightId, "removed the staff details of staff with customerId: " + staffDetails.customerId + " from abis");
           this.isVerified = false;
@@ -190,7 +191,7 @@ export class DetachStaffComponent implements OnInit, OnDestroy {
     }
     this.blockUI.start('Rejecting the Staff...');
     this.tellerSvc.rejectRemoveTeller(staffDetails).subscribe(data => {
-      this.response = data;
+      this.response = JSON.parse(data);
       this.blockUI.stop();
       if (this.response.status === true) {
         this.editMode = false;
