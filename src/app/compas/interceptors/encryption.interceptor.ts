@@ -23,6 +23,7 @@ export class EncryptionInterceptor implements HttpInterceptor {
             "/tellers/approveTeller",
             "/tellers/approveTeller",
             "/tellers/obtainTellerDetails",
+            "/tellers/previewStaff",
             "/sysusers/print/auth",
             "/sysusers/auth",
             "/usergroups/usergroup",
@@ -72,7 +73,7 @@ export class EncryptionInterceptor implements HttpInterceptor {
         console.log(url + ":::" + shouldEncrypt)
         return from(this.encryptRequest(req)).pipe(
             //TODO: pass encrypted data when posting
-            switchMap((encryptedReq: any) => next.handle(req)),
+            switchMap((encryptedReq: any) => next.handle(encryptedReq)),
 
             switchMap((event) => {
                 if (this.shouldEncryptURL(url)) {
