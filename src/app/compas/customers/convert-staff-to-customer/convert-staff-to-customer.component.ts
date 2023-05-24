@@ -66,7 +66,8 @@ export class ConvertStaffToCustomerComponent implements OnInit {
       'tellerId': teller
     };
     this.tellerSvc.checkStaffApproved(tellerDetails).subscribe(data => {
-      this.tellerResponse = data;
+      this.tellerResponse = JSON.parse(data);
+      console.log("tellerResponse",this.tellerResponse)
       if (this.tellerResponse.status === true) {
         this.initTellerProfile();
         return this.toastr.success('Staff with the specified id was found', 'Success!');
@@ -112,7 +113,7 @@ export class ConvertStaffToCustomerComponent implements OnInit {
       "branchCode": this.tellerResponse.teller.deptCode
     };
     this.custSvc.convertStaffToCustomer(customerDetails).subscribe((response) => {
-      this.convertStaffToCustomerResponse = response;
+      this.convertStaffToCustomerResponse = JSON.parse(response);
       if (this.convertStaffToCustomerResponse.status === true) {
         this.isVerified = false;
         this.log(this.rightId, "converted the staff with tellerid: " + this.tellerResponse.teller.tellerId + " to customer");
