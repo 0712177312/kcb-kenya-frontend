@@ -44,7 +44,7 @@ export class EnrolledCustomersComponent implements OnInit {
   ngOnInit() {
     console.log('init');
     this.customerStatus = [{ name: 'Enrolled', id: 'N' }, { name: 'Verified', id: 'A' }, { name: 'Rejected', id: 'R' }, { name: 'Deleted', id: 'AD' }];
-  
+
     this.otc = JSON.parse(localStorage.getItem('otc'));
     this.branch = this.otc.branch;
     this.groupid = this.otc.group;
@@ -60,8 +60,8 @@ export class EnrolledCustomersComponent implements OnInit {
     } else {
       console.log('dates $$$$', this.toDate, this.fromDate);
       this.reportSvc.getCustomerPreview(this.formatDate(this.fromDate), this.formatDate(this.toDate), this.enrolledType, this.branch, this.groupid).subscribe(data => {
-        this.response = data;
-        this.response = this.response.collection;
+        this.response = JSON.parse(data);
+        this.response = this.response.hashset;
         console.log(this.response);
       });
     }

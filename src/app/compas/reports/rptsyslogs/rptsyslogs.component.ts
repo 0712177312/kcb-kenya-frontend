@@ -56,8 +56,8 @@ export class RptsyslogsComponent implements OnInit {
       return this.toastr.warning('Kindly specify to user to continue', 'Warning!', { timeOut: 4000 });
     } else {
       this.reportSvc.getSystemLogs(this.formatDate(this.fromDate), this.formatDate(this.toDate), this.userId).subscribe(data => {
-        this.resp = data;
-        if (this.resp.collection.length <= 0) {
+        this.resp = JSON.parse(data);
+        if (this.resp.hashset.length <= 0) {
           return this.toastr.warning('No items found', 'Alert', { timeOut: 4000 });
         }
         if (this.resp.status === true && this.resp.collection.length > 0) {
@@ -73,7 +73,7 @@ export class RptsyslogsComponent implements OnInit {
   }
 
   getUsers() {
-    this.userSvc.getUserProfiles().subscribe(data => {
+    this.userSvc.getUserProfiles().subscribe((data:any) => {
       this.users = data;
       if (this.users.status === true) {
         this.usersResp = this.users.collection;

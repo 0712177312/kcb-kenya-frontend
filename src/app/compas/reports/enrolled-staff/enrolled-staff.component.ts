@@ -44,7 +44,7 @@ export class EnrolledStaffComponent implements OnInit {
       return this.toastr.warning('Kindly specify to date to continue', 'Warning!', { timeOut: 3000 });
     } else {
       this.reportSvc.getStaffPreview(this.formatDate(this.fromDate), this.formatDate(this.toDate), this.enrolledType, this.branch, this.groupid).subscribe(data => {
-        this.response = data;
+        this.response = JSON.parse(data);
         this.response = this.response.collection;
       });
     }
