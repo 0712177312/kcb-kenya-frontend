@@ -53,9 +53,9 @@ export class WaivedCountryComponent implements OnInit {
   gtCountries() {
     this.blockUI.start('Loading data...');
     this.regionService.waivedCountry().subscribe(data => {
-      this.countries = data;
+      this.countries = JSON.parse(data);
       console.log('custs', this.countries);
-      this.countries = this.countries.collection;
+      this.countries = this.countries.hashset;
       console.log('countries##', this.countries);
       this.source = new LocalDataSource(this.countries);
       this.blockUI.stop();
@@ -76,7 +76,7 @@ approveCountryCountry() {
   };
   this.blockUI.start('Rejecting country waive...');
   this.regionService.approveCountryWaive(cou).subscribe(data => {
-    this.response = data;
+    this.response = JSON.parse(data);
     this.blockUI.stop();
     if (this.response.status === true) {
       this.log(this.rightId, 'approved country waive ' + this.country.id);
@@ -106,7 +106,7 @@ rejectCountry() {
   };
   this.blockUI.start('Rejecting country waive...');
   this.regionService.rejectCountryWaive(cou).subscribe(data => {
-    this.response = data;
+    this.response = JSON.parse(data);
     this.blockUI.stop();
     if (this.response.status === true) {
       this.log(this.rightId, 'rejected country waive ' + this.country.id );

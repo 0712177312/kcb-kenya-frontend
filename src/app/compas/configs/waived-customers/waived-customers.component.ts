@@ -147,9 +147,9 @@ initEditcustomer($event) {
 gtCustomers() {
   this.blockUI.start('Loading data...');
   this.custSvc.getWaivedCustomers().subscribe(data => {
-    this.customers = data;
+    this.customers = JSON.parse(data);
     console.log('custs', this.customers);
-    this.customers = this.customers.collection;
+    this.customers = this.customers.hashset;
     this.source = this.customers;
     console.log('customers##', this.customers);
     this.blockUI.stop();
@@ -178,7 +178,7 @@ gtCustomers() {
      this.blockUI.start('updating customer details...');
       this.custSvc.approveCustomerWaive(cust).subscribe(data => {
         this.blockUI.stop();
-        this.response = data;
+        this.response = JSON.parse(data);
         if (this.response.status === true) {
           this.log(this.rightId, 'approved customer waive ' + this.customer.customerId);
           this.editMode = false;
@@ -209,7 +209,7 @@ gtCustomers() {
     this.blockUI.start('updating customer details...');
     this.custSvc.rejectCustomerWaive(cust).subscribe(data => {
       this.blockUI.stop();
-      this.response = data;
+      this.response = JSON.parse(data);
       if (this.response.status === true) {
         this.log(this.rightId, 'rejected customer waive ' + this.customer.customerId);
         this.editMode = false;

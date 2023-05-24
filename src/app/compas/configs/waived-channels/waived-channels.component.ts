@@ -61,9 +61,9 @@ export class WaivedChannelsComponent implements OnInit {
   gtChannels() {
     this.blockUI.start('Loading data...');
     this.conSvc.getWaivedChannels().subscribe(data => {
-      this.channels = data;
+      this.channels = JSON.parse(data);
       console.log('custs', this.channels);
-      this.channels = this.channels.collection;
+      this.channels = this.channels.hashset;
       console.log('channels##', this.channels);
       this.source = new LocalDataSource(this.channels);
       this.blockUI.stop();
@@ -96,7 +96,7 @@ rejectChannels() {
   this.blockUI.start('updating channel details ...');
         this.conSvc.rejectChannelWaive(chann).subscribe(res => {
             this.blockUI.stop();
-            this.response = res;
+            this.response = JSON.parse(res);
             if (this.response.status === true) {
                this.log(this.rightId, 'rejected channel waive id ' + this.channel.id);
                 this.editMode = false;
@@ -125,7 +125,7 @@ approveWaivedChannel() {
   this.blockUI.start('updating channel details ...');
         this.conSvc.approveWaivedChannel(chann).subscribe(res => {
             this.blockUI.stop();
-            this.response = res;
+            this.response = JSON.parse(res);
             if (this.response.status === true) {
                 this.log(this.rightId, 'approved channel waive id ' + this.channel.id);
                 this.editMode = false;

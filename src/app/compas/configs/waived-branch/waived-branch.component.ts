@@ -63,9 +63,9 @@ export class WaivedBranchComponent implements OnInit {
     gtbranches() {
       this.blockUI.start('Loading data...');
       this.regionService.getWaivedBranches().subscribe(data => {
-        this.branches = data;
+        this.branches = JSON.parse(data);
         console.log('custs', this.branches);
-        this.branches = this.branches.collection;
+        this.branches = this.branches.hashset;
         console.log('branches##', this.branches);
         this.source = new LocalDataSource(this.branches);
         this.blockUI.stop();
@@ -76,7 +76,7 @@ export class WaivedBranchComponent implements OnInit {
     }
     gtActiveCountries() {
       this.regionService.getActiveCountries().subscribe(data => {
-        this.response = data;
+        this.response = JSON.parse(data);
         this.activeCountries = this.response.hashset;
         console.log('countries##', this.activeCountries);
       }, error => {
@@ -97,7 +97,7 @@ export class WaivedBranchComponent implements OnInit {
     };
           this.regionService.approveWaivedBranches(bra).subscribe(res => {
               this.blockUI.stop();
-              this.response = res;
+              this.response = JSON.parse(res);
               if (this.response.status === false) {
                   this.toastr.warning(this.response.respMessage, 'Alert!', { timeOut: 4000 });
               }
@@ -125,7 +125,7 @@ export class WaivedBranchComponent implements OnInit {
       };
             this.regionService.rejectBranchWaive(bra).subscribe(res => {
                 this.blockUI.stop();
-                this.response = res;
+                this.response = JSON.parse(res);
                 if (this.response.status === false) {
                   this.log(this.rightId, 'failed to reject branch waive ' + this.branch.id);
                     this.toastr.warning(this.response.respMessage, 'Alert!', { timeOut: 4000 });
