@@ -173,8 +173,10 @@ export class LoginComponent implements OnInit {
 
           // get user
           this.appService.getUser().subscribe((user: any) => {
-            if (user.status) {
-              this.response = user;
+            console.log("User::", user)
+            const res = JSON.parse(user)
+            if (res.status) {
+              this.response =JSON.parse(user);
 
               this.appService.getUserAssignedRights(this.response.model.group).subscribe((userRights:any) => {
                 this.userAssignedRights =  JSON.parse(userRights);
@@ -242,6 +244,7 @@ export class LoginComponent implements OnInit {
             }
 
           }, error => {
+            console.log("Error::", error)
             return this.toastr.warning('No User Details Found', 'Alert!', { timeOut: 1500 });
           })
         } else {

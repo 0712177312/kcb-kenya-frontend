@@ -22,7 +22,7 @@ export class AppService {
 
   getUser() {
     return this.http.get(`${this.API_URL.url}/getLoggedInUserDetails`,
-    { headers: this.globalService.getTokenHeader().headers }
+    {  responseType: 'text', headers: this.globalService.getTokenHeader().headers}
     );
   }
 }

@@ -64,6 +64,9 @@ export class EncryptionInterceptor implements HttpInterceptor {
             "/gtWaivedchannels",
             "/gtChannelstoWaive",
             "/gtchannels",
+            "/auth/manual_login",
+            "/getLoggedInUserDetails"
+
         ].map(endpoint => apiUrl + endpoint);
     }
 
@@ -80,6 +83,7 @@ export class EncryptionInterceptor implements HttpInterceptor {
                     const decryptedData = this.decryptResponse(event as any)
                     return from(decryptedData)
                 }
+                console.log("SHOULD NOT DECRYPT:", url)
                 return of(event)
             })
         );
@@ -112,7 +116,7 @@ export class EncryptionInterceptor implements HttpInterceptor {
                 const encryptedParam = this.globalService.encryptData(value);
                 return `${key}=${encodeURIComponent(encryptedParam)}`;
             })
-            console.log("encryptedParams",encryptedParams)
+            console.log("encryptedParams", encryptedParams)
             const encryptedUrl = `${baseURL}?${encryptedParams.join('&')}`;
             return req.clone({ url: encryptedUrl });
 
@@ -135,7 +139,7 @@ export class EncryptionInterceptor implements HttpInterceptor {
             }
             return res.clone({ body: JSON.parse(decryptedBody) });
         }
-        console.log("Status",res.status)
+        console.log("Status", res.status)
         console.log("ResponseBODY", res.body)
         return res;
     }
