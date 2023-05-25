@@ -538,7 +538,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
         this.custSvc.gtCustomers().subscribe((data:any) => {
             this.customers =data;
 
-            this.customers = this.customers.hashset;
+            this.customers = this.customers.collection;
 
 
         }, error => {
@@ -951,12 +951,6 @@ export class CustomersComponent implements OnInit, OnDestroy {
             console.log("getCustomerByAccountNo", data)
             this.blockUI.stop();
             this.custInquiry = JSON.parse(data);
-
-
-            // console.log('Result from inquiring customer');
-            // console.log(this.custInquiry);
-            // console.log('Result from inquiring customer');
-
             if (this.custInquiry.payload && this.custInquiry.payload.cif !== '') {
                 this.initProfile();
                 return this.toastr.success('Customer Account Number is valid, can proceed to enroll', ' Success!');

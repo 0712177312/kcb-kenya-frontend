@@ -70,7 +70,6 @@ export class EncryptionInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const url = req.url
         const shouldEncrypt = this.shouldEncryptURL(url)
-        console.log(url + ":::" + shouldEncrypt)
         return from(this.encryptRequest(req)).pipe(
             //TODO: pass encrypted data when posting
             switchMap((encryptedReq: any) => next.handle(encryptedReq)),
@@ -129,12 +128,15 @@ export class EncryptionInterceptor implements HttpInterceptor {
     private async decryptResponse(res: HttpResponse<any>): Promise<HttpResponse<any>> {
 
         if (res.body) {
+            console.log("DecryptingBody", res.url)
             const decryptedBody = this.globalService.decryptData(res.body);
             if (this.isJSONString(decryptedBody)) {
                 return res.clone({ body: decryptedBody });
             }
             return res.clone({ body: JSON.parse(decryptedBody) });
         }
+        console.log("Status",res.status)
+        console.log("ResponseBODY", res.body)
         return res;
     }
 

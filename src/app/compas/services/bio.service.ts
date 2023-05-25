@@ -75,19 +75,19 @@ export class BioService {
   }
 
   afisIdentify(applicant) {
-    return this.http.post(`${this.getConfigs().abis}/identify`, applicant, this.globalService.getTokenHeader());
+    return this.http.post(`${this.getConfigs().abis}/identify`, applicant,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
 
   afisRemove(applicant) {
-    return this.http.post(`${this.getConfigs().abis}/delete`, applicant, this.globalService.getTokenHeader());
+    return this.http.post(`${this.getConfigs().abis}/delete`, applicant, { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
 
   appoveCustomer(cust) {
-    return this.http.post(`${this.API_URL.url}/approveCustomer`, cust, this.globalService.getTokenHeader());
+    return this.http.post(`${this.API_URL.url}/approveCustomer`, cust,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
 
   getCustomerByAccountNo(customer) {
-    return this.http.post(`${this.API_URL.url}/customer_inquiry`, customer, this.globalService.getTokenHeader());
+    return this.http.post(`${this.API_URL.url}/customer_inquiry`, customer,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
 
   getCustomerDetails() {
