@@ -74,6 +74,13 @@ export class BioService {
     return this.http.post(`${this.getConfigs().abis}/verify`, applicant, this.globalService.getTokenHeader());
   }
 
+  afisLogin(applicant) {
+    return this.http.post(`${this.getConfigs().abis}/login`, applicant, {
+      responseType: 'text',
+    });
+  }
+
+
   afisIdentify(applicant) {
     return this.http.post(`${this.getConfigs().abis}/identify`, applicant,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }

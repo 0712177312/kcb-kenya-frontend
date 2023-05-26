@@ -176,15 +176,15 @@ export class LoginComponent implements OnInit {
             console.log("User::", user)
             const res = JSON.parse(user)
             if (res.status) {
-              this.response =JSON.parse(user);
+              this.response = JSON.parse(user);
 
-              this.appService.getUserAssignedRights(this.response.model.group).subscribe((userRights:any) => {
-                this.userAssignedRights =  JSON.parse(userRights);
+              this.appService.getUserAssignedRights(this.response.model.group).subscribe((userRights: any) => {
+                this.userAssignedRights = JSON.parse(userRights);
                 if (this.userAssignedRights.status === true) {
                   this.log(this.response.model.id, 'logged in');
                   this.appService.getUserMenus(this.response.model.group).subscribe(resp => {
                     this.menus = JSON.parse(resp);
-    
+
                     if (this.menus.status === true) {
                       this.storageObject.username = this.user.username;
                       this.storageObject.rightId = this.response.model.id;
@@ -192,7 +192,7 @@ export class LoginComponent implements OnInit {
                       this.storageObject.branch = this.response.model.branch;
                       this.storageObject.group = this.response.model.group;
                       this.storageObject.userAssignedRights = this.userAssignedRights.hashset;
-    
+
                       localStorage.setItem('otc', JSON.stringify(this.storageObject));
                       this.globalService.setAuth(true);
                       this.globalService.setRightId(this.user.id);
@@ -210,7 +210,7 @@ export class LoginComponent implements OnInit {
                       this.storageObject.branch = this.user.branch;
                       this.storageObject.group = this.response.model.group;
                       this.storageObject.userAssignedRights = this.userAssignedRights.hashset;
-    
+
                       localStorage.setItem('otc', JSON.stringify(this.storageObject));
                       this.globalService.setAuth(true);
                       this.globalService.setRightId(this.user.id);
@@ -224,8 +224,8 @@ export class LoginComponent implements OnInit {
                       //  this.blockUI.stop();
                       return this.toastr.warning(this.menus.respMessage, 'Alert!', { timeOut: 1500 });
                     }
-                  }, error=>{
-                  //  console.log("Error::", this.globalService.decryptData(error.error.text))
+                  }, error => {
+                    //  console.log("Error::", this.globalService.decryptData(error.error.text))
                     return this.toastr.warning('Error getting User Menus', 'Alert!', { timeOut: 1500 });
                   });
                 } else {
@@ -290,22 +290,49 @@ export class LoginComponent implements OnInit {
       return this.toastr.warning('Please specify the user name to continue', 'Alert!', { timeOut: 1500 });
     } else {
       this.blockUI.start('Verifying user finger print...');
-      this.apiService.afisVer(this.verifyUser).subscribe(dat => {
-        this.response = dat;
+      this.apiService.afisLogin(this.verifyUser).subscribe((dat: any) => {
+        const authRes = JSON.parse(dat);
+        console.log("authRes", authRes)
+        if (authRes.access_token && authRes.access_token !== '') {
+          localStorage.setItem('auth', JSON.stringify(authRes))
 
-        if (this.response.status === true) {
+          this.appService.getUser().subscribe((user: any) => {
+            console.log("User::", user)
+            const res = JSON.parse(user)
+            if (res.status) {
+              this.response = JSON.parse(user);
+              this.printAuth();
+            } else {
+              this.blockUI.stop();
+              return this.toastr.warning('No User Found', 'Alert!', { timeOut: 1500 });
+            }
 
-          // this.toastr.success('Profile verified successfully', ' Success!');
-          this.printAuth();
+          }, error => {
+            console.log("Error::", error)
+            return this.toastr.warning('No User Details Found', 'Alert!', { timeOut: 1500 });
+          })
+
         } else {
           this.blockUI.stop();
-          return this.toastr.warning(this.response.message, 'Warning!', { timeOut: 3000 });
+          return this.toastr.warning(authRes.message, 'Warning!', { timeOut: 3000 });
         }
-      }, error => {
-        this.log(0, 'server error ' + this.user.username);
-        this.blockUI.stop();
-        return this.toastr.error("Failed to contact ABIS Client", 'Error!', { timeOut: 1500 });
       });
+      // this.apiService.afisVer(this.verifyUser).subscribe((dat:any) => {
+      //   this.response = JSON.parse(dat); 
+
+      //   if (this.response.status === true) {
+
+      //     // this.toastr.success('Profile verified successfully', ' Success!');
+      //     this.printAuth();
+      //   } else {
+      //     this.blockUI.stop();
+      //     return this.toastr.warning(this.response.message, 'Warning!', { timeOut: 3000 });
+      //   }
+      // }, error => {
+      //   this.log(0, 'server error ' + this.user.username);
+      //   this.blockUI.stop();
+      //   return this.toastr.error("Failed to contact ABIS Client", 'Error!', { timeOut: 1500 });
+      // });
     }
   }
 
@@ -321,10 +348,10 @@ export class LoginComponent implements OnInit {
       }
       if (this.response.status === true) {
         this.appService.getUserAssignedRights(this.response.model.group).subscribe(resp => {
-          this.userAssignedRights = resp;
+          this.userAssignedRights =JSON.parse(resp);
           if (this.userAssignedRights.status === true) {
             this.appService.getUserMenus(this.response.model.group).subscribe(resp => {
-              this.menus = resp;
+              this.menus = JSON.parse(resp);
               this.blockUI.stop();
               if (this.menus.status === true) {
                 this.storageObject.username = this.user.username;

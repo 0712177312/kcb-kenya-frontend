@@ -5,6 +5,9 @@ export class Urls {
 
     // private uri = 'http://10.216.1.74:8090/compas/rest/v1' // UAT ENV
 
+    private outUri = "http://10.216.1.74:8090/compas"
+    // private outUri = ""
+
 
 
     //private uri = 'rest/v1';
@@ -12,6 +15,10 @@ export class Urls {
 
     get url(): string {
         return this.uri;
+    }
+
+    get outUrl(): string {
+        return this.outUri;
     }
 
     // set url(uri: string) {

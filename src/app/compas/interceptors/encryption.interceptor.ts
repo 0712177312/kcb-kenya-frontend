@@ -15,6 +15,7 @@ export class EncryptionInterceptor implements HttpInterceptor {
         "/verify",
         "/identify",
         "/delete",
+        "/login",
     ]
 
     private compassEncryptUrls = [
