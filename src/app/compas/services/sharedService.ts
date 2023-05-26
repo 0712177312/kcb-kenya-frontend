@@ -45,6 +45,11 @@ export class MySharedService {
     return headers;
   }
 
+  getAbisClient(){
+    const localData = JSON.parse(localStorage.getItem('bio.glob#$$#'));
+    return localData? localData.abis : ""
+  }
+
   encryptData(data) {
     const akey2 = CryptoJS.enc.Utf8.parse(this.encPassword);
     const iv2 = CryptoJS.enc.Utf8.parse(this.encPassword);

@@ -8,77 +8,95 @@ import { UrlTree, DefaultUrlSerializer, Router } from '@angular/router';
 
 @Injectable()
 export class EncryptionInterceptor implements HttpInterceptor {
-    private readonly encryptURLList: string[];
+    private  encryptURLList: string[];
+    private abisEncryptUrls = [
+        "/Enroll",
+        "/verifyMultiple",
+        "/verify",
+        "/identify",
+        "/delete",
+    ]
+
+    private compassEncryptUrls = [
+        "/tellers/staff_inquiry",
+        "/tellers/gtTellers",
+        "/tellers/gtBranchTellers",
+        "/tellers/gtTeller",
+        "/tellers/checkStaffApproved",
+        "/tellers/tellersToApprove",
+        "/tellers/tellersToApproveDetach",
+        "/tellers/approveTeller",
+        "/tellers/approveTeller",
+        "/tellers/obtainTellerDetails",
+        "/tellers/previewStaff",
+        "/sysusers/print/auth",
+        "/sysusers/auth",
+        "/usergroups/usergroup",
+        "/usergroups/getUserGroupUsingGroupId",
+        "/usergroups/gtUserGroups",
+        "/usergroups/gtRights",
+        "/usergroups",
+        "/getSystemActivity",
+        "/gtLogs",
+        "/rightsmenulist",
+        "/gtBranchesPrev",
+        "/gtCountriesToWaive",
+        "/gtWaivedCountries",
+        "/gtWaivedBranches",
+        "/getBranchesToWaive",
+        "/gtActiveBranches",
+        "/gtBranches",
+        "/gtActiveCountryBranches",
+        "/gtActiveCountries",
+        "/gtCountries",
+        "/menulist/group",
+        "/menulist",
+        "/dashboard/cardinfo",
+        "/dashboard/topbranches",
+        "/dashboard/configs",
+        "/rejectRemoveCustomer",
+        "/approveRemoveCustomer",
+        "/previewCustomers",
+        "/gtWaivedCustomers",
+        "/gtCustomerToWaive",
+        "/customersToApproveDetach",
+        "/customersToApprove",
+        "/obtainCustomerDetails",
+        "/identifyCustomer",
+        "/getMatchedCustomers",
+        "/gtCustomers",
+        "/customer_inquiry",
+        "/gtWaivedchannels",
+        "/gtChannelstoWaive",
+        "/gtchannels",
+        "/auth/manual_login",
+        "/getLoggedInUserDetails"
+    ]
+
 
     constructor(private globalService: MySharedService, private router: Router) {
-        const apiUrl = new Urls().url;
-        this.encryptURLList = [
-            "/tellers/staff_inquiry",
-            "/tellers/gtTellers",
-            "/tellers/gtBranchTellers",
-            "/tellers/gtTeller",
-            "/tellers/checkStaffApproved",
-            "/tellers/tellersToApprove",
-            "/tellers/tellersToApproveDetach",
-            "/tellers/approveTeller",
-            "/tellers/approveTeller",
-            "/tellers/obtainTellerDetails",
-            "/tellers/previewStaff",
-            "/sysusers/print/auth",
-            "/sysusers/auth",
-            "/usergroups/usergroup",
-            "/usergroups/getUserGroupUsingGroupId",
-            "/usergroups/gtUserGroups",
-            "/usergroups/gtRights",
-            "/usergroups",
-            "/getSystemActivity",
-            "/gtLogs",
-            "/rightsmenulist",
-            "/gtBranchesPrev",
-            "/gtCountriesToWaive",
-            "/gtWaivedCountries",
-            "/gtWaivedBranches",
-            "/getBranchesToWaive",
-            "/gtActiveBranches",
-            "/gtBranches",
-            "/gtActiveCountryBranches",
-            "/gtActiveCountries",
-            "/gtCountries",
-            "/menulist/group",
-            "/menulist",
-            "/dashboard/cardinfo",
-            "/dashboard/topbranches",
-            "/dashboard/configs",
-            "/rejectRemoveCustomer",
-            "/approveRemoveCustomer",
-            "/previewCustomers",
-            "/gtWaivedCustomers",
-            "/gtCustomerToWaive",
-            "/customersToApproveDetach",
-            "/customersToApprove",
-            "/obtainCustomerDetails",
-            "/identifyCustomer",
-            "/getMatchedCustomers",
-            "/gtCustomers",
-            "/customer_inquiry",
-            "/gtWaivedchannels",
-            "/gtChannelstoWaive",
-            "/gtchannels",
-            "/auth/manual_login",
-            "/getLoggedInUserDetails"
+    }
 
-        ].map(endpoint => apiUrl + endpoint);
+    private buildURLList(){
+        const apiUrl = new Urls().url;
+        const abisURL = this.globalService.getAbisClient()
+        const fullAbisUrls = this.abisEncryptUrls.map(endpoint => abisURL + endpoint);
+        const fullCompassUrls = this.compassEncryptUrls.map(endpoint => apiUrl + endpoint);
+        this.encryptURLList = [
+            ...fullAbisUrls,
+            ...fullCompassUrls
+        ]
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        this.buildURLList();
         const url = req.url
         const shouldEncrypt = this.shouldEncryptURL(url)
         return from(this.encryptRequest(req)).pipe(
-            //TODO: pass encrypted data when posting
             switchMap((encryptedReq: any) => next.handle(encryptedReq)),
 
             switchMap((event) => {
-                if (this.shouldEncryptURL(url)) {
+                if (shouldEncrypt) {
                     console.log("SHOULD DECRYPT:", url)
                     const decryptedData = this.decryptResponse(event as any)
                     return from(decryptedData)

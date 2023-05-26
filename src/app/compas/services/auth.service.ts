@@ -36,14 +36,23 @@ export class AuthService {
     });
   }
 
+  logout(){
+    return this.http.post(`${this.API_URL.outUrl}/logout`, {}, {
+      responseType: 'text',
+      headers: this.globalService.getTokenHeader().headers
+    });
+  }
+
   printAuth(user) {
     return this.http.post(`${this.API_URL.url}/sysusers/print/auth`, user,   { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
 
   logOutUser() {
-    this.sharedService.setAuth(false);
-    sessionStorage.removeItem('otc');
-    sessionStorage.removeItem('bio.glob#$$#');
-    this.router.navigate(['/auth']);
+    this.logout().subscribe((data: any) => {
+      this.sharedService.setAuth(false);
+      sessionStorage.removeItem('otc');
+      sessionStorage.removeItem('bio.glob#$$#');
+      this.router.navigate(['/auth']);
+    });
   }
 }
