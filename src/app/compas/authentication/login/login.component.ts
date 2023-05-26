@@ -184,7 +184,6 @@ export class LoginComponent implements OnInit {
                   this.log(this.response.model.id, 'logged in');
                   this.appService.getUserMenus(this.response.model.group).subscribe(resp => {
                     this.menus = JSON.parse(resp);
-
                     if (this.menus.status === true) {
                       this.storageObject.username = this.user.username;
                       this.storageObject.rightId = this.response.model.id;
@@ -192,7 +191,6 @@ export class LoginComponent implements OnInit {
                       this.storageObject.branch = this.response.model.branch;
                       this.storageObject.group = this.response.model.group;
                       this.storageObject.userAssignedRights = this.userAssignedRights.hashset;
-
                       localStorage.setItem('otc', JSON.stringify(this.storageObject));
                       this.globalService.setAuth(true);
                       this.globalService.setRightId(this.user.id);
@@ -210,7 +208,6 @@ export class LoginComponent implements OnInit {
                       this.storageObject.branch = this.user.branch;
                       this.storageObject.group = this.response.model.group;
                       this.storageObject.userAssignedRights = this.userAssignedRights.hashset;
-
                       localStorage.setItem('otc', JSON.stringify(this.storageObject));
                       this.globalService.setAuth(true);
                       this.globalService.setRightId(this.user.id);
