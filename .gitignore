@@ -48,3 +48,4 @@ testem.log
 Thumbs.db
 node_modules/*
 src/app/compas/services/url.ts
+.env

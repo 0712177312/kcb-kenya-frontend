@@ -67,7 +67,7 @@
                     </div>
                   </div>
                   <div class="col-sm-9">
-                    <input type="text" class="form-control" autocomplete="off" id="inputEmail3"
+                    <input type="text" class="form-control" autocomplete="off" id="inputEmail3"  (keypress)="numberOnly($event)"
                       [(ngModel)]="account_number" placeholder="Customer Id" [ngModelOptions]="{standalone: true}">
                   </div>
                 </div>
@@ -78,7 +78,7 @@
                   <button type="submit" class="btn btn-success cust-bt waves-effect waves-light"
                     (click)="getCustomer(account_number)">NEXT</button>
                   <button type="button" class="btn btn-danger waves-effect waves-light"
-                    (click)="cancelEnr()">CANCEL</button>
+                    (click)="cancelEnr()">CANCEL</button> 
                 </div>
               </div>
             </form>

@@ -290,28 +290,33 @@ export class LoginComponent implements OnInit {
       this.apiService.afisLogin(this.verifyUser).subscribe((dat: any) => {
         const authRes = JSON.parse(dat);
         console.log("authRes", authRes)
-        if (authRes.access_token && authRes.access_token !== '') {
-          localStorage.setItem('auth', JSON.stringify(authRes))
-
-          this.appService.getUser().subscribe((user: any) => {
-            console.log("User::", user)
-            const res = JSON.parse(user)
-            if (res.status) {
-              this.response = JSON.parse(user);
-              this.printAuth();
-            } else {
-              this.blockUI.stop();
-              return this.toastr.warning('No User Found', 'Alert!', { timeOut: 1500 });
-            }
-
-          }, error => {
-            console.log("Error::", error)
-            return this.toastr.warning('No User Details Found', 'Alert!', { timeOut: 1500 });
-          })
-
+        if(authRes.json.status){
+          if (authRes.token.access_token && authRes.token.access_token !== '') {
+            localStorage.setItem('auth', JSON.stringify(authRes.token))
+  
+            this.appService.getUser().subscribe((user: any) => {
+              console.log("User::", user)
+              const res = JSON.parse(user)
+              if (res.status) {
+                this.response = JSON.parse(user);
+                this.printAuth();
+              } else {
+                this.blockUI.stop();
+                return this.toastr.warning('No User Found', 'Alert!', { timeOut: 1500 });
+              }
+  
+            }, error => {
+              console.log("Error::", error)
+              return this.toastr.warning('No User Details Found', 'Alert!', { timeOut: 1500 });
+            })
+  
+          } else {
+            this.blockUI.stop();
+            return this.toastr.warning(authRes.json.message, 'Warning!', { timeOut: 3000 });
+          }
         } else {
           this.blockUI.stop();
-          return this.toastr.warning(authRes.message, 'Warning!', { timeOut: 3000 });
+          return this.toastr.warning(authRes.json.message, 'Warning!', { timeOut: 3000 });
         }
       });
       // this.apiService.afisVer(this.verifyUser).subscribe((dat:any) => {

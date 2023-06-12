@@ -118,6 +118,13 @@ export class CustomersComponent implements OnInit, OnDestroy {
         private toastr: ToastrService, private regionService: RegionService, private logs: LogsService) {
 
     }
+    numberOnly(event): boolean {
+        const charCode = (event.which) ? event.which : event.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+          return false;
+        }
+        return true;
+      }
 
     get c() {
         return this.tellerForm.controls;
