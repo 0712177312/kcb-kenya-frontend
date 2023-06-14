@@ -8,6 +8,7 @@ import { ProgressBarModalComponent } from '../app/progressbar-modal.component';
 
 import { MySharedService } from '../app/compas/services/sharedService';
 import { Router, ActivationEnd } from '@angular/router';
+import { AuthService } from './compas/services/auth.service';
 
 enableProdMode();
 @Component({
@@ -24,7 +25,7 @@ export class AppComponent {
   progressBarPopup: NgbModalRef;
 
   constructor(private element: ElementRef, private idle: Idle, private keepalive: Keepalive,
-    private ngbModal: NgbModal, private sharedService: MySharedService, private router: Router) {
+    private ngbModal: NgbModal, private sharedService: MySharedService, private router: Router, private authService:AuthService) {
     //logout when the tab is closed
     window.onbeforeunload = function (e) {
       localStorage.removeItem('otc');
@@ -65,6 +66,7 @@ export class AppComponent {
   }
 
   logout() {
+    this.authService.logout();
     this.resetTimeOut();
   }
 

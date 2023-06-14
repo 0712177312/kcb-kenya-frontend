@@ -8,6 +8,7 @@ import {
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { Router } from '@angular/router';
 import { MySharedService } from '../../compas/services/sharedService';
+import { AuthService } from 'src/app/compas/services/auth.service';
 declare var $: any;
 
 @Component({
@@ -22,7 +23,7 @@ export class NavigationComponent implements AfterViewInit {
 username: any;
   public showSearch = false;
 
-  constructor(private modalService: NgbModal, private router: Router, private globalService: MySharedService) {
+  constructor(private modalService: NgbModal, private router: Router, private globalService: MySharedService, private authService:AuthService) {
 
     this.username = this.globalService.username;
   }
@@ -94,6 +95,7 @@ username: any;
   ngAfterViewInit() {}
 
   logout() {
+    this.authService.logout();
     localStorage.removeItem('otc');
     localStorage.removeItem('bio.glob#$$#');
     this.globalService.setAuth(false);

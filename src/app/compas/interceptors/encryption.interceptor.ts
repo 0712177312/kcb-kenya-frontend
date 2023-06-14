@@ -8,8 +8,8 @@ import { UrlTree, DefaultUrlSerializer, Router } from '@angular/router';
 
 @Injectable()
 export class EncryptionInterceptor implements HttpInterceptor {
-    private  encryptURLList: string[];
-    private  ignoreEncrypURLList: string[];
+    private encryptURLList: string[];
+    private ignoreEncrypURLList: string[];
     private abisEncryptUrls = [
         "/Enroll",
         "/verifyMultiple",
@@ -19,7 +19,7 @@ export class EncryptionInterceptor implements HttpInterceptor {
         "/login",
     ]
 
-    private abisIgnoreURLList =[
+    private abisIgnoreURLList = [
         "/identify"
     ]
 
@@ -83,7 +83,7 @@ export class EncryptionInterceptor implements HttpInterceptor {
     constructor(private globalService: MySharedService, private router: Router) {
     }
 
-    private buildURLList(){
+    private buildURLList() {
         const apiUrl = new Urls().url;
         const abisURL = this.globalService.getAbisClient()
         const fullAbisUrls = this.abisEncryptUrls.map(endpoint => abisURL + endpoint);
@@ -136,15 +136,17 @@ export class EncryptionInterceptor implements HttpInterceptor {
         return false
     }
 
+
     async encryptRequest(req: HttpRequest<any>): Promise<HttpRequest<any>> {
         const url = req.url;
         const encryptionKey = this.globalService.generateRandomEncryptionKey();
         console.log("encryptionKey", encryptionKey)
         const encryptedKey = this.globalService.encryptWithPublicKey(encryptionKey);
         console.log("encryptedKey", encryptedKey)
-        req = req.clone({ headers: req.headers.set('key', encryptedKey) });
 
         if (req.method === 'GET' && url.includes('?')) {
+            req = req.clone({ headers: req.headers.set('Enckey', encryptedKey) });
+
             const [baseURL, queryParams] = req.url.split('?');
             const encryptedParams = queryParams.split('&').map(param => {
                 const [key, value] = param.split('=');
@@ -157,7 +159,9 @@ export class EncryptionInterceptor implements HttpInterceptor {
             return req.clone({ url: encryptedUrl });
 
         } else if (req.method === 'POST' && req.body) {
-            if(this.ignoreEncrypURLList.includes(req.url)){
+            req = req.clone({ headers: req.headers.set('key', encryptedKey) });
+
+            if (this.ignoreEncrypURLList.includes(req.url)) {
                 console.log("Ignore Encrypt URL:", req.url)
                 return req
             }
@@ -172,13 +176,14 @@ export class EncryptionInterceptor implements HttpInterceptor {
 
     private async decryptResponse(res: HttpResponse<any>): Promise<HttpResponse<any>> {
 
-        // extract the key from the response
-        const encryptedKey = res.headers.get('key');
-        console.log("encryptedKey", encryptedKey)
-        const encryptionKey = this.globalService.decryptWithPrivateKey(encryptedKey);
-        console.log("encryptionKey", encryptionKey)
 
         if (res.body) {
+            // extract the key from the response
+            const encryptedKey = res.headers.get('Enckey');
+            console.log("encryptedKey", encryptedKey)
+            const encryptionKey = this.globalService.decryptWithPrivateKey(encryptedKey);
+            console.log("encryptionKey", encryptionKey)
+
             console.log("DecryptingBody", res.url)
             const decryptedBody = this.globalService.decryptDataV2(res.body, encryptionKey);
             // const decryptedBody = this.globalService.decryptData(res.body);
