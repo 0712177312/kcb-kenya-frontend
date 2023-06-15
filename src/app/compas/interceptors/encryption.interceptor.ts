@@ -145,7 +145,7 @@ export class EncryptionInterceptor implements HttpInterceptor {
         console.log("encryptedKey", encryptedKey)
 
         if (req.method === 'GET' && url.includes('?')) {
-            req = req.clone({ headers: req.headers.set('Enckey', encryptedKey) });
+            req = req.clone({ headers: req.headers.set('key', encryptedKey) });
 
             const [baseURL, queryParams] = req.url.split('?');
             const encryptedParams = queryParams.split('&').map(param => {
