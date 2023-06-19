@@ -276,7 +276,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         this.blockUI.start('Loading data...');
         this.apiService.getUserProfilesByBranchExcludingCurrentUser(this.branch, this.groupId, this.userId).subscribe(data => {
             this.blockUI.stop();
-            this.response = JSON.parse(this.globalService.decryptData(data));
+            this.response = JSON.parse(data); 
             this.userProfiles = this.response.collection;
             this.source = new LocalDataSource(this.userProfiles);
         });
@@ -429,7 +429,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
                     console.log('user profile details ####$$', this.userProfile);
                     this.apiService.addUserProfile(this.userProfile).subscribe(res => {
                         this.blockUI.stop();
-                        this.response = JSON.parse(this.globalService.decryptData(res));
+                        this.response = JSON.parse(res);
                         if (this.response.status === false) {
                             this.toastr.warning(this.response.respMessage, 'Alert!', {timeOut: 1500});
                         }
@@ -465,7 +465,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
             console.log('userProfile: ' + this.userProfile);
             this.apiService.editUserProfile(this.userProfile).subscribe(res => {
                 this.blockUI.stop();
-                this.response = JSON.parse(this.globalService.decryptData(res));
+                this.response = JSON.parse(res);
                 ;
                 if (this.response.status === false) {
                     this.toastr.warning(this.response.respMessage, 'Alert!', {timeOut: 1500});

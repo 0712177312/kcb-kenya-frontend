@@ -20,10 +20,10 @@ export class NavigationComponent implements AfterViewInit {
   @Output() toggleSidebar = new EventEmitter<void>();
 
   public config: PerfectScrollbarConfigInterface = {};
-username: any;
+  username: any;
   public showSearch = false;
 
-  constructor(private modalService: NgbModal, private router: Router, private globalService: MySharedService, private authService:AuthService) {
+  constructor(private modalService: NgbModal, private router: Router, private globalService: MySharedService, private authService: AuthService) {
 
     this.username = this.globalService.username;
   }
@@ -92,13 +92,15 @@ username: any;
     }
   ];
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() { }
 
   logout() {
-    this.authService.logout();
-    localStorage.removeItem('otc');
-    localStorage.removeItem('bio.glob#$$#');
-    this.globalService.setAuth(false);
-    this.router.navigate(['/auth']);
+    this.authService.logout().subscribe((res) => {
+      localStorage.removeItem('otc');
+      localStorage.removeItem('bio.glob#$$#');
+      this.globalService.setAuth(false);
+      this.router.navigate(['/auth']);
+    })
+
   }
 }

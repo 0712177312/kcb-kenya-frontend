@@ -65,6 +65,7 @@
                 <th scope="col">FULL NAME</th>
                 <th scope="col">USER NAME</th>
                 <th scope="col">ACTIVITY</th>
+                <th scope="col">Login Type</th>
                 <th scope="col">IP ADDRESS</th>
                 <th scope="col">CREATED AT</th>
               </tr>
@@ -75,6 +76,7 @@
                 <td>{{log.fullname}}</td>
                 <td>{{log.username}}</td>
                 <td>{{log.activity}}</td>
+                <td>{{log.loginType || "N/A"}}</td>
                 <td>{{log.ipAddress}}</td>
                 <td>{{log.createdAt}}</td>
               </tr>

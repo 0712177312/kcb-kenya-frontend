@@ -55,6 +55,16 @@ export class MySharedService {
     return localData ? localData.abis : ""
   }
 
+  getBioClients() {
+    const localData = JSON.parse(localStorage.getItem('bio.glob#$$#'));
+    if(localData){
+      const { secugen = "https://localhost:8443", greenbit = "https://localhost:8444/getImage/" } = localData;
+      return [`${secugen}/SGIFPCapture`, `${greenbit}`]
+    } else {
+      return []
+    }
+  }
+
   encryptData(data) {
     const akey2 = CryptoJS.enc.Utf8.parse(this.encPassword);
     const iv2 = CryptoJS.enc.Utf8.parse(this.encPassword);

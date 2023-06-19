@@ -9,7 +9,7 @@ import { UrlTree, DefaultUrlSerializer, Router } from '@angular/router';
 @Injectable()
 export class EncryptionInterceptor implements HttpInterceptor {
     private encryptURLList: string[];
-    private ignoreEncrypURLList: string[];
+    private ignoreEncryptURLList: string[];
     private abisEncryptUrls = [
         "/Enroll",
         "/verifyMultiple",
@@ -42,6 +42,8 @@ export class EncryptionInterceptor implements HttpInterceptor {
         "/usergroups/gtUserGroups",
         "/usergroups/gtRights",
         "/usergroups",
+        "/usergroups/assignrights",
+        "/usergrouptypes",
         "/getSystemActivity",
         "/gtLogs",
         "/rightsmenulist",
@@ -76,12 +78,21 @@ export class EncryptionInterceptor implements HttpInterceptor {
         "/gtChannelstoWaive",
         "/gtchannels",
         "/auth/manual_login",
-        "/getLoggedInUserDetails"
+        "/getLoggedInUserDetails",
+        "/allUsersByBranchExcludingCurrentUser",
+        "/editUserProfile",
+        "/upUser",
+        "/allUsers",
+        "/user/gtGroupsByUserType",
+        "/users/toverify",
+        "/users/verifyusers",
+        "dashboard/stats"
     ]
 
 
     constructor(private globalService: MySharedService, private router: Router) {
     }
+
 
     private buildURLList() {
         const apiUrl = new Urls().url;
@@ -94,10 +105,14 @@ export class EncryptionInterceptor implements HttpInterceptor {
         ]
         console.log("EncrypList", this.encryptURLList)
         const fullAbisIgnore = this.abisIgnoreURLList.map(endpoint => abisURL + endpoint);
-        this.ignoreEncrypURLList = [
-            ...fullAbisIgnore
+        const bioIgnoreURLs = this.globalService.getBioClients()
+        console.log("bioIgnoreURLs:", bioIgnoreURLs)
+
+        this.ignoreEncryptURLList = [
+            ...fullAbisIgnore,
+            ...bioIgnoreURLs
         ]
-        console.log("ignoreEncrypURLList", this.ignoreEncrypURLList)
+        console.log("ignoreEncryptURLList", this.ignoreEncryptURLList)
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -120,6 +135,12 @@ export class EncryptionInterceptor implements HttpInterceptor {
     }
 
     private shouldEncryptURL(url: string): boolean {
+
+        // if in ignore lis
+        if (this.ignoreEncryptURLList.includes(url)) {
+            return false
+        }
+
         if (this.encryptURLList.includes(url)) {
             return true
         }
@@ -159,12 +180,12 @@ export class EncryptionInterceptor implements HttpInterceptor {
             return req.clone({ url: encryptedUrl });
 
         } else if (req.method === 'POST' && req.body) {
-            req = req.clone({ headers: req.headers.set('key', encryptedKey) });
 
-            if (this.ignoreEncrypURLList.includes(req.url)) {
+            if (this.ignoreEncryptURLList.includes(req.url)) {
                 console.log("Ignore Encrypt URL:", req.url)
                 return req
             }
+            req = req.clone({ headers: req.headers.set('key', encryptedKey) });
             const encryptedBody = this.globalService.encryptDataV2(req.body, encryptionKey);
             // const encryptedBody = this.globalService.encryptData(req.body);
             return req.clone({ body: encryptedBody });
@@ -175,7 +196,6 @@ export class EncryptionInterceptor implements HttpInterceptor {
 
 
     private async decryptResponse(res: HttpResponse<any>): Promise<HttpResponse<any>> {
-
 
         if (res.body) {
             // extract the key from the response
@@ -193,8 +213,7 @@ export class EncryptionInterceptor implements HttpInterceptor {
             }
             return res.clone({ body: JSON.parse(decryptedBody) });
         }
-        console.log("Status", res.status)
-        console.log("ResponseBODY", res.body)
+        console.log("NO BODY FOR: ", res.url)
         return res;
     }
 

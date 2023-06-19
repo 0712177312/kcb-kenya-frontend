@@ -74,7 +74,7 @@ export class RptsyslogsComponent implements OnInit {
 
   getUsers() {
     this.userSvc.getUserProfiles().subscribe((data:any) => {
-      this.users = data;
+      this.users = JSON.parse(data);
       if (this.users.status === true) {
         this.usersResp = this.users.collection;
       } else {
