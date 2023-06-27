@@ -318,23 +318,11 @@ export class LoginComponent implements OnInit {
           this.blockUI.stop();
           return this.toastr.warning(authRes.json.message, 'Warning!', { timeOut: 3000 });
         }
-      });
-      // this.apiService.afisVer(this.verifyUser).subscribe((dat:any) => {
-      //   this.response = JSON.parse(dat); 
-
-      //   if (this.response.status === true) {
-
-      //     // this.toastr.success('Profile verified successfully', ' Success!');
-      //     this.printAuth();
-      //   } else {
-      //     this.blockUI.stop();
-      //     return this.toastr.warning(this.response.message, 'Warning!', { timeOut: 3000 });
-      //   }
-      // }, error => {
-      //   this.log(0, 'server error ' + this.user.username);
-      //   this.blockUI.stop();
-      //   return this.toastr.error("Failed to contact ABIS Client", 'Error!', { timeOut: 1500 });
-      // });
+      }, error=>{
+       this.log(0, `Error: ${error}` + this.user.username);
+        this.blockUI.stop();
+        return this.toastr.warning('Failed to contact ABIS Client', 'Alert!', { timeOut: 1500 });
+      })
     }
   }
 
@@ -343,7 +331,7 @@ export class LoginComponent implements OnInit {
     // this.user.customerId = '';
     // this.user.transactionType = 'L';
     this.authService.printAuth(this.user).subscribe(res => {
-      this.response = res;
+      this.response = JSON.parse(res);
 
       if (this.response.status === false) {
         return this.toastr.warning(this.response.respMessage, 'Alert!', { timeOut: 1500 });

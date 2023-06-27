@@ -334,7 +334,7 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
       }
     }, error => {
 
-      return this.toastr.error('Error in loading data.', 'Error!', { timeOut: 3000 });
+      return this.toastr.error('Abis Client is not reachable', 'Error!', { timeOut: 3000 });
     });
   }
 

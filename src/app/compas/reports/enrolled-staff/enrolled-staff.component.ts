@@ -31,7 +31,7 @@ export class EnrolledStaffComponent implements OnInit {
   constructor(calendar: NgbCalendar, private toastr: ToastrService, private reportSvc: ReportsService) { }
 
   ngOnInit() {
-    this.staffStatus = [{ name: 'Enrolled', id: 'N' }, { name: 'Verified', id: 'A' }, { name: 'Rejected', id: 'R' }, { name: 'Deleted', id: 'AD' }];
+    this.staffStatus = [{ name: 'Enrolled', id: 'N' }, { name: 'Verified', id: 'A' }, { name: 'Rejected', id: 'R' }, { name: 'Detached', id: 'AD' }];
     this.otc = JSON.parse(localStorage.getItem('otc'));
     this.branch = this.otc.branch;
     this.groupid = this.otc.group;

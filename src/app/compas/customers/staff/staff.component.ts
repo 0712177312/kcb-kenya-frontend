@@ -1137,7 +1137,7 @@ export class StaffComponent implements OnInit, OnDestroy {
             'name': fin, 'missingStatus': this.missingStatus,
             'missingCount': count, 'missing': this.missing, 'customerId': this.account_number
         }).subscribe((data:any) => {
-            this.hands =JSON.parse(data)
+            this.hands =data
             if (this.hands.status === true) {
                 if (this.hands.hand === 'left') {
                     this.getLeftPrint(this.hands);

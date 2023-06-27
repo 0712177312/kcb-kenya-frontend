@@ -1085,11 +1085,11 @@ export class CustomersComponent implements OnInit, OnDestroy {
         //   JSON.stringify({ 'name': fin, 'missingStatus': this.missingStatus,
         //   'missingCount': count, 'missing': this.missing, 'customerId': this.account_number })
         // );
-        this.apiService.getFingerPrintImage({
+        this.apiService.getFingerPrintImage({ 
             'name': fin, 'missingStatus': this.missingStatus,
             'missingCount': count, 'missing': this.missing, 'customerId': this.account_number
         }).subscribe((data:any) => {
-            this.hands =JSON.parse(data);
+            this.hands =data;
             if (this.hands.status === true) {
                 if (this.hands.hand === 'left') {
                     this.getLeftPrint(this.hands);
@@ -1105,7 +1105,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
                 return this.toastr.warning(this.hands.responseMessage, 'Alert!', { timeOut: 4000 });
             }
         }, error => {
-
+            return this.toastr.warning(error.message, 'Alert!', { timeOut: 4000 });
         });
     }
 

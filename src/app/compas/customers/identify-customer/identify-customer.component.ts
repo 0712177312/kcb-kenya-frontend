@@ -422,7 +422,7 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
         this.blockUI.start('Identify Customer data...');
         this.apiService.getMatchedCustomers(data).subscribe((response) => {
             this.blockUI.stop();
-            this.cust = response;
+            this.cust = JSON.parse(response);
             if (this.cust.status === true) {
                 console.log('customes', this.cust);
 
@@ -436,11 +436,11 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
                 console.log('customer', this.customers);
                 return this.customers;
             } else {
-                return this.toastr.error('Error Getting data.', 'Error!', { timeOut: 1500 });
+                return this.toastr.error(`Error: ${this.cust.respMessage}`, 'Error!', { timeOut: 1500 });
             }
         }, error => {
             this.blockUI.stop();
-            return this.toastr.error('Error updating data.', 'Error!', { timeOut: 1500 });
+            return this.toastr.error('ABIS CLient is unreachable.', 'Error!', { timeOut: 1500 });
         });
     }
 
@@ -454,7 +454,7 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
         //Don't allow identify without finger prints
         if (this.fingerPrints.length > 0) {
             this.apiService.afisIdentify(cust).subscribe((response) => {
-                this.response = response;
+                this.response = JSON.parse(response);
                 if (this.response.status === true && this.response.candidates.length > 0) {
                     this.profiles.push(this.response.candidates);
                     console.log('uploaded afis##', this.response);
@@ -478,7 +478,7 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
                 }
             }, error => {
                 this.blockUI.stop();
-                return this.toastr.error('Error verifying data.', 'Error!', { timeOut: 1500 });
+                return this.toastr.error('Abis Client is not reachable.', 'Error!', { timeOut: 1500 });
             });
         } else {
             this.blockUI.stop();
@@ -618,7 +618,7 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
     afisIdentifyUser(cust) {
         if (this.fingerPrints.length > 0) {
             this.apiService.afisIdentify(cust).subscribe((response) => {
-                this.response = response;
+                this.response = JSON.parse(response);
                 if (this.response.status === true && this.response.candidates.length > 0) {
                     this.profiles.push(this.response.candidates);
                     console.log('uploaded afis##', this.response);

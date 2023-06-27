@@ -14,14 +14,12 @@ export class EncryptionInterceptor implements HttpInterceptor {
         "/Enroll",
         "/verifyMultiple",
         "/verify",
-        // "/identify",
+        "/identify",
         "/delete",
         "/login",
     ]
 
-    private abisIgnoreURLList = [
-        "/identify"
-    ]
+    private abisIgnoreURLList = []
 
     private compassEncryptUrls = [
         "/tellers/staff_inquiry",
