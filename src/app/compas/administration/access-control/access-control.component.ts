@@ -92,7 +92,7 @@ export class AccessControlComponent implements OnInit, OnDestroy {
             console.log(this.groups);
             this.blockUI.stop();
             if (this.groups.status === true) {
-                this.userGroups = this.groups.rights;
+                this.userGroups = this.groups.hashset;
                 this.source = new LocalDataSource(this.userGroups);
             } else {
                 return this.toastr.warning(this.groups.respMessage, 'Warning!', { timeOut: 4000 });

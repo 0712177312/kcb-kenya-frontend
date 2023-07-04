@@ -121,10 +121,10 @@ export class CustomersComponent implements OnInit, OnDestroy {
     numberOnly(event): boolean {
         const charCode = (event.which) ? event.which : event.keyCode;
         if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-          return false;
+            return false;
         }
         return true;
-      }
+    }
 
     get c() {
         return this.tellerForm.controls;
@@ -542,8 +542,8 @@ export class CustomersComponent implements OnInit, OnDestroy {
 
     gtCustomers() {
 
-        this.custSvc.gtCustomers().subscribe((data:any) => {
-            this.customers =data;
+        this.custSvc.gtCustomers().subscribe((data: any) => {
+            this.customers = data;
 
             this.customers = this.customers.collection;
 
@@ -647,7 +647,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
 
     storeCustomer() {
 
-        this.apiService.addCustomer(this.customer).subscribe((response:any) => {
+        this.apiService.addCustomer(this.customer).subscribe((response: any) => {
             this.response = JSON.parse(response);
             if (this.response.status === true) {
                 if (this.customer.id === 0) {
@@ -722,7 +722,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
             return this.toastr.error('Kindly ensure you have captured all the fingerprints to continue .', 'Error!', { timeOut: 4000 });
         }
 
-        this.apiService.afisEnroll(this.customer).subscribe((response:any) => {
+        this.apiService.afisEnroll(this.customer).subscribe((response: any) => {
             this.response = JSON.parse(response);
 
             if (this.response.status === true) {
@@ -770,7 +770,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
             customerId: this.teller.customerId,
             fingerPrints: this.enrolledFPrints
         };
-        this.apiService.afisEnroll(tller).subscribe((response:any) => {
+        this.apiService.afisEnroll(tller).subscribe((response: any) => {
             this.response = JSON.parse(response);
 
             if (this.response.status === true) {
@@ -868,6 +868,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
                 this.blockUI.stop();
                 return this.toastr.warning('Customer with specified account id number is already enrolled', ' Warning!', { timeOut: 3000 });
             } else {
+                // t24 inquiry
                 this.tellerCoBankingInq(tell);
                 this.blockUI.stop();
             }
@@ -877,7 +878,37 @@ export class CustomersComponent implements OnInit, OnDestroy {
         });
     }
 
-    customerInfInquiry(customer) {
+    tellerInquiry2(teller) {
+        this.blockUI.start('Inquiring staff details...');
+
+        const tell = {
+            'id': teller
+        };
+        const tellr = {
+            'tellerId': teller
+        };
+
+        this.tellerSvc.checkTellerExists(tellr).subscribe(data => {
+            this.locl = JSON.parse(data);
+            if (this.locl.status === true) {
+                this.blockUI.stop();
+                this.toastr.warning('Customer with specified account id number is already enrolled', ' Warning!', { timeOut: 3000 });
+                return false;
+            } else {
+                // t24 inquiry
+                // this.tellerCoBankingInq(tell);
+                this.blockUI.stop();
+                return true;
+            }
+        }, error => {
+            this.blockUI.stop();
+            this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
+            return false;
+        });
+        return false;
+    }
+
+    async customerInfInquiry(customer) {
         this.blockUI.start('Inquiring customer details...');
         const custom = {
             'mnemonic': customer
@@ -890,7 +921,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
             if (isNaN(customer)) {
                 return this.toastr.warning('Customer id must be a number.', ' Warning!');
             } else {
-                this.custSvc.findByAccountNumber(custom).subscribe(data => {
+                this.custSvc.findByAccountNumber(custom).subscribe(async (data) => {
                     console.log("findByAccountNumber", data)
                     this.locl = JSON.parse(data);
                     if (this.locl.status === true) {
@@ -898,8 +929,15 @@ export class CustomersComponent implements OnInit, OnDestroy {
                         // tslint:disable-next-line:max-line-length
                         return this.toastr.warning('Customer with specified account id number is already enrolled', ' Warning!', { timeOut: 3000 });
                     } else {
-                        this.coBankingInq(custo);
-                        this.blockUI.stop();
+                        // check if is teller  
+                        const isTeller = await this.tellerInquiry2(customer);
+                        if (isTeller) {
+                            this.coBankingInq(custo);
+                            this.blockUI.stop();
+                        } else {
+                            this.blockUI.stop();
+                            return this.toastr.warning('Customer with specified account id number is already enrolled', ' Warning!', { timeOut: 3000 });
+                        }
                     }
                 }, error => {
                     this.blockUI.stop();
@@ -916,11 +954,12 @@ export class CustomersComponent implements OnInit, OnDestroy {
             return this.toastr.warning('Kindly provide valid customer/staff id to continue', ' Warning!', { timeOut: 4000 });
         }
 
-        if (this.profType === '2') {
-            this.tellerInquiry(cust);
-        } else {
-            this.customerInfInquiry(cust);
-        }
+        this.customerInfInquiry(cust);
+        // if (this.profType === '2') {
+        //     this.tellerInquiry(cust);
+        // } else {
+        //     this.customerInfInquiry(cust);
+        // }
     }
 
     tellerCoBankingInq(teller) {
@@ -954,7 +993,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
         // this.blockUI.start('Inquiring customer details...');
         // this.apiService.getCustomerDetails().subscribe (data => {
         this.blockUI.start('Searching for the Customer...');
-        this.apiService.getCustomerByAccountNo(customer).subscribe((data:any) => {
+        this.apiService.getCustomerByAccountNo(customer).subscribe((data: any) => {
             console.log("getCustomerByAccountNo", data)
             this.blockUI.stop();
             this.custInquiry = JSON.parse(data);
@@ -1085,11 +1124,11 @@ export class CustomersComponent implements OnInit, OnDestroy {
         //   JSON.stringify({ 'name': fin, 'missingStatus': this.missingStatus,
         //   'missingCount': count, 'missing': this.missing, 'customerId': this.account_number })
         // );
-        this.apiService.getFingerPrintImage({ 
+        this.apiService.getFingerPrintImage({
             'name': fin, 'missingStatus': this.missingStatus,
             'missingCount': count, 'missing': this.missing, 'customerId': this.account_number
-        }).subscribe((data:any) => {
-            this.hands =data;
+        }).subscribe((data: any) => {
+            this.hands = data;
             if (this.hands.status === true) {
                 if (this.hands.hand === 'left') {
                     this.getLeftPrint(this.hands);

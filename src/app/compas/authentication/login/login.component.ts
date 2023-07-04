@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
 
     }, error => {
       this.blockUI.stop();
-      return this.toastr.error('Error logging.', 'Error!', { timeOut: 4000 });
+      // return this.toastr.error('Error logging.', 'Error!', { timeOut: 4000 });
     });
   }
   login() {
@@ -168,6 +168,8 @@ export class LoginComponent implements OnInit {
       this.authService.loginV2(this.user).subscribe(res => {
         const authRes = JSON.parse(res);
 
+        console.log("Authres", authRes)
+
         if (authRes.access_token && authRes.access_token !== '') {
           localStorage.setItem('auth', JSON.stringify(authRes))
 
@@ -247,10 +249,15 @@ export class LoginComponent implements OnInit {
         } else {
           this.log(0, 'failed to log in ' + this.user.username);
           this.blockUI.stop();
-          return this.toastr.warning(this.response.respMessage, 'Alert!', { timeOut: 1500 });
+          return this.toastr.warning(authRes.message, 'Alert!', { timeOut: 1500 });
         }
 
-      });
+      },
+        error => {
+          console.log("Error::", error)
+          return this.toastr.warning(`Error logging in: ${error.description}`, 'Alert!', { timeOut: 1500 });
+        }
+      );
     }
   }
 

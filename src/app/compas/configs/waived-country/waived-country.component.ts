@@ -14,7 +14,7 @@ import { BlockUI, NgBlockUI, BlockUIService } from 'ng-block-ui';
 export class WaivedCountryComponent implements OnInit {
   @BlockUI() blockUI: NgBlockUI;
   constructor(private blockUIService: BlockUIService, private toastr: ToastrService,
-     private regionService: RegionService, private logs: LogsService) {}
+    private regionService: RegionService, private logs: LogsService) { }
   countries: any = [];
   settings = settings;
   form: FormGroup;
@@ -40,16 +40,16 @@ export class WaivedCountryComponent implements OnInit {
 
   log(userId, activity) {
     const log = {
-        'userId': userId,
-        'activity': activity
+      'userId': userId,
+      'activity': activity
     };
     this.logs.log(log).subscribe((data) => {
-        console.log('logged');
+      console.log('logged');
     }, error => {
-        this.blockUI.stop();
-        return this.toastr.error('Error logging.', 'Error!', { timeOut: 4000 });
+      this.blockUI.stop();
+      return this.toastr.error('Error logging.', 'Error!', { timeOut: 4000 });
     });
-}
+  }
   gtCountries() {
     this.blockUI.start('Loading data...');
     this.regionService.waivedCountry().subscribe(data => {
@@ -60,70 +60,70 @@ export class WaivedCountryComponent implements OnInit {
       this.source = new LocalDataSource(this.countries);
       this.blockUI.stop();
     }, error => {
-        this.blockUI.stop();
-        return this.toastr.error('Error in loading data.', 'Error!', { timeOut: 4000 });
+      this.blockUI.stop();
+      return this.toastr.error('Error in loading data.', 'Error!', { timeOut: 4000 });
     });
   }
 
-approveCountryCountry() {
-  if (this.rightId === this.country.createdBy) {
-    this.log(this.rightId, 'to approve country they added ' + this.country.id);
-    return this.toastr.warning('User cannot aprrove country waive they added .', 'Warning!', { timeOut: 4000 });
-  }
-  const cou = {
-    'id': this.country.id,
-    'waivedApprovedBy': this.rightId
-  };
-  this.blockUI.start('Rejecting country waive...');
-  this.regionService.approveCountryWaive(cou).subscribe(data => {
-    this.response = JSON.parse(data);
-    this.blockUI.stop();
-    if (this.response.status === true) {
-      this.log(this.rightId, 'approved country waive ' + this.country.id);
-      this.editMode = false;
-      this.country = {};
-      this.gtCountries();
-      return this.toastr.success(this.response.respMessage, 'Success!', { timeOut: 4000 });
-    } else {
-      this.log(this.rightId, 'failed to approve country waive ' + this.country.id);
-      return this.toastr.success(this.response.respMessage, 'Alert!', { timeOut: 4000 });
+  approveCountryCountry() {
+    if (this.rightId === this.country.createdBy) {
+      this.log(this.rightId, 'to approve country they added ' + this.country.id);
+      return this.toastr.warning('User cannot aprrove country waive they added .', 'Warning!', { timeOut: 4000 });
     }
-  }, error => {
-    this.log(this.rightId, 'server error approving country waive ' + this.country.id);
+    const cou = {
+      'id': this.country.id,
+      'waivedApprovedBy': this.rightId
+    };
+    this.blockUI.start('Rejecting country waive...');
+    this.regionService.approveCountryWaive(cou).subscribe(data => {
+      this.response = JSON.parse(data);
+      this.blockUI.stop();
+      if (this.response.status === true) {
+        this.log(this.rightId, 'approved country waive ' + this.country.id);
+        this.editMode = false;
+        this.country = {};
+        this.gtCountries();
+        return this.toastr.success(this.response.respMessage, 'Success!', { timeOut: 4000 });
+      } else {
+        this.log(this.rightId, 'failed to approve country waive ' + this.country.id);
+        return this.toastr.success(this.response.respMessage, 'Alert!', { timeOut: 4000 });
+      }
+    }, error => {
+      this.log(this.rightId, 'server error approving country waive ' + this.country.id);
       this.blockUI.stop();
       return this.toastr.error('Error in loading data.', 'Error!', { timeOut: 4000 });
-  });
-}
-rejectCountry() {
-  if (this.rightId === this.country.createdBy) {
-    this.log(this.rightId, 'to reject country they added ' + this.country.id);
-    return this.toastr.warning('User cannot reject country waive they added .', 'Warning!', { timeOut: 4000 });
+    });
   }
-
-  const cou = {
-    'id': this.country.id,
-    'waivedApprovedBy': this.rightId
-  };
-  this.blockUI.start('Rejecting country waive...');
-  this.regionService.rejectCountryWaive(cou).subscribe(data => {
-    this.response = JSON.parse(data);
-    this.blockUI.stop();
-    if (this.response.status === true) {
-      this.log(this.rightId, 'rejected country waive ' + this.country.id );
-      this.editMode = false;
-      this.country = {};
-      this.gtCountries();
-      return this.toastr.success(this.response.respMessage, 'Success!', { timeOut: 4000 });
-    } else {
-      this.log(this.rightId, 'failed to reject country waive ' + this.country.id );
-      return this.toastr.success(this.response.respMessage, 'Alert!', { timeOut: 4000 });
+  rejectCountry() {
+    if (this.rightId === this.country.createdBy) {
+      this.log(this.rightId, 'to reject country they added ' + this.country.id);
+      return this.toastr.warning('User cannot reject country waive they added .', 'Warning!', { timeOut: 4000 });
     }
-  }, error => {
+
+    const cou = {
+      'id': this.country.id,
+      'waivedApprovedBy': this.rightId
+    };
+    this.blockUI.start('Rejecting country waive...');
+    this.regionService.rejectCountryWaive(cou).subscribe(data => {
+      this.response = JSON.parse(data);
+      this.blockUI.stop();
+      if (this.response.status === true) {
+        this.log(this.rightId, 'rejected country waive ' + this.country.id);
+        this.editMode = false;
+        this.country = {};
+        this.gtCountries();
+        return this.toastr.success(this.response.respMessage, 'Success!', { timeOut: 4000 });
+      } else {
+        this.log(this.rightId, 'failed to reject country waive ' + this.country.id);
+        return this.toastr.success(this.response.respMessage, 'Alert!', { timeOut: 4000 });
+      }
+    }, error => {
       this.log(this.rightId, 'server error rejecting country waive ' + this.country.id);
       this.blockUI.stop();
       return this.toastr.error('Error in loading data.', 'Error!', { timeOut: 4000 });
-  });
-}
+    });
+  }
 
   cancel() {
     this.editMode = false;
@@ -131,46 +131,46 @@ rejectCountry() {
   }
 
   initEditCountry($event) {
-     this.country.id = $event.data.id;
-     this.country.countryCode = $event.data.countryCode;
-     this.country.status = $event.data.status;
-     this.country.createdBy = $event.data.createdBy;
-     this.country.name =  $event.data.name;
-      this.editMode = true;
-      this.title = 'Add Country';
-      this.button = 'Add Country';
-      this.is_edit = true;
-      this.isNew = true;
+    this.country.id = $event.data.id;
+    this.country.countryCode = $event.data.countryCode;
+    this.country.status = $event.data.status;
+    this.country.createdBy = $event.data.createdBy;
+    this.country.name = $event.data.name;
+    this.editMode = true;
+    this.title = 'Add Country';
+    this.button = 'Add Country';
+    this.is_edit = true;
+    this.isNew = true;
   }
 }
 
 export let settings = {
   mode: 'external',
   actions: {
-      delete: false,
-      add: false,
-      position: 'right',
+    delete: false,
+    add: false,
+    position: 'right',
   },
- // selectMode: 'multi',
+  // selectMode: 'multi',
   columns: {
     id: {
       title: '#',
       filter: true
     },
     countryCode: {
-          title: 'Country Code',
-          filter: true
-      },
-      name: {
-          title: 'Country Name',
-          filter: true
-      }
+      title: 'Country Code',
+      filter: true
+    },
+    name: {
+      title: 'Country Name',
+      filter: true
+    }
   },
   edit: {
-      // tslint:disable-next-line:max-line-length
-      editButtonContent: '<a class="btn btn-block btn-outline-success m-r-10"> <i class="fas fa-check-circle text-info-custom"></i></a>',
-      saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
-      cancelButtonContent: '<i class="ti-close text-danger"></i>'
+    // tslint:disable-next-line:max-line-length
+    editButtonContent: '<a class="btn btn-block btn-outline-success m-r-10"> <i class="fas fa-check-circle text-info-custom"></i></a>',
+    saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
+    cancelButtonContent: '<i class="ti-close text-danger"></i>'
   },
   // add: {
   //     // tslint:disable-next-line:max-line-length

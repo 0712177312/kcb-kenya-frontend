@@ -46,13 +46,14 @@ export class RptsyslogsComponent implements OnInit {
     return new Date();
   }
   // http://localhost:9000/compas/reports/enrolledCustomers?reportType=BD&exportType=P&FromDt=2018-12-12&ToDt=2019-12-12&userId=21
-  getLogsRpt() {
+  getLogsRpt() { 
+    console.log("USERID", this.userId)
     this.logs = [];
     if (this.fromDate === undefined) {
       return this.toastr.warning('Kindly specify from date to continue', 'Warning!', { timeOut: 4000 });
     } else if (this.toDate === undefined) {
       return this.toastr.warning('Kindly specify to date to continue', 'Warning!', { timeOut: 4000 });
-    } else if (this.userId === undefined) {
+    } else if (!this.userId) {
       return this.toastr.warning('Kindly specify to user to continue', 'Warning!', { timeOut: 4000 });
     } else {
       this.reportSvc.getSystemLogs(this.formatDate(this.fromDate), this.formatDate(this.toDate), this.userId).subscribe(data => {
@@ -77,6 +78,8 @@ export class RptsyslogsComponent implements OnInit {
       this.users = JSON.parse(data);
       if (this.users.status === true) {
         this.usersResp = this.users.collection;
+        // add all option as first option
+        this.usersResp.unshift({ id: 'all', fullName: 'All' });
       } else {
         return this.toastr.warning('No users found', 'Warning!', { timeOut: 4000 });
       }
