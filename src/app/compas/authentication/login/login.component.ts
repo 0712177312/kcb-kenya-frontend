@@ -171,7 +171,10 @@ export class LoginComponent implements OnInit {
         console.log("Authres", authRes)
 
         if (authRes.access_token && authRes.access_token !== '') {
-          localStorage.setItem('auth', JSON.stringify(authRes))
+          localStorage.setItem('auth', JSON.stringify({
+            ...authRes,
+            loginType: "manual"
+          }))
 
           // get user
           this.appService.getUser().subscribe((user: any) => {
@@ -297,10 +300,13 @@ export class LoginComponent implements OnInit {
       this.apiService.afisLogin(this.verifyUser).subscribe((dat: any) => {
         const authRes = JSON.parse(dat);
         console.log("authRes", authRes)
-        if(authRes.json.status){
+        if (authRes.json.status) {
           if (authRes.token.access_token && authRes.token.access_token !== '') {
-            localStorage.setItem('auth', JSON.stringify(authRes.token))
-  
+            localStorage.setItem('auth', JSON.stringify({
+              ...authRes.token,
+              loginType: 'bio',
+            }))
+
             this.appService.getUser().subscribe((user: any) => {
               console.log("User::", user)
               const res = JSON.parse(user)
@@ -311,12 +317,12 @@ export class LoginComponent implements OnInit {
                 this.blockUI.stop();
                 return this.toastr.warning('No User Found', 'Alert!', { timeOut: 1500 });
               }
-  
+
             }, error => {
               console.log("Error::", error)
               return this.toastr.warning('No User Details Found', 'Alert!', { timeOut: 1500 });
             })
-  
+
           } else {
             this.blockUI.stop();
             return this.toastr.warning(authRes.json.message, 'Warning!', { timeOut: 3000 });
@@ -325,8 +331,8 @@ export class LoginComponent implements OnInit {
           this.blockUI.stop();
           return this.toastr.warning(authRes.json.message, 'Warning!', { timeOut: 3000 });
         }
-      }, error=>{
-       this.log(0, `Error: ${error}` + this.user.username);
+      }, error => {
+        this.log(0, `Error: ${error}` + this.user.username);
         this.blockUI.stop();
         return this.toastr.warning('Failed to contact ABIS Client', 'Alert!', { timeOut: 1500 });
       })
@@ -345,7 +351,7 @@ export class LoginComponent implements OnInit {
       }
       if (this.response.status === true) {
         this.appService.getUserAssignedRights(this.response.model.group).subscribe(resp => {
-          this.userAssignedRights =JSON.parse(resp);
+          this.userAssignedRights = JSON.parse(resp);
           if (this.userAssignedRights.status === true) {
             this.appService.getUserMenus(this.response.model.group).subscribe(resp => {
               this.menus = JSON.parse(resp);

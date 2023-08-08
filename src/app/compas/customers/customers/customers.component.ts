@@ -896,7 +896,11 @@ export class CustomersComponent implements OnInit, OnDestroy {
                 return false;
             } else {
                 // t24 inquiry
-                // this.tellerCoBankingInq(tell);
+                // this.tellerCoBankingInq(tell); 
+                const custo = {
+                    'mnemonic': teller
+                };
+                this.coBankingInq(custo);
                 this.blockUI.stop();
                 return true;
             }
@@ -920,7 +924,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
         if (!customer.startsWith('ID')) {
             if (isNaN(customer)) {
                 return this.toastr.warning('Customer id must be a number.', ' Warning!');
-            } else {
+            } else {  
                 this.custSvc.findByAccountNumber(custom).subscribe(async (data) => {
                     console.log("findByAccountNumber", data)
                     this.locl = JSON.parse(data);
@@ -989,7 +993,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
         });
     }
 
-    coBankingInq(customer) {
+    coBankingInq(customer) { 
         // this.blockUI.start('Inquiring customer details...');
         // this.apiService.getCustomerDetails().subscribe (data => {
         this.blockUI.start('Searching for the Customer...');

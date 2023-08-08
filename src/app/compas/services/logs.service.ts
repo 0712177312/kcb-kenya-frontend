@@ -12,6 +12,10 @@ export class LogsService {
   constructor(private http: HttpClient, private globalService: MySharedService) { }
 
   log(log) {
-      return  this.http.post(`${this.API_URL.url}/sysLog`, log, this.globalService.getTokenHeader() );
+    const token = this.globalService.getTokens();
+    return this.http.post(`${this.API_URL.url}/sysLog`, {
+      ...log,
+      loginType: token.loginType,
+    }, this.globalService.getTokenHeader());
   }
 }
