@@ -79,7 +79,8 @@ export class VerifyUsersComponent implements OnInit {
    for (let i = 0; i < this.users.length; i++) {
       if (this.users[i].isActive) {
          if (this.users[i].createdBy === this.rightId) {
-             return  this.toastr.warning('User cannot approve user/s they enrolled', 'Alert!', { timeOut: 1500 });
+          this.toastr.warning('User cannot approve user/s they enrolled', 'Alert!', { timeOut: 1500 });
+          return;  
            } else {
          console.log('users', this.users[i].isActive);
          this.approve.push({'id': this.users[i].userId});
@@ -105,10 +106,12 @@ export class VerifyUsersComponent implements OnInit {
          this.fromDate = '';
          this.toDate = '';
           this.blockUI.stop();
-          return this.toastr.success(this.response.respMessage, 'Success!', {timeOut: 3000});
+           this.toastr.success(this.response.respMessage, 'Success!', {timeOut: 3000});
+           return;
        } else {
           this.blockUI.stop();
-          return this.toastr.warning(this.response.respMessage, 'Alert!', {timeOut: 3000});
+           this.toastr.warning(this.response.respMessage, 'Alert!', {timeOut: 3000});
+           return;
        }
      });
   }

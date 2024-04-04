@@ -454,11 +454,12 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
         //Don't allow identify without finger prints
         if (this.fingerPrints.length > 0) {
             this.apiService.afisIdentify(cust).subscribe((response) => {
+                console.log(response);
                 this.response = JSON.parse(response);
                 if (this.response.status === true && this.response.candidates.length > 0) {
                     this.profiles.push(this.response.candidates);
                     console.log('uploaded afis##', this.response);
-                    console.log('applicants', this.profiles);
+                    console.log('applicants','checking identify data', this.profiles);
                     const cu: any = {};
                     for (let k = 0; k < this.response.candidates.length; k++) {
                         this.matchedCustomers.push({ 'customerId': this.response.candidates[k].applicant.externalId });
@@ -642,7 +643,7 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
                 }
             }, error => {
                 this.blockUI.stop();
-                return this.toastr.error('Error identifying data.', 'Error!', { timeOut: 1500 });
+                return this.toastr.error('Error identifying data.', 'Error!', { timeOut: 3000 });
             });
         } else {
             this.blockUI.stop();
@@ -670,21 +671,21 @@ export let settings = {
             filter: false
         },
         customerIdNumber: {
-            title: 'Customer IdNumber',
+            title: 'StaffId',
             filter: false
         },
-        phoneNumber: {
-            title: 'Phone Number',
-            filter: false
-        },
-        gender: {
-            title: 'Gender',
-            filter: false
-        },
-        country: {
-            title: 'Nationality',
-            filter: false
-        }
+        // phoneNumber: {
+        //     title: 'Phone Number',
+        //     filter: false
+        // },
+        // gender: {
+        //     title: 'Gender',
+        //     filter: false
+        // },
+        // country: {
+        //     title: 'Nationality',
+        //     filter: false
+        // }
     },
     edit: {
         // tslint:disable-next-line:max-line-length

@@ -117,13 +117,16 @@ export class ConvertStaffToCustomerComponent implements OnInit {
       if (this.convertStaffToCustomerResponse.status === true) {
         this.isVerified = false;
         this.log(this.rightId, "converted the staff with tellerid: " + this.tellerResponse.teller.tellerId + " to customer");
-        return this.toastr.success('Conversion of staff to customer performed successfully', 'Success!', { timeOut: 3000 });
+         this.toastr.success('Conversion of staff to customer performed successfully', 'Success!', { timeOut: 3000 });
+         return;
       } else {
         this.log(this.rightId, "attempted to convert the staff with tellerid: " + this.tellerResponse.teller.tellerId + " to customer");
-        return this.toastr.error('Conversion of staff to customer not performed successfully', 'Error!', { timeOut: 4000 });
+        this.toastr.error('Conversion of staff to customer not performed successfully', 'Error!', { timeOut: 4000 });
+        return;
       }
     }, error => {
-      return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
+       this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
+       return;
     })
   }
 

@@ -115,7 +115,13 @@ export class AccessControlComponent implements OnInit, OnDestroy {
             return this.toastr.error('Error in loading data.', 'Error!', { timeOut: 4000 });
         });
     }
+
+
+    addCorrect(){
+        
+    }
     addGroup() {
+        console.log("inside add group")
         if (this.userGroup.groupCode === '') {
             this.toastr.warning('Please specify the group code', 'Alert!', { timeOut: 4000 });
         } else if (this.userGroup.groupName === '') {
@@ -134,8 +140,10 @@ export class AccessControlComponent implements OnInit, OnDestroy {
             this.userGroup.rights = this.asignedRights;
             console.log(this.userGroup);
             this.blockUI.start('Updating user group details...');
-            this.apiService.addUserGroup(this.userGroup).subscribe(res => {
+            this.apiService.addUserGroup(this.userGroup).subscribe((res) => {
+                console.log(res);
                 this.res = res;
+                console.log(this.res);
                 if (this.res.status === false) {
                     this.log(this.rightId, this.res.respMessage);
                     this.blockUI.stop();
@@ -162,6 +170,10 @@ export class AccessControlComponent implements OnInit, OnDestroy {
             });
         }
     }
+
+   
+    
+    
     cancel() {
         this.userGroup = {};
         this.editMode = false;

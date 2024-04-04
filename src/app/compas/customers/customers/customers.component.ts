@@ -866,7 +866,8 @@ export class CustomersComponent implements OnInit, OnDestroy {
             this.locl = JSON.parse(data);
             if (this.locl.status === true) {
                 this.blockUI.stop();
-                return this.toastr.warning('Customer with specified account id number is already enrolled', ' Warning!', { timeOut: 3000 });
+              //  this.toastr.warning('Customer with specified account id number is already enrolled', ' Warning!', { timeOut: 3000 });
+                return;
             } else {
                 // t24 inquiry
                 this.tellerCoBankingInq(tell);
@@ -890,6 +891,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
 
         this.tellerSvc.checkTellerExists(tellr).subscribe(data => {
             this.locl = JSON.parse(data);
+            console.log(data);
             if (this.locl.status === true) {
                 this.blockUI.stop();
                 this.toastr.warning('Customer with specified account id number is already enrolled', ' Warning!', { timeOut: 3000 });
@@ -926,12 +928,13 @@ export class CustomersComponent implements OnInit, OnDestroy {
                 return this.toastr.warning('Customer id must be a number.', ' Warning!');
             } else {  
                 this.custSvc.findByAccountNumber(custom).subscribe(async (data) => {
-                    console.log("findByAccountNumber", data)
+                    console.log("findByAccountNumber","checking what response data brings", data)
                     this.locl = JSON.parse(data);
                     if (this.locl.status === true) {
                         this.blockUI.stop();
                         // tslint:disable-next-line:max-line-length
-                        return this.toastr.warning('Customer with specified account id number is already enrolled', ' Warning!', { timeOut: 3000 });
+                         this.toastr.warning('Customer with specified account id number is already enrolled', ' Warning!', { timeOut: 3000 });
+                        return;
                     } else {
                         // check if is teller  
                         const isTeller = await this.tellerInquiry2(customer);
@@ -940,7 +943,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
                             this.blockUI.stop();
                         } else {
                             this.blockUI.stop();
-                            return this.toastr.warning('Customer with specified account id number is already enrolled', ' Warning!', { timeOut: 3000 });
+                            return;
                         }
                     }
                 }, error => {
@@ -1003,7 +1006,8 @@ export class CustomersComponent implements OnInit, OnDestroy {
             this.custInquiry = JSON.parse(data);
             if (this.custInquiry.payload && this.custInquiry.payload.cif !== '') {
                 this.initProfile();
-                return this.toastr.success('Customer Account Number is valid, can proceed to enroll', ' Success!');
+                 this.toastr.success('Customer Account Number is valid, can proceed to enroll', ' Success!');
+                 return;
             } else if (this.custInquiry.payload && this.custInquiry.payload.cif === '') {
                 // valid customer returned but they do not have a cif number attached
                 return this.toastr.warning('Customer id is valid but account does not have a valid cif number', 'Warning!');

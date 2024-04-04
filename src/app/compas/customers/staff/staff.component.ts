@@ -244,6 +244,8 @@ export class StaffComponent implements OnInit, OnDestroy {
             this.canViewUserProfile = userAssignedRights[0].rights[rightsIndex].allowView;
             this.canAddUserProfile = userAssignedRights[0].rights[rightsIndex].allowAdd;
             this.canEditUserProfile = userAssignedRights[0].rights[rightsIndex].allowEdit;
+            console.log(this.canAddUserProfile);
+            console.log(this.canEditUserProfile);
         }
     }
 

@@ -258,7 +258,7 @@ export class LoginComponent implements OnInit {
       },
         error => {
           console.log("Error::", error)
-          return this.toastr.warning(`Error logging in: ${error.description}`, 'Alert!', { timeOut: 1500 });
+          return this.toastr.warning(`Error logging in: ${error.ad}`, 'Alert!', { timeOut: 1500 });
         }
       );
     }
@@ -352,6 +352,7 @@ export class LoginComponent implements OnInit {
       if (this.response.status === true) {
         this.appService.getUserAssignedRights(this.response.model.group).subscribe(resp => {
           this.userAssignedRights = JSON.parse(resp);
+          console.log(res);
           if (this.userAssignedRights.status === true) {
             this.appService.getUserMenus(this.response.model.group).subscribe(resp => {
               this.menus = JSON.parse(resp);

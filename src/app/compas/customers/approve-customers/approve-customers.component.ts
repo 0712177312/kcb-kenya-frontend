@@ -325,13 +325,16 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
 
   afisVerifyUser($event) {
     this.apiService.afisVer($event).subscribe((dat:any) => {
+      console.log(dat);
       this.response = JSON.parse(dat);
+      
 
       if (this.response.status === true) {
         this.editMode = false;
         this.upCustDet();
       } else {
-        return this.toastr.warning('Failed to verify. Try Again!', 'Warning!', { timeOut: 3000 });
+        this.toastr.warning('Failed to verify. Try Again!', 'Warning!', { timeOut: 3000 });
+        return;
       }
     }, error => {
 
@@ -550,7 +553,8 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
 
     }, error => {
 
-      return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 1500 });
+       this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 1500 });
+       return;
     });
   }
 
@@ -572,8 +576,8 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
         this.customer = {};
         this.editMode = false;
         this.gtCustomers();
-
-        return this.toastr.success('Profile details updated successfully.', ' Success!');
+        this.toastr.success('Profile details updated successfully.', ' Success!');
+        return;
       } else {
         this.log(this.rightId, 'attempted to approve the enrollment of customer with customerId ' + this.customer.customerId + 'Failed: ' + this.response.respMessage);
         this.blockUI.stop();

@@ -82,7 +82,9 @@ export class BioService {
 
 
   afisIdentify(applicant) {
+    console.log("trying to check headers",    this.globalService.getTokenHeader().headers)
     return this.http.post(`${this.getConfigs().abis}/identify`, applicant, { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
+  
   }
 
   afisRemove(applicant) {
