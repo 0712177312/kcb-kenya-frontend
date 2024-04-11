@@ -67,7 +67,8 @@ export class WaiveComponent implements OnInit {
     this.blockUI.start('updating customer details ...');
     const cust = {
       'waivedBy': this.rightId,
-      'customerId' : this.customer.customerId
+      'customerId' : this.customer.customerId,
+      'reason':""
     };
     console.log('customer to waive', cust);
     this.configService.waiveCustomer(cust).subscribe(data => {

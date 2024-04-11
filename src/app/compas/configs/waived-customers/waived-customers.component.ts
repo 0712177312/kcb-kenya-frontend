@@ -125,6 +125,7 @@ initEditcustomer($event) {
     this.customer.active = $event.data.active;
     this.customer.branchId = $event.data.branchId;
     this.customer.customerName = $event.data.customerName;
+    this.customer.reason = $event.data.reason;
     this.customer.gender = $event.data.gender;
     this.customer.customerIdNumber = $event.data.customerIdNumber;
     this.customer.phoneNumber = $event.data.phoneNumber;
@@ -172,7 +173,8 @@ gtCustomers() {
       const cust = {
         'customerId': this.customer.customerId,
         'waived': this.customer.waived,
-        'waivedApprovedBy': this.rightId
+        'waivedApprovedBy': this.rightId,
+        'reason':""
       };
       console.log('works %%%', cust);
      this.blockUI.start('updating customer details...');

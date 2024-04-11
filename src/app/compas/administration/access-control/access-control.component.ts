@@ -5,6 +5,9 @@ import { AdministrationService } from '../../services/administration.service';
 import { ToastrService } from '../../../../../node_modules/ngx-toastr';
 import { AppService } from '../../services/app.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+
 
 @Component({
     selector: 'app-access-control',
@@ -127,23 +130,23 @@ export class AccessControlComponent implements OnInit, OnDestroy {
         } else if (this.userGroup.groupName === '') {
             this.toastr.warning('Please specify the group name', 'Alert!', { timeOut: 4000 });
         } else {
-            console.log('rights ##############################', this.rights);
-            console.log('rights ##############################', this.rights.length);
+            // console.log('rights ##############################', this.rights);
+            // console.log('rights ##############################', this.rights.length);
            // this.userGroup.rights = this.rights;
             for (let l = 0; l < this.rights.length; l++) {
                 if (this.rights[l].allowView === true || this.rights[l].allowEdit === true
                       || this.rights[l].allowAdd === true || this.rights[l].allowDelete === true) {
                     this.asignedRights.push(this.rights[l]);
-                    console.log('assigned rights', this.asignedRights);
+                    // console.log('assigned rights', this.asignedRights);
                 }
             }
             this.userGroup.rights = this.asignedRights;
-            console.log(this.userGroup);
+            // console.log(this.userGroup);
+            let userGroup = this.userGroup;
             this.blockUI.start('Updating user group details...');
-            this.apiService.addUserGroup(this.userGroup).subscribe((res) => {
-                console.log(res);
+            this.apiService.addUserGroup(userGroup).subscribe(res => {
+                console.log("response from the server :: "+res);
                 this.res = res;
-                console.log(this.res);
                 if (this.res.status === false) {
                     this.log(this.rightId, this.res.respMessage);
                     this.blockUI.stop();
@@ -151,14 +154,14 @@ export class AccessControlComponent implements OnInit, OnDestroy {
                 }
                 if (this.res.status === true) {
                     if (this.userGroup.id === 0) {
-                        this.log(this.rightId, 'added group ' + this.userGroup.groupName);
+                        this.log(this.rightId, 'added group ' + userGroup.groupName);
                     } else {
-                        this.log(this.rightId, 'modified group ' + this.userGroup.id);
+                        this.log(this.rightId, 'modified group ' + userGroup.id);
                     }
                     this.editMode = false;
                     this.asignedRights = [];
                     this.rights = [];
-                    this.userGroup = {};
+                    userGroup = {};
                     this.getGroupsAndUserRights();
                     this.blockUI.stop();
                     return this.toastr.success(this.res.respMessage, 'Success!', { timeOut: 4000 });
@@ -170,6 +173,65 @@ export class AccessControlComponent implements OnInit, OnDestroy {
             });
         }
     }
+   
+    
+    
+  
+    // async addGroup() {
+    //     console.log("inside add group")
+    //     if (this.userGroup.groupCode === '') {
+    //         this.toastr.warning('Please specify the group code', 'Alert!', { timeOut: 4000 });
+    //     } else if (this.userGroup.groupName === '') {
+    //         this.toastr.warning('Please specify the group name', 'Alert!', { timeOut: 4000 });
+    //     } else {
+        
+       
+    //         for (let l = 0; l < this.rights.length; l++) {
+    //             if (this.rights[l].allowView === true || this.rights[l].allowEdit === true
+    //                   || this.rights[l].allowAdd === true || this.rights[l].allowDelete === true) {
+    //                 this.asignedRights.push(this.rights[l]);
+    //                 console.log('assigned rights', this.asignedRights);
+    //             }
+    //         }
+    //         this.userGroup.rights = this.asignedRights;
+    //         console.log(this.userGroup);
+    //         let userGroup = this.userGroup;
+    //         this.blockUI.start('Updating user group details...');
+
+
+    //         try {
+    //             const res = await this.apiService.addUserGroup(userGroup);
+    //             console.log(res);
+    //             this.res = res;
+    //             console.log(this.res);
+    //             if (this.res.status === false) {
+    //                 this.log(this.rightId, this.res.respMessage);
+    //                 this.blockUI.stop();
+    //                 return this.toastr.warning(this.res.respMessage, 'Alert!', { timeOut: 4000 });
+    //             }
+    //             if (this.res.status === true) {
+    //                 if (this.userGroup.id === 0) {
+    //                     this.log(this.rightId, 'added group ' + userGroup.groupName);
+    //                 } else {
+    //                     this.log(this.rightId, 'modified group ' + userGroup.id);
+    //                 }
+    //                 this.editMode = false;
+    //                 this.asignedRights = [];
+    //                 this.rights = [];
+    //                 userGroup = {};
+    //                 this.getGroupsAndUserRights();
+    //                 this.blockUI.stop();
+    //                 return this.toastr.success(this.res.respMessage, 'Success!', { timeOut: 4000 });
+    //             }
+    //         } catch (error) {
+    //             this.log(this.rightId, 'server error updating user group ');
+    //             this.blockUI.stop();
+                
+    //         }
+    //     }
+    //   }
+    
+    
 
    
     

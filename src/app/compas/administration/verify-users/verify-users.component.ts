@@ -90,6 +90,7 @@ export class VerifyUsersComponent implements OnInit {
     }
     console.log('user', this.user.isActive);
      this.apusers = this.approve;
+     console.log(this.apusers);
     if (this.apusers.length <= 0) {
       return  this.toastr.warning('Kindly select at least one user to approve', 'Alert!', { timeOut: 1500 });
      }

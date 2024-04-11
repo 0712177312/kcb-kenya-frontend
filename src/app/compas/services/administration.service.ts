@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Urls } from './url';
 import { MySharedService } from './sharedService';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -34,9 +35,19 @@ export class AdministrationService {
     return this.http.get(`${this.API_URL.url}/usergrouptypes`, { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
 
-  addUserGroup(userGroup) {
+  addUserGroup(userGroup): Observable<any> {
     return this.http.post(`${this.API_URL.url}/usergroups/assignrights`, userGroup, this.globalService.getTokenHeader());
   }
+  // async addUserGroup(userGroup): Promise<any> {
+  //   try {
+  //     const response = await this.http.post(`${this.API_URL.url}/usergroups/assignrights`, userGroup, this.globalService.getTokenHeader()).toPromise();
+  //     return response;
+      
+  //   } catch (error) {
+  //     throw error; // Re-throwing error for error handling in addGroup function
+  //   }
+  // }
+
 
   getAllUserMenus() {
     return this.http.get(`${this.API_URL.url}/rightsmenulist`, { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
@@ -60,7 +71,7 @@ export class AdministrationService {
   }
 
   approveUsers(users) {
-    return this.http.post(`${this.API_URL.url}/users/verifyusers`, { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
+    return this.http.post(`${this.API_URL.url}/users/verifyusers`,users, { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
 
   gtUsernames() {
