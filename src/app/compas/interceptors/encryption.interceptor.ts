@@ -23,6 +23,7 @@ export class EncryptionInterceptor implements HttpInterceptor {
 
     private compassEncryptUrls = [
         "/tellers/staff_inquiry",
+        "/previewConvertedCustomersStaff",
         "/tellers/gtTellers",
         "/tellers/gtBranchTellers",
         "/tellers/gtTeller",
@@ -35,6 +36,7 @@ export class EncryptionInterceptor implements HttpInterceptor {
         "/tellers/previewStaff",
         "/sysusers/print/auth",
         "/sysusers/auth",
+        "/previewBioExemption",
         "/usergroups/usergroup",
         "/usergroups/getUserGroupUsingGroupId",
         "/usergroups/gtUserGroups",
@@ -51,6 +53,7 @@ export class EncryptionInterceptor implements HttpInterceptor {
         "/gtWaivedBranches",
         "/getBranchesToWaive",
         "/gtActiveBranches",
+        "/approveCustomer",
         "/gtBranches",
         "/gtActiveCountryBranches",
         "/gtActiveCountries",
@@ -63,6 +66,7 @@ export class EncryptionInterceptor implements HttpInterceptor {
         "/rejectRemoveCustomer",
         "/approveRemoveCustomer",
         "/previewCustomers",
+        "/previewProfiles",
         "/gtWaivedCustomers",
         "/gtCustomerToWaive",
         "/customersToApproveDetach",
@@ -101,16 +105,16 @@ export class EncryptionInterceptor implements HttpInterceptor {
             ...fullAbisUrls,
             ...fullCompassUrls
         ]
-        console.log("EncrypList", this.encryptURLList)
+       // console.log("EncrypList", this.encryptURLList)
         const fullAbisIgnore = this.abisIgnoreURLList.map(endpoint => abisURL + endpoint);
         const bioIgnoreURLs = this.globalService.getBioClients()
-        console.log("bioIgnoreURLs:", bioIgnoreURLs)
+      //  console.log("bioIgnoreURLs:", bioIgnoreURLs)
 
         this.ignoreEncryptURLList = [
             ...fullAbisIgnore,
             ...bioIgnoreURLs
         ]
-        console.log("ignoreEncryptURLList", this.ignoreEncryptURLList)
+      //  console.log("ignoreEncryptURLList", this.ignoreEncryptURLList)
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -124,6 +128,7 @@ export class EncryptionInterceptor implements HttpInterceptor {
                 if (shouldEncrypt) {
                     console.log("SHOULD DECRYPT:", url)
                     const decryptedData = this.decryptResponse(event as any)
+                    console.log('decryptedData', decryptedData);
                     return from(decryptedData)
                 }
                 console.log("SHOULD NOT DECRYPT:", url)
@@ -196,6 +201,14 @@ export class EncryptionInterceptor implements HttpInterceptor {
     private async decryptResponse(res: HttpResponse<any>): Promise<HttpResponse<any>> {
 
         if (res.body) {
+            try{
+            console.log("THERE IS BODY FOR: ", res)
+
+            // if (this.isJSONString(res.body)) {
+            //     console.log('res.body...');
+            //     return res.clone({ body: JSON.parse(res.body) });
+            // }
+
             // extract the key from the response
             const encryptedKey = res.headers.get('Enckey');
             console.log("encryptedKey", encryptedKey)
@@ -210,8 +223,11 @@ export class EncryptionInterceptor implements HttpInterceptor {
                 return res.clone({ body: decryptedBody });
             }
             return res.clone({ body: JSON.parse(decryptedBody) });
+        } catch(e){
+           console.log('this is the exception',e) ;
         }
-        console.log("NO BODY FOR: ", res.url)
+        }
+        console.log("NO BODY FOR: ", res)
         return res;
     }
 

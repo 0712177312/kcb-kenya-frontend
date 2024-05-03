@@ -90,6 +90,7 @@ export class WaivedCustomersComponent implements OnInit {
   rightFP: any;
   thumbsFP: any;
   hand: { 'req': any; };
+  reason: any;
   constructor( private apiService: BioService, private domSanitizer: DomSanitizer,
       private modalService: NgbModal,
       private modalService2: NgbModal, private logs: LogsService,
@@ -161,9 +162,9 @@ gtCustomers() {
 }
 
   approveCustomerWaive() {
-    if (this.rightId === this.customer.createdBy) {
-      this.log(this.rightId, 'to approve customer waive they enrolled ' + this.customer.customerId);
-      return this.toastr.warning('User cannot approve customer waive they enrolled.', 'Warning!', { timeOut: 4000 });
+    if (this.rightId === this.customer.waivedBy) {
+      this.log(this.rightId, 'to approve customer waive they waived ' + this.customer.customerId);
+      return this.toastr.warning('User cannot approve customer waive they waived.', 'Warning!', { timeOut: 4000 });
     }
      if (this.customer.action === 'W') {
         this.customer.waived = 'A';
@@ -173,8 +174,9 @@ gtCustomers() {
       const cust = {
         'customerId': this.customer.customerId,
         'waived': this.customer.waived,
+        'action': this.customer.action,
         'waivedApprovedBy': this.rightId,
-        'reason':""
+        'reason':this.customer.reason
       };
       console.log('works %%%', cust);
      this.blockUI.start('updating customer details...');
@@ -261,18 +263,18 @@ columns: {
       title: 'Customer ID',
       filter: true
     },
-    country: {
-      title: 'Country',
-      filter: true
-    },
-    phoneNumber: {
-        title: 'Email Address',
-        filter: true
-    },
-    customerIdNumber: {
-        title: 'Customer ID Number',
-        filter: true
-    },
+    // country: {
+    //   title: 'Country',
+    //   filter: true
+    // },
+    // phoneNumber: {
+    //     title: 'Email Address',
+    //     filter: true
+    // },
+    // customerIdNumber: {
+    //     title: 'Customer ID Number',
+    //     filter: true
+    // },
     enrolledOn: {
       title: 'Enrolled On',
       filter: true

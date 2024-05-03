@@ -35,9 +35,14 @@ export class AdministrationService {
     return this.http.get(`${this.API_URL.url}/usergrouptypes`, { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
 
-  addUserGroup(userGroup): Observable<any> {
-    return this.http.post(`${this.API_URL.url}/usergroups/assignrights`, userGroup, this.globalService.getTokenHeader());
+  addUserGroup(userGroup) {
+    return this.http.post(`${this.API_URL.url}/usergroups/assignrights`, userGroup, { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
+
+  editUserGroup(userGroup) {
+   
+    return this.http.post(`${this.API_URL.url}/usergroups/editrights`, userGroup,this.globalService.getTokenHeader());
+}
   // async addUserGroup(userGroup): Promise<any> {
   //   try {
   //     const response = await this.http.post(`${this.API_URL.url}/usergroups/assignrights`, userGroup, this.globalService.getTokenHeader()).toPromise();

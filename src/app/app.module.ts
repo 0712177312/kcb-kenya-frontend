@@ -90,6 +90,9 @@ import { EnrolledStaffComponent } from './compas/reports/enrolled-staff/enrolled
 import {
   EncryptionInterceptor
 } from './compas/interceptors/encryption.interceptor';
+import { UserProfileReportComponent } from './compas/reports/user-profile-report/user-profile-report.component';
+import { ConvertedCustomerReportComponent } from './compas/reports/converted-customer-report/converted-customer-report.component';
+import { BioExemptionReportComponent } from './compas/reports/bio-exemption-report/bio-exemption-report.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -148,7 +151,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DetachCustomerComponent,
     DetachStaffComponent,
     EnrolledStaffComponent,
-    ReportsTestComponent
+    ReportsTestComponent,
+    UserProfileReportComponent,
+    ConvertedCustomerReportComponent,
+    BioExemptionReportComponent
   ],
   imports: [
     CommonModule,

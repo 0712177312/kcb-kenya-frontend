@@ -670,10 +670,15 @@ export let settings = {
             title: 'Full Name',
             filter: false
         },
-        customerIdNumber: {
-            title: 'StaffId',
+        tellerId: {
+            title: 'Staff Id',
             filter: false
         },
+        customerId: {
+            title: 'Customer Id',
+            filter: false
+        },
+      
         // phoneNumber: {
         //     title: 'Phone Number',
         //     filter: false

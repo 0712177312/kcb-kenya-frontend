@@ -32,6 +32,9 @@ import {DetachCustomerComponent} from './compas/customers/detach-customer/detach
 import {DetachStaffComponent} from './compas/configs/detach-staff/detach-staff.component';
 import {EnrolledStaffComponent} from './compas/reports/enrolled-staff/enrolled-staff.component';
 import {StaffComponent} from './compas/customers/staff/staff.component';
+import { UserProfileReportComponent } from './compas/reports/user-profile-report/user-profile-report.component';
+import { ConvertedCustomerReportComponent } from './compas/reports/converted-customer-report/converted-customer-report.component';
+import { BioExemptionReportComponent } from './compas/reports/bio-exemption-report/bio-exemption-report.component';
 
 export const Approutes: Routes = [
 
@@ -187,7 +190,23 @@ export const Approutes: Routes = [
                 path: 'reports/staff',
                 component: EnrolledStaffComponent,
                 canActivate: [ServiceGuard]
+            },
+            {
+                path: 'reports/user-profile',
+                component: UserProfileReportComponent,
+                canActivate: [ServiceGuard]
+            },
+            {
+                path: 'reports/convertedstaff',
+                component: ConvertedCustomerReportComponent,
+                canActivate: [ServiceGuard]
+            },
+            {
+                path: 'reports/exemptedcustomers',
+                component: BioExemptionReportComponent,
+                canActivate: [ServiceGuard]
             }
+           
         ]
     },
     {

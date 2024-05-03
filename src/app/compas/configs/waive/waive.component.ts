@@ -26,6 +26,7 @@ export class WaiveComponent implements OnInit {
   countries: any = [];
   source: LocalDataSource;
   staticAlertClosed = false;
+  reason: any;
   constructor( private toastr: ToastrService, private configService: ConfigsService,
     private logs: LogsService, private regionService: RegionService) { }
 
@@ -61,14 +62,14 @@ export class WaiveComponent implements OnInit {
   }
 
   waiveCustomer() {
-    if (this.customer.createdBy === this.rightId) {
-      return this.toastr.error('User cannot waive customer they enrolled, kindly contact admin.', 'Error!', { timeOut: 1500 });
-    } else {
+    // if (this.customer.createdBy === this.rightId) {
+    //   return this.toastr.error('User cannot waive customer they enrolled, kindly contact admin.', 'Error!', { timeOut: 1500 });
+    // } else {
     this.blockUI.start('updating customer details ...');
     const cust = {
       'waivedBy': this.rightId,
       'customerId' : this.customer.customerId,
-      'reason':""
+      'reason':this.reason
     };
     console.log('customer to waive', cust);
     this.configService.waiveCustomer(cust).subscribe(data => {
@@ -87,7 +88,7 @@ export class WaiveComponent implements OnInit {
       this.blockUI.stop();
       return this.toastr.error('Error in loading data.', 'Error!', { timeOut: 1500 });
        });
-     }
+    // }
   }
 
   cancel() {

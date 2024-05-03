@@ -103,6 +103,7 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
   canViewUserProfile;
   canAddUserProfile;
   canEditUserProfile;
+  reason: any;
 
   constructor(private apiService: BioService,
     private modalService: NgbModal,
@@ -174,7 +175,25 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
       }
     };
   }
+  getUserAssignedRights() {
+    const userAssignedRights = this.otc.userAssignedRights;
+    console.log('userAssignedRights: ', userAssignedRights);
+    let rightsIndex = -1;
+    for (let i = 0; i < userAssignedRights[0].rights.length; i++) {
+      console.log('userAssignedRights path: ' + userAssignedRights[0].rights[i].path);
+      if (userAssignedRights[0].rights[i].path === '/masters/approvecustomers') {
+        rightsIndex = i;
+        break;
+      }
+    }
 
+    if (rightsIndex >= 0) {
+      this.canViewUserProfile = userAssignedRights[0].rights[rightsIndex].allowView;
+      this.canAddUserProfile = userAssignedRights[0].rights[rightsIndex].allowAdd;
+      this.canEditUserProfile = userAssignedRights[0].rights[rightsIndex].allowEdit;
+      console.log('allowEdit'+this.canEditUserProfile);
+    }
+  }
   log(userId, activity) {
     const log = {
       'userId': userId,
@@ -547,7 +566,7 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
     }
     this.custSvc.getCustomersToAuthorize(customerDetails).subscribe(data => {
       this.customers = JSON.parse(data);
-      // console.log('custs', this.customers);
+       console.log('custs', this.customers);
       this.customers = this.customers.hashset;
       // console.log('customers##', this.customers);
 
@@ -566,7 +585,8 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
       'customerName': this.customer.customerName,
       'phoneNumber': this.customer.phoneNumber
     };
-    // console.log('timestamp', new Date());
+    console.log('customer details ', cust);
+
     this.apiService.appoveCustomer(cust).subscribe((response:any) => {
       this.response = JSON.parse(response);
 
@@ -665,8 +685,10 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
   rejectCustomer() {
     const customerDetails = {
       'customerId': this.customer.customerId,
-      'rejectedBy': this.rightId
+      'rejectedBy': this.rightId,
+      'reason1':this.reason
     };
+    console.log(customerDetails);
     if (this.rightId === this.customer.createdBy) {
       return this.toastr.error('User cannot reject customer that they created', 'Error!', { timeOut: 4000 });
     }
@@ -758,24 +780,7 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
     this.profpic = '';
   }
 
-  getUserAssignedRights() {
-    const userAssignedRights = this.otc.userAssignedRights;
-    console.log('userAssignedRights: ', userAssignedRights);
-    let rightsIndex = -1;
-    for (let i = 0; i < userAssignedRights[0].rights.length; i++) {
-      console.log('userAssignedRights path: ' + userAssignedRights[0].rights[i].path);
-      if (userAssignedRights[0].rights[i].path === '/administration/userProfile') {
-        rightsIndex = i;
-        break;
-      }
-    }
 
-    if (rightsIndex >= 0) {
-      this.canViewUserProfile = userAssignedRights[0].rights[rightsIndex].allowView;
-      this.canAddUserProfile = userAssignedRights[0].rights[rightsIndex].allowAdd;
-      this.canEditUserProfile = userAssignedRights[0].rights[rightsIndex].allowEdit;
-    }
-  }
 
 
 }

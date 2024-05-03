@@ -1,7 +1,7 @@
 <div class="col-md-12 col-sm-12 col-lg-12">
   <div class="card">
     <div class="card-body">
-      <h3 class="card-title">Enrolled Staff Report</h3>
+      <h3 class="card-title">Enrolled User Report</h3>
       <form action="#">
         <div class="row">
           <div class="col-sm-3">
@@ -40,19 +40,19 @@
             <div class="form-group row">
               <label class="control-label text-right col-sm-3 labels">Status</label>
               <div class="col-md-9">
-                <ng-select [items]="staffStatus" bindLabel="name" bindValue="id" [(ngModel)]="enrolledType"
+                <ng-select [items]="userStatus" bindLabel="name" bindValue="id" [(ngModel)]="enrolledType"
                   [ngModelOptions]="{standalone: true}">
                 </ng-select>
               </div>
             </div>
           </div>
           <div class="col-sm-3">
-            <button type="button" class="btn btn-success" (click)="getStaffReport()"
+            <button type="button" class="btn btn-success" (click)="getUsersReport()"
               style="width: 150px;">Preview</button>
           </div>
           <div class="col-sm-3">
             <button class="btn btn-default" [disabled]="exportButtonDisabled"
-              (click)="getPdfStaffReport()">Export</button>
+              (click)="getPdfUserReport()">Export</button>
           </div>
         </div>
       </form>
@@ -64,47 +64,31 @@
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Staff Name</th>
-                <th scope="col">Staff Email</th>
-                <th scope="col">Staff Dao</th>
+                <th scope="col">Full Name</th>
+                <th scope="col">Username</th>
+                <th scope="col">Group Name</th>
+                <th scope="col">Branch Name</th>
                 <th scope="col">Created on</th>
                 <th scope="col">Created By</th>
-                <th scope="col">Branch Code </th>
                 <th scope="col">Verified on</th>
                 <th scope="col">Verified By</th>
-                <th scope="col">Rejected on</th>
-                <th scope="col">Rejected By</th>
-                    <!-- Hide these columns conditionally -->
-               <!--<ng-container *ngIf="response.length > 0">
-                  <th scope="col" *ngIf="response[0].verifiedOn">Verified on</th>
-                  <th scope="col" *ngIf="response[0].verifiedBy">Verified By</th>
-                  <th scope="col" *ngIf="response[0].rejectedOn">Rejected on</th>
-                  <th scope="col" *ngIf="response[0].rejectedBy">Rejected By</th>
-               </ng-container>-->
-          <!-- End of conditional hiding -->
+                <!--<th scope="col">Rejected on</th>-->
+                <!--<th scope="col">Rejected By</th>-->
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let teller of response; let i = index">
+              <tr *ngFor="let user of response; let i = index">
                 <th scope="row">{{i+1}}</th>
-                <td>{{teller.tellerName}}</td>
-                <td>{{teller.tellerEmail}}</td>
-                <td>{{teller.branch}}</td>
-                <td>{{teller.createdOn !== null ? teller.createdOn : 'null'}}</td>
-                <td>{{teller.createdBy !== null ? teller.createdBy : 'null'}}</td>
-                <td>{{teller.branch}}</td>
-                  <!-- Hide these columns conditionally -->
-                <!--<ng-container *ngIf="teller.verifiedOn || teller.verifiedBy || teller.rejectedOn || teller.rejectedBy">
-                  <td>{{teller.verifiedOn}}</td>
-                  <td>{{teller.verifiedBy}}</td>
-                   <td>{{teller.rejectedOn}}</td>
-                   <td>{{teller.rejectedBy}}</td>
-                </ng-container>-->
-          <!-- End of conditional hiding -->
-                <td>{{teller.verifiedOn !== null ? teller.verifiedOn : 'null'}}</td>
-                <td>{{teller.verifiedBy !== null ? teller.verifiedBy : 'null'}}</td>
-                <td>{{teller.rejectedOn !== null ? teller.rejectedOn : 'null'}}</td>
-                <td>{{teller.rejectedOn !== null ? teller.rejectedOn : 'null'}}</td>
+                <td>{{user.fullName}}</td>
+                <td>{{user.teller}}</td>
+                <td>{{user.groupName}}</td>
+                <td>{{user.branchName}}</td>
+                <td>{{user.createdOn !== null ? user.createdOn : 'null'}}</td>
+                <td>{{user.createdBy !== null ? user.createdBy : 'null'}}</td>
+                <td>{{user.verifiedOn !== null ? user.verifiedOn : 'null'}}</td>
+                <td>{{user.verifiedBy !== null ? user.verifiedBy : 'null'}}</td>
+                <!--<td>{{user.rejectedOn}}</td>-->
+                <!--<td>{{user.rejectedBy}}</td>-->
               </tr>
             </tbody>
           </table>

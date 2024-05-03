@@ -82,6 +82,7 @@ export class LoginComponent implements OnInit {
       this.authService.login(this.user).subscribe(res => {
         // this.blockUI.start('Authenticating user...');
         this.response = JSON.parse(res);
+        console.log('auth res :: '+ this.response);
         if (this.response.status === false) {
           this.log(0, 'failed to log in ' + this.user.username);
           this.blockUI.stop();
@@ -183,6 +184,8 @@ export class LoginComponent implements OnInit {
             if (res.status) {
               this.response = JSON.parse(user);
 
+              console.log(this.response);
+
               this.appService.getUserAssignedRights(this.response.model.group).subscribe((userRights: any) => {
                 this.userAssignedRights = JSON.parse(userRights);
                 if (this.userAssignedRights.status === true) {
@@ -194,6 +197,8 @@ export class LoginComponent implements OnInit {
                       this.storageObject.rightId = this.response.model.id;
                       this.storageObject.rights = this.menus.hashset;
                       this.storageObject.branch = this.response.model.branch;
+                      this.storageObject.country=this.response.model.country;
+                      this.storageObject.teller=this.response.model.teller;
                       this.storageObject.group = this.response.model.group;
                       this.storageObject.userAssignedRights = this.userAssignedRights.hashset;
                       localStorage.setItem('otc', JSON.stringify(this.storageObject));

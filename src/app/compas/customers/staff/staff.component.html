@@ -317,14 +317,16 @@
                         <div class="form-check">
                           <div class="custom-control custom-radio">
                             <input type="radio" value="MALE" formControlName="gender" class="custom-control-input"
-                              id="customControlValidation2" [attr.disabled]="isDisabled? true : null">
+                              id="customControlValidation2" [attr.disabled]="isDisabled? true : null"
+                              [checked]="gender === 'MALE'">
                             <label class="custom-control-label" for="customControlValidation2">Male</label>
                           </div>
                         </div>
                         <div class="form-check">
                           <div class="custom-control custom-radio">
                             <input type="radio" class="custom-control-input" value="FEMALE" formControlName="gender"
-                              id="customControlValidation3" [attr.disabled]="isDisabled? true : null">
+                              id="customControlValidation3" [attr.disabled]="isDisabled? true : null"
+                              [checked]="gender === 'FEMALE'">
                             <label class="custom-control-label" for="customControlValidation3">Female</label>
                           </div>
                         </div>

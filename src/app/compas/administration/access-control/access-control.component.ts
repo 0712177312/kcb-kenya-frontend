@@ -1,5 +1,5 @@
 import { LogsService } from './../../services/logs.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { LocalDataSource } from '../../../../../node_modules/ng2-smart-table';
 import { AdministrationService } from '../../services/administration.service';
 import { ToastrService } from '../../../../../node_modules/ngx-toastr';
@@ -7,7 +7,12 @@ import { AppService } from '../../services/app.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
+import { MySharedService } from '../../services/sharedService';
+import { Urls } from '../../services/url';
 
+import { HttpClient } from '@angular/common/http';
+import { Right } from '../../models/Right';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
     selector: 'app-access-control',
@@ -15,6 +20,8 @@ import { Observable, throwError } from 'rxjs';
     styleUrls: ['./access-control.component.css']
 })
 export class AccessControlComponent implements OnInit, OnDestroy {
+
+    API_URL = new Urls();
     groups: any;
     types: any;
     res: any;
@@ -23,6 +30,11 @@ export class AccessControlComponent implements OnInit, OnDestroy {
     initRights: any = [];
     userGroup: any = {};
     asignedRights = [];
+    rightDisabled= false;
+    update = false;
+    updatedRights: Right[] = [];
+    originalGroupRights: Right[] = [];
+    originalGroupRightsString = '';
     response: any = null;
     is_edit: any = false;
     editMode = false;
@@ -36,8 +48,8 @@ export class AccessControlComponent implements OnInit, OnDestroy {
     otc: any = {};
     source: LocalDataSource;
     @BlockUI() blockUI: NgBlockUI;
-    constructor(private apiService: AdministrationService, private toastr: ToastrService,
-         private logs: LogsService) {
+    constructor(private apiService: AdministrationService, private toastr: ToastrService,@Inject(DOCUMENT) private document: any,
+         private logs: LogsService,private globalService: MySharedService, private http: HttpClient) {
         this.userGroup.id = 0;
         this.userGroup.groupName = '';
         this.userGroup.groupCode = '';
@@ -86,6 +98,15 @@ export class AccessControlComponent implements OnInit, OnDestroy {
         this.title = 'Edit user group';
         this.button = 'Update user group';
         this.rights = this.userGroup.rights;
+        this.rights = this.userGroup.rights.slice();
+
+        this.originalGroupRights = this.rights.slice();
+
+        // console.log('Here are the rights on edit: this.rights');
+        // console.log(JSON.stringify(this.rights));
+        this.originalGroupRightsString = JSON.stringify(this.rights);
+
+  
     }
     
     getGroupsAndUserRights() {
@@ -120,9 +141,6 @@ export class AccessControlComponent implements OnInit, OnDestroy {
     }
 
 
-    addCorrect(){
-        
-    }
     addGroup() {
         console.log("inside add group")
         if (this.userGroup.groupCode === '') {
@@ -146,13 +164,19 @@ export class AccessControlComponent implements OnInit, OnDestroy {
             this.blockUI.start('Updating user group details...');
             this.apiService.addUserGroup(userGroup).subscribe(res => {
                 console.log("response from the server :: "+res);
+
                 this.res = res;
-                if (this.res.status === false) {
-                    this.log(this.rightId, this.res.respMessage);
+
+                //response from the server :: {"respCode":"000","respMessage":"user group updated successfully","status":true,"version":"1.0.0","hashset":null,"collection":null}
+               
+                this.response = JSON.parse(this.res);
+                console.log("response from the server :: "+this.response.status);
+                if (this.response.status === false) {
+                    this.log(this.rightId, this.response.respMessage);
                     this.blockUI.stop();
-                    return this.toastr.warning(this.res.respMessage, 'Alert!', { timeOut: 4000 });
+                    return this.toastr.warning(this.response.respMessage, 'Alert!', { timeOut: 4000 });
                 }
-                if (this.res.status === true) {
+                if (this.response.status === true) {
                     if (this.userGroup.id === 0) {
                         this.log(this.rightId, 'added group ' + userGroup.groupName);
                     } else {
@@ -164,7 +188,7 @@ export class AccessControlComponent implements OnInit, OnDestroy {
                     userGroup = {};
                     this.getGroupsAndUserRights();
                     this.blockUI.stop();
-                    return this.toastr.success(this.res.respMessage, 'Success!', { timeOut: 4000 });
+                    return this.toastr.success(this.response.respMessage, 'Success!', { timeOut: 4000 });
                 }
             }, error => {
                 this.log(this.rightId, 'server error updating user group ');
@@ -174,72 +198,26 @@ export class AccessControlComponent implements OnInit, OnDestroy {
         }
     }
    
-    
+  
+    //added this by 12/04/2024
+    // changeGroup(){
+    //     if (this.update) {
+    //         this.editGroup();
+    //     } else {
+    //         this.addGroup();
+    //     }
+    // }
+
     
   
-    // async addGroup() {
-    //     console.log("inside add group")
-    //     if (this.userGroup.groupCode === '') {
-    //         this.toastr.warning('Please specify the group code', 'Alert!', { timeOut: 4000 });
-    //     } else if (this.userGroup.groupName === '') {
-    //         this.toastr.warning('Please specify the group name', 'Alert!', { timeOut: 4000 });
-    //     } else {
-        
-       
-    //         for (let l = 0; l < this.rights.length; l++) {
-    //             if (this.rights[l].allowView === true || this.rights[l].allowEdit === true
-    //                   || this.rights[l].allowAdd === true || this.rights[l].allowDelete === true) {
-    //                 this.asignedRights.push(this.rights[l]);
-    //                 console.log('assigned rights', this.asignedRights);
-    //             }
-    //         }
-    //         this.userGroup.rights = this.asignedRights;
-    //         console.log(this.userGroup);
-    //         let userGroup = this.userGroup;
-    //         this.blockUI.start('Updating user group details...');
-
-
-    //         try {
-    //             const res = await this.apiService.addUserGroup(userGroup);
-    //             console.log(res);
-    //             this.res = res;
-    //             console.log(this.res);
-    //             if (this.res.status === false) {
-    //                 this.log(this.rightId, this.res.respMessage);
-    //                 this.blockUI.stop();
-    //                 return this.toastr.warning(this.res.respMessage, 'Alert!', { timeOut: 4000 });
-    //             }
-    //             if (this.res.status === true) {
-    //                 if (this.userGroup.id === 0) {
-    //                     this.log(this.rightId, 'added group ' + userGroup.groupName);
-    //                 } else {
-    //                     this.log(this.rightId, 'modified group ' + userGroup.id);
-    //                 }
-    //                 this.editMode = false;
-    //                 this.asignedRights = [];
-    //                 this.rights = [];
-    //                 userGroup = {};
-    //                 this.getGroupsAndUserRights();
-    //                 this.blockUI.stop();
-    //                 return this.toastr.success(this.res.respMessage, 'Success!', { timeOut: 4000 });
-    //             }
-    //         } catch (error) {
-    //             this.log(this.rightId, 'server error updating user group ');
-    //             this.blockUI.stop();
-                
-    //         }
-    //     }
-    //   }
-    
-    
-
-   
-    
+  
+ 
     
     cancel() {
         this.userGroup = {};
         this.editMode = false;
         this.rights = [];
+       this.rightDisabled=false
     }
 
     selectAllViewRights() {
@@ -305,7 +283,7 @@ export let settings = {
     },
     edit: {
         // tslint:disable-next-line:max-line-length
-        editButtonContent: '<a class="btn btn-block btn-outline-success m-r-10"> <i class="fas fa-check-circle text-info-custom"></i></a>',
+        editButtonContent: '<a class="btn btn-block btn-outline-success m-r-10" (click)="update=true"><i class="fas fa-check-circle text-info-custom"></i></a>',
         saveButtonContent: '<i class="ti-save text-success m-r-10"></i>',
         cancelButtonContent: '<i class="ti-close text-danger"></i>'
     },
@@ -315,4 +293,9 @@ export let settings = {
         createButtonContent: '<i class="nb-checkmark"></i>',
         cancelButtonContent: '<i class="nb-close"></i>',
     },
+
+
+
+
+
 };

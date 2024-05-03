@@ -192,7 +192,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
     this.tellerSvc.upgradeTellerProfile(this.tellerForm.value).subscribe(data => {
       this.tellerdata = JSON.parse(data);
       console.log(data);
-      if (this.tellerdata.status) {
+      if (this.tellerdata.status===true) {
         this.isVerified = false;
         this.tellerProfile = {};
         this.tellerdata = {};
@@ -201,7 +201,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
         this.toastr.success('Staff details upgraded successfully.', 'Success!', { timeOut: 4000 });
         return;
       } else {
-        //  this.toastr.warning('Failed to update staff details.', 'Warning!', { timeOut: 4000 });
+          this.toastr.warning(this.tellerdata.respMessage, 'Warning!', { timeOut: 4000 });
          return;
       }
     }, error => {

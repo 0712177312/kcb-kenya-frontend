@@ -78,12 +78,12 @@ export class VerifyUsersComponent implements OnInit {
   verifyUsers() {
    for (let i = 0; i < this.users.length; i++) {
       if (this.users[i].isActive) {
-         if (this.users[i].createdBy === this.rightId) {
+         if (this.users[i].updatedBy === this.rightId) {
           this.toastr.warning('User cannot approve user/s they enrolled', 'Alert!', { timeOut: 1500 });
           return;  
            } else {
          console.log('users', this.users[i].isActive);
-         this.approve.push({'id': this.users[i].userId});
+         this.approve.push({'id': this.users[i].userId,'approvedBy': this.rightId});
          console.log('to approve', this.approve);
         }
       }

@@ -1,21 +1,20 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgbCalendar, NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
-import { ReportsService } from '../../services/reports.service';
+import { NgbCalendar, NgbDateAdapter, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { ReportsService } from '../../services/reports.service';
 
 @Component({
-  selector: 'app-enrolled-staff',
-  templateUrl: './enrolled-staff.component.html',
-  styleUrls: ['./enrolled-staff.component.css'],
+  selector: 'app-converted-customer-report',
+  templateUrl: './converted-customer-report.component.html',
+  styleUrls: ['./converted-customer-report.component.css'],
   providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }]
 })
-
-export class EnrolledStaffComponent implements OnInit {
+export class ConvertedCustomerReportComponent implements OnInit {
 
   fromDate: Date;
   toDate: Date;
   response: any;
-  staffStatus = [];
+  enrollStatus = [];
   enrolledType: String;
 
   exportButtonDisabled: boolean;
@@ -31,27 +30,13 @@ export class EnrolledStaffComponent implements OnInit {
   constructor(calendar: NgbCalendar, private toastr: ToastrService, private reportSvc: ReportsService) { }
 
   ngOnInit() {
-    this.staffStatus = [{ name: 'Enrolled', id: 'N' }, { name: 'Verified', id: 'A' }, { name: 'Rejected', id: 'R' }, { name: 'Detached', id: 'AD' }];
+
+    this.enrollStatus = [{ name: 'Converted Staff', id: 'D' }, { name: 'Converted Customer', id: 'U' }];
     this.otc = JSON.parse(localStorage.getItem('otc'));
     this.branch = this.otc.branch;
     this.groupid = this.otc.group;
   }
-
-  getStaffReport() {
-    if (this.fromDate === undefined) {
-      return this.toastr.warning('Kindly specify from date to continue', 'Warning!', { timeOut: 3000 });
-    } else if (this.toDate === undefined) {
-      return this.toastr.warning('Kindly specify to date to continue', 'Warning!', { timeOut: 3000 });
-    } else {
-      this.reportSvc.getStaffPreview(this.formatDate(this.fromDate), this.formatDate(this.toDate), this.enrolledType, this.branch, this.groupid).subscribe(data => {
-        this.response = JSON.parse(data);
-        this.response = this.response.collection;
-        console.log(this.response);
-      });
-    }
-  }
-
-  getPdfStaffReport() {
+  getPdfConvertedCustomersStaffReport() {
     this.exportButtonDisabled = true;
     this.dtOptions = {
       dom: 'Bfrtip',
@@ -62,7 +47,19 @@ export class EnrolledStaffComponent implements OnInit {
     this.dataTable = $(this.table.nativeElement);
     this.dataTable.DataTable(this.dtOptions);
   }
-
+  getConvertedCustomersStaffReport() {
+    if (this.fromDate === undefined) {
+      return this.toastr.warning('Kindly specify from date to continue', 'Warning!', { timeOut: 3000 });
+    } else if (this.toDate === undefined) {
+      return this.toastr.warning('Kindly specify to date to continue', 'Warning!', { timeOut: 3000 });
+    } else {
+      this.reportSvc.getConvertedCustomersStaffReport(this.formatDate(this.fromDate), this.formatDate(this.toDate), this.enrolledType, this.branch, this.groupid).subscribe(data => {
+        this.response = JSON.parse(data);
+        this.response = this.response.collection;
+        console.log(this.response);
+      });
+    }
+  }
   formatDate(date) {
     let d = new Date(date),
       month = '' + (d.getMonth() + 1),
@@ -74,5 +71,4 @@ export class EnrolledStaffComponent implements OnInit {
 
     return [year, month, day].join('-');
   }
-
 }

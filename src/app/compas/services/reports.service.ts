@@ -20,11 +20,21 @@ export class ReportsService {
   getCustomerPreview(fromDate, toDate, enrolledType, branchCode, groupId) {
     return  this.http.get(`${this.API_URL.url}/previewCustomers?FromDt=${fromDate}&ToDt=${toDate}&enrolledType=${enrolledType}&branchCode=${branchCode}&groupid=${groupId}`,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
-
+  getBioExemptionPreview(fromDate, toDate,  branchCode, groupId){
+    return  this.http.get(`${this.API_URL.url}/previewBioExemption?FromDt=${fromDate}&ToDt=${toDate}&branchCode=${branchCode}&groupid=${groupId}`,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
+  
+  }
   getStaffPreview(fromDate, toDate, enrolledType, branchCode, groupId) {
     return  this.http.get(`${this.API_URL.url}/tellers/previewStaff?FromDt=${fromDate}&ToDt=${toDate}&enrolledType=${enrolledType}&branchCode=${branchCode}&groupid=${groupId}`,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
+  
+  getUsersPreview(fromDate, toDate, enrolledType, branchCode, groupId) {
+    return  this.http.get(`${this.API_URL.url}/previewProfiles?FromDt=${fromDate}&ToDt=${toDate}&enrolledType=${enrolledType}&branchCode=${branchCode}&groupid=${groupId}`,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
+  }
 
+  getConvertedCustomersStaffReport(fromDate, toDate, enrolledType, branchCode, groupId) {
+    return  this.http.get(`${this.API_URL.url}/previewConvertedCustomersStaff?FromDt=${fromDate}&ToDt=${toDate}&enrolledType=${enrolledType}&branchCode=${branchCode}&groupid=${groupId}`,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
+  }
   getPdfCustomerReport(fromDt, toDt) {
     return  this.http.get(`${this.EXP_API}reportType=BD&exportType=P&FromDt=${fromDt}&ToDt=${toDt}`,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }

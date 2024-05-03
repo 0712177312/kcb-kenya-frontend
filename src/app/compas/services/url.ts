@@ -5,6 +5,10 @@ export class Urls {
 
     private uri = 'http://10.216.1.74:8090/compas/rest/v1' // UAT ENV
 
+
+   //private uri = 'http://localhost:8090/compas/rest/v1' // UAT ENV
+
+    // private outUri = "http://10.216.1.74:8090/compas"
     private outUri = "http://10.216.1.74:8090/compas"
     // private outUri = ""
 

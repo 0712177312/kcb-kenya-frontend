@@ -72,6 +72,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
     bio: any;
     tellersResp: any;
     teller: any;
+    country: any;
     tellers = [];
     rightId: any;
     myBehaviorSubject$;
@@ -99,25 +100,28 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
     // the branch of the logged  in user
     branch: any;
     // map containing what codes a given code can access
-    groupCodesMap = new Map([['G001', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008', 'G009']]
-        , ['G002', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008', 'G009']],
-        ['G003', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008', 'G009']],
-        ['G004', ['G005', 'G006', 'G007', 'G008']],
-        ['G005', ['G007', 'G008']],
-        ['G006', ['G007', 'G008']],
-        ['G007', []],
-        ['G008', []],
-        ['G009', ['G005', 'G006', 'G007', 'G008']]]);
+    // groupCodesMap = new Map([['G001', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008', 'G009']]
+    //     , ['G002', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008', 'G009']],
+    //     ['G003', ['G001', 'G002', 'G003', 'G004', 'G005', 'G006', 'G007', 'G008', 'G009']],
+    //     ['G004', ['G005', 'G006', 'G007', 'G008']],
+    //     ['G005', ['G007', 'G008']],
+    //     ['G006', ['G007', 'G008']],
+    //     ['G007', []],
+    //     ['G008', []],
+    //     ['G009', ['G005', 'G006', 'G007', 'G008']]]);
     // from the list of users in the user profiles page
     userId: any;
 
     // the id of the logged in user. This will be used to filter out the currently logged in user
     settings;
     private base64textString: String = '';
+    activeBranches: any;
+ 
 
     constructor(private blockUIService: BlockUIService,
                 private renderer: Renderer2, private regionSvc: RegionService, private apiService: AdministrationService,
                 private toastr: ToastrService,
+                private regionService: RegionService,
                 private bioService: BioService, private tellerSvc: TellerService, private fb: FormBuilder,
                 private modalService: NgbModal,
                 private modalService2: NgbModal, private logs: LogsService,
@@ -134,11 +138,14 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         this.otc = JSON.parse(localStorage.getItem('otc'));
         this.groupId = this.otc.group;
         this.branch = this.otc.branch;
+        this.country=this.otc.country;
+        this.teller=this.otc.teller;
         this.userId = this.otc.rightId;
         //this.getTellers();
         this.getUserProfiles();
         this.getUserGroups();
-        //this.getActiveBranches();
+        this.getActiveBranches(this.country);
+        this.gtActivebranches();
         this.getActiveCountries();
         this.rightId = this.otc.rightId;
         console.log('right id', this.rightId);
@@ -272,6 +279,32 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         this.isNew = false;
     }
 
+
+
+    gtActivebranches() {
+        this.regionService.getActiveBranches().subscribe(data => {
+          this.response = JSON.parse(data);
+          this.activeBranches = this.response.hashset;
+        }, error => {
+          return this.toastr.error('Error in loading branch data.', 'Error!', { timeOut: 1500 });
+        });
+      }
+
+      gtTellers(){
+        this.tellerSvc.getTellers().subscribe(data => {
+            console.log("TelllerData:::",data)
+            this.tellerDet = JSON.parse(data);
+            if (this.tellerDet.status === true) {
+                this.teller = this.tellerDet.teller;
+                console.log('teller dts', this.tellerDet.teller);
+            } else {
+                console.log('not tellers enrolled');
+            }
+            // this.tellerDet.details = this.tellerDet.model;
+        }, error => {
+            console.log('error getting teller details');
+        }); 
+      }
     getUserProfiles() {
         this.blockUI.start('Loading data...');
         this.apiService.getUserProfilesByBranchExcludingCurrentUser(this.branch, this.groupId, this.userId).subscribe(data => {
@@ -329,12 +362,12 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         // filter the user groups displayed based on the groupCodesMap
         this.userGroupsFiltered = [];
         let userGroupsFilteredIndex = 0;
-        for (let i = 0; i < this.userGroups.length; i++) {
-            let currentgroupCode = this.userGroups[i].groupCode;
-            if (this.groupCodesMap.get(groupCode).includes(currentgroupCode)) {
-                this.userGroupsFiltered[userGroupsFilteredIndex++] = this.userGroups[i];
-            }
-        }
+        // for (let i = 0; i < this.userGroups.length; i++) {
+        //     let currentgroupCode = this.userGroups[i].groupCode;
+        //     if (this.groupCodesMap.get(groupCode).includes(currentgroupCode)) {
+        //         this.userGroupsFiltered[userGroupsFilteredIndex++] = this.userGroups[i];
+        //     }
+        // }
 
         const validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         this.form = this.fb.group({
@@ -462,7 +495,8 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
             return this.toastr.warning('Kindly ensure all fields are correctly entered', 'Success!', {timeOut: 1500});
         } else {
             this.userProfile = this.form.value;
-            console.log('userProfile: ' + this.userProfile);
+            this.userProfile.updatedBy=this.rightId;
+            console.log('userProfile: ' , this.userProfile);
             this.apiService.editUserProfile(this.userProfile).subscribe(res => {
                 this.blockUI.stop();
                 this.response = JSON.parse(res);

@@ -1,7 +1,7 @@
 <div class="col-md-12 col-sm-12 col-lg-12">
   <div class="card">
       <div class="card-body">
-          <h3 class="card-title">Enrolled Customers Report</h3>
+          <h3 class="card-title">Bio Expetion Report</h3>
           <form action="#">
             <div class="row">
                 <div class="col-sm-3">
@@ -36,19 +36,6 @@
                       </div>
                     </div>
                 </div>
-                <div class="col-sm-3">
-                    <div class="form-group row">
-                      <label class="control-label text-right col-sm-3 labels">Status</label>
-                      <div class="col-md-9">
-                          <ng-select [items]="customerStatus"
-                                    bindLabel="name"
-                                    bindValue="id"
-                                    [(ngModel)]="enrolledType"
-                                    [ngModelOptions]="{standalone: true}">
-                          </ng-select>
-                      </div>
-                  </div>
-                </div>
               <div class="col-sm-3" *ngIf="!filtered">
                 <button type="button" class="btn btn-success" (click)="getCustomersReport()" style="width: 150px;">Preview</button>
               </div>
@@ -70,10 +57,6 @@
                             <th scope="col">Customer Dao</th>
                             <th scope="col">Created on</th>
                             <th scope="col">Created By</th>
-                            <th scope="col">Verified on</th>
-                            <th scope="col">Verified By</th>
-                            <th scope="col">Rejected on</th>
-                            <th scope="col">Rejected By</th>
                             <th scope="col">Waived on</th>
                             <th scope="col">Waived By</th>
                             <th scope="col">Branch Code </th>
@@ -89,10 +72,6 @@
                             <td>{{customer.branch}}</td>
                             <td>{{customer.createdOn !== null ? customer.createdOn : 'null'}}</td>
                             <td>{{customer.createdBy !== null ? customer.createdBy : 'null'}}</td>
-                            <td>{{customer.verifiedOn !== null ? customer.verifiedOn : 'null'}}</td>
-                            <td>{{customer.verifiedBy !== null ? customer.verifiedBy : 'null'}}</td>
-                            <td>{{customer.rejectedOn !== null ? customer.rejectedOn : 'null'}}</td>
-                            <td>{{customer.rejectedBy !== null ? customer.rejectedBy : 'null'}}</td>
                             <td>{{customer.customerWaivedOn !== null ? customer.customerWaivedOn : 'null'}}</td>
                             <td>{{customer.customerWaivedBy !== null ? customer.customerWaivedBy : 'null'}}</td>
                             <td>{{customer.branchCode}}</td>

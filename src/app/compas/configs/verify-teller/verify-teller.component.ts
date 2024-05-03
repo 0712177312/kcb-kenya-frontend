@@ -85,6 +85,7 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
   length: any;
   otc: any = {};
   rightId: any;
+  enrollStatus: any;
   dupResult: number;
   disabled: boolean;
   greetings: any[];
@@ -99,6 +100,7 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
   hand: { 'req': any; };
   branch: any;
   groupid: any;
+  reason:any;
 
   // manage rights buttons
   canViewUserProfile;
@@ -200,6 +202,7 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
     this.teller.active = $event.data.active;
     this.teller.branchId = $event.data.branchId;
     this.teller.tellerName = $event.data.tellerName;
+    this.teller.enroll= $event.data.enroll;
     this.teller.customerId = $event.data.customerId;
     this.teller.mnemonic = $event.data.mnemonic;
     this.teller.createdBy = $event.data.createdBy;
@@ -609,6 +612,8 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
     this.tellerSvc.getTellersToApprove(this.branch, this.groupid).subscribe(data => {
       this.tellers = JSON.parse(data);
       console.log('tellers', this.tellers);
+      console.log('enroll status ',this.tellers.hashset.enroll);
+      this.enrollStatus=this.tellers.hashset.enroll;
       this.tellers = this.tellers.hashset;
       console.log('tellers##', this.tellers);
       this.blockUI.stop();
@@ -622,9 +627,11 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
     const teller = {
       'customerId': this.teller.customerId,
       'verifiedBy': this.rightId,
+      'enroll':this.teller.enroll,
       'verifiedOn': new Date()
     };
     console.log('timestamp', new Date());
+    console.log(teller);
     this.tellerSvc.approveTeller(teller).subscribe((response) => {
       this.response = JSON.parse(response);
 
@@ -720,7 +727,8 @@ export class VerifyTellerComponent implements OnInit, OnDestroy {
   rejectTeller() {
     const tellerDetails = {
       'customerId': this.teller.customerId,
-      'rejectedBy': this.rightId
+      'rejectedBy': this.rightId,
+      'reason':this.reason
     };
     if (this.rightId == this.teller.createdBy) {
       return this.toastr.error('Cannot reject staff that one has created', 'Error!', { timeOut: 4000 });
