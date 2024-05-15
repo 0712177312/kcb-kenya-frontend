@@ -88,7 +88,7 @@ export class EncryptionInterceptor implements HttpInterceptor {
         "/user/gtGroupsByUserType",
         "/users/toverify",
         "/users/verifyusers",
-        "dashboard/stats"
+        "/dashboard/stats"
     ]
 
 

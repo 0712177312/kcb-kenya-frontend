@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbCalendar, NgbDateAdapter, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { ReportsService } from '../../services/reports.service';
 import { ToastrService } from 'ngx-toastr';
@@ -14,7 +14,12 @@ export class BioExemptionReportComponent implements OnInit {
   url: any;
   toDate: Date;
   response: any;
+  exportButtonDisabled: boolean;
 
+  @ViewChild('dataTable') table;
+  dataTable: any;
+  dtOptions: any;
+  filtered = false;
   otc: any = {};
   branch: any;
   groupid: any;
@@ -41,6 +46,18 @@ export class BioExemptionReportComponent implements OnInit {
         console.log(this.response);
       });
     }
+  }
+
+  getCustomersReportExport(){
+    this.exportButtonDisabled = true;
+    this.dtOptions = {
+      dom: 'Bfrtip',
+      buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+      ]
+    };
+    this.dataTable = $(this.table.nativeElement);
+    this.dataTable.DataTable(this.dtOptions);
   }
   formatDate(date) {
     let d = new Date(date),
