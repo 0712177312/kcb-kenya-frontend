@@ -54,6 +54,10 @@ export class MySharedService {
     const localData = JSON.parse(localStorage.getItem('bio.glob#$$#'));
     return localData ? localData.abis : ""
   }
+  getCompasUri() {
+    const localData = JSON.parse(localStorage.getItem('bio.glob#$$#'));
+    return localData ? localData.compasUri : ""
+  }
 
   getBioClients() {
     const localData = JSON.parse(localStorage.getItem('bio.glob#$$#'));

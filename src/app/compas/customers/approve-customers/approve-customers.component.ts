@@ -147,7 +147,7 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
           filter: true
         },
         phoneNumber: {
-          title: 'Email Address',
+          title: 'Phone Number',
           filter: true
         },
         customerIdNumber: {
@@ -276,11 +276,13 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
         if (pri.length > 0) {
           pri.forEach((res) => {
             this.capturedFings.push({
-              position: fp, quality: res.quality,
+              position: fp, 
+              quality: res.quality,
               fingerPrint: res.fingerprint
             });
             this.fingerPrints.push({
-              position: fp, quality: res.quality,
+              position: fp, 
+              quality: res.quality,
               fingerPrint: res.fingerprint
             });
           });
@@ -290,25 +292,23 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
       let p = 6;
       this.leftFP.leftHand.forEach((print) => {
         this.capturedFings.push({
-          position: p, quality: print.quality,
+          position: p, 
+          quality: print.quality,
           fingerPrint: print.fingerprint
         });
         this.fingerPrints.push({
-          position: p, quality: print.quality,
+          position: p, 
+          quality: print.quality,
           fingerPrint: print.fingerprint
         });
         p++;
       });
     }
-    // console.log('finger prints ', this.fingerPrints);
-    // console.log('finger prints ', this.capturedFings);
     this.capturedFings.forEach((pt) => {
       const pp = pt.position;
-      // console.log('pos lll', pt.position);
       this.document.getElementById('L' + pp).src = 'assets/images/enroll/SL' + pp + '.png';
     });
     this.btnsCaptured.push('left');
-    // console.log('btns cp', this.btnsCaptured);
     (<HTMLInputElement>document.getElementById('left')).disabled = true;
     // });
 
@@ -381,8 +381,15 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
           Number(print.position) === i);
         if (fo.length > 0) {
           fo.forEach((fpr) => {
-            this.fingerPrints.push({ position: item, quality: fpr.quality, fingerPrint: fpr.fingerprint });
-            this.capturedRPrints.push({ position: item, quality: fpr.quality, fingerPrint: fpr.fingerprint });
+            this.fingerPrints.push({
+               position: item, 
+               quality: fpr.quality, 
+               fingerPrint: fpr.fingerprint 
+              });
+            this.capturedRPrints.push({ 
+              position: item, 
+              quality: fpr.quality, 
+              fingerPrint: fpr.fingerprint });
           });
         }
       });
@@ -400,16 +407,12 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
         p++;
       });
     }
-    // console.log('finger prints ', this.fingerPrints);
-    // console.log('finger prints ', this.capturedRPrints);
     this.capturedRPrints.forEach((fing) => {
       const pt = fing.position;
       this.document.getElementById('R' + pt).src = 'assets/images/enroll/SR' + pt + '.png';
     });
     this.btnsCaptured.push('right');
-    // console.log('btns cp', this.btnsCaptured);
     (<HTMLInputElement>document.getElementById('right')).disabled = true;
-    //  });
 
   }
 
@@ -422,7 +425,6 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
     this.thumbsMissing.forEach((thumb) => {
       this.remove(toos, thumb);
       ths = toos;
-      // console.log('fings fings &&&', ths);
     });
 
     this.thumbsFP = data;

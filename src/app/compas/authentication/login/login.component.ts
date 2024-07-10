@@ -174,9 +174,9 @@ export class LoginComponent implements OnInit {
         if (authRes.access_token && authRes.access_token !== '') {
           localStorage.setItem('auth', JSON.stringify({
             ...authRes,
-            loginType: "manual"
+            loginType: 'manual'
           }))
-
+          console.log('authres - loginType', JSON.parse(localStorage.getItem('auth')));
           // get user
           this.appService.getUser().subscribe((user: any) => {
             console.log("User::", user)

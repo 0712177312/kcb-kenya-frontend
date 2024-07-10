@@ -710,7 +710,7 @@ export class StaffComponent implements OnInit, OnDestroy {
         const missingCount = this.rightMissing.length + this.leftMissing.length + this.thumbsMissing.length;
         this.customer = this.form.value;
         this.customer.fingerPrints = this.enrolledFPrints;
-
+        console.log('length',this.enrolledFPrints.length);
         if (this.enrolledFPrints.length > 10) {
             return this.toastr.warning('It appears you have captured more than the required 10 finger prints, '
                 + ' kindly reset device to continue!', 'Warning',
@@ -752,6 +752,9 @@ export class StaffComponent implements OnInit, OnDestroy {
         const missingCount = this.rightMissing.length + this.leftMissing.length + this.thumbsMissing.length;
         this.teller = this.tellerForm.value;
         this.teller.createdBy = this.rightId;
+
+        console.log('length',this.enrolledFPrints.length);
+        
 
         if (this.enrolledFPrints.length > 10) {
             return this.toastr.warning('It appears you have captured more than the required 10 finger prints, '
@@ -1143,7 +1146,7 @@ export class StaffComponent implements OnInit, OnDestroy {
             if (this.hands.status === true) {
                 if (this.hands.hand === 'left') {
                     this.getLeftPrint(this.hands);
-                    // this.getLeftPrint();
+                 
                 } else if (this.hands.hand === 'right') {
                     this.getRightPrint(this.hands);
                     // this.getRightPrint();
@@ -1184,29 +1187,37 @@ export class StaffComponent implements OnInit, OnDestroy {
                 const pri = this.leftFP.leftHand.filter(pos => Number(pos.position) === i);
                 if (pri.length > 0) {
                     pri.forEach((res) => {
+                        if (!this.enrolledFPrints.some(fprint => fprint.fingerPrint === res.fingerprint) && this.enrolledFPrints.length < 10) {
                         this.capturedFings.push({
-                            position: fp, quality: res.quality,
+                            position: fp,
+                            quality: res.quality,
                             fingerPrint: res.fingerprint
                         });
                         this.enrolledFPrints.push({
-                            position: fp, quality: res.quality,
+                            position: fp, 
+                            quality: res.quality,
                             fingerPrint: res.fingerprint
                         });
+                    }
                     });
                 }
             });
         } else {
             let p = 6;
             this.leftFP.leftHand.forEach((print) => {
+                if (!this.enrolledFPrints.some(fprint => fprint.fingerPrint === print.fingerprint) && this.enrolledFPrints.length < 10) {
                 this.capturedFings.push({
-                    position: p, quality: print.quality,
+                    position: p, 
+                    quality: print.quality,
                     fingerPrint: print.fingerprint
                 });
                 this.enrolledFPrints.push({
-                    position: p, quality: print.quality,
+                    position: p, 
+                    quality: print.quality,
                     fingerPrint: print.fingerprint
                 });
                 p++;
+            }
             });
         }
 
@@ -1243,23 +1254,36 @@ export class StaffComponent implements OnInit, OnDestroy {
                     Number(print.position) === i);
                 if (fo.length > 0) {
                     fo.forEach((fpr) => {
-                        this.enrolledFPrints.push({ position: item, quality: fpr.quality, fingerPrint: fpr.fingerprint });
-                        this.capturedRPrints.push({ position: item, quality: fpr.quality, fingerPrint: fpr.fingerprint });
+                        if (!this.enrolledFPrints.some(fprint => fprint.fingerPrint === fpr.fingerprint) && this.enrolledFPrints.length < 10) {
+                        this.enrolledFPrints.push({ 
+                            position: item, 
+                            quality: fpr.quality, 
+                            fingerPrint: fpr.fingerprint });
+                        this.capturedRPrints.push({
+                             position: item,
+                            quality: fpr.quality, 
+                            fingerPrint: fpr.fingerprint 
+                        });
+                    }
                     });
                 }
             });
         } else {
             let p = 1;
             this.rightFP.rightHand.forEach((print) => {
+                if (!this.enrolledFPrints.some(fprint => fprint.fingerPrint === print.fingerprint) && this.enrolledFPrints.length < 10) {
                 this.capturedRPrints.push({
-                    position: p, quality: print.quality,
+                    position: p,
+                    quality: print.quality,
                     fingerPrint: print.fingerprint
                 });
                 this.enrolledFPrints.push({
-                    position: p, quality: print.quality,
+                    position: p, 
+                    quality: print.quality,
                     fingerPrint: print.fingerprint
                 });
                 p++;
+              }
             });
         }
 
@@ -1294,20 +1318,25 @@ export class StaffComponent implements OnInit, OnDestroy {
                 const thu = this.thumbsFP.thumbs.filter(thum => Number(thum.position) === index);
                 if (thu.length > 0) {
                     thu.forEach((res) => {
+                        if (!this.enrolledFPrints.some(fprint => fprint.fingerPrint === res.fingerprint) && this.enrolledFPrints.length < 10) {
                         this.enrolledFPrints.push({
-                            position: pos, quality: res.quality,
+                            position: pos, 
+                            quality: res.quality,
                             fingerPrint: res.fingerprint
                         });
                         this.capturedThumbs.push({
-                            position: pos, quality: res.quality,
+                            position: pos, 
+                            quality: res.quality,
                             fingerPrint: res.fingerprint
                         });
+                      }
                     });
                 }
             });
         } else {
             let t = 0;
             this.thumbsFP.thumbs.forEach((te) => {
+                if (!this.enrolledFPrints.some(fprint => fprint.fingerPrint === te.fingerprint) && this.enrolledFPrints.length < 10) {
                 this.enrolledFPrints.push({
                     position: t, quality: te.quality,
                     fingerPrint: te.fingerprint
@@ -1317,6 +1346,7 @@ export class StaffComponent implements OnInit, OnDestroy {
                     fingerPrint: te.fingerprint
                 });
                 t += 5;
+              } 
             });
         }
 
