@@ -11,6 +11,7 @@ import { DOCUMENT } from '@angular/common';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { LogsService } from '../../services/logs.service';
 import { TellerService } from '../../services/teller.service';
+import { timeout } from 'rxjs/operators';
 
 @Component({
     selector: 'app-customers',
@@ -722,44 +723,45 @@ export class CustomersComponent implements OnInit, OnDestroy {
             return this.toastr.error('Kindly ensure you have captured all the fingerprints to continue .', 'Error!', { timeOut: 4000 });
         }
 
-        this.apiService.afisEnroll(this.customer).subscribe((response: any) => {
-            this.response = JSON.parse(response);
+        this.apiService.afisEnroll(this.customer)
+        .pipe(timeout(120000)) // 2-minute timeout
+        .subscribe(
+            (response: any) => {
+                const responseData = typeof response === 'string' ? JSON.parse(response) : response;
 
-            if (this.response.status === true) {
-                this.log(this.rightId, 'Enrolled: ' + this.customer.customerName + ' CIF: ' + this.customer.customerId +
-                    ' missing FPs: ' + missingCount + '. Enrolled FP(s): ' + this.enrolledFPrints.length);
-                this.storeCustomer();
-            } else {
-                    this.custSvc.checkCustomerExists({ customerId: this.customer.customerId }).subscribe(
-                        (exists) => {
-                          if (exists) {
-                            this.toastr.warning(
-                              'Customer with specified customerId is already enrolled',
-                              'Warning!',
-                              { timeOut: 4000 }
-                            );
-                          } else {
-                            // Compare customer IDs to check for matching
-                            if (this.response.customerId === this.teller.customerId) {
-                              this.storeCustomer();
-                            } else {
-                              this.toastr.warning(
-                                `${this.response.message}  customer id: ${this.response.customerId}`,
-                                'Warning!',
-                                { timeOut: 6000 }
-                              );
+                if (responseData.status === true) {
+                    this.log(this.rightId, `Enrolled: ${this.customer.customerName} CIF: ${this.customer.customerId}. Missing FPs: ${missingCount}. Enrolled FP(s): ${this.enrolledFPrints.length}`);
+                    this.storeCustomer();
+                } else {
+                    this.custSvc.checkCustomerExists({ customerId: this.customer.customerId })
+                        .pipe(timeout(120000)) // 2-minute timeout
+                        .subscribe(
+                            (exists) => {
+                                if (exists) {
+                                    this.toastr.warning(
+                                        'Customer with specified Customer ID is already enrolled',
+                                        'Warning!',
+                                        { timeOut: 4000 }
+                                    );
+                                } else {
+                                    if (responseData.customerId === this.customer.customerId) {
+                                        this.storeCustomer();
+                                    } else {
+                                        this.toastr.warning(
+                                            `${responseData.message} Customer ID: ${responseData.customerId}`,
+                                            'Warning!',
+                                            { timeOut: 6000 }
+                                        );
+                                    }
+                                }
+                            },
+                            (error) => {
+                                console.error('Error checking customer enrollment:', error);
+                                this.toastr.error('Error checking customer enrollment. Please try again.', 'Error!', { timeOut: 4000 });
                             }
-                          }
-                        },
-                        (error) => {
-                            this.log(this.rightId, 'Failed to enroll: ' + this.customer.customerName + ' CIF: ' + this.customer.customerId +
-                            ' missing FPs: ' + missingCount + ' Failed FP(s): ' + this.enrolledFPrints.length);
-                          console.error('Error checking customer enrollment:', error);
-                          this.toastr.error('Error checking customer enrollment. Please try again.', 'Error!', { timeOut: 4000 });
-                        }
-                     );
-            }
-        }, error => {
+                        );
+                }
+            }, error => {
             this.log(this.rightId, 'Failed to enroll ' + this.customer.customerName + ' CIF: ' + this.customer.customerId +
                 ' missing FPs: ' + missingCount + ' Failed FP(s) ' + this.enrolledFPrints.length);
             return this.toastr.error('Error updating data.', 'Error!', { timeOut: 4000 });

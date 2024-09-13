@@ -11,6 +11,7 @@ import { DOCUMENT } from '@angular/common';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { LogsService } from '../../services/logs.service';
 import { TellerService } from '../../services/teller.service';
+import { timeout } from 'rxjs/operators';
 
 @Component({
     selector: 'app-staff',
@@ -748,87 +749,114 @@ export class StaffComponent implements OnInit, OnDestroy {
         // }
     }
 
+
     enrollTellerDetails() {
         const missingCount = this.rightMissing.length + this.leftMissing.length + this.thumbsMissing.length;
         this.teller = this.tellerForm.value;
         this.teller.createdBy = this.rightId;
-
-        console.log('length',this.enrolledFPrints.length);
-        
-
+    
+        console.log('length', this.enrolledFPrints.length);
+    
         if (this.enrolledFPrints.length > 10) {
-            return this.toastr.warning('It appears you have captured more than the required 10 finger prints, '
-                + ' kindly reset device to continue!', 'Warning',
-                { timeOut: 4000 });
+            return this.toastr.warning(
+                'It appears you have captured more than the required 10 fingerprints. Kindly reset the device to continue!',
+                'Warning',
+                { timeOut: 4000 }
+            );
         }
-
-        //Capture Atleast one finger print
+    
         if (this.enrolledFPrints.length < 1) {
             this.log(this.rightId, 'Trying to enroll less than one fingerprint for Staff: ' + this.teller.tellerSignOnName);
-            return this.toastr.error('Kindly ensure you have captured atleast one fingerprint to continue.', 'Error!', { timeOut: 4000 });
+            return this.toastr.error(
+                'Kindly ensure you have captured at least one fingerprint to continue.',
+                'Error!',
+                { timeOut: 4000 }
+            );
         }
-        //No missing fingers
+    
         if (missingCount === 0 && this.enrolledFPrints.length < 10) {
             this.log(this.rightId, 'Enrolling less than 10 FP for staff: ' + this.teller.tellerSignOnName +
-                ' missing FPs: ' + missingCount + ' Enrolling FP(s) :' + this.enrolledFPrints.length);
-            return this.toastr.error('Kindly ensure you have captured all the fingerprints to continue .', 'Error!', { timeOut: 4000 });
+                ' Missing FPs: ' + missingCount + ' Enrolling FP(s): ' + this.enrolledFPrints.length);
+            return this.toastr.error(
+                'Kindly ensure you have captured all the fingerprints to continue.',
+                'Error!',
+                { timeOut: 4000 }
+            );
         }
-
-        // this.teller.fingerPrints = this.enrolledFPrints;
-        const tller = {
+    
+        const tellerData = {
             customerId: this.teller.customerId,
             fingerPrints: this.enrolledFPrints
         };
-        this.apiService.afisEnroll(tller).subscribe((response:any) => {
-            this.response = JSON.parse(response);
-
-            if (this.response.status === true) {
-                this.log(this.rightId, 'Enrolled staff: ' + this.teller.tellerName + ' CIF: ' + this.teller.customerId +
-                    ' missing FP(s): ' + missingCount + 'Enrolled FP(s): ' + this.enrolledFPrints.length);
-                this.teller.createdBy = this.rightId;
-                this.storeTeller(this.teller);
-            }  else {   
-                // Check if the staff with the specified account ID is already enrolled
-                this.tellerSvc.checkCustomerTellerExists({ tellerId: this.teller.customerId }).subscribe(
-                    (exists) => {
-                      if (exists) {
-                        this.toastr.warning(
-                          'Staff with specified account ID number is already enrolled',
-                          'Warning!',
-                          { timeOut: 4000 }
-                        );
-                      } else {
-                        // Compare customer IDs to check for matching
-                        if (this.response.customerId === this.teller.customerId) {
-                          this.storeTeller(this.teller);
-                        } else {
-                          this.toastr.warning(
-                            `${this.response.message} Teller ID: ${this.response.customerId}`,
-                            'Warning!',
-                            { timeOut: 6000 }
-                          );
-                        }
-                      }
-                    },
-                    (error) => {
+    
+        this.apiService.afisEnroll(tellerData)
+            .pipe(timeout(120000)) // 10-second timeout for the request
+            .subscribe(
+                (response: any) => {
+                    const responseData = typeof response === 'string' ? JSON.parse(response) : response;
+    
+                    if (responseData.status === true) {
+                        this.log(this.rightId, 'Enrolled staff: ' + this.teller.tellerName + ' CIF: ' + this.teller.customerId +
+                            ' Missing FP(s): ' + missingCount + ' Enrolled FP(s): ' + this.enrolledFPrints.length);
+                        this.storeTeller(this.teller);
+                    } else {
+                        this.tellerSvc.checkCustomerTellerExists({ tellerId: this.teller.customerId })
+                            .pipe(timeout(120000)) // 5-second timeout for the check
+                            .subscribe(
+                                (exists) => {
+                                    if (exists) {
+                                        console.log('Service response - exists:', exists);
+                                        this.toastr.warning(
+                                            'Staff with specified customer ID is already enrolled',
+                                            'Warning!',
+                                            { timeOut: 4000 }
+                                        );
+                                    } else {
+                                        console.log('Comparing customer IDs:', responseData.customerId, this.teller.customerId);
+    
+                                        if (responseData.customerId === this.teller.customerId) {
+                                            this.storeTeller(this.teller);
+                                        } else {
+                                            this.toastr.warning(
+                                                `${responseData.message} Teller ID: ${responseData.customerId}`,
+                                                'Warning!',
+                                                { timeOut: 6000 }
+                                            );
+                                        }
+                                    }
+                                },
+                                (error) => {
+                                    if (error.name === 'TimeoutError') {
+                                        this.toastr.error('The request timed out. Please try again.', 'Error!', { timeOut: 4000 });
+                                    } else {
+                                        console.error('Error checking teller enrollment:', error);
+                                        this.log(
+                                            this.rightId,
+                                            `Failed to enroll staff: ${this.teller.tellerName} CIF: ${this.teller.customerId} Missing FP(s): ${missingCount} Enrolled FP(s): ${this.enrolledFPrints.length}`
+                                        );
+                                        this.toastr.error('Error checking teller enrollment. Please try again.', 'Error!', { timeOut: 4000 });
+                                    }
+                                }
+                            );
+                    }
+                },
+                (error) => {
+                    if (error.name === 'TimeoutError') {
+                        this.toastr.error('The request timed out. Please try again.', 'Error!', { timeOut: 4000 });
+                    } else {
+                        console.error('Error enrolling staff:', error);
                         this.log(
                             this.rightId,
-                            `Failed to enroll staff: ${this.teller.tellerName} CIF: ${this.teller.customerId} missing FP(s): ${missingCount} Enrolled FP(s): ${this.enrolledFPrints.length}`
-                          );
-                      console.error('Error checking teller enrollment:', error);
-                      this.toastr.error('Error checking teller enrollment. Please try again.', 'Error!', { timeOut: 4000 });
+                            'Failed to enroll staff: ' + this.teller.tellerName + ' CIF: ' + this.teller.customerId +
+                            ' Missing FP(s): ' + missingCount + ' Enrolled FP(s): ' + this.enrolledFPrints.length
+                        );
+                        this.toastr.error('Error updating data. Please try again.', 'Error!', { timeOut: 4000 });
                     }
-                  );
                 }
-              },
-            
-         error => {
-            this.log(this.rightId, 'Failed to enroll staff: ' + this.teller.tellerName + ' CIF: ' + this.teller.customerId +
-                ' missing FP(s) ' + missingCount + 'Failed FP(s)' + this.enrolledFPrints.length);
-
-            return this.toastr.error('Error updating data.', 'Error!', { timeOut: 4000 });
-        });
+            );
     }
+    
+    
 
     cancelEnr() {
         this.editMode = false;
