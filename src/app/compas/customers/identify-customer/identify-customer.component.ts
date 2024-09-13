@@ -158,7 +158,6 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
         return true;
     }
     private getLeftPrint(data) {
-        // this.apiService.leftFing().subscribe((data) => {
         this.btnClass = false;
         let oj = [];
         const arr = [6, 7, 8, 9];
@@ -429,8 +428,6 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
                 if(this.cust.collection.length<1){
                     return this.toastr.error('Customer is Detached.', 'Error!', { timeOut: 1500 });
                 }
-
-                // this.source = this.cust;
                 this.indentify = true;
                 this.customers = this.cust.collection;
                 console.log('customer', this.customers);
@@ -508,7 +505,6 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
         this.capturedFings = [];
         this.btnClass = false;
         this.capturedRPrints = [];
-        // this.sendName('stop');
         this.fingerPrints = [];
         this.capturedThumbs = [];
         let captS: any;
@@ -539,7 +535,6 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        // ...
         this.cust = {};
         this.missing = [];
         this.String = {};
@@ -619,6 +614,7 @@ export class IdentifyCustomerComponent implements OnInit, OnDestroy {
     afisIdentifyUser(cust) {
         if (this.fingerPrints.length > 0) {
             this.apiService.afisIdentify(cust).subscribe((response) => {
+                console.log(this.response);
                 this.response = JSON.parse(response);
                 if (this.response.status === true && this.response.candidates.length > 0) {
                     this.profiles.push(this.response.candidates);

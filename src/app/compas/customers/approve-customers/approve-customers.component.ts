@@ -93,7 +93,7 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
   capturedRPrints: any = [];
   capturedFings: any = [];
   stompClient: any;
-  hands: any;
+  hands: any = {};
   leftFP: any;
   rightFP: any;
   thumbsFP: any;
@@ -535,7 +535,7 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
       'name': fin, 'missingStatus': this.missingStatus,
       'missingCount': count, 'missing': this.missing, 'customerId': this.account_number
     }).subscribe((data:any) => {
-      this.hands = JSON.parse(data);
+        this.hands = data;
       if (this.hands.status === true) {
         if (this.hands.hand === 'left') {
           this.getLeftPrint(this.hands);
@@ -626,7 +626,8 @@ export class ApproveCustomersComponent implements OnInit, OnDestroy {
   }
 
   afisUpdate() {
-    if (this.customer.usersId === this.rightId) {
+    //if (this.customer.usersId === this.rightId) {
+    if(this.customer.createdBy === this.rightId){
       return this.toastr.warning('User cannot approve customer they enrolled', 'Alert!', { timeOut: 1500 });
     } else {
       // console.log('customer', this.customer);

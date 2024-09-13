@@ -42,7 +42,7 @@
     "datatables.net-dt": "^1.10.16",
     "fuelux": "^3.17.0",
     "i": "^0.3.6",
-    "jquery": "^3.3.1",
+    "jquery": "3.3.1",
     "jszip": "^3.2.1",
     "net": "^1.0.2",
     "ng-block-ui": "^1.0.6",
@@ -97,6 +97,7 @@
     "tslint": "~5.9.1",
     "typescript": "~2.7.2"
   },
+
   "browser": {
     "crypto": false
   },

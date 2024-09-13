@@ -69,6 +69,10 @@ export class CustomerService {
     return this.http.post(`${this.API_URL.url}/deleteCustomer`, customerDetails,   { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
 
+  checkCustomerExists(customer){
+    return this.http.post(`${this.API_URL.url}/checkCustomerByCustomerId`, customer,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
+  
+  }
   obtainCustomerDetails(customer){
     return this.http.post(`${this.API_URL.url}/obtainCustomerDetails`, customer,   { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }

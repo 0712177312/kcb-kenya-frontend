@@ -730,16 +730,40 @@ export class CustomersComponent implements OnInit, OnDestroy {
                     ' missing FPs: ' + missingCount + '. Enrolled FP(s): ' + this.enrolledFPrints.length);
                 this.storeCustomer();
             } else {
-                this.log(this.rightId, 'Failed to enroll: ' + this.customer.customerName + ' CIF: ' + this.customer.customerId +
-                    ' missing FPs: ' + missingCount + ' Failed FP(s): ' + this.enrolledFPrints.length);
-                this.toastr.warning(this.response.message + ' customer id ' + this.response.customerId + '', 'Warning!', { timeOut: 4000 });
+                    this.custSvc.checkCustomerExists({ customerId: this.customer.customerId }).subscribe(
+                        (exists) => {
+                          if (exists) {
+                            this.toastr.warning(
+                              'Customer with specified customerId is already enrolled',
+                              'Warning!',
+                              { timeOut: 4000 }
+                            );
+                          } else {
+                            // Compare customer IDs to check for matching
+                            if (this.response.customerId === this.teller.customerId) {
+                              this.storeCustomer();
+                            } else {
+                              this.toastr.warning(
+                                `${this.response.message}  customer id: ${this.response.customerId}`,
+                                'Warning!',
+                                { timeOut: 6000 }
+                              );
+                            }
+                          }
+                        },
+                        (error) => {
+                            this.log(this.rightId, 'Failed to enroll: ' + this.customer.customerName + ' CIF: ' + this.customer.customerId +
+                            ' missing FPs: ' + missingCount + ' Failed FP(s): ' + this.enrolledFPrints.length);
+                          console.error('Error checking customer enrollment:', error);
+                          this.toastr.error('Error checking customer enrollment. Please try again.', 'Error!', { timeOut: 4000 });
+                        }
+                     );
             }
         }, error => {
             this.log(this.rightId, 'Failed to enroll ' + this.customer.customerName + ' CIF: ' + this.customer.customerId +
                 ' missing FPs: ' + missingCount + ' Failed FP(s) ' + this.enrolledFPrints.length);
             return this.toastr.error('Error updating data.', 'Error!', { timeOut: 4000 });
         });
-        // }
     }
 
     enrollTellerDetails() {

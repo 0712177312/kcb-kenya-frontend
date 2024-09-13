@@ -7,6 +7,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
   providedIn: 'root'
 })
 export class TellerService {
+
   API_URL = new Urls();
   CUST_D = 'assets/teller.json';
   // TEL_SVC = 'http://172.17.74.91:8055/api/userSearch';
@@ -25,6 +26,10 @@ export class TellerService {
   checkTellerExists(teller) {
     return this.http.post(`${this.API_URL.url}/tellers/checkTeller`, teller,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
+  checkCustomerTellerExists(teller) {
+    return this.http.post(`${this.API_URL.url}/tellers/checkTellerByCustomerId`, teller,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
+}
+
 
   getTellerDetails(teller) {
     return this.http.post(`${this.API_URL.url}/tellers/staff_inquiry`, teller,  { responseType: 'text', headers: this.globalService.getTokenHeader().headers });

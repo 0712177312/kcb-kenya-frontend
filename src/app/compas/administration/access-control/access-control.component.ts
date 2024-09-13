@@ -99,11 +99,7 @@ export class AccessControlComponent implements OnInit, OnDestroy {
         this.button = 'Update user group';
         this.rights = this.userGroup.rights;
         this.rights = this.userGroup.rights.slice();
-
         this.originalGroupRights = this.rights.slice();
-
-        // console.log('Here are the rights on edit: this.rights');
-        // console.log(JSON.stringify(this.rights));
         this.originalGroupRightsString = JSON.stringify(this.rights);
 
   

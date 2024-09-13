@@ -94,5 +94,8 @@ export class AdministrationService {
   editUserProfile(userProfile) {
     return this.http.post(`${this.API_URL.url}/editUserProfile`, userProfile, { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
+  checkUserExists(username) {
+    return this.http.post(`${this.API_URL.url}/checkUserExists`, username, { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
 
+  }
 }

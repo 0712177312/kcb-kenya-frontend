@@ -112,6 +112,18 @@
                       </div>
                     </div>
                     <div class="form-group row">
+                      <label for="customerId" class="col-2 col-form-label">Customer Id <span
+                          class="error">*</span></label>
+                      <div class="col-md-10">
+                        <input type="text" class="form-control" formControlName="customerId" placeholder="Customer Id"
+                          [attr.disabled]="isDisabled? true : null" />
+                        <div
+                          *ngIf="submited && (tellerForm.controls['customerId'].invalid || tellerForm.controls['customerId'].dirty || tellerForm.controls['customerId'].touched)"
+                          class="error">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
                       <label for="tellerEmail" class="col-2 col-form-label">Staff Email <span
                           class="error">*</span></label>
                       <div class="col-md-10">

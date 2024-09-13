@@ -108,7 +108,7 @@ export class VerifyCustomerDetailsComponent implements OnInit {
     let idPattern = new RegExp(/^KE[0-9]{1,15}$/);
     let result = idPattern.test(teller);
 
-    if (result) {
+  //  if (result) {
       const tellr = {
         'tellerId': teller
       };
@@ -133,10 +133,11 @@ export class VerifyCustomerDetailsComponent implements OnInit {
       }, error => {
         return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
       });
-    } else {
-      console.log('invalid id');
-      return this.toastr.error('Staff ID should match pattern KE1234', 'Error!', { timeOut: 4000 });
-    }
+    // } 
+    // else {
+    //   console.log('invalid id');
+    //   return this.toastr.error('Staff ID should match pattern KE1234', 'Error!', { timeOut: 4000 });
+    // }
 
   }
   tellerCoBankingInq(teller) {

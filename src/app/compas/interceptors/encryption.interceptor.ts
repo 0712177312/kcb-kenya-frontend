@@ -139,7 +139,7 @@ export class EncryptionInterceptor implements HttpInterceptor {
 
     private shouldEncryptURL(url: string): boolean {
 
-        // if in ignore lis
+        // if in ignore list
         if (this.ignoreEncryptURLList.includes(url)) {
             return false
         }

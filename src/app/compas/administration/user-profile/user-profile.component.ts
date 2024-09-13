@@ -264,8 +264,8 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
             branch: new FormControl($event.data.branch, [Validators.required]),
             teller: new FormControl($event.data.teller, [Validators.required]),
             group: new FormControl($event.data.group, Validators.required),
-            // password: new FormControl($event.data.password, Validators.required),
-            // confirmPassword: new FormControl($event.data.password, Validators.required),
+            // password: new FormControl($event.data.password),
+            // confirmPassword: new FormControl($event.data.password),
             status: new FormControl($event.data.status, Validators.required),
             locked: new FormControl($event.data.locked, Validators.required),
             createdBy: new FormControl($event.data.createdBy, Validators.required),
@@ -497,6 +497,7 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
             this.userProfile = this.form.value;
             this.userProfile.updatedBy=this.rightId;
             console.log('userProfile: ' , this.userProfile);
+            this.userProfile.password = this.form.value.password ? this.form.value.password : null;
             this.apiService.editUserProfile(this.userProfile).subscribe(res => {
                 this.blockUI.stop();
                 this.response = JSON.parse(res);
@@ -565,15 +566,15 @@ export class UserProfileComponent implements OnInit, OnChanges { // ComponentCan
         } else if (this.userProfile.password === '') {
             $event.preventDefault();
             this.toastr.warning('Please specify the user password', 'Alert!', {timeOut: 1500});
-        } else if (this.userProfile.password.length < 7) {
-            $event.preventDefault();
-            this.toastr.warning('The user password should be atleast 8 characters', 'Alert!', {timeOut: 1500});
-        } else if (this.userProfile.confirmPassword === '') {
-            $event.preventDefault();
-            this.toastr.warning('Please confirm the user password', 'Alert!', {timeOut: 1500});
-        } else if (this.userProfile.password !== this.userProfile.confirmPassword) {
-            $event.preventDefault();
-            this.toastr.warning('The passwords do not match', 'Alert!', {timeOut: 1500});
+        // } else if (this.userProfile.password.length < 7) {
+        //     $event.preventDefault();
+        //     this.toastr.warning('The user password should be atleast 8 characters', 'Alert!', {timeOut: 1500});
+        // } else if (this.userProfile.confirmPassword === '') {
+        //     $event.preventDefault();
+        //     this.toastr.warning('Please confirm the user password', 'Alert!', {timeOut: 1500});
+        // } else if (this.userProfile.password !== this.userProfile.confirmPassword) {
+        //     $event.preventDefault();
+        //     this.toastr.warning('The passwords do not match', 'Alert!', {timeOut: 1500});
         }
     }
 

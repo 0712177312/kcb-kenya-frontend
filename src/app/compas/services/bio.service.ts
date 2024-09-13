@@ -50,6 +50,8 @@ export class BioService {
     return this.http.post(`${this.getConfigs().secugen}/SGIFPCapture`, "t");
   }
 
+  
+
   getCustomers() {
     return this.http.get(`${this.API_URL.url}/customers`, { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
   }
@@ -82,8 +84,10 @@ export class BioService {
 
 
   afisIdentify(applicant) {
+    console.log(" start inide afis identify ::::: ")
     console.log("trying to check headers",    this.globalService.getTokenHeader().headers)
-    return this.http.post(`${this.getConfigs().abis}/identify`, applicant, { responseType: 'text', headers: this.globalService.getTokenHeader().headers });
+    console.log("End inide afis identify ::::: ")
+    return this.http.post(`${this.getConfigs().abis}/identify`, applicant, { responseType: 'text', headers: this.globalService.getTokenHeader().headers }); 
   
   }
 

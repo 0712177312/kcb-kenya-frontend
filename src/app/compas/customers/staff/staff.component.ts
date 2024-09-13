@@ -787,13 +787,42 @@ export class StaffComponent implements OnInit, OnDestroy {
                     ' missing FP(s): ' + missingCount + 'Enrolled FP(s): ' + this.enrolledFPrints.length);
                 this.teller.createdBy = this.rightId;
                 this.storeTeller(this.teller);
-            } else {
-                this.log(this.rightId, 'Failed to enroll staff: ' + this.teller.tellerName + ' CIF: ' + this.teller.customerId +
-                    ' missing FP(s):' + missingCount + 'Enrolled FP(s):' + this.enrolledFPrints.length);
-
-                this.toastr.warning(this.response.message + ' teller id ' + this.response.customerId + '', 'Warning!', { timeOut: 4000 });
-            }
-        }, error => {
+            }  else {   
+                // Check if the staff with the specified account ID is already enrolled
+                this.tellerSvc.checkCustomerTellerExists({ tellerId: this.teller.customerId }).subscribe(
+                    (exists) => {
+                      if (exists) {
+                        this.toastr.warning(
+                          'Staff with specified account ID number is already enrolled',
+                          'Warning!',
+                          { timeOut: 4000 }
+                        );
+                      } else {
+                        // Compare customer IDs to check for matching
+                        if (this.response.customerId === this.teller.customerId) {
+                          this.storeTeller(this.teller);
+                        } else {
+                          this.toastr.warning(
+                            `${this.response.message} Teller ID: ${this.response.customerId}`,
+                            'Warning!',
+                            { timeOut: 6000 }
+                          );
+                        }
+                      }
+                    },
+                    (error) => {
+                        this.log(
+                            this.rightId,
+                            `Failed to enroll staff: ${this.teller.tellerName} CIF: ${this.teller.customerId} missing FP(s): ${missingCount} Enrolled FP(s): ${this.enrolledFPrints.length}`
+                          );
+                      console.error('Error checking teller enrollment:', error);
+                      this.toastr.error('Error checking teller enrollment. Please try again.', 'Error!', { timeOut: 4000 });
+                    }
+                  );
+                }
+              },
+            
+         error => {
             this.log(this.rightId, 'Failed to enroll staff: ' + this.teller.tellerName + ' CIF: ' + this.teller.customerId +
                 ' missing FP(s) ' + missingCount + 'Failed FP(s)' + this.enrolledFPrints.length);
 
@@ -872,7 +901,7 @@ export class StaffComponent implements OnInit, OnDestroy {
         let idPattern = new RegExp(/^KE[0-9]{1,15}$/);
         let result = idPattern.test(teller);
 
-        if (result) {
+        // if (result) {
 
             this.blockUI.start('Inquiring staff details...');
 
@@ -904,10 +933,10 @@ export class StaffComponent implements OnInit, OnDestroy {
                 this.blockUI.stop();
                 return this.toastr.error(`Error: ${error.respMessage}`, 'Error!', { timeOut: 4000 });
             });
-        } else {
-            console.log('invalid id');
-            return this.toastr.error('Staff ID should match pattern KE1234', 'Error!', { timeOut: 4000 });
-        }
+        // } else {
+        //     console.log('invalid id');
+        //     return this.toastr.error('Staff ID should match pattern KE1234', 'Error!', { timeOut: 4000 });
+        // }
 
     }
 
@@ -948,10 +977,11 @@ export class StaffComponent implements OnInit, OnDestroy {
         }
 
         if (this.profType === '2') {
-            // this is a teller: must start with KE.
-            if (!cust.startsWith('KE')) {
-                return this.toastr.warning('Staff id must start with KE', ' Warning!', { timeOut: 4000 });
-            } else if (cust.length <= 2) {
+            // this is a teller: must start with KE. ACCEPT ALSO THAT DO NOT START WITH KE
+            // if (!cust.startsWith('KE')) {
+            //     return this.toastr.warning('Staff id must start with KE', ' Warning!', { timeOut: 4000 });
+            // } else
+             if (cust.length <= 2) {
                 return this.toastr.warning('Enter a valid staff ID', ' Warning!', { timeOut: 4000 });
             }
             else {

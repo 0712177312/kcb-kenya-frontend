@@ -42,11 +42,14 @@ export class MySharedService {
   }
 
   getTokenHeader() {
+    console.log(" inside  start get token stored locally : ");
+    console.log(this.getTokens().access_token);
     const localheaders = new HttpHeaders({
       'Authorization': `Bearer ${this.getTokens().access_token}`,
       'Access-Control-Expose-Headers': 'Authorization'
     });
     const headers = { headers: localheaders };
+    console.log(" inside  End get token stored locally : ");
     return headers;
   }
 
