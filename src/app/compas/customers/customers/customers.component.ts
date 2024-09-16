@@ -737,13 +737,15 @@ export class CustomersComponent implements OnInit, OnDestroy {
                         .pipe(timeout(120000)) // 2-minute timeout
                         .subscribe(
                             (exists) => {
-                                if (exists) {
+                                if (JSON.parse(exists)==true) {
                                     this.toastr.warning(
                                         'Customer with specified Customer ID is already enrolled',
                                         'Warning!',
                                         { timeOut: 4000 }
                                     );
                                 } else {
+                                    console.log('Comparing customer IDs:', responseData.customerId, this.teller.customerId);
+
                                     if (responseData.customerId === this.customer.customerId) {
                                         this.storeCustomer();
                                     } else {

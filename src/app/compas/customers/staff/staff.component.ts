@@ -800,11 +800,11 @@ export class StaffComponent implements OnInit, OnDestroy {
                             ' Missing FP(s): ' + missingCount + ' Enrolled FP(s): ' + this.enrolledFPrints.length);
                         this.storeTeller(this.teller);
                     } else {
-                        this.tellerSvc.checkCustomerTellerExists({ tellerId: this.teller.customerId })
+                        this.tellerSvc.checkCustomerTellerExists({ customerId: this.teller.customerId })
                             .pipe(timeout(120000)) // 5-second timeout for the check
                             .subscribe(
                                 (exists) => {
-                                    if (exists) {
+                                    if (JSON.parse(exists)==true) {
                                         console.log('Service response - exists:', exists);
                                         this.toastr.warning(
                                             'Staff with specified customer ID is already enrolled',
@@ -820,7 +820,7 @@ export class StaffComponent implements OnInit, OnDestroy {
                                             this.toastr.warning(
                                                 `${responseData.message} Teller ID: ${responseData.customerId}`,
                                                 'Warning!',
-                                                { timeOut: 6000 }
+                                                { timeOut: 4000 }
                                             );
                                         }
                                     }

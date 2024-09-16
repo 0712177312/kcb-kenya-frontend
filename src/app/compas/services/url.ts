@@ -12,8 +12,8 @@ export class Urls {
 
   // private uri = 'http://localhost:8090/compas/rest/v1' // localhost 
   // private uri = 'https://biosuat.kcbad.com:8090/compas/rest/v1'//UAT ENV-DOMAIN
-  //private uri = 'https://10.216.1.74:8090/compas/rest/v1'//UAT ENV-IP
-   private uri ='https://bios.kcbad.com/compas/rest/v1' //prod using domain 
+  private uri = 'https://10.216.1.74:8090/compas/rest/v1'//UAT ENV-IP
+  // private uri ='https://bios.kcbad.com/compas/rest/v1' //prod using domain 
   
 
    // DR servers==START
@@ -28,11 +28,11 @@ export class Urls {
    
    //private outUri = "http://localhost:8090/compas" //localhost
    //private outUri = "https://biosuat.kcbad.com:8090/compas" //UAT DOMAIN
-   //private outUri = 'https://10.216.1.74:8090/compas/rest/v1'//UAT ENV-IP
+   private outUri = 'https://10.216.1.74:8090/compas'//UAT ENV-IP
 
    // DR servers==START
    // private outUri = 'https://172.17.74.250:8090/compas'
-   private outUri = 'https://bios.kcbad.com/compas'//prod using domain
+   //private outUri = 'https://bios.kcbad.com/compas'//prod using domain
    //private outUri = 'https://172.17.74.32:8090/compas'
     //END HERE
     //PROD servers==START
